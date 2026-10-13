@@ -3,7 +3,7 @@ name: skyrim-source-verification
 description: Fact-check Skyrim quest prerequisites, perks, formulas, items and game behavior before relying on assumptions, using UESP, local game data and Apocrypha Discord evidence.
 ---
 
-# Source verification procedure
+# Skyrim AE source verification procedure
 
 Use when a basic factual premise influences a hypothesis or test plan.
 

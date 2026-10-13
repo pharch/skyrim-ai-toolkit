@@ -1,53 +1,107 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
+  "target": {
+    "edition": "AE",
+    "runtime_minimum": "1.6.318",
+    "runtime_verified": false,
+    "note": "Target policy only; no Windows game executable or runtime was available in this Linux session."
+  },
   "items": [
     {
-      "id": "Q-0001", "objective": "OBJ-1", "kind": "baseline", "status": "open",
+      "id": "Q-0001",
+      "objective": "OBJ-1",
+      "kind": "baseline",
+      "status": "open",
       "question": "Which vanilla quests/events have independently verifiable player-level gates, and at what phase are the gates evaluated?",
-      "methods": ["UESP cross-check", "Skyrim.esm + DLC record analysis", "Papyrus/native trace"],
-      "blocked_by": [], "evidence": [], "priority": 1.0
+      "methods": ["UESP cross-check", "AE plugin record analysis", "Papyrus/native trace"],
+      "blocked_by": [],
+      "evidence": [],
+      "priority": 1.0,
+      "next_action": "On the AE research machine, identify the exact runtime and active profile, then select one candidate gate whose level prerequisite can be checked in both records and a dated source."
     },
     {
-      "id": "Q-0002", "objective": "OBJ-1", "kind": "mechanism", "status": "open",
-      "question": "Can a vanilla-accessible alternate initiation path bypass a representative gate without simply forcing quest state through a developer console?",
+      "id": "Q-0002",
+      "objective": "OBJ-1",
+      "kind": "mechanism",
+      "status": "open",
+      "question": "Can a vanilla-accessible alternate initiation path bypass a representative gate without forcing quest state through a developer console?",
       "methods": ["static call graph", "story-manager audit", "controlled test plan"],
-      "blocked_by": ["Q-0001 representative gate selection"], "evidence": [], "priority": 0.98
+      "blocked_by": ["Q-0001"],
+      "evidence": [],
+      "priority": 0.98,
+      "next_action": "After Q-0001 identifies a representative gate, enumerate its distinct start paths and predict a discriminating observation for each."
     },
     {
-      "id": "Q-0003", "objective": "OBJ-2", "kind": "baseline", "status": "open",
+      "id": "Q-0003",
+      "objective": "OBJ-2",
+      "kind": "baseline",
+      "status": "open",
       "question": "What engine event and code path awards armor skill XP from a validated incoming hit, independently of damage reduction?",
-      "methods": ["game records", "Ghidra", "SKSE baseline with XP snapshots"],
-      "blocked_by": [], "evidence": [], "priority": 1.0
+      "methods": ["AE game records", "Ghidra", "SKSE baseline with XP snapshots"],
+      "blocked_by": [],
+      "evidence": [],
+      "priority": 1.0,
+      "next_action": "Trace the relevant vanilla records and locate a build-matched native entry point; record an explicit unknown if the binary is not available."
     },
     {
-      "id": "Q-0004", "objective": "OBJ-2", "kind": "mechanism", "status": "open",
+      "id": "Q-0004",
+      "objective": "OBJ-2",
+      "kind": "mechanism",
+      "status": "open",
       "question": "Is there a vanilla-reachable state or sequence which preserves equipped armor protection but suppresses armor skill XP credit?",
       "methods": ["native branch points", "perk/condition inspection", "A/B hit protocol"],
-      "blocked_by": ["Q-0003 validated baseline"], "evidence": [], "priority": 0.99
+      "blocked_by": ["Q-0003"],
+      "evidence": [],
+      "priority": 0.99,
+      "next_action": "Use Q-0003 to identify candidate award branches; test the armor-protection and hit-XP observables separately."
     },
     {
-      "id": "Q-0005", "objective": "OBJ-3", "kind": "numeric", "status": "open",
-      "question": "How is enchanting XP accumulated and rounded, and can XP be made sub-threshold without invalidating item creation?",
-      "methods": ["numeric experiment", "native XP function", "prior glitch notes"],
-      "blocked_by": [], "evidence": [], "priority": 0.7
+      "id": "Q-0005",
+      "objective": "OBJ-3",
+      "kind": "numeric",
+      "status": "open",
+      "question": "How is enchanting XP accumulated and rounded, and can it remain below the 15→16 or 20→21 thresholds while a useful item is created?",
+      "methods": ["numeric experiment", "native XP function", "prior research notes"],
+      "blocked_by": [],
+      "evidence": [],
+      "priority": 0.7,
+      "next_action": "Locate prior numeric research with provenance and define cumulative-XP observables before proposing any threshold test."
     },
     {
-      "id": "Q-0006", "objective": "OBJ-4", "kind": "mechanism", "status": "open",
+      "id": "Q-0006",
+      "objective": "OBJ-4",
+      "kind": "mechanism",
+      "status": "open",
       "question": "What transitions determine the duration and lifetime of a poison/potion ActiveEffect, and what persists after save/load?",
-      "methods": ["ActiveEffect native paths", "SKSE state dumps", "existing shifting notes"],
-      "blocked_by": [], "evidence": [], "priority": 0.7
+      "methods": ["ActiveEffect native paths", "SKSE state dumps", "prior effect-lifecycle notes"],
+      "blocked_by": [],
+      "evidence": [],
+      "priority": 0.7,
+      "next_action": "Locate prior alchemy/effect observations with source paths and design controls that distinguish duration display from a surviving ActiveEffect."
     },
     {
-      "id": "Q-0007", "objective": "SHARED", "kind": "tooling", "status": "open",
-      "question": "Which current toolkit facilities execute correctly from a separate checkout, without modifying the live game installation?",
-      "methods": ["tool inventory", "version checks", "read-only smoke tests"],
-      "blocked_by": [], "evidence": [], "priority": 0.93
+      "id": "Q-0007",
+      "objective": "SHARED",
+      "kind": "tooling",
+      "status": "open",
+      "question": "Which retained research tools execute correctly from a separate checkout and are compatible with the verified AE runtime and profile?",
+      "methods": ["tool inventory", "version checks", "read-only positive and negative fixtures"],
+      "blocked_by": [],
+      "evidence": [],
+      "priority": 0.93,
+      "next_action": "Run the documented Windows preflight and tool matrix on the AE research machine; retain Linux-only results separately from runtime checks."
     },
     {
-      "id": "Q-0008", "objective": "SHARED", "kind": "source-audit", "status": "open",
-      "question": "Which currently held assumptions can be independently verified using UESP, vanilla records, and dated Apocrypha messages?",
-      "methods": ["wiki lookup", "message index", "claim ledger"],
-      "blocked_by": [], "evidence": [], "priority": 0.89
+      "id": "Q-0008",
+      "objective": "SHARED",
+      "kind": "source-audit",
+      "status": "open",
+      "question": "Which assumptions can be independently verified using authorized sources, AE records, and dated Apocrypha messages?",
+      "methods": ["targeted source lookup", "message index", "claim ledger"],
+      "blocked_by": [],
+      "evidence": [],
+      "priority": 0.89,
+      "next_action": "Record source access status and import only authorized local exports or targeted citations with stable revision/message identifiers."
     }
   ]
 }

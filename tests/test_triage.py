@@ -104,15 +104,15 @@ def test_papyrus_rejects_a_path_that_is_not_a_file(tmp_path):
 
 def crash_log(offset: str, symbol: str) -> str:
     return "\n".join([
-        "Skyrim VR v1.4.15",
+        "Skyrim Special Edition v1.6.1170",
         "CrashLoggerSSE v1-0-0",
         "",
         f'Unhandled exception "EXCEPTION_ACCESS_VIOLATION" at 0x7FF6A1{offset} '
-        f"SkyrimVR.exe+{offset}\tmov rax, [rcx] |  {symbol})",
+        f"SkyrimSE.exe+{offset}\tmov rax, [rcx] |  {symbol})",
         "",
         "PROBABLE CALL STACK:",
-        f"\t[0]\t0x7FF6A1{offset} SkyrimVR.exe+{offset}",
-        "\t[1]\t0x7FF6A1000000 SkyrimVR.exe+1000000",
+        f"\t[0]\t0x7FF6A1{offset} SkyrimSE.exe+{offset}",
+        "\t[1]\t0x7FF6A1000000 SkyrimSE.exe+1000000",
         "",
         "REGISTERS:",
         "\tRAX 0x0",
@@ -123,7 +123,7 @@ def crash_log(offset: str, symbol: str) -> str:
 def crash_dir(tmp_path) -> Path:
     d = tmp_path / "SKSE"
     d.mkdir()
-    # Two of a signature the knowledgebase has already ruled on, one it has not.
+    # Repeated signatures remain unclassified without an AE-specific evidence source.
     (d / "crash-2026-08-26-01.txt").write_text(crash_log("0B84F05", "hkpContactSolver"), encoding="utf-8")
     (d / "crash-2026-08-26-02.txt").write_text(crash_log("0B84F05", "hkpContactSolver"), encoding="utf-8")
     (d / "crash-2026-08-26-03.txt").write_text(crash_log("1234567", "SomethingNew"), encoding="utf-8")
@@ -134,23 +134,23 @@ def test_crash_groups_repeats_into_one_ranked_signature(crash_dir):
     r = run(CRASH, str(crash_dir))
     assert "3 log(s)" in r.stdout, r.stdout
     assert "2 distinct" in r.stdout, r.stdout
-    assert "2 x  SkyrimVR.exe+0B84F05" in r.stdout, r.stdout
+    assert "2 x  SkyrimSE.exe+0B84F05" in r.stdout, r.stdout
 
 
-def test_crash_labels_an_accepted_signature_from_the_knowledgebase(crash_dir):
-    """The point of the tool: an accepted crash must not read as a new finding."""
+def test_crash_does_not_reuse_unverified_legacy_signature_classifications(crash_dir):
     r = run(CRASH, str(crash_dir))
-    assert "[ACCEPTED - do not re-investigate]" in r.stdout, r.stdout
+    assert "[** UNKNOWN — verify AE context **]" in r.stdout, r.stdout
+    assert "known/accepted" not in r.stdout.lower(), r.stdout
 
 
 def test_crash_flags_an_unrecognised_signature_as_unknown(crash_dir):
     r = run(CRASH, str(crash_dir))
-    assert "[** UNKNOWN **]" in r.stdout, r.stdout
-    assert "UNKNOWN        : 1" in r.stdout, r.stdout
+    assert "[** UNKNOWN — verify AE context **]" in r.stdout, r.stdout
+    assert "UNKNOWN        : 3" in r.stdout, r.stdout
 
 
 def test_crash_shows_stack_frames_only_for_the_unknown_ones(crash_dir):
-    """Frames are for triage; printing them for a settled crash is just noise."""
+    """Frames are retained for every unclassified signature."""
     r = run(CRASH, str(crash_dir))
     assert "top 4 frames" in r.stdout, r.stdout
     assert r.stdout.count("top 4 frames") == 1, r.stdout
@@ -164,7 +164,7 @@ def test_crash_accounting_balances_and_reports_ok(crash_dir):
 
 
 def test_crash_counts_a_log_with_no_exception_line_rather_than_dropping_it(crash_dir):
-    (crash_dir / "crash-2026-08-26-04.txt").write_text("Skyrim VR v1.4.15\nnothing here\n",
+    (crash_dir / "crash-2026-08-26-04.txt").write_text("Skyrim Special Edition v1.6.1170\nnothing here\n",
                                                       encoding="utf-8")
     r = run(CRASH, str(crash_dir))
     assert "no exception  : 1" in r.stdout, r.stdout
@@ -185,7 +185,7 @@ def test_crash_finds_dot_log_files_not_only_dot_txt(crash_dir):
         crash_log("ABCDEF0", "NewOne"), encoding="utf-8")
     r = run(CRASH, str(crash_dir))
     assert "5 log(s)" in r.stdout, r.stdout
-    assert "2 x  SkyrimVR.exe+ABCDEF0" in r.stdout, r.stdout
+    assert "2 x  SkyrimSE.exe+ABCDEF0" in r.stdout, r.stdout
     assert "accounted     : 5   [OK vs 5 found]" in r.stdout, r.stdout
 
 
@@ -218,7 +218,7 @@ def crash_log_cpp(info: str) -> str:
     that distinguishes one of these from another.
     """
     return "\n".join([
-        "Skyrim SSE v1.6.1170",
+        "Skyrim Special Edition v1.6.1170",
         "CrashLoggerSSE v1-23-1-0",
         "",
         'Unhandled exception "C++ Exception" at 0x7FFF55741000 '
@@ -302,7 +302,7 @@ def crash_log_truncated_before_exception() -> str:
     to serve this role in these fixtures, but it now parses as `(no module)+ADDR`,
     so tests that need an unparseable dump had to stop borrowing it.
     """
-    return "Skyrim VR v1.4.15\nCrashLoggerSSE v1-15-0-0\n\n"
+    return "Skyrim Special Edition v1.6.1170\nCrashLoggerSSE v1-15-0-0\n\n"
 
 
 def test_crash_flags_a_degraded_parser_rather_than_reporting_ok(tmp_path):
@@ -312,7 +312,7 @@ def test_crash_flags_a_degraded_parser_rather_than_reporting_ok(tmp_path):
     d = tmp_path / "SKSE"
     d.mkdir()
     (d / "crash-2026-01-01-00-00-01.log").write_text(
-        "Skyrim SSE v1.6.1170\n"
+        "Skyrim Special Edition v1.6.1170\n"
         'Unhandled exception "EXCEPTION_ACCESS_VIOLATION" at 0x1 SkyrimSE.exe+0000001\tmov\n',
         encoding="utf-8")
     for n in range(2, 6):
@@ -325,7 +325,7 @@ def test_crash_flags_a_degraded_parser_rather_than_reporting_ok(tmp_path):
 
 
 def test_crash_does_not_flag_one_legitimate_unparsed_dump(tmp_path):
-    """Priced against real data: a healthy VR install has 1 unparsed dump in 28.
+    """One unparsed dump among ten is not by itself a parser-format failure.
     A guard that fires on that gets ignored, so it must stay quiet here.
 
     The first version of this test took the `crash_dir` fixture, which contains
@@ -366,10 +366,10 @@ def crash_log_no_stack(offset: str) -> str:
     not evidence about frame syntax and must not trip the frames guard.
     """
     return "\n".join([
-        "Skyrim VR v1.4.15",
+        "Skyrim Special Edition v1.6.1170",
         "CrashLoggerSSE v1-24-0-0",
         "",
-        f'Unhandled exception "EXCEPTION_ACCESS_VIOLATION" at 0x1 SkyrimVR.exe+{offset}\tmov rax, rcx',
+        f'Unhandled exception "EXCEPTION_ACCESS_VIOLATION" at 0x1 SkyrimSE.exe+{offset}\tmov rax, rcx',
         "",
     ])
 
@@ -377,13 +377,13 @@ def crash_log_no_stack(offset: str) -> str:
 def crash_log_stack_header_moved(offset: str) -> str:
     """A COMPLETE dump whose stack header this parser does not recognise."""
     return "\n".join([
-        "Skyrim VR v1.4.15",
+        "Skyrim Special Edition v1.6.1170",
         "CrashLoggerSSE v9-99-9-9",
         "",
-        f'Unhandled exception "EXCEPTION_ACCESS_VIOLATION" at 0x1 SkyrimVR.exe+{offset}\tmov rax, rcx',
+        f'Unhandled exception "EXCEPTION_ACCESS_VIOLATION" at 0x1 SkyrimSE.exe+{offset}\tmov rax, rcx',
         "",
         "BACKTRACE (probable / scan):",
-        f"\t[ 0] 0x7FF700000001    SkyrimVR.exe+{offset}\tmov rax, rcx",
+        f"\t[ 0] 0x7FF700000001    SkyrimSE.exe+{offset}\tmov rax, rcx",
         "",
         "REGISTERS:",
         "\tRAX 0x0",
@@ -428,7 +428,7 @@ def test_crash_parses_an_exception_with_no_module_attribution(tmp_path):
     d = tmp_path / "SKSE"
     d.mkdir()
     (d / "crash-2026-06-28-14-50-36.log").write_text(
-        "Skyrim VR v1.4.15\n"
+        "Skyrim Special Edition v1.6.1170\n"
         "CrashLoggerSSE v1-15-0-0\n"
         "\n"
         'Unhandled exception "EXCEPTION_ACCESS_VIOLATION" at 0x000000000001\n',
@@ -443,7 +443,7 @@ def test_crash_still_reads_the_module_when_there_is_one(crash_dir):
     it being captured when present. Without this, 'optional' could silently become
     'ignored' and every signature would collapse to (no module)."""
     r = run(CRASH, str(crash_dir))
-    assert "SkyrimVR.exe+0B84F05" in r.stdout, r.stdout
+    assert "SkyrimSE.exe+0B84F05" in r.stdout, r.stdout
     assert "(no module)" not in r.stdout, r.stdout
 
 
@@ -540,7 +540,7 @@ def crash_log_empty_stack(offset: str) -> str:
     exactly this (crash-2026-06-28-14-50-36, 1,753 lines).
     """
     return "\n".join([
-        "Skyrim VR v1.4.15",
+        "Skyrim Special Edition v1.6.1170",
         "CrashLoggerSSE v1-15-0-0",
         "",
         f'Unhandled exception "EXCEPTION_ACCESS_VIOLATION" at 0x{offset}',

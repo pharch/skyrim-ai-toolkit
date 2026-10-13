@@ -1,6 +1,6 @@
 #!/bin/bash
 # Wrapper for ResaverCLI — headless driver for ReSaver's (FallrimTools) save library.
-# Parses/queries/edits Skyrim SE/VR .ess saves and emits JSON on stdout.
+# Read-only parser/query wrapper for Skyrim AE .ess saves; emits JSON on stdout.
 #
 # Usage: bash tools/resaver-cli.sh <op> <save.ess> [args...]
 #   info       <save>
@@ -12,16 +12,7 @@
 #   recon      <save>             READ: sync-aware parse-coverage scan of ALL changeform body types —
 #                                 perType ok/fail, failure categories, unknown extra-data types WITH
 #                                 predecessor histograms (the phantom test). Uses the read-only overlay.
-#   set-global <save> <target> <value> [<out.ess>] [--apply]      target = formidHex | Plugin.esp:formid
-#   set-var    <save> <eidHex> [<index> <value> <out.ess>] [--type int|float|bool|str] [--apply]
-#   clean      <save> <out.ess> [--undefined] [--unattached] [--terminate-threads] [--apply]
-#                                 dry-run unless --apply; writes to a NEW file, auto-backs-up + handles .skse
 #   changeform <save> <refidHex> [--raw] [--depth N]   parse ONE changeform body; --raw adds changeflags+hex/base64
-#   --- ReSaver-DELEGATED write ops (dry-run unless --apply; VERIFY-GATED: re-read==model or delete+fail) ---
-#   reset-havok       <save> [<out.ess>] [--apply]     ESS.resetHavok — clear REFR havok-move data
-#   cleanse-formlists <save> [<out.ess>] [--apply]     ESS.cleanseFormLists — strip null FLST entries
-#   remove-created    <save> [<out.ess>] [--apply]     ESS.removeNonexistentCreated — drop orphaned created-form instances
-#   verify-roundtrip  <save>                           safety self-test: write+re-read+compare, report identical (temp discarded)
 #   --- READ diagnostics ---
 #   extradata-scan    <save> [--limit N] [--type ACHR|REFR]   tally unknown extra-data types (REFR=trustworthy)
 #   changeform-diff   <saveA> <saveB> [refidHex|--quests]     structured+raw-tail diff; noise-labeled; refid candidates
@@ -29,14 +20,25 @@
 #   globaldata        <save>                                  survey the save's global-data tables
 #   globaldata-diff   <saveA> <saveB>                         cross-save global-data table diff
 #
-# Notes: writes NEVER overwrite the input save. Always review dry-run output before --apply.
-#   Every --apply is VERIFY-GATED: the output is re-read and compared to the written model; on ANY
-#   unintended divergence the output is DELETED and the op fails (fail-to-write beats silent corruption).
+# Write and cleanup operations are deliberately unavailable in this research harness.
 # Names: ResaverCLI emits Plugin:FORMID; resolve to EditorIDs on demand via tools/resaver-resolve-names.js.
 #
 # Requires a downloaded ReSaver.jar + its lib/ in tools/resaver-cli/ (FallrimTools, Nexus mod 5031),
 # and JDK 17+ (JDK 21 LTS recommended). The wrapper compiles its small driver on first run.
 set -uo pipefail
+OP="${1:-}"
+case "$OP" in
+  info|dump|changeform|find-refs|find|worries|extradata-scan|recon|changeform-diff|freeze-report|globaldata|globaldata-diff)
+    if printf '%s\n' "$@" | grep -q -- '--apply'; then
+      echo '{"ok":false,"error":"save writes are disabled in this research harness"}'
+      exit 2
+    fi
+    ;;
+  *)
+    echo '{"ok":false,"error":"unsupported operation; this wrapper permits read-only ReSaver analysis only"}'
+    exit 2
+    ;;
+esac
 
 HERE="$(cd "$(dirname "$0")" && pwd -W 2>/dev/null)"
 [ -z "$HERE" ] && HERE="$(cd "$(dirname "$0")" && pwd)"
@@ -67,7 +69,6 @@ fi
 # prepended ONLY for read/diagnostic ops. Every WRITE-capable op (and any unknown op) runs the STOCK jar
 # so ChangeForm.write() emits rawData verbatim — an authored fix can never reach updateRawData/writeESS.
 # Default = stock (safe).
-OP="${1:-}"
 case "$OP" in
   info|dump|changeform|find-refs|find|worries|extradata-scan|recon|changeform-diff|freeze-report|globaldata|globaldata-diff)
     EDD_SRC="$OVERLAY/resaver/ess/ChangeFormExtraDataData.java"

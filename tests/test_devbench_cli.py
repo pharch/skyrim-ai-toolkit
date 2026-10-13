@@ -35,6 +35,23 @@ MOCK = Path(__file__).resolve().parent / "mock_devbench.py"
 NEEDED = ["bash", "curl", "sed", "head", "tr", "cat", "sleep", "env"]
 
 _nojq_dir: Path | None = None
+_preflight_dir: Path | None = None
+
+
+def _preflight_node() -> str:
+    """Stub only the executable gate; AE target behavior is tested separately."""
+    global _preflight_dir
+    if _preflight_dir is None:
+        _preflight_dir = Path(tempfile.mkdtemp(prefix="toolkit-ae-preflight-stub-"))
+        script = _preflight_dir / "node"
+        script.write_text(
+            "#!/bin/sh\n"
+            "if [ \"$2\" = \"--game-root\" ]; then printf '%s\\n' \"$TEST_GAME_ROOT\"; fi\n"
+            "exit 0\n",
+            encoding="utf-8",
+        )
+        script.chmod(0o755)
+    return str(_preflight_dir)
 
 
 def _path_without_jq() -> str:
@@ -127,8 +144,11 @@ def server(request):
 def run_cli(*args, port: int, mask_jq: bool = False):
     env = dict(os.environ)
     env["DEVBENCH_PORT"] = str(port)
+    env["TEST_GAME_ROOT"] = str(Path(tempfile.gettempdir()) / "skyrim-ae-fixture")
+    base_path = _path_without_jq() if mask_jq else env.get("PATH", "")
+    env["PATH"] = _preflight_node() + os.pathsep + base_path
     if mask_jq:
-        env["PATH"] = _path_without_jq()
+        env["PATH"] = _preflight_node() + os.pathsep + _path_without_jq()
         # Prove the mask worked. If jq were still reachable this test would run
         # the jq path and pass while claiming to cover the fallback -- a test
         # that examines nothing must never report success.
@@ -179,13 +199,10 @@ def test_no_save_loaded_is_its_own_state(server):
 
 
 @pytest.mark.parametrize("server", ["legacy"], indirect=True)
-def test_pre_1_11_devbench_falls_back_and_says_so(server):
-    """Older DevBench has no /api/health. The wrapper must degrade to the legacy
-    frame diff rather than fail, and must say that it did."""
+def test_pre_1_11_devbench_is_rejected_without_identity_fields(server):
     r = run_cli("alive", port=server.port)
-    assert r.returncode == 0, r.stdout + r.stderr
-    assert "RUNNING" in r.stdout
-    assert "predates" in r.stderr or "legacy" in r.stderr.lower()
+    assert r.returncode == 1, r.stdout + r.stderr
+    assert "predates identity-bearing /api/health" in r.stderr
 
 
 def test_dead_port_is_distinguishable_from_a_hang():
@@ -226,3 +243,16 @@ def test_liveness_still_works_without_jq(server):
     r = run_cli("alive", port=server.port, mask_jq=True)
     assert "instance:" in r.stdout, r.stdout + r.stderr
     assert r.returncode in (0, 2, 3), f"unexpected exit {r.returncode}"
+
+
+@pytest.mark.parametrize("server", ["wrongexe"], indirect=True)
+def test_live_reads_reject_a_non_ae_devbench_process(server):
+    r = run_cli("inspect", "player", port=server.port)
+    assert r.returncode == 4, r.stdout + r.stderr
+    assert "not verifiably the expected Skyrim AE process" in r.stderr
+
+
+def test_mutating_devbench_commands_are_not_exposed():
+    r = run_cli("exec", "player.kill", port=8920)
+    assert r.returncode == 1
+    assert "Unknown command: exec" in r.stderr

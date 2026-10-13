@@ -1,25 +1,30 @@
 ---
 name: archive-source-discovery
-description: Locate and extract vanilla plugin, script, or other research inputs from BSA/BA2 archives while preserving provenance and avoiding writes.
+description: Locate and extract Skyrim AE vanilla plugin, script, or other research inputs from BSA archives while preserving provenance and avoiding writes.
 ---
 
-# BSA/BA2 source discovery
+# Skyrim AE BSA source discovery
 
-1. Identify the exact game/archive edition and hash the archive. Record its source
-   path privately; never modify or replace the original.
-2. Start with `archive info`, `archive list`, or `archive validate` in the existing
-   AutoMod wrapper, if installed. Always request JSON output and retain raw output.
-3. Search the listing for the smallest relevant source set: plugin masters,
-   scripts, records or assets needed to answer the stated research question.
-   Preserve the archive-relative path and archive identity for each extracted file.
-4. Extract only to an explicit scratch directory outside the game installation.
-   Before extraction, confirm the output path is a new research scratch location;
-   do not extract over `Data/` or any mod-manager directory.
-5. Check whether a loose file overrides the archive entry before claiming what the
-   game loads. For record conclusions, inspect the complete active load order and
-   winner, not just the base archive.
-6. Treat parser errors, empty listings, and missing tools as unknown coverage.
-   Record tool version, exit code, archive hash, and a known-present control when
-   available.
-7. Do not use archive create/add/remove/replace/merge/optimize commands in this
-   research workflow.
+Use this only for Skyrim AE `.bsa` research inputs. BA2 and other game-edition
+archive workflows are outside this harness.
+
+1. Verify AE runtime and identify the exact archive source. Record its filename,
+   size, SHA-256, archive version if available, and private source path; never
+   modify or replace the original.
+2. Use only enabled read-only wrapper commands:
+   `bash tools/automod-cli.sh archive info <archive> --json`,
+   `archive list <archive> --filter <pattern> --json`,
+   `archive validate <archive> --json`, or `archive diff <a> <b> --json`.
+   Capture stdout, stderr, exit code, and AutoMod version.
+   Missing tools, parser errors, or empty results mean unknown coverage.
+3. Search for the smallest relevant plugin/script set. Preserve archive-relative
+   paths and map every extracted file to the archive hash and tool command.
+4. This wrapper intentionally does not expose archive extraction or mutation.
+   If an authorized offline source requires extraction, use a separately
+   reviewed tool/procedure that verifies a new scratch destination outside the
+   game, active profile, and original source before writing.
+5. Check for loose-file overrides and inspect the complete AE active load order
+   before claiming which data the game uses.
+6. Do not use archive create, extract, add, remove, update, replace, merge, or
+   optimize operations through this harness. Preserve raw listings and negative
+   search results.

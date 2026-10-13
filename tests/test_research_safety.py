@@ -9,7 +9,7 @@ from scripts import research_safety as safety
 
 
 @pytest.mark.parametrize("path", [
-    r"C:\Games\Skyrim VR\Data\MyMod.esp",
+    r"C:\Games\Skyrim Special Edition\Data\MyMod.esp",
     "/tmp/fixture.esm",
     "test.ess",
     "test.skse",
@@ -19,13 +19,13 @@ def test_check_write_rejects_binary_and_save_targets(path):
 
 
 def test_check_write_rejects_configured_game_roots_case_insensitively():
-    target = r"c:\games\skyrim vr\Data\Scripts\probe.pex"
-    assert safety.check_write(target, [r"C:\Games\Skyrim VR"]) is not None
+    target = r"c:\games\skyrim special edition\Data\Scripts\probe.pex"
+    assert safety.check_write(target, [r"C:\Games\Skyrim Special Edition"]) is not None
 
 
 def test_check_write_rejects_game_shaped_paths_without_local_config():
     assert safety.check_write("Data/Scripts/Probe.psc", []) is not None
-    assert safety.check_write("Documents/My Games/Skyrim VR/SkyrimVR.ini", []) is not None
+    assert safety.check_write("Documents/My Games/Skyrim Special Edition/Skyrim.ini", []) is not None
 
 
 def test_check_write_allows_research_workspace_text_files():

@@ -1,4 +1,4 @@
-"""crash-triage -- reduce CrashLoggerSSE dumps to signatures, and say which are known.
+"""crash-triage -- reduce supported Skyrim AE CrashLogger dumps to signatures.
 
 A crash log here is ~5,500 lines, of which ~4,600 are the raw STACK dump. The
 part that identifies a crash is the exception line plus the top of PROBABLE CALL
@@ -65,24 +65,12 @@ CRASH_PREFIX_RE = re.compile(r"^crash[-_]", re.I)
 # and the dev install holds 341. The COUNT is the finding; the names are a sample.
 LIST_CAP = 10
 
-VERSION_RE = re.compile(r"^(Skyrim ?VR|Skyrim Special Edition)\s+v?(?P<ver>[\d.]+)", re.I)
+VERSION_RE = re.compile(r"^Skyrim Special Edition\s+v?(?P<ver>[\d.]+)", re.I)
 
 # A C++ throw reports the THROW SITE on the exception line -- the same
 # KERNELBASE address for every C++ crash on the machine. What actually
 # distinguishes them lives in the `C++ EXCEPTION:` block, so parse it.
 CPP_FIELD_RE = re.compile(r"^\s*(?P<field>Type|Info|Throw Location)\s*:\s*(?P<value>.+?)\s*$")
-
-# Signatures the knowledgebase has already ruled on. The status text is quoted
-# from it: a crash marked ACCEPTED must not quietly read as a new finding.
-KNOWN = {
-    "0B84F05": ("ACCEPTED", "Havok contact solver on a dangling rigid body "
-                            "(predator Havok CTD) -- KB: accepted, do not re-investigate"),
-    "0B67DCE": ("KNOWN", "Havok ragdoll add/remove during get-up (PLANCK/hdtSMP) "
-                         "-- same family as 0B84F05"),
-    "093D04C": ("ACCEPTED", "Papyrus VM SkyrimScript::HandlePolicy::Func4 "
-                            "-- KB: accepted, do not change Papyrus memory INIs"),
-}
-
 
 def parse(path: Path):
     """Return a dict for one crash log, or None if it has no exception line."""
@@ -397,12 +385,11 @@ def main() -> int:
     print(f"SIGNATURES  ({len(parsed)} crashes, {len(sigs)} distinct)")
     rows = sigs.most_common() if args.all else sigs.most_common(15)
     shown = 0
+    frame_block_printed = False
     for key, count in rows:
         shown += count
         r = detail[key]
-        status, note = KNOWN.get(r["offset"], ("UNKNOWN", ""))
-        tag = {"ACCEPTED": "[ACCEPTED - do not re-investigate]",
-               "KNOWN": "[known]"}.get(status, "[** UNKNOWN **]")
+        tag = "[** UNKNOWN — verify AE context **]"
         print(f"\n  {count} x  {key}   {tag}")
         print(f"        {r['type']}  {r['instr']}")
         if r.get("cpp_type") or r.get("cpp_info"):
@@ -411,13 +398,12 @@ def main() -> int:
                 print(f"        throw  : {r['cpp_throw']}")
         if r["symbol"]:
             print(f"        symbol : {r['symbol']}")
-        if note:
-            print(f"        KB     : {note}")
         print(f"        seen   : {', '.join(sorted(dates[key]))}")
-        if status == "UNKNOWN" and r["frames"]:
+        if r["frames"] and not frame_block_printed:
             print(f"        top {args.frames} frames:")
             for fr in r["frames"][:args.frames]:
                 print(f"          {fr}")
+            frame_block_printed = True
 
     remainder = len(parsed) - shown
     print(f"\n  {remainder} x  (signatures not shown above)")
@@ -427,9 +413,9 @@ def main() -> int:
     print(f"  {sig_total} accounted   "
           f"[{'OK' if sig_ok else 'MISMATCH'} vs {len(parsed)} parsed crashes]")
 
-    unknown = sum(c for k, c in sigs.items() if detail[k]["offset"] not in KNOWN)
-    print(f"\n  known/accepted : {len(parsed) - unknown}")
-    print(f"  UNKNOWN        : {unknown}   <-- the ones worth looking at")
+    unknown = len(parsed)
+    print(f"\n  UNKNOWN        : {unknown}")
+    print("  Every signature requires build-specific evidence before classification.")
 
     all_ok = ok and sig_ok and not parse_degraded and not near_misses
     unparsed_clause = unparsed >= 2 and unparsed_pct > 25.0

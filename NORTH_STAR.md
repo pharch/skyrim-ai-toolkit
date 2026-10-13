@@ -1,5 +1,9 @@
 # North Star: Vanilla Level-One Capability Expansion
 
+This harness targets Skyrim Anniversary Edition runtime 1.6.318 or newer only.
+The current machine's actual runtime is not verified until the Windows
+executable preflight passes.
+
 The project's primary reward is obtaining capabilities in an unmodified Skyrim playthrough that appear inaccessible to a level-one character, without raising the player beyond level 1. The larger scientific objective is an explanatory map of Skyrim's engine mechanisms that predicts *new* interactions, not merely a catalog of tricks.
 
 ## Ordered objectives

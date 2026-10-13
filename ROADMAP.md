@@ -1,6 +1,8 @@
 # Rolling Research Roadmap
 
-This is a *map of research programs*, not a fixed completion checklist. Rebuild it after major discoveries and at regular synthesis checkpoints.
+This is a *map of Skyrim AE research programs*, not a fixed completion
+checklist. Rebuild it after major discoveries and at regular synthesis
+checkpoints. Do not reuse non-AE evidence without an AE-specific verification.
 
 ## A. Objective 1 — Level-gated world / quest triggers (P0, main focus)
 

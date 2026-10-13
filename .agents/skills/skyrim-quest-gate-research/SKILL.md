@@ -3,7 +3,7 @@ name: skyrim-quest-gate-research
 description: Investigate level-locked vanilla Skyrim quests, encounters and events, locate actual gate mechanisms, and develop reproducible level-one bypass experiments.
 ---
 
-# Quest/event gate research
+# Skyrim AE quest/event gate research
 
 1. Choose a precisely identified quest/encounter with a plausible level prerequisite; verify from UESP and game data.
 2. Distinguish quest startup, journal display, dialogue availability, alias fill, story-manager event and actual world encounter spawn.

@@ -11,9 +11,9 @@ attachment, or effective override.
 1. State the falsifiable claim, target game edition/build, relevant records, and the
    observation that would disprove it. Treat EditorIDs and wiki descriptions as
    search aids, not proof of runtime behavior.
-2. Resolve the complete active load order for the exact edition/profile before
-   drawing a conclusion. For MO2, use the profile's virtualized view; never treat a
-   stale SSE `plugins.txt` as the VR order.
+2. Resolve the complete active AE load order for the exact profile before
+   drawing a conclusion. For MO2, use the selected profile's active
+   `plugins.txt`; a file from another profile is not a substitute.
 3. Inspect the winning record and full override chain with xEdit/xelib or the
    applicable record tool. Capture plugin names, FormIDs, winning values, relevant
    conditions, and the tool/version used.

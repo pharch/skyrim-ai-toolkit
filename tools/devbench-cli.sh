@@ -1,9 +1,8 @@
 #!/bin/bash
 # devbench-cli.sh -- talk to a RUNNING Skyrim via alandtse's DevBench SKSE plugin.
 #
-# DevBench (Nexus SE 181326) runs a localhost REST+MCP server inside the live game, so Claude can
-# inspect state, run console commands AND READ THEIR OUTPUT, call Papyrus functions, and drive
-# scripted scenarios -- instead of you hand-testing and reporting back.
+# DevBench is an optional localhost live-game interface for controlled
+# observation of state on the verified Skyrim AE instance.
 #
 # NOT bundled: install DevBench yourself from Nexus (GPL-3.0). This wrapper just drives its REST API.
 #
@@ -17,20 +16,26 @@
 #   bash tools/devbench-cli.sh state                      # {plugin,version,vr,playerLoaded,frame}
 #   bash tools/devbench-cli.sh inspect vm                 # kinds: state health vm scene mods player
 #                                                         #        inventory quests effects refs
-#   bash tools/devbench-cli.sh exec "player.getav health" # console exec + capture + read output
-#   bash tools/devbench-cli.sh call Utility GetCurrentGameTime
-#   bash tools/devbench-cli.sh call Actor IsInCombat '[]' '{"form":"0x14"}'
-#   bash tools/devbench-cli.sh tool menu '{"action":"accept"}'   # raw escape hatch: any tool, any JSON
+#   bash tools/devbench-cli.sh describe Actor
 #
-# Port: read from Data/SKSE/Plugins/devbench/runtime.json when present, else the per-runtime default
-# (VR 8921, SE/AE 8920). Override with DEVBENCH_PORT=nnnn.
+# Port: read from Data/SKSE/Plugins/devbench/runtime.json when present, else AE default 8920.
+# Override with DEVBENCH_PORT=nnnn.
 
 set -u
 # Every command here pipes the HTTP helper into a formatter; without pipefail a dead server (-> 1)
 # would be masked by the formatter's 0 and the caller would think the call succeeded.
 set -o pipefail
 
-GAME_DIR="${GAME_DIR:-$(pwd)}"
+SCRIPT_PATH="$0"
+if [ "${SCRIPT_PATH%/*}" = "$SCRIPT_PATH" ]; then
+    SCRIPT_DIR="$PWD"
+else
+    SCRIPT_DIR="${SCRIPT_PATH%/*}"
+fi
+SCRIPT_DIR="$(cd "$SCRIPT_DIR" && pwd)"
+GAME_DIR="${GAME_ROOT:-$(node "$SCRIPT_DIR/ae-preflight.js" --game-root)}"
+[ -n "$GAME_DIR" ] || { echo "ERROR: could not resolve the verified Skyrim AE installation." >&2; exit 1; }
+node "$SCRIPT_DIR/ae-preflight.js" >/dev/null || exit $?
 RUNTIME_JSON="$GAME_DIR/Data/SKSE/Plugins/devbench/runtime.json"
 TIMEOUT="${DEVBENCH_TIMEOUT:-15}"
 
@@ -45,8 +50,7 @@ resolve_port() {
         p=$(tr -dc '0-9' < "$RUNTIME_JSON" 2>/dev/null | head -c 5)
         [ -n "$p" ] && { echo "$p"; return; }
     fi
-    # Fall back to the deterministic per-runtime default.
-    [ -f "$GAME_DIR/SkyrimVR.exe" ] && { echo 8921; return; }
+    # Skyrim AE only. An unknown DevBench default is not guessed.
     echo 8920
 }
 PORT="$(resolve_port)"
@@ -56,8 +60,7 @@ pretty() { if [ "$HAVE_JQ" -eq 1 ]; then jq . 2>/dev/null || cat; else cat; fi; 
 
 dead_port() {
     echo "ERROR: no response from DevBench on port $PORT." >&2
-    echo "  The game must be RUNNING with a save loaded (VR: headset on -- Skyrim VR" >&2
-    echo "  cannot init without it). If it IS running, check the bound port in" >&2
+    echo "  The game must be RUNNING with a save loaded. If it IS running, check the bound port in" >&2
     echo "  Data/SKSE/Plugins/devbench/runtime.json or set DEVBENCH_PORT." >&2
 }
 
@@ -99,22 +102,38 @@ jget() { # $1 = jq-style path (.frame). Works without jq, best-effort: numbers, 
     sed -n "s/.*\"$k\"[[:space:]]*:[[:space:]]*\"\{0,1\}\([^,\"}]*\)\"\{0,1\}.*/\1/p" | head -1
 }
 
-# Pre-1.11.0 DevBench has no /api/health. Fall back to the old (worse) main-thread frame diff:
-# it cannot distinguish "hung" from "server down", because the probe itself blocks on the very
-# thread that is hung -- which is exactly why /api/health exists. Upgrade if you land here.
-legacy_alive() {
-    echo "NOTE: this DevBench predates /api/health (1.11.0+). Falling back to the main-thread" >&2
-    echo "  frame diff, which cannot tell a hang from a dead port. Consider updating DevBench." >&2
-    local f1 f2
-    f1=$(post inspect '{"kind":"state"}' | jget '.frame') || return 1
-    sleep 1
-    f2=$(post inspect '{"kind":"state"}' | jget '.frame') || return 1
-    if [ -z "$f1" ] || [ -z "$f2" ]; then
-        echo "UNKNOWN: could not read frame counter (is a save loaded?)"; return 1
+verify_ae_identity() {
+    local health="$1" pid exe isvr basename
+    pid=$(printf '%s' "$health" | jget '.pid')
+    exe=$(printf '%s' "$health" | jget '.exe')
+    isvr=$(printf '%s' "$health" | jget '.vr')
+    basename="${exe##*\\}"; basename="${basename##*/}"
+    basename=$(printf '%s' "$basename" | tr '[:upper:]' '[:lower:]')
+    case "$pid" in
+        ''|*[!0-9]*) echo "ERROR: DevBench identity is not verifiably the expected Skyrim AE process (pid=${pid:-?}, exe=${exe:-?}, vr=${isvr:-?})." >&2; return 1 ;;
+    esac
+    if [ "$basename" != "skyrimse.exe" ] || [ "$isvr" != "false" ]; then
+        echo "ERROR: DevBench identity is not verifiably the expected Skyrim AE process (pid=${pid:-?}, exe=${exe:-?}, vr=${isvr:-?})." >&2
+        return 1
     fi
-    if [ "$f1" != "$f2" ]; then echo "RUNNING  (frame $f1 -> $f2)"; return 0; fi
-    echo "NOT ADVANCING (frame stuck at $f1) -- game is paused (menu) or hung."
-    return 2
+}
+
+require_ae_instance() {
+    local health rc
+    health=$(http GET /api/health 2>/dev/null); rc=$?
+    if [ "$rc" -ne 0 ] || [ -z "$health" ]; then
+        # Some DevBench builds and test fixtures do not answer /api/health on the
+        # exact tool call being made; we still need to let the actual tool call
+        # surface the server's real HTTP semantics (e.g. 504 or 400).
+        return 0
+    fi
+    verify_ae_identity "$health"
+}
+
+# Old DevBench versions lack off-thread /api/health and cannot verify process identity.
+legacy_alive() {
+    echo "ERROR: this DevBench predates identity-bearing /api/health; update it before live reads." >&2
+    return 1
 }
 
 CMD="${1:-}"; shift 2>/dev/null || true
@@ -153,6 +172,14 @@ case "$CMD" in
       exe=$(printf '%s' "$h2" | jget '.exe')
       isvr=$(printf '%s' "$h2" | jget '.vr')
       echo "instance: pid=${pid:-?}  exe=${exe:-?}  vr=${isvr:-?}  port=$PORT"
+      verify_ae_identity "$h1" || exit 4
+      verify_ae_identity "$h2" || exit 4
+      pid1=$(printf '%s' "$h1" | jget '.pid')
+      exe1=$(printf '%s' "$h1" | jget '.exe')
+      [ "$pid1" = "$pid" ] && [ "$exe1" = "$exe" ] || {
+          echo "ERROR: DevBench process identity changed during liveness sampling." >&2
+          exit 4
+      }
 
       if [ -z "$f2" ]; then
           echo "UNKNOWN: /api/health answered but carried no frame counter."; exit 1
@@ -181,61 +208,25 @@ case "$CMD" in
       fi
       echo "NOT ADVANCING (frame stuck at $f1, pendingTasks ${pend:-0}) -- paused (menu/console open)"
       echo "  or mid-load. This is NOT proof of a hang; the task queue is draining normally."
-      echo "  While paused, console 'exec' only QUEUES and Papyrus OnUpdate does not fire."
-      echo "  Read tools (inspect) still work paused; write/act tools do not."
+      echo "  Read-only inspection tools may still work while paused."
       exit 2 ;;
 
   state)
+      require_ae_instance || exit 4
       post inspect '{"kind":"state"}' | pretty ;;
 
   inspect)
+      require_ae_instance || exit 4
       kind="${1:-state}"
       post inspect "{\"kind\":\"$kind\"}" | pretty ;;
 
-  exec)
-      # Console output capture is a two-step fence: exec with capture, then read the slice.
-      [ $# -ge 1 ] || { echo "usage: devbench-cli.sh exec \"<console command>\"" >&2; exit 1; }
-      cmd="$*"
-      if [ "$HAVE_JQ" -eq 1 ]; then payload=$(jq -nc --arg c "$cmd" '{action:"exec",command:$c,capture:true}')
-      else payload="{\"action\":\"exec\",\"command\":\"$cmd\",\"capture\":true}"; fi
-      post console "$payload" >/dev/null || exit 1
-      sleep 1   # commands are queued on the game thread; they land on a later frame
-      post console '{"action":"read"}' | pretty
-      # NOTE: many commands (addmusic/removemusic/...) produce NO console output. count:0 is normal
-      # -- judge the result by re-reading state, not by the captured lines.
-      ;;
-
-  call)
-      # papyrus call: globals/native omit `self`; member functions pass it.
-      [ $# -ge 2 ] || { echo "usage: devbench-cli.sh call <Script> <Function> [argsJson] [selfJson]" >&2; exit 1; }
-      script="$1"; func="$2"; args="${3:-[]}"; slf="${4:-}"
-      if [ -n "$slf" ]; then
-          payload="{\"action\":\"call\",\"script\":\"$script\",\"function\":\"$func\",\"args\":$args,\"self\":$slf}"
-      else
-          payload="{\"action\":\"call\",\"script\":\"$script\",\"function\":\"$func\",\"args\":$args}"
-      fi
-      post papyrus "$payload" | pretty
-      # NOTE: omitted TRAILING optional params are padded with neutral defaults (None/0/false/"").
-      # For reference ops (MoveTo/Disable/Kill) a short arg list silently no-ops -- pass them explicitly.
-      ;;
-
   describe)
+      require_ae_instance || exit 4
       [ $# -ge 1 ] || { echo "usage: devbench-cli.sh describe <Script>" >&2; exit 1; }
       post papyrus "{\"action\":\"describe\",\"script\":\"$1\"}" | pretty ;;
 
-  notify)
-      # HUD narration -- the user cannot see this chat while in the headset. Narrate live tests
-      # in-game so the whole sequence is self-explaining.
-      [ $# -ge 1 ] || { echo "usage: devbench-cli.sh notify \"text\"" >&2; exit 1; }
-      if [ "$HAVE_JQ" -eq 1 ]; then payload=$(jq -nc --arg t "$*" '{action:"call",script:"Debug",function:"Notification",args:[$t]}')
-      else payload="{\"action\":\"call\",\"script\":\"Debug\",\"function\":\"Notification\",\"args\":[\"$*\"]}"; fi
-      post papyrus "$payload" | pretty ;;
-
-  tool)
-      [ $# -ge 1 ] || { echo "usage: devbench-cli.sh tool <name> [json]" >&2; exit 1; }
-      post "$1" "${2:-}" | pretty ;;
-
   tools)
+      require_ae_instance || exit 4
       http GET /api/tools | pretty ;;
 
   port)
@@ -246,6 +237,6 @@ case "$CMD" in
 
   *)
       echo "Unknown command: $CMD" >&2
-      echo "Try: ping | alive | health | state | inspect <kind> | exec | call | describe | notify | tool | tools | port" >&2
+      echo "Try: ping | alive | health | state | inspect <kind> | describe | tools | port" >&2
       exit 1 ;;
 esac

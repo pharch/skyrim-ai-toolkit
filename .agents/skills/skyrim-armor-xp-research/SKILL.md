@@ -3,7 +3,7 @@ name: skyrim-armor-xp-research
 description: Analyze and test ways to wear light or heavy armor while incoming verified hits produce zero armor skill XP, without losing effective armor protection.
 ---
 
-# Armor XP investigation
+# Skyrim AE armor XP investigation
 
 1. Establish valid baseline: equipped type/slot, source hit, actual hit/damage event, protection/armor rating, raw skill XP before/after, character level and active effects.
 2. Identify the award path from hit detection through armor skill/use calculation and all branching or clamping behavior.

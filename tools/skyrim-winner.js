@@ -28,9 +28,8 @@
 // [plugin] scopes the lookup to a file that CONTAINS the record (defining it or
 // overriding it); masters are always searched either way.
 //
-// The game root is derived as the parent of tools/, so there is nothing to
-// configure; set $GAME_ROOT to override. xelib is resolved from the npm
-// package or from a local tools/xelib/xelib.js, whichever is installed.
+// GAME_ROOT, executable version, edition, and active load order are verified
+// explicitly; this checkout must never be mistaken for the game installation.
 //
 // NOTE: node's own exit code is unreliable here -- koffi's DLL is still
 // resident when stdio flushes, so it exits 127 on full success (CLAUDE.md #12).
@@ -54,7 +53,7 @@ function ensureTrailingSep(dir) {
     return (last === path.posix.sep || last === path.win32.sep) ? dir : dir + path.sep;
 }
 
-const GAME_PATH = ensureTrailingSep(process.env.GAME_ROOT || path.resolve(__dirname, '..'));
+let GAME_PATH;
 const UNKNOWN = '(unknown file)';
 
 // xelib sits in one of two places depending on how the toolkit was installed:
@@ -172,6 +171,12 @@ function openFile(name) {
 
 function main(argv) {
     parseArgv(argv);
+    try {
+        const target = require('./ae-target').assertAETarget();
+        GAME_PATH = ensureTrailingSep(target.gameRoot);
+    } catch (e) {
+        die(e.message);
+    }
     loadXelib();
 
     xelib.init();

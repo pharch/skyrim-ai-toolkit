@@ -3,7 +3,7 @@ name: skyrim-cross-domain-synthesis
 description: Periodically synthesize Skyrim reverse-engineering findings across quests, combat XP, ActiveEffects, enchanting and serialization to discover shared engine primitives and new level-one exploit candidates.
 ---
 
-# Synthesis pass
+# Skyrim AE cross-domain synthesis
 
 After five meaningful investigation results, a major contradiction, or surprising behavior:
 
@@ -14,3 +14,9 @@ After five meaningful investigation results, a major contradiction, or surprisin
 5. Generate frontier entries with exact falsifiable predictions and feasible tests, not vague subjects.
 6. Rebalance the frontier while preserving negative findings and the P0 priority hierarchy.
 7. Update `research/KNOWLEDGE_GRAPH.md`, `ROADMAP.md` and short `STATE.md`.
+
+Do not promote a shared name or a coincident state transition into a causal
+edge. For each proposed connection, state the observable that could disprove
+it and keep edition/build provenance attached to both endpoints. Mark an edge
+as an analogy until a shared call path or discriminating experiment supports
+causality.

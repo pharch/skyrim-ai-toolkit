@@ -1,29 +1,51 @@
-# Live-Game Testing Protocol
+# Skyrim AE live-test protocol
 
-## Allowed lanes
+## Lanes
 
-- **offline**: Ghidra, records, decompilation, saves copied to fixtures. Preferred autonomous lane.
-- **diagnostic**: isolated throwaway save, approved DevBench/SKSE access, explicit tagged state changes (`setstage`, `modav`, spawning, load/save) to map mechanisms. Outcomes are not vanilla exploits.
-- **vanilla-validation**: baseline clean save with only approved observational instrumentation. Test user-reproducible steps with no mod-mediated alteration of conditions.
+- `offline`: records, Ghidra, decompilation, save copies, parsers, and test
+  fixtures. Default for autonomous work.
+- `diagnostic_intervention`: isolated disposable save and explicitly tagged
+  interventions used only to locate a mechanism. Such evidence is not a vanilla
+  exploit.
+- `vanilla-validation`: a clean baseline with observational instrumentation
+  only, reproducing the player-available sequence without altering conditions.
 
-## Minimum before a live action
+## AE identity gate
 
-Record game version, SKSE version, load order, exact save ID and duplicate save backup, existing quest state, current level, skills/XP, relevant ActorValues, active effects, equipped items, timestamp and plugin list. Show state-diff afterward. Unique saves and game files are protected.
+Before any live tool call, run `node tools/ae-preflight.js` on Windows. Confirm
+the detected `SkyrimSE.exe` ProductVersion is 1.6.318+, the executable hash
+matches the intended install, and the load-order path/hash identifies the
+selected AE profile. `GAME_ROOT` and a named plugin are not sufficient identity
+evidence. Stop on a runtime/profile mismatch.
 
-## DevBench baseline (provided by upstream)
+DevBench is optional and is not bundled. The operator installs it through the
+mod manager. Use `alive` before other requests and confirm process identity
+matches the AE target. The API may answer while the game's main thread is
+blocked; `ping` alone is not evidence that gameplay is advancing.
 
-`bash tools/devbench-cli.sh alive` (not `ping` alone), then `health`, `state`, `inspect vm`. Inspect `CLAUDE.md` from archived upstream docs for the exact invocation patterns. Example of a read-only console request when correctly routed: `bash tools/devbench-cli.sh exec "player.getav health"`. Since the upstream wrapper assumes game-root placement in places, verify URL/port and game-instance identity first. Do not expose its general `exec`/`call` to unattended agents without a gate.
+## Before and after each experiment
 
-## Probe safeguards
+Record game build, SKSE version, load-order hash, save identifier/hash, lane,
+instrumentation version, test objective, competing hypotheses, preconditions,
+expected outcomes, observables, exact commands, rollback, and data destination.
+Use a duplicated disposable save for any diagnostic intervention. Preserve the
+original save and co-save. Capture before/after state and raw output; never
+overwrite a unique baseline.
 
-- Generate an experiment manifest specifying allowed commands/forms/variables, preconditions, before/after captures and rollback.
-- Use a separate test save and enforce command-level allowlist from trusted code, not only natural-language instructions.
-- Deny plugin file writes, registry writes, save deletion, unknown teleport, overwriting main saves, and unbounded loops.
-- For quest research, stage mutations are **diagnostic controls** only. Detect progression via journal, quest instance state, stage history, world-state effects and corresponding events; a `setstage` success alone is not an unlock.
-- For armor XP, capture actual hit/damage and armor skill XP; state snapshots alone may not expose sub-level XP accurately—add a purpose-built read-only probe if required.
-- If the game is loading, saving, freezing, or in an unsafe state, stop *that* experiment and continue offline research.
+- Quest target: retain player level 1 and track skill/character XP, real quest
+  start, journal visibility, stage transitions, aliases, world changes, event
+  initiation, and every trigger/precondition. `setstage` or `startquest` is
+  diagnostic only.
+- Armor target: verify the incoming hit/damage event, worn armor, coverage,
+  rating, armor skill XP before/after, race/perks, combat state, and damage
+  absorption. A miss or prevented hit is a false positive.
+- Enchanting: track cumulative skill XP and underlying threshold, not only a
+  crafting UI level.
+- Alchemy: distinguish displayed duration, remaining ActiveEffect instance,
+  reapplied/ability/enchantment effects, and save/load persistence.
 
-## Integration maturity
-
-DevBench: upstream capability documented, local installation **unverified**.
-SkyLink / Skyrim-MCP: design only; not installed. See `docs/SKSE_MCP_INTEGRATION.md`.
+Stop that experiment if the executable/profile changes, baseline becomes
+uncertain, data is corrupted, the game enters a crash loop, or the tool returns
+an unsupported schema. Continue with offline work and record the blocker.
+Unattended Codex cycles may not call DevBench mutators, save/load, console
+commands, or arbitrary MCP tools.

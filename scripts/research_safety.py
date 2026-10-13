@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BACKUP_ROOT = ROOT / ".research-backups"
 PROTECTED_SUFFIXES = {".esp", ".esm", ".esl", ".bsa", ".ba2", ".ess", ".skse"}
 SNAPSHOT_SUFFIXES = {
-    ".md", ".json", ".toml", ".py", ".sh", ".psc", ".txt", ".yaml", ".yml",
+    ".md", ".json", ".toml", ".py", ".sh", ".txt", ".yaml", ".yml",
 }
 
 
@@ -32,7 +32,7 @@ def _local_config() -> dict[str, str]:
                 continue
             key, value = line.split("=", 1)
             values[key.strip()] = value.strip().strip("\"'")
-    for key in ("GAME_ROOT", "SKYRIM_CONFIG_DIR"):
+    for key in ("SKYRIM_EDITION", "GAME_ROOT", "SKYRIM_EXE_PATH", "SKYRIM_CONFIG_DIR", "PLUGINS_TXT"):
         if os.environ.get(key):
             values[key] = os.environ[key]
     return values
@@ -117,16 +117,14 @@ def preflight() -> int:
     except (OSError, ValueError) as exc:
         checks.append((False, f"Codex configuration parses: {exc}"))
 
-    settings_path = ROOT / ".claude" / "settings.json"
-    if settings_path.exists():
-        try:
-            settings = json.loads(settings_path.read_text(encoding="utf-8"))
-            hooks_disabled = settings.get("hooks", {}) == {}
-            checks.append((hooks_disabled, "legacy Claude hooks are not registered"))
-        except (OSError, json.JSONDecodeError) as exc:
-            checks.append((False, f"legacy Claude settings parse: {exc}"))
+    checks.append((not (ROOT / ".claude").exists(), "no active Claude hooks/settings"))
+    checks.append(((ROOT / "research" / "FRONTIER.json").is_file(), "durable research frontier exists"))
+    checks.append(((ROOT / "research" / "EVIDENCE.json").is_file(), "durable evidence register exists"))
 
     values = _local_config()
+    edition = values.get("SKYRIM_EDITION", "")
+    if edition and edition != "AE":
+        checks.append((False, "configured target must be Skyrim AE"))
     game_root = values.get("GAME_ROOT", "").strip()
     if game_root:
         outside = not _within(str(ROOT), game_root)
@@ -194,7 +192,14 @@ def main() -> int:
         return snapshot(args.paths)
 
     values = _local_config()
-    roots = [values.get("GAME_ROOT", ""), values.get("SKYRIM_CONFIG_DIR", "")]
+    plugin_list = values.get("PLUGINS_TXT", "")
+    profile_root = str(Path(plugin_list).parent) if plugin_list else ""
+    roots = [
+        values.get("GAME_ROOT", ""),
+        values.get("SKYRIM_CONFIG_DIR", ""),
+        profile_root,
+        str(ROOT),
+    ]
     failures = 0
     for value in args.paths:
         reason = check_write(value, roots)

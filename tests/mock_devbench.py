@@ -32,8 +32,9 @@ def _tick() -> int:
 
 def health_body() -> dict:
     n = _tick()
-    common = {"pid": 4242, "port": PORT, "exe": "SkyrimVR.exe", "vr": True}
-    if MODE == "running":
+    exe = "SkyrimSE.exe" if MODE != "wrongexe" else "SkyrimVR.exe"
+    common = {"pid": 4242, "port": PORT, "exe": exe, "vr": False}
+    if MODE in {"running", "wrongexe"}:
         return {"ok": True, "lastLifecycle": "postLoadGame", "frame": 1000 + n * 90,
                 "lastTaskFrame": 990 + n * 90, "pendingTasks": 0, **common}
     if MODE == "paused":
@@ -83,7 +84,7 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(200, {"ok": True})
         if self.path == "/api/tool/inspect":
             # Legacy path: the main-thread frame counter, advancing.
-            return self._send(200, {"plugin": "devbench", "vr": True,
+            return self._send(200, {"plugin": "devbench", "vr": False,
                                     "playerLoaded": True, "frame": 2000 + _tick() * 90})
         self._send(200, {"ok": True})
 

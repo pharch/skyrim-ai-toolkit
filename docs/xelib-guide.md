@@ -1,164 +1,44 @@
-# xelib Guide for Skyrim Modding
+# xEditLib/xelib for Skyrim AE research
 
-## What is xelib?
+xEditLib exposes xEdit record inspection through a Delphi-compiled Windows
+DLL. It is not available to Linux CI. Skyrim AE uses xEdit `GM_SSE` (enum 4)
+for plugin data, but that mode does not detect AE; use
+`node tools/ae-preflight.js` first.
 
-[xeditlib](https://github.com/WingedGuardian/xeditlib) is a Node.js wrapper around `XEditLib.dll`, the same engine that powers xEdit/TES5Edit/SSEEdit. It gives you programmatic access to all 163 xEdit functions from JavaScript.
+## Prerequisites
 
-This means you can read, inspect, diff, and modify ESP/ESM files with code instead of clicking through the xEdit GUI.
+1. Windows, Node.js 20+, an operator-installed xEditLib package, and the
+   required xEdit registry mapping to the intended AE installation.
+2. Local `config/local.env` values: `SKYRIM_EDITION=AE`, `GAME_ROOT`, and an
+   absolute `PLUGINS_TXT`. For MO2, choose the active profile's virtualized
+   plugin list. Never use a hand-selected plugin subset for an absence or
+   winner claim.
+3. Run the executable and load-order preflight, then preserve its output,
+   executable SHA-256, and profile path/hash with the experiment.
 
-## Installation
+## Read-only usage
 
-Run this **from the toolkit root** (the folder containing `tools/` and `examples/`):
-
-```bash
-npm install github:WingedGuardian/xeditlib
+```sh
+bash tools/skyrim-winner.sh winner 0x0003418E
+bash tools/skyrim-winner.sh chain 0x0003418E
+bash tools/skyrim-winner.sh conflicts Example.esp
 ```
 
-Installing at the root puts `node_modules/xeditlib` where Node's upward module lookup can find it
-from every bundled script — `tools/xelib/*.js`, `tools/resaver-resolve-names.js`, and `examples/*.js`
-all `require('xeditlib')` and resolve it from here. (Install it somewhere deeper and those scripts
-throw `MODULE_NOT_FOUND`.)
+The winner helper loads the complete active order and asks xEdit for the
+winning override. The shell wrapper's exit status is authoritative: 0 denotes
+a complete result, 2 a reported error, 3 no valid result marker. Inspect logs
+for the `RESULT:` line and loaded plugin count. Never convert a loader error or
+empty tree into a negative record finding.
 
-This installs:
-- `xelib.js` -- The Node.js wrapper (all 163 functions with correct FFI signatures)
-- `XEditLib.dll` + the `*.Hardcoded.dat` game-data files -- the Delphi-compiled binary and its data.
-  `xelib.js` loads the DLL relative to its own package folder, and XEditLib finds the `.dat` files
-  next to the DLL, so **the scripts work regardless of your current working directory** once the
-  package is installed at the root.
-- `koffi` -- The FFI library for calling native DLL functions from Node.js
+## FFI caveats retained from upstream
 
-Verify it resolves: from the toolkit root, `node -e "require('xeditlib')"` should exit clean.
+- Delphi strings are UTF-16LE, not UTF-8.
+- `WordBool` is 16-bit. `InitXEdit()` and `CloseXEdit()` are void.
+- String results use a length output then a separate string retrieval call.
+- Use file-based Node scripts for xelib, not `node -e`.
+- Terminate the game path with a separator before initializing the native
+  library; call order can otherwise change whether the DLL reports an error.
+- Release every record/element handle after use.
 
-## Critical Setup: Registry Key
-
-XEditLib reads your game path from the Windows registry. You need the **SSE registry key** (even for VR):
-
-```
-HKLM\SOFTWARE\WOW6432Node\Bethesda Softworks\Skyrim Special Edition
-  Installed Path = C:\path\to\your\Skyrim VR\
-```
-
-If this key doesn't exist, create it **from an elevated (Run as administrator) terminal** — writing
-under `HKLM` requires admin rights, and a normal shell fails with `ERROR: Access is denied.`:
-```bash
-reg add "HKLM\SOFTWARE\WOW6432Node\Bethesda Softworks\Skyrim Special Edition" /v "Installed Path" /t REG_SZ /d "C:\path\to\your\Skyrim VR\\" /f
-```
-
-> **Why SSE, not VR?** XEditLib uses game mode `gmSSE=4` for both SSE and VR. There is no VR-specific mode. The DLL looks up the game path using the SSE registry key regardless.
-
-## Delphi FFI Gotchas
-
-XEditLib.dll is Delphi-compiled. These quirks caused hours of debugging and are now handled by the xelib wrapper, but understanding them helps when debugging:
-
-1. **All strings are UCS-2/UTF-16LE** (Delphi `PWideChar`), never UTF-8
-2. **`InitXEdit()` and `CloseXEdit()` are VOID** -- declaring them as bool corrupts the call stack
-3. **`WordBool` = `uint16`** (2 bytes), not bool/uint8
-4. **String return pattern**: Functions write a length to a `PInteger`, then you call `GetResultString(buffer, len)` to get the value
-5. **Game mode enum**: gmFNV=0, gmFO3=1, gmTES4=2, gmTES5=3, gmSSE=4 (use this for VR), gmFO4=5
-
-## Basic Usage Pattern
-
-```js
-const xelib = require('xeditlib');
-
-// Initialize
-xelib.init();
-xelib.setGameMode(xelib.GM_SSE); // Always GM_SSE for VR
-
-// Load plugins
-xelib.loadPlugins('Skyrim.esm', true, false);
-await xelib.waitForLoader(60000);
-
-// Work with records
-const fileH = xelib.fileByName('Skyrim.esm');
-const weapons = xelib.getRecords(fileH, 'WEAP');
-
-for (const w of weapons.slice(0, 5)) {
-    console.log(xelib.displayName(w));
-    xelib.release(w);  // Always release handles!
-}
-
-// Cleanup
-xelib.release(fileH);
-xelib.close();
-```
-
-## The Dry-Run Convention
-
-**Never call `SaveFile()` on the first run.** Always follow this pattern:
-
-### Pass 1: Read-Only Preview
-```js
-// Load ESP, inspect records, log proposed changes
-// Do NOT call xelib.saveFile()
-console.log('Would modify: SPEL record 0x000800');
-console.log('Would add: MGEF record with EditorID "MyEffect"');
-```
-
-### Pass 2: User Reviews
-The user reads the console output and decides whether to proceed.
-
-### Pass 3: Write (with --commit flag)
-```js
-if (process.argv.includes('--commit')) {
-    xelib.saveFile(fileH);
-    console.log('Saved!');
-} else {
-    console.log('DRY RUN -- use --commit to save');
-}
-```
-
-See `examples/create-esp.js` for a complete implementation of this pattern.
-
-## Element Path Navigation
-
-xelib uses backslash-delimited paths to navigate record structures:
-
-```js
-// Get a value from a nested path
-const castType = xelib.getValue(spellH, 'SPIT\\Cast Type');
-
-// For deeply nested paths, use two-step navigation
-const data = xelib.getElement(mgefH, 'Magic Effect Data\\DATA');
-const archetype = xelib.getValue(data, 'Archetype');
-```
-
-**Quirk**: `getValue(record, 'PARENT\\Child')` can fail with nested paths when the target doesn't exist. Use two-step navigation instead:
-```js
-const outer = xelib.getElement(recH, 'DATA');
-const inner = xelib.getElement(outer, 'Radius');
-const v = xelib.getValue(inner, '');  // empty path on element handle
-```
-
-## Handle Management
-
-XEditLib uses integer handles (like file descriptors). **You must release handles when done**:
-
-```js
-const h = xelib.getElement(fileH, 'WEAP');
-// ... work with h ...
-xelib.release(h);  // MUST release!
-```
-
-Forgetting to release handles causes memory leaks and eventually crashes.
-
-## Common Record Types
-
-| Signature | Type | Description |
-|-----------|------|-------------|
-| SPEL | Spell | Spells, abilities, powers |
-| MGEF | Magic Effect | Individual magic effects |
-| GLOB | Global Variable | Script-accessible global values |
-| KYWD | Keyword | Tags for filtering and conditions |
-| WEAP | Weapon | Weapon definitions |
-| ARMO | Armor | Armor and clothing |
-| NPC_ | NPC | Non-player characters |
-| QUST | Quest | Quest definitions |
-| FLST | FormList | Lists of forms |
-| PERK | Perk | Perk tree entries |
-
-## Further Reading
-
-- [xeditlib GitHub](https://github.com/WingedGuardian/xeditlib) -- Full API documentation
-- [xEdit documentation](https://tes5edit.github.io/docs/) -- Record structure reference
-- [UESP Mod File Format](https://en.uesp.net/wiki/Skyrim_Mod:Mod_File_Format) -- Low-level file format
+Do not call `SaveFile` or deserialize altered Spriggit output. Registry creation and xEditLib installation
+are operator-managed Windows setup, not automated by this repository.

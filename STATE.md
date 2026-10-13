@@ -1,39 +1,40 @@
-# Active Research State
+# Operational State
 
-Status: INITIAL / UNVERIFIED. The fork's legacy research, probes and Discord corpus have **not** yet been ingested here. Do not treat seeded frontier entries as discovered facts.
+## Research target
 
-## Operating environment
+- Edition: Skyrim AE only
+- Runtime requirement: `SkyrimSE.exe` ProductVersion 1.6.318 or newer
+- Runtime executable, SKSE build, active profile/load order, test save,
+  instrumentation: **not available or verified in this Linux checkout**
+- No in-game action or save mutation was performed.
 
-- Game edition/version: **TO BE RECORDED**
-- Mod manager/load order: **TO BE RECORDED**
-- Game paths and test save: **TO BE RECORDED IN LOCAL UNTRACKED CONFIG**
-- SKSE/native probe environment: **TO BE AUDITED**
-- Static-analysis binaries and Ghidra project: **TO BE AUDITED**
-- Existing DevBench availability: **UNKNOWN**
-- UESP access: **API ENDPOINT NOT VALIDATED FROM LOCAL ENVIRONMENT**
-- Apocrypha export location and format: **UNKNOWN**
+## Current research status
 
-## Existing research to migrate
+All seeded frontier items remain **open and unverified**. No game mechanics,
+quest gates, XP behavior, or ActiveEffect behavior were validated in this
+session. The executable gate and fixture-tested routing are infrastructure,
+not gameplay evidence.
 
-Check legacy repo for `shifting.md`, research notes on poison resistance, float/ULP AV perturbation, enchanting and alchemy XP, active-effect lifecycles, quest requirements, armor XP, and prior SKSE probe outputs. Preserve original evidence and caveats.
+## Session recovery
 
-## P0 active themes
+The requested authoritative `migration/FINAL_SETUP_BRIEF.md` was not present
+in the checkout, tracked files, Git history, or either visible remote branch
+when checked on 2026-10-13. Its required 82 acceptance criteria therefore
+cannot be transcribed or honestly marked complete. See
+`migration/UNRESOLVED.md`; do not invent a substitute checklist.
 
-OBJ-1: Enumerate specific gates and the distinct pathways that initiate real quests/events. Separate a level gate from quest completion, event spawn, and player-facing journal state.
+Current implementation checkpoint: AE executable/load-order gates, initial
+research evidence register/validator, and Codex setup/docs have been started.
+Continue the migration work from `migration/MIGRATION_PROGRESS.md`; finish
+tool-routing surfaces, CI, active-workflow pruning, and regression tests. Then
+obtain the missing authoritative brief, create its exact checklist, and audit
+each item. Before another CLI/context boundary, record the exact changes and
+next action in `research/SESSION_LOG.md`.
 
-OBJ-2: Trace the native XP grant for armor hits and determine whether damage mitigation can remain while skill XP award is independently suppressed.
+## Live test blockers
 
-## Next actions
-
-1. Validate retained upstream tooling works from a **separate checkout** and never from the game root.
-2. Import legacy research/source paths with provenance, not guessed summaries.
-3. Run source-verification baseline for top quest and armor assumptions.
-4. Expand `FRONTIER.json` from actual evidence.
-
-## Blockers / user-controlled operations
-
-No real in-game actions have been authorized or performed in this bootstrap.
-
-## Recent checkpoint
-
-This file is a template generated before installation. Replace with evidence-backed operational status at the first real research session.
+- No Windows Skyrim AE installation is mounted in this Linux environment.
+- No executable, game build, SKSE, MO2 profile, test save, xEditLib DLL, or
+  DevBench instance is available here.
+- UESP and Apocrypha inputs are not present in this checkout; do not infer
+  access or content.

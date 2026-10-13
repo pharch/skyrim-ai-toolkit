@@ -1,5 +1,5 @@
 # User-specific settings (contains local paths)
-.claude/settings.local.json
+.codex/config.local.toml
 
 # Local research snapshots (generated at runtime)
 .research-backups/

@@ -1,59 +1,66 @@
-# Seven-day Local Research Run: Practical Operation
+# Bounded Codex continuation and recovery
 
-A week-long autonomous investigation requires **two separate things**: (1) a durable research system that can survive context resets and (2) a runtime supervisor that re-invokes Codex after each normal turn/CLI exit. Repeating "never stop" in AGENTS.md is not a runtime guarantee. `/goal` supports persistent continuation in compatible interactive Codex builds, but still has budgets, stop conditions, and access limits. The optional `scripts/research_supervisor.py` performs bounded serial CLI re-invocations so no single session must last seven days.
+The harness supports durable, serial research cycles; it cannot promise a
+continuous week of execution. The supervisor is foreground, opt-in, quota- and
+timeout-bounded, and must remain offline. It does not launch a game, call
+DevBench, mutate saves, or enable an MCP server.
 
-## Prior to running
+## Before any unattended run
 
-- Pin both upstream commit and current fork commit; record `codex --version` and tool versions.
-- Ensure repo is outside Skyrim installation; validate path routing and independent permissions.
-- Set up a separate, disposable game profile/save. Back up saves externally. Ensure live MCP tools are **not configured** until safe read-only gateway has passed evaluation.
-- Install prerequisites for retained tools; validate one positive and one negative fixture. Confirm correct game build and MO2/stock load order.
-- Import and index authorized Apocrypha log locally; verify UESP access/permissions. Read-only source lookup should not depend on live game.
-- Create initial claims and frontier; check `STATE.md` has specific next tasks. Run preflight `python scripts/validate_overlay.py`.
-- Commit baseline. Inspect sandbox/approval and the tool whitelist; in unattended mode approval prompts cannot be answered. Do not broaden privileges to make a stuck agent continue.
-- Set OS sleep/updates/network and Codex quota expectations consciously; the supervisor cannot bypass service limits.
+1. Finish the repository finalization checklist and pass
+   `python scripts/setup_research.py check`.
+2. Review the exact Codex command/configuration and confirm the trusted checkout
+   is outside the game install. Keep the only shared Codex config at
+   `.codex/config.toml`; do not configure live MCP servers.
+3. Confirm `research/FRONTIER.json`, `research/EVIDENCE.json`, `STATE.md`, and
+   `research/SESSION_LOG.md` are valid and committed or backed up.
+4. Check the Codex CLI identity/version, OS sleep/update behavior, rate limits,
+   log disk space, and process supervision. Do not loosen sandbox/approval
+   settings to make a run continue.
+5. Keep the run offline. Live observations require a separate supervised,
+   authorized session and a disposable save.
 
-## Interactive research mode (best for setup/testing)
+## Dry run and bounded execution
 
-```bash
-npm install -g @openai/codex@latest
-codex --version
-codex
-```
-
-Then paste this **optional** persistent interactive Goal (requires a compatible build):
-
-```text
-/goal Expand the evidence-backed causal model of vanilla Skyrim with priority on
-(1) reproducible level-one access to level-gated quests/encounters and
-(2) no-armor-skill-XP incoming hits while worn armor still works.
-Use NORTH_STAR.md and the FRONTIER as the verification surface. When a branch
-fails, log it and advance another. Keep objective and cross-system synthesis
-running. Record every evidence artifact and resumable checkpoint. Stop for
-user authorization of live mutations, protected files, or a genuine global
-blocker, not a locally exhausted branch.
-```
-
-Goals can stop on budget or hard blockers. Do not assume this alone guarantees a week.
-
-## Unattended offline-first mode (opt-in)
-
-```bash
-python scripts/research_supervisor.py                 # inspect dry run
+```sh
+python scripts/research_supervisor.py
 python scripts/research_supervisor.py --execute --hours 168 --round-minutes 45
-# To request graceful termination between cycles, create .stop-research
+# Graceful stop between cycles:
+touch .stop-research
 ```
 
-The supervisor calls **fresh** Codex CLI sessions in sequence using a stored repo-state handoff, logs stdout JSONL, stderr and exit code, and stops after bounded repeated failures. It does not quietly elevate permissions, access your live save, create mod files inside game directory, or retry failed live actions. CLI/API availability, quotas, network/sleep and local process lifetime can prevent a continuous run.
+The default is dry-run. Execution requires `codex` on `PATH`, valid repository
+preflight, no existing lock, and explicit `--execute`. Each cycle records JSON
+metadata, stdout JSONL, stderr, input hashes, changed durable files, exit code,
+frontier IDs, and validation outcome under `research/supervisor-logs/`.
+Success requires both a zero process exit and a valid durable core-state
+change; an exit code alone is not evidence of progress.
 
-## Cadence
+## Recovery after interruption
 
-- Every investigation: record evidence/provenance, contradiction/claim updates, frontier changes, and the next action.
-- Every ~5 meaningful investigations: cross-system synthesis and priority rebalance.
-- After any surprise/invalid probe: audit instrument, game version, totals and denominator before updating the game model.
-- Daily (operator review): audit `research/supervisor-logs/` and `research/SESSION_LOG.md`, negative results and dubious certainty; optionally authorize a new live experiment batch.
-- After run: consolidate state into a clean synthesis and use a separate reviewer agent to challenge unsupported claims.
+At cycle start, `research/RECOVERY.json` is atomically set to `running`. A
+normal result records the cycle's status and exact artifact base. If the
+supervisor is killed, the next invocation detects the stale `running` marker,
+sets status to `interrupted`, and adds a recovery entry to the session log.
+Before resuming:
 
-## Human-in-the-loop live experimentation
+1. Inspect the old metadata, stdout, stderr, exit code, and repository diff.
+2. Compare the durable file hashes and `STATE.md` checkpoint with the frontier.
+3. Decide whether a partial change is valid; do not assume Codex finished.
+4. Resolve stale `.research-supervisor.lock` only after confirming no process is
+   active; the tool intentionally will not remove it automatically.
+5. Continue from the explicit next action in `STATE.md` and
+   `research/RECOVERY.json`.
 
-Until an independent MCP gate exists, keep the week-long run offline/read-only and perform in-game tests in separately authorized supervised windows. Later a restricted, audited gateway can automatically execute only tagged, reversible experiments on disposable saves, with a watchdog, rollback and immutable before/after captures.
+Timeouts kill the Codex process group where supported, write exit code 124, and
+count toward the bounded failure limit. Malformed research data is a failed
+cycle and remains available for review; it is never silently repaired or
+accepted.
+
+## Review cadence and limits
+
+Review run metadata and state diffs after each cycle. Every five meaningful
+investigations, synthesize shared mechanisms and update the graph. A human
+reviewer should check false claims, repetition, source access, and session
+drift before extending the budget. Do not interpret a supervisor process that
+is alive as a Codex session that is making valid progress.

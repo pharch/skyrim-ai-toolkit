@@ -1,37 +1,27 @@
-# First Codex session prompt (after fork port + baseline verification)
-
-Paste into Codex in the forked repository:
+# Codex session start prompt
 
 ```text
-Read AGENTS.md, NORTH_STAR.md, STATE.md, ROADMAP.md, research/FRONTIER.json,
-protocols/TOOL_ROUTING.md, and migration/PORTING_CHECKLIST.md.
+Read AGENTS.md, NORTH_STAR.md, STATE.md, ROADMAP.md,
+research/FRONTIER.json, research/EVIDENCE_MODEL.md, and
+protocols/TOOL_ROUTING.md.
 
-Your immediate objective is to bring the RESEARCH harness to validated readiness,
-not to build a Skyrim mod.
+This is a Skyrim AE research checkout, not a mod-authoring workspace. First
+recover the exact current checkpoint from STATE.md and research/SESSION_LOG.md.
+Select one ready, tractable frontier item; list the rival mechanisms and
+predicted discriminants; use the cheapest reliable source. Preserve raw output
+with hashes and tool/build provenance. Update evidence, claims, contradictions,
+frontier, session log, and state as applicable.
 
-First audit the fork's tracked files and the upstream artifacts in
-references/upstream. Verify that the old Claude instructions contain no unique
-operating knowledge missing from new protocols. Inventory native tools and
-version/path assumptions; migrate useful Claude skills to .agents/skills,
-without carrying asset-authoring workflows forward.
+Do not invent results or infer a negative from empty/incomplete tool output.
+Keep diagnostic intervention separate from vanilla-valid evidence. Do not
+write to the game, plugins, archives, saves, or co-saves. Do not call live-game
+mutators or enable them in unattended runs. If a Windows/player test is
+required, create a complete protocol and continue with a different offline
+question.
 
-Then validate tools on read-only fixtures and establish a sourced, precise
-research frontier focused overwhelmingly on the two P0 goals:
-  1) trigger normally level-locked quests/encounters at level one;
-  2) retain effective equipped armor without gaining armor skill XP from hits.
-
-Import existing source notes and SKSE/Ghidra discoveries with provenance.
-Check basic assumptions against UESP/Apocrypha if authorized and available;
-otherwise record an access blocker and use verifiable game records.
-
-Run research continuously by cycling between deep investigation and
-cross-system synthesis. If a question depends on user-run tests, write a full
-discriminating protocol, mark it awaiting-user-data, then continue another.
-Never treat console-forced states or edited game records as a verified vanilla
-exploit. Do not alter the original game installation or saves.
-
-Before every CLI/context boundary, update STATE.md, the frontier and
-research/SESSION_LOG.md. Do not spend the session rephrasing prior work.
+Before a context or CLI boundary, checkpoint the exact completed work and the
+next action. Never claim a Windows or in-game test from Linux fixture checks.
 ```
 
-During interactive pilot, start with this prompt; use `/goal` if your Codex version supports it. Only use `research_supervisor.py --execute` after the migration and read-only preflight have passed.
+This prompt is a convenience, not a safety boundary or a promise of unlimited
+continuation.
