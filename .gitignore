@@ -1,8 +1,8 @@
 # User-specific settings (contains local paths)
 .claude/settings.local.json
 
-# Backups (generated at runtime)
-.claude/backups/
+# Local research snapshots (generated at runtime)
+.research-backups/
 
 # Node modules
 node_modules/
@@ -22,12 +22,20 @@ tools/.nexus_api_key
 __pycache__/
 .pytest_cache/
 
-# Machine-local paths recorded by setup.sh for the safety hooks. Never tracked:
-# it names one user's directories, and shipping it would point another
-# install's guard at a folder that does not exist there.
-.claude/skyrim-paths.env
-
 # YOUR knowledgebase, not ours. Never tracked and never shipped: the update path is
 # "extract the new zip over your install", so any file the toolkit ships is replaced.
 # A file that is both shipped by us and appended to by you loses your work on update.
 KNOWLEDGEBASE.local.md
+# Append these entries to the inherited .gitignore; do not replace upstream ignore rules.
+config/local.env
+research/data-private/
+research/raw-private/
+research/uesp-cache/
+research/apocrypha-index.sqlite*
+research/supervisor-logs/
+.codex-local/
+*.ess
+*.skse
+*.dmp
+.research-supervisor.lock
+.stop-research

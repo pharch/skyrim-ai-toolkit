@@ -1,0 +1,3 @@
+# These defaults apply only after the operator trusts this repository.
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"

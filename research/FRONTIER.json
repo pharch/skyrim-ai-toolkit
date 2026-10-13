@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "items": [
+    {
+      "id": "Q-0001", "objective": "OBJ-1", "kind": "baseline", "status": "open",
+      "question": "Which vanilla quests/events have independently verifiable player-level gates, and at what phase are the gates evaluated?",
+      "methods": ["UESP cross-check", "Skyrim.esm + DLC record analysis", "Papyrus/native trace"],
+      "blocked_by": [], "evidence": [], "priority": 1.0
+    },
+    {
+      "id": "Q-0002", "objective": "OBJ-1", "kind": "mechanism", "status": "open",
+      "question": "Can a vanilla-accessible alternate initiation path bypass a representative gate without simply forcing quest state through a developer console?",
+      "methods": ["static call graph", "story-manager audit", "controlled test plan"],
+      "blocked_by": ["Q-0001 representative gate selection"], "evidence": [], "priority": 0.98
+    },
+    {
+      "id": "Q-0003", "objective": "OBJ-2", "kind": "baseline", "status": "open",
+      "question": "What engine event and code path awards armor skill XP from a validated incoming hit, independently of damage reduction?",
+      "methods": ["game records", "Ghidra", "SKSE baseline with XP snapshots"],
+      "blocked_by": [], "evidence": [], "priority": 1.0
+    },
+    {
+      "id": "Q-0004", "objective": "OBJ-2", "kind": "mechanism", "status": "open",
+      "question": "Is there a vanilla-reachable state or sequence which preserves equipped armor protection but suppresses armor skill XP credit?",
+      "methods": ["native branch points", "perk/condition inspection", "A/B hit protocol"],
+      "blocked_by": ["Q-0003 validated baseline"], "evidence": [], "priority": 0.99
+    },
+    {
+      "id": "Q-0005", "objective": "OBJ-3", "kind": "numeric", "status": "open",
+      "question": "How is enchanting XP accumulated and rounded, and can XP be made sub-threshold without invalidating item creation?",
+      "methods": ["numeric experiment", "native XP function", "prior glitch notes"],
+      "blocked_by": [], "evidence": [], "priority": 0.7
+    },
+    {
+      "id": "Q-0006", "objective": "OBJ-4", "kind": "mechanism", "status": "open",
+      "question": "What transitions determine the duration and lifetime of a poison/potion ActiveEffect, and what persists after save/load?",
+      "methods": ["ActiveEffect native paths", "SKSE state dumps", "existing shifting notes"],
+      "blocked_by": [], "evidence": [], "priority": 0.7
+    },
+    {
+      "id": "Q-0007", "objective": "SHARED", "kind": "tooling", "status": "open",
+      "question": "Which current toolkit facilities execute correctly from a separate checkout, without modifying the live game installation?",
+      "methods": ["tool inventory", "version checks", "read-only smoke tests"],
+      "blocked_by": [], "evidence": [], "priority": 0.93
+    },
+    {
+      "id": "Q-0008", "objective": "SHARED", "kind": "source-audit", "status": "open",
+      "question": "Which currently held assumptions can be independently verified using UESP, vanilla records, and dated Apocrypha messages?",
+      "methods": ["wiki lookup", "message index", "claim ledger"],
+      "blocked_by": [], "evidence": [], "priority": 0.89
+    }
+  ]
+}
