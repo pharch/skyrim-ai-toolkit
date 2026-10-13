@@ -1,9 +1,0 @@
-{
-  "name": "Skyrim Glitch Research — Cloud",
-  "image": "mcr.microsoft.com/devcontainers/universal:linux",
-  "customizations": {
-    "codespaces": {
-      "disableAutomaticConfiguration": true
-    }
-  }
-}
