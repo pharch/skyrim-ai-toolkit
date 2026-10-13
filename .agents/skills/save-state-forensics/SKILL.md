@@ -11,7 +11,8 @@ description: Use read-only Skyrim save and co-save analysis to test quest-state,
 2. Prefer read-only ReSaver CLI operations for changeforms, globals, quest state,
    references, and effect-lifecycle questions. Use `scripts/read-save.py` only for
    its documented header/string/byte scans; it does not parse Papyrus variables or
-   prove an ActiveEffect remains active.
+   prove an ActiveEffect remains active. The file is present at
+   `scripts/read-save.py` and is intentionally read-only.
 3. Record exact command, tool/JAR version, exit code, and complete output. Resolve
    FormIDs against the matching plugin set before interpreting them.
 4. For quest experiments, distinguish a quest's changeform/stage from actual event

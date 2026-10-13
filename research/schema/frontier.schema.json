@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pharch.github.io/skyrim-ai-toolkit/frontier.schema.json",
+  "title": "Skyrim AE research frontier",
+  "type": "object",
+  "required": ["schema_version", "target", "items"],
+  "properties": {
+    "schema_version": { "const": 3 },
+    "target": {
+      "type": "object",
+      "required": ["edition", "runtime_minimum", "runtime_verified"],
+      "properties": {
+        "edition": { "const": "AE" },
+        "runtime_minimum": { "type": "string" },
+        "runtime_verified": { "oneOf": [{ "type": "boolean" }, { "type": "string" }] }
+      },
+      "additionalProperties": true
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id", "objective", "kind", "status", "question", "hypotheses",
+          "methods", "blocked_by", "evidence", "priority", "information_gain",
+          "next_action", "linked_claims", "successors", "attempts"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[A-Z]+-[0-9]{4,}$" },
+          "status": {
+            "enum": [
+              "open", "in_progress", "awaiting_user_test", "blocked_tool",
+              "blocked_environment", "completed", "falsified", "superseded"
+            ]
+          },
+          "hypotheses": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "required": ["id", "model", "predicted_discriminant", "status"],
+              "properties": {
+                "id": { "type": "string", "minLength": 1 },
+                "model": { "type": "string", "minLength": 1 },
+                "predicted_discriminant": { "type": "string", "minLength": 1 },
+                "status": { "enum": ["proposed", "supported", "falsified", "superseded"] },
+                "evidence": { "type": "array", "items": { "type": "string", "pattern": "^EV-[0-9]{4,}$" } }
+              }
+            }
+          },
+          "priority": { "type": "number", "minimum": 0, "maximum": 1 },
+          "information_gain": { "type": "number", "minimum": 0, "maximum": 1 },
+          "next_action": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}

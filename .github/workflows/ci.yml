@@ -2,7 +2,7 @@ name: Research harness CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main, master, glitch-hunting-setup]
   pull_request:
   workflow_dispatch:
 

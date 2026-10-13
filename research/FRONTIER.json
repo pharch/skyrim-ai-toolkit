@@ -1,10 +1,10 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "target": {
     "edition": "AE",
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
-    "note": "Target policy only; no Windows game executable or runtime was available in this Linux session."
+    "note": "Repository target policy only; no Windows executable or game runtime was available."
   },
   "items": [
     {
@@ -12,96 +12,256 @@
       "objective": "OBJ-1",
       "kind": "baseline",
       "status": "open",
-      "question": "Which vanilla quests/events have independently verifiable player-level gates, and at what phase are the gates evaluated?",
-      "methods": ["UESP cross-check", "AE plugin record analysis", "Papyrus/native trace"],
+      "question": "Which candidate vanilla quest/event has a verifiable player-level gate, and at which transition is the gate evaluated?",
+      "hypotheses": [
+        {
+          "id": "Q1-H1",
+          "model": "A candidate gate is evaluated at a single event or quest-start transition.",
+          "predicted_discriminant": "A controlled trace would show the level predicate on one transition, and alternate initiation routes would not evaluate it.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q1-H2",
+          "model": "The candidate gate is checked repeatedly or at a later alias, dialogue, or encounter transition.",
+          "predicted_discriminant": "A trace would show later or repeated level-dependent checks, with different intermediate states after an alternate route.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "methods": ["dated source verification", "complete AE record analysis", "controlled state-transition protocol"],
       "blocked_by": [],
       "evidence": [],
       "priority": 1.0,
-      "next_action": "On the AE research machine, identify the exact runtime and active profile, then select one candidate gate whose level prerequisite can be checked in both records and a dated source."
+      "information_gain": 0.8,
+      "next_action": "Select a named candidate from authorized dated source material, then verify its prerequisite against the winning record in the complete active AE order.",
+      "linked_claims": [],
+      "successors": [],
+      "attempts": []
     },
     {
       "id": "Q-0002",
       "objective": "OBJ-1",
       "kind": "mechanism",
       "status": "open",
-      "question": "Can a vanilla-accessible alternate initiation path bypass a representative gate without forcing quest state through a developer console?",
-      "methods": ["static call graph", "story-manager audit", "controlled test plan"],
+      "question": "Can a player-available alternate initiation path reach a representative gated quest/event without console or plugin intervention?",
+      "hypotheses": [
+        {
+          "id": "Q2-H1",
+          "model": "Every valid initiation path applies the same gate before the event begins.",
+          "predicted_discriminant": "The vanilla candidate path and ordinary path both stop at the same gate under the same level and baseline.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q2-H2",
+          "model": "At least one player-accessible event path reaches a distinct initiation point before that gate is evaluated.",
+          "predicted_discriminant": "A clean level-one sequence starts the real event while preserving level and without forced stage changes.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "methods": ["record/call-path analysis", "rival-path comparison", "clean-save reproduction"],
       "blocked_by": ["Q-0001"],
       "evidence": [],
       "priority": 0.98,
-      "next_action": "After Q-0001 identifies a representative gate, enumerate its distinct start paths and predict a discriminating observation for each."
+      "information_gain": 0.9,
+      "next_action": "After Q-0001 identifies a verified gate, enumerate distinct entry paths and state the observation that separates H1 from H2.",
+      "linked_claims": [],
+      "successors": [],
+      "attempts": []
     },
     {
       "id": "Q-0003",
       "objective": "OBJ-2",
       "kind": "baseline",
       "status": "open",
-      "question": "What engine event and code path awards armor skill XP from a validated incoming hit, independently of damage reduction?",
-      "methods": ["AE game records", "Ghidra", "SKSE baseline with XP snapshots"],
+      "question": "What event and native-use path awards armor skill XP from an incoming hit, independently of armor protection?",
+      "hypotheses": [
+        {
+          "id": "Q3-H1",
+          "model": "Armor skill XP is credited on a hit event after protection/damage is computed.",
+          "predicted_discriminant": "The award path is reached only after a validated incoming-hit event and can be separated from armor rating.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q3-H2",
+          "model": "Armor skill XP is credited through a distinct event/use route whose prerequisites are not identical to damage calculation.",
+          "predicted_discriminant": "Native/control traces show a separately gated skill-use call while protection remains effective.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "methods": ["build-matched native analysis", "record/condition review", "instrumented XP snapshot protocol"],
       "blocked_by": [],
       "evidence": [],
       "priority": 1.0,
-      "next_action": "Trace the relevant vanilla records and locate a build-matched native entry point; record an explicit unknown if the binary is not available."
+      "information_gain": 0.9,
+      "next_action": "Review retained source/protocol knowledge and define independent hit, damage, armor-rating, skill-XP, and character-XP observables before seeking a matching binary.",
+      "linked_claims": [],
+      "successors": [],
+      "attempts": []
     },
     {
       "id": "Q-0004",
       "objective": "OBJ-2",
       "kind": "mechanism",
       "status": "open",
-      "question": "Is there a vanilla-reachable state or sequence which preserves equipped armor protection but suppresses armor skill XP credit?",
-      "methods": ["native branch points", "perk/condition inspection", "A/B hit protocol"],
+      "question": "Can a vanilla-reachable state preserve functional worn armor while suppressing armor skill XP credit from verified incoming hits?",
+      "hypotheses": [
+        {
+          "id": "Q4-H1",
+          "model": "Protection and skill XP share an inseparable prerequisite in the candidate scenario.",
+          "predicted_discriminant": "Any state suppressing XP also removes or changes the verified armor protection or hit event.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q4-H2",
+          "model": "Protection computation and skill-XP credit have a separable vanilla-reachable condition.",
+          "predicted_discriminant": "A verified hit still receives armor protection while measured armor XP remains unchanged and normal XP returns in control.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "methods": ["native award-branch analysis", "record/perk condition inspection", "controlled A/B hit protocol"],
       "blocked_by": ["Q-0003"],
       "evidence": [],
       "priority": 0.99,
-      "next_action": "Use Q-0003 to identify candidate award branches; test the armor-protection and hit-XP observables separately."
+      "information_gain": 0.95,
+      "next_action": "Use Q-0003 to identify distinct protection and award observables; do not test a bypass until a real hit and functioning armor can be independently verified.",
+      "linked_claims": [],
+      "successors": [],
+      "attempts": []
     },
     {
       "id": "Q-0005",
       "objective": "OBJ-3",
       "kind": "numeric",
       "status": "open",
-      "question": "How is enchanting XP accumulated and rounded, and can it remain below the 15→16 or 20→21 thresholds while a useful item is created?",
-      "methods": ["numeric experiment", "native XP function", "prior research notes"],
+      "question": "How does enchanting credit and round skill XP, and can a useful enchantment be crafted below the relevant 15→16 or 20→21 XP threshold?",
+      "hypotheses": [
+        {
+          "id": "Q5-H1",
+          "model": "The operation grants skill XP according to a quantized or rounded function of enchantment inputs.",
+          "predicted_discriminant": "Boundary-adjacent inputs yield repeatable steps or discontinuities in raw skill XP.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q5-H2",
+          "model": "The operation grants a smooth/cumulative amount whose displayed skill level hides the threshold crossing.",
+          "predicted_discriminant": "Raw XP changes before the displayed level changes, and cumulative controls expose the threshold.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "methods": ["numeric boundary tests", "build-matched native analysis", "cumulative skill-XP measurement"],
       "blocked_by": [],
       "evidence": [],
       "priority": 0.7,
-      "next_action": "Locate prior numeric research with provenance and define cumulative-XP observables before proposing any threshold test."
+      "information_gain": 0.7,
+      "next_action": "Define input values, raw skill-XP observables, threshold baselines, and controls; treat ULP/rounding explanations as hypotheses until raw representations are recorded.",
+      "linked_claims": [],
+      "successors": [],
+      "attempts": []
     },
     {
       "id": "Q-0006",
       "objective": "OBJ-4",
       "kind": "mechanism",
       "status": "open",
-      "question": "What transitions determine the duration and lifetime of a poison/potion ActiveEffect, and what persists after save/load?",
-      "methods": ["ActiveEffect native paths", "SKSE state dumps", "prior effect-lifecycle notes"],
+      "question": "Which transitions determine potion/poison ActiveEffect duration, lifetime, and persistence across save/load?",
+      "hypotheses": [
+        {
+          "id": "Q6-H1",
+          "model": "The observed effect is one ActiveEffect whose lifetime is extended or fails to expire.",
+          "predicted_discriminant": "The same effect instance/reference survives waiting, travel, save/load, and recalculation without reapplication.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q6-H2",
+          "model": "The apparent persistence is replacement, reapplication, or another permanent ability/enchantment.",
+          "predicted_discriminant": "Instance identity, source, or remaining duration changes at a transition while the displayed magnitude persists.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "methods": ["ActiveEffect lifetime analysis", "read-only save comparison", "controlled duration/persistence protocol"],
       "blocked_by": [],
       "evidence": [],
       "priority": 0.7,
-      "next_action": "Locate prior alchemy/effect observations with source paths and design controls that distinguish duration display from a surviving ActiveEffect."
+      "information_gain": 0.8,
+      "next_action": "Define instance identity, duration, magnitude, dispel, save/load, and reapplication observables that distinguish one surviving ActiveEffect from replacement.",
+      "linked_claims": [],
+      "successors": [],
+      "attempts": []
     },
     {
       "id": "Q-0007",
       "objective": "SHARED",
       "kind": "tooling",
       "status": "open",
-      "question": "Which retained research tools execute correctly from a separate checkout and are compatible with the verified AE runtime and profile?",
-      "methods": ["tool inventory", "version checks", "read-only positive and negative fixtures"],
+      "question": "Which retained offline tool interfaces can be verified from this checkout, and which remain dependent on an exact AE runtime or optional local software?",
+      "hypotheses": [
+        {
+          "id": "Q7-H1",
+          "model": "The checked-in parsers and documented offline interfaces can be validated with fixtures in cloud mode.",
+          "predicted_discriminant": "Unit and integration fixtures exercise positive, negative, and malformed inputs with explicit output and status contracts.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q7-H2",
+          "model": "Some retained commands are disconnected, stale, or cannot be safely tested without local dependencies.",
+          "predicted_discriminant": "Inventory and smoke tests identify missing executables, broken interfaces, or undocumented prerequisites.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "methods": ["tracked-file/tool inventory", "offline fixture tests", "Windows prerequisite matrix"],
       "blocked_by": [],
       "evidence": [],
       "priority": 0.93,
-      "next_action": "Run the documented Windows preflight and tool matrix on the AE research machine; retain Linux-only results separately from runtime checks."
+      "information_gain": 1.0,
+      "next_action": "Run each available cloud fixture and validate every documented command against its retained wrapper; record Windows-only integrations as unverified, not passed.",
+      "linked_claims": [],
+      "successors": [],
+      "attempts": []
     },
     {
       "id": "Q-0008",
       "objective": "SHARED",
       "kind": "source-audit",
       "status": "open",
-      "question": "Which assumptions can be independently verified using authorized sources, AE records, and dated Apocrypha messages?",
-      "methods": ["targeted source lookup", "message index", "claim ledger"],
+      "question": "Which factual assumptions can be independently grounded with authorized sources, full-order records, and dated community evidence?",
+      "hypotheses": [
+        {
+          "id": "Q8-H1",
+          "model": "At least one authorized source provides a stable dated claim that can be checked against records or a controlled test.",
+          "predicted_discriminant": "A source fixture retains URL/revision or channel/message/time IDs and supports a reproducible targeted query.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q8-H2",
+          "model": "Available sources are unavailable, incomplete, or contradictory for the selected claim.",
+          "predicted_discriminant": "The source query returns a documented access/coverage limitation or conflicting claims requiring a separate discriminating test.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "methods": ["authorized source query", "local fixture ingestion", "claim/contradiction ledger"],
       "blocked_by": [],
       "evidence": [],
       "priority": 0.89,
-      "next_action": "Record source access status and import only authorized local exports or targeted citations with stable revision/message identifiers."
+      "information_gain": 0.85,
+      "next_action": "Validate the local source-index adapters using synthetic fixtures only; do not access private archives or claim UESP availability without an actual permitted response.",
+      "linked_claims": [],
+      "successors": [],
+      "attempts": []
     }
   ]
 }

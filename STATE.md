@@ -17,19 +17,19 @@ not gameplay evidence.
 
 ## Session recovery
 
-The requested authoritative `migration/FINAL_SETUP_BRIEF.md` was not present
-in the checkout, tracked files, Git history, or either visible remote branch
-when checked on 2026-10-13. Its required 82 acceptance criteria therefore
-cannot be transcribed or honestly marked complete. See
-`migration/UNRESOLVED.md`; do not invent a substitute checklist.
+The authoritative `migration/FINAL_SETUP_BRIEF.md` is now available and has
+been read, including its 82-item Section 15 closure checklist. The earlier
+blocker note is stale and will be reconciled. The active task is to transcribe
+the exact criteria with current status/evidence, then complete every
+cloud-verifiable item before claiming repository readiness.
 
-Current implementation checkpoint: AE executable/load-order gates, initial
-research evidence register/validator, and Codex setup/docs have been started.
-Continue the migration work from `migration/MIGRATION_PROGRESS.md`; finish
-tool-routing surfaces, CI, active-workflow pruning, and regression tests. Then
-obtain the missing authoritative brief, create its exact checklist, and audit
-each item. Before another CLI/context boundary, record the exact changes and
-next action in `research/SESSION_LOG.md`.
+Current checkpoint: exact 82-criterion checklist is present; first review
+confirmed stale migration reports, CI excluding `glitch-hunting-setup`,
+obsolete checklist parsing/skill-count thresholds, missing focused P1
+workflows, and an active 45-minute supervisor interface. Next action:
+implement a testable research transaction/state lifecycle and simulated
+interruption recovery, then continue with skills, adapters, CI, and source
+mapping. Windows AE runtime verification remains unavailable in Linux.
 
 ## Live test blockers
 

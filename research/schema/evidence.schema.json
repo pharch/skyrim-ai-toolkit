@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pharch.github.io/skyrim-ai-toolkit/evidence.schema.json",
+  "title": "Skyrim AE research evidence register",
+  "type": "object",
+  "required": ["schema_version", "items"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id", "kind", "source", "artifact", "sha256", "captured_utc",
+          "edition", "runtime", "modified_state", "lane", "tools", "coverage",
+          "result"
+        ],
+        "properties": {
+          "id": { "type": "string", "pattern": "^EV-[0-9]{4,}$" },
+          "kind": { "enum": ["record", "native", "runtime", "save", "log", "wiki", "discord", "tool", "legacy"] },
+          "source": { "type": "string", "minLength": 1 },
+          "artifact": { "type": "string", "minLength": 1 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "captured_utc": { "type": "string", "format": "date-time" },
+          "edition": { "const": "AE" },
+          "runtime": { "type": "string", "minLength": 1 },
+          "modified_state": { "type": "boolean" },
+          "lane": {
+            "enum": [
+              "offline", "diagnostic_intervention", "vanilla_candidate",
+              "vanilla_reproduction", "mechanism_inference"
+            ]
+          },
+          "tools": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "coverage": { "type": "string", "minLength": 1 },
+          "result": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  }
+}
