@@ -1,23 +1,26 @@
-# Python plugin inspection and SSEEdit boundary
+# Plugin record inspection and the xEdit boundary
 
-The old Node/xEditLib winner bridge has been retired. The active Python
-replacement is a standard-library TES4 reader:
+Use the Python reader for read-only inspection of an explicit plugin:
 
-```text
-python3 scripts/python_env.py run tools/plugin_reader.py doctor
-python3 scripts/python_env.py run tools/plugin_reader.py inventory Skyrim.esm
-python3 scripts/python_env.py run tools/plugin_reader.py record Skyrim.esm --signature QUST --form-id <local-id>
-```
+    python3 scripts/python_env.py run tools/plugin_reader.py doctor
+    python3 scripts/python_env.py run tools/plugin_reader.py inventory Skyrim.esm
+    python3 scripts/python_env.py run tools/plugin_reader.py record Skyrim.esm --signature QUST --form-id <local-id> --include-subrecords
 
-It inspects one explicit plugin file and reports record/subrecord fields. It
-does not establish a full active order, resolve a winning override, or replace
-SSEEdit. Before a native SSEEdit call, run
-`python3 scripts/python_env.py run tools/ae_preflight.py` and verify the exact
-Windows executable plus selected full profile order. No tested Python binding
-to the xEdit native library is currently available, so winning-record claims
-remain blocked until that integration is implemented and tested.
+--include-subrecords returns each subrecord's signature, byte length, raw hex
+and a bounded CP1252 view. It exposes CTDA, ALST, ALID, and VMAD payloads for
+review. It does not decode every condition function or Papyrus property.
 
-The Python parser is read-only and never opens the game or saves plugin data.
-Summarize relevant record fields and provenance in Markdown or the evidence
-database. Keep original plugins and raw tool outputs in local game storage or
-ignored `.local/`, never in the repository.
+The reader processes one file at a time. The tested
+`resolve_record_winner(candidates, active_order)` helper can choose the final
+candidate when supplied the same logical FormID candidates and a complete
+validated AE order. It does not load every active file or discover the user's
+profile. Its two-record test fixture is synthetic; it is not a real winner
+query or a replacement for xEdit. The configured SSEEdit binary is present, but
+a native call is blocked until the selected profile's full explicit
+plugins.txt passes:
+
+    python3 scripts/python_env.py run tools/ae_preflight.py
+
+Do not infer a winner from Skyrim.esm and Update.esm rows without verified
+load-order evidence. Keep original plugins read-only; retain raw outputs under
+ignored .local/ and cite plugin hashes in tracked research.

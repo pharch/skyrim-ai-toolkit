@@ -1,5 +1,11 @@
 # Session Log
 
+## 2026-10-14 — Ghidra long-analysis terminal checkpoint
+
+- Session 40253 returned terminal JSON: Ghidra imported the EV-0109 executable, ran for 7,260.809 seconds, reached its 7,200-second per-file analysis timeout, and saved the project successfully. The wrapper reported `ok:false`, exit code 0, and `analysis_timeout_reported:true`; 134,783-byte stdout SHA256 `bf5b4831f05668374fc1c8ac51a6109239d6fab80921e19e03cb0bd3881628a4`.
+- This is an incomplete analysis result, not a binary-wide negative and not an xref/decompilation query result. C07/C08 remain blocked until a bounded query launches and exports evidence.
+- EV-0139 now registers terminal output and the longanalysis metadata hash. The query-only fallback admits only the exact EV-0113 attempt2 or EV-0139 longanalysis project, with recorded metadata, artifact and current-binary hash checks; tests cover accepted longanalysis, changed metadata, and unknown project names. EV-0140 records 9 passing focused tests and a passing research validator. EV-0141 records that the bounded query passed its project/executable attestation and then failed before Ghidra with WSL `UtilBindVsockAnyPort:307: socket failed 1`; no script ran. Exact next action: run the full local suite and all validators, then finish Markdown/privacy audit and final synchronization.
+
 ## 2026-10-13 — Codex/AE harness finalization (in progress)
 
 - Scope: repository migration and validation only; no Skyrim runtime or user
@@ -121,6 +127,12 @@
 
 
 - Next action: inspect importer interface and skill conventions; write the Apocrypha grounding skill under `.agents/skills/` using the user-authorized audit scope.
+
+- Mission continuation checkpoint: native CommonLib build session 60759 and fresh Ghidra analysis session 40253 were both still active on last poll; no output was emitted. Exact next action: retrieve bounded UESP and legacy-source passages plus transaction event summaries for D13, then encode unsupported cross-domain findings into graph/claims/frontier for E12 and poll both native operations.
+
+- Checkpoint: inspected transaction summaries and located historical EV-0108's DA14 >=14 claim plus raw file-level QUST evidence from Skyrim.esm/Update.esm. A helper read revealed the saved JSON wrapper is a list, so the CTDA values and UESP page metadata remain unverified. Exact next action: decode the DA14 raw CTDA with the active parser, verify the local UESP title/revision/content, then record only a supported two-source comparison or leave the claim unverified; update graph/claims/frontier and poll native sessions.
+
+- Checkpoint: the local UESP page operation for `Skyrim:A Night to Remember` exited 0 and wrote only to ignored `.local/readiness/uesp/cli/quest-da14-page.stdout.raw`; DA14 CTDA remains raw because `plugin_reader.py` explicitly does not decode condition semantics. Exact next action: inspect the returned title/revision and the `Skyrim:Ebony Warrior` page, compare the latter with legacy EV-0108's reported >=80 condition, and record a narrow source consistency check without asserting the active winner or runtime gate.
 
 
 - Next action: inspect the exact local setup criteria and high-value source reports/tool inventories; draft durable migration records with snapshot-relative provenance.
@@ -541,3 +553,489 @@ Exact next action: Run the final research/overlay/setup validators and pre-push 
 Final state: 62 PASS / 24 BLOCKED_EXTERNAL; READY_FOR_STATIC_RESEARCH. Audit found 0 tracked raw/heavy artifacts, 0 unignored untracked raw artifacts, and 11/11 ignore probes passing. Thirty-one focused standard-library tests and the research, overlay, checklist, compile, and diff validators pass. G01/G10 are blocked for missing legacy Git metadata and unavailable native tooling. No commit or push was made.
 
 Exact next action: At the next research session, run python3 scripts/python_env.py run tools/ae_preflight.py against the selected Windows AE executable and complete active MO2 plugins.txt. If target verification is unavailable, continue offline Q-0001. The user reviews, commits, and pushes this checkout.
+
+## 2026-10-14 — Local readiness mission started
+
+- Began the user-authorized end-to-end audit of `migration/LOCAL_RESEARCH_READINESS_MISSION.md`.
+- Opened the mission and required context files; the combined output truncated before all content could be inspected.
+- Next exact action: reread the full acceptance checklist in bounded sections, reconcile existing checklists, and create the five required readiness artifacts with all criterion IDs.
+
+- Mission update: full mission read; exactly 74 criteria identified. Next: inspect existing readiness documents and repository baseline, then create the evidence ledger and companion artifacts.
+
+- Baseline: branch `glitch-hunting-setup`, HEAD `e13ae4b253a6f5fd66f0f8abc3e49e6f9b29a6cc`. Initial tree also had a pre-existing deletion of `migration/RESEARCH_READINESS_MISSION.md` and untracked `migration/LOCAL_RESEARCH_READINESS_MISSION.md`; preserve those user inputs.
+
+- Reconciliation: `LOCAL_SETUP_CHECKLIST.md` contains 86 criteria and `FINALIZATION_CHECKLIST.md` points to a historical 82-item checklist; neither matches this mission. No legacy PASS status will be copied into the 74-row ledger.
+
+- Required context read. `STATE.md` refers to stale HEAD `146ef076…` and the prior 86-item audit; actual audited HEAD is `e13ae4b…`, so readiness will be recomputed against the current mission.
+
+- Read applicable skill procedures for AE target verification, retained tools, record research, UESP, Apocrypha, discriminating experiments, and synthesis. Next: reconcile frontier/recovery state before probes.
+
+- State inventory: 18 frontier entries Q-0001–Q-0018, RECOVERY idle/no active item. Existing session history ends in stale setup handoff language and will be reconciled after validation.
+
+- First current-state probes: AE preflight exit 1 because PowerShell returned no ProductVersion; domain doctor showed a configured Ghidra launcher without Java, CommonLib source without CMake, xEdit configured but ungated, SKSE fixture only, usable local UESP/Apocrypha databases. Research and overlay validators passed under Python 3.12.3 fallback.
+
+- Original checkout discovery: the configured source folder is readable and has 243 Markdown files; its Git status/commit and old-to-new hash map are being independently rechecked.
+
+- Historical scope boundary: legacy sources attribute findings to GOG runtime 1.6.1179 and Steam 1.6.1170 where stated; neither is substituted for the actual local AE target.
+
+- Native launch probe: absolute Windows PowerShell and Node executables fail from WSL with `UtilBindVsockAnyPort` socket errors. Windows Java 21 candidate exists but is not assumed runnable. No native/game operation was attempted.
+
+- Legacy source manifest verification: 242/242 Markdown source hashes match; 1 documented generated third-party exclusion; original `.git` directory is empty. The full unittest discovery ran 36 tests: 33 passed, 3 modules could not import because pytest is missing.
+
+- Executable identity lead: the local PE contains version literal `1.6.1170.0` in UTF-16 and Steam installation markers; this is recorded as direct file evidence, while native Windows ProductVersion and active profile verification remain separate.
+
+- UESP/Apocrypha retrieval is next; all Discord output will be captured under ignored local storage and only aggregate provenance checks will be logged publicly.
+
+- Local configuration sync found no missing path values and did not modify the ignored config. The configured profile list remains absent, so the target gate stays closed.
+
+- Read-only UESP/Apocrypha real retrieval started; raw results are directed to ignored `.local/readiness/`. The first batch exceeded the 30-second response window and is being polled.
+
+- Local corpus query batch completed: UESP exact raw page retrieval worked for four Skyrim articles with revisions; Apocrypha search/context worked for four queries and retained seven surrounding records. A driver typo skipped only the related-link operation, which will be rerun through the supported CLI.
+
+- CLI forms verified: UESP supports exact page/revision, full-text search and related-page context; Apocrypha supports local summary search and focused neighboring-message context. Raw outputs remain ignored.
+
+- UESP local metadata provides snapshot name/hash and exact namespace counts; export source URL and licensing remain missing. A local Codex CLI is available, so the independent-context recovery check can be attempted.
+
+- The dispatcher batch had not emitted output by the first poll; one additional short poll is in progress before narrowing it.
+
+- Dispatcher retrieval succeeded for UESP namespace-134 pages and Apocrypha private message context. The latter is stored behind private alias `APO-LOCAL-0001` in ignored local storage; no IDs or text enter Git.
+
+- Corpus dispatcher calls all returned exit 0. A follow-up summary script failed while parsing the saved stdout framing; query results remain intact and will be inspected with a corrected parser.
+
+- Fixed the corpus result reader: the dispatcher status notice was on stderr, while saved stdout is pure JSON. Review now proceeds without rerunning completed queries.
+
+- Cross-source interpretation: UESP revision 3580051 states Ebony Warrior is only encountered at level 80 and starts the quest; private Apocrypha context (alias APO-LOCAL-0001) includes that threshold but explicitly expresses uncertainty about whether some reported thresholds are hard prerequisites or prompts. Treat the community item as an untrusted lead; it does not establish the native gate.
+
+- Local file inventory found five official masters, `Skyrim - Misc.bsa` v105, and real save/co-save files. Any record/archive inspection will be read-only, tied to file hashes, and will not imply the active load-order winner.
+
+- Actual record query: QUST `DA14` and two auxiliary DA14 records were read from `Skyrim.esm`; `Update.esm` contains the same base-origin record. Conditions, aliases, and VMAD script-attachment signatures are present. This is per-file data, not the active winning record.
+
+- Before declaring active order blocked, checking standard manager metadata and selected-profile markers without choosing a plugins.txt by filename alone.
+
+- Profile resolution: no common MO2/Vortex metadata was found; the single global plugins.txt contains three active entries and is incomplete, so it was not configured as the active order.
+
+- Escalated read-only Windows preflight reached PowerShell; `ae_target` raised a UnicodeDecodeError on byte 0xAE. This is a repository defect to fix; xEdit/game access was not attempted.
+
+- Readiness mission checkpoint: replaced locale-dependent PowerShell text capture with an ASCII Base64 transport and added a non-ASCII regression case. Exact next action: run AE target unit tests, then rerun executable-only ProductVersion probe and full preflight; no xEdit/game action ran.
+
+- Target-reader regression verification: all 7 AE target tests passed, including the new non-ASCII transport case. Exact next action: run executable-only ProductVersion probe through Windows PowerShell, then full preflight; xEdit/game remains gated.
+
+- Executable-only probe after transport fix still returned no ProductVersion; no xEdit/game operation ran. Exact next action: capture raw PowerShell subprocess return code/stdout/stderr and repair the actual failure before probing again.
+
+- PowerShell diagnostic: return code 1, empty stdout, and a French .NET invalid-path message; the locale-safe transport works, but the environment variable path transport is malformed. No xEdit/game operation ran. Exact next action: encode the UTF-8 Windows path inside `-EncodedCommand`, strengthen argument assertions, then rerun the executable-only probe.
+
+- Fixed WSL path transport by embedding a UTF-8 Base64 Windows path in a PowerShell `-EncodedCommand`; regression now checks that command and its encoded path. Exact next action: rerun AE target tests, then the read-only executable-only probe.
+
+- Encoded-path regression passed all 7 AE target tests. Exact next action: run the executable-only Windows API ProductVersion probe and record version/hash; no xEdit/game launch.
+
+- Windows API executable-only probe passed with ProductVersion `1.6.1170.0` and SHA256 `c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9`; the result explicitly reports `full_order_verified: false`. Exact next action: run full preflight to validate the configured active plugins.txt; xEdit/game remain gated.
+
+- Full AE preflight passed executable validation but failed closed because the resolved plugins.txt has no active entries; no xEdit/game operation ran. Exact next action: inspect resolved path and redacted file-shape/count metadata to distinguish missing selected profile from wrong file resolution.
+
+- Redacted full-order diagnostic confirms the resolver fell back to the global user plugins.txt: 167 bytes, hash `620811b9a4a21402df410bf1fba470e4874e4bae8577acc0556be21ca50fbfb0`, zero active-marker entries, and zero of five required masters. This cannot represent a verified selected profile; no xEdit/game operation ran. Exact next action: map all 74 readiness criteria to actual evidence and continue local fixes.
+
+- Ledger review confirms the active-profile gate: resolver fell back to an unstarred global file with zero verified active plugins, so no winner/negative finding is valid. Exact next action: audit configured wrappers and direct native launch/build status for Ghidra/JDK, xEdit, SKSE/CommonLib, and ReSaver; xEdit stays unlaunched pending full order.
+
+- Domain doctor and active docs show real UESP/Apocrypha stores, fixture-only SKSE, missing JDK/CMake, xEdit gated; documentation still reports the pre-fix ProductVersion failure. Exact next action: inspect active Markdown, skill, CI, and research-tool surfaces, then reconcile documented capabilities using Python orchestration.
+
+- Active docs and CI audit: checked-in matrix/routing still say ProductVersion could not be read; native wrapper claims are path-only, and CI uses pytest. Exact next action: resolve configured Windows Java/Ghidra/SSEEdit/CommonLib candidates privately and probe their actual executability before correcting the matrix.
+
+- Config check: Ghidra home/headless/Windows batch launcher, SSEEdit executable, CommonLib source, vcpkg and Address Library candidates exist; `JAVA_HOME` is not configured. Exact next action: query Windows command discovery for Java/CMake and version-probe any usable runtime; xEdit remains gated by the full load order.
+
+- First encoded PowerShell Java/CMake discovery wrapper returned CLIXML stderr before its JSON result; this does not establish absence. Exact next action: use a minimal encoded query for command presence, then probe each present executable separately.
+
+- Minimal Windows PowerShell command discovery passed: Java resolves on the Windows host, CMake does not. The Ghidra candidate includes `analyzeHeadless.bat`; no Ghidra run/build yet. Exact next action: capture Java version and invoke the real Ghidra headless help path if usable.
+
+- Combined Java/Ghidra PowerShell probe did not execute the requested tools; it returned a valid JSON payload with empty outputs and a nonempty CLIXML stderr capture. No Ghidra analysis ran. Exact next action: decode the safe error text, fix the wrapper, and independently verify Java version.
+
+- PowerShell stderr explains the combined version/help wrapper problem: it attempted native `.exe` and `.bat` calls in a pipeline, which PowerShell rejected. The command-discovery query itself remains valid. Exact next action: call Java version directly as a native command, then use cmd.exe for Ghidra batch help.
+
+- Standalone PowerShell Java command did not produce a version or exit status despite command discovery; this is not a usable JDK verification. Exact next action: invoke through `cmd.exe /c` and inspect resolved executable metadata before a Ghidra attempt.
+
+- Direct Windows native probe passed: `java.exe -version` via `cmd.exe /d /c` reports Java 21.0.10 LTS, 64-bit. Raw stdout/stderr are ignored local captures. Exact next action: execute configured Ghidra `analyzeHeadless.bat -help`; if functional, run analysis in a new disposable project on the SHA-identified AE executable.
+
+- Java 21.0.10 is verified. First Ghidra help probe failed before launcher startup because the cmd.exe argument contained literal backslashes before quotes; raw error saved locally. Exact next action: retry with standard `/s /c` quoting of the configured `.bat` and capture output.
+
+- Ghidra help retry again failed before batch startup because the command string still carried backslashes before quotes. Exact next action: construct the standard `""<path>" -help"` argument by string concatenation, save raw output, and only then classify the launcher.
+
+- Standard cmd.exe quoting still failed through WSL interop before Ghidra startup; the native command string was misparsed. Exact next action: write a temporary ignored `.local` command file with a normal quoted batch call and launch its space-free path through cmd.exe; do not track the wrapper.
+
+- Actual Ghidra headless launcher operation passed: configured `analyzeHeadless.bat` responded with complete supported usage through Windows cmd; Java 21.0.10 LTS is executable. The help-only invocation returns exit 1, consistent with missing project/input arguments; full raw captures are ignored local files. Exact next action: verify the current executable SHA, create a fresh ignored project, and analyze the verified AE binary.
+
+- First Ghidra import attempt stopped immediately in cmd.exe with a parse error that includes a token from the configured game path; no analysis occurred and no game file was modified. Source SHA remained `c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9`. Exact next action: inspect the generated wrapper after redacting local paths, fix path quoting, and preserve attempt-1 logs.
+
+- Inspection shows Ghidra wrapper quotes are present; the game path includes `Program Files (x86)` plus `Skyrim Special Edition`, and the batch stack exited before analysis. Exact next action: resolve Windows 8.3 short alias with a read-only CMD loop, then import via it if available.
+
+- Read-only Windows CMD short-name resolution succeeded for the configured SkyrimSE.exe; returned alias has no spaces/parentheses, and attempt-1 raw logs remain preserved. Exact next action: verify alias SHA with Windows Get-FileHash, then rerun the Ghidra import in a fresh attempt-2 project.
+
+- The short-path Ghidra retry command stopped before running because it looked for the alias in a nested directory instead of `.local/readiness/ghidra-probe/`; no project was created. Exact next action: read from the actual ignored path, verify the alias hash, then retry in the separate project tree.
+
+- Attempt-2 Ghidra import is running after the corrected short-path capture location; hash verification and native process output are pending. Exact next action: poll this invocation, record exit code/log hashes and inspect project artifacts before selecting another operation.
+
+- Windows Get-FileHash for the resolved short alias matches the recorded full-path executable SHA exactly (`c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9`). Ghidra attempt-2 analysis is still running. Exact next action: poll session 74123, preserve its final output, and inspect isolated project artifacts.
+
+- Poll update: Ghidra attempt-2 remains active and silent; no failure output. Exact next action: continue polling session 74123 until completion, then preserve logs and inspect project artifacts.
+
+- Ghidra attempt-2 remained active with no new stdout/stderr after the latest poll; no failure has arrived. Exact next action: poll again, inspect only process/log-size progress if still silent, and continue until completion or the documented timeout.
+
+- Ghidra attempt-2 is still active and silent after repeated 30-second polls. Exact next action: inspect only the ignored project/log file metadata for growth, then poll session 74123 to completion or its 1200-second per-file timeout.
+
+- Ghidra attempt-2 project lock and database files are present; analysis log is 28,870 bytes and was recently modified, confirming native analysis progress. Exact next action: poll session 74123; if still running, monitor only log growth and continue to completion or timeout.
+
+- Ghidra attempt-2 remains active after another 30-second poll; project database and analysis log persist. Exact next action: inspect sanitized last 30 log lines for actual analysis progress, then poll session 74123 to completion or timeout.
+
+- Sanitized Ghidra log confirms actual analysis: 31,179 bytes/349 lines, with thunk/function analysis progressing. PDB lookup yielded no PDB, noted as a limitation. Exact next action: poll session 74123 and wait for a final analysis summary or the per-file timeout.
+
+- Ghidra log shows real function/thunk analysis in session 74123; no PDB was found, and analysis continues. To use time independently, exact next action: audit research transaction/recovery schemas and implement validated lifecycle/reselection plus fresh-process tests without disturbing the native process.
+
+- Research-state inspection: only item transition/recovery primitives exist; no transaction lifecycle CLI. The assumed `research/CLAIMS.json` is absent, so actual claim/experiment stores must be located before extending schema. Exact next action: inspect research file inventory and full transition/ready-item logic, while Ghidra session 74123 continues.
+
+- Actual research stores located: claim ledger `research/CLAIMS.md`, frontier/evidence JSON, recovery JSON, and experiment Markdown; there is no claims JSON. Exact next action: implement an append-only validated transaction event ledger plus begin/update/complete/block/resume/recover, automatic independent reselection, and stdlib tests while Ghidra analysis continues in its ignored project.
+
+- Implemented `research/TRANSACTIONS.json` and Python lifecycle operations for begin/update/complete/block/recover/resume, with append-only events, evidence/artifact validation, automatic independent reselection, and stdlib tests. Exact next action: run focused lifecycle tests, compile, and research validators; fix failures. Ghidra session 74123 remains active separately.
+
+- Transaction lifecycle tests: 9/10 passed and compile passed. One duplicate-action test hit the generic no-evidence guard before the repeat check. Exact next action: reorder update validation so duplicate detection is exercised, then rerun focused tests and validators. Ghidra session 74123 continues.
+
+- Focused transaction/recovery tests passed 10/10 and compileall passed. Direct `python3 scripts/research_state.py validate --root .` exposed an import-path failure for `scripts.research_transactions`; no validator result was produced. Exact next action: resolve the repository import path for direct scripts, then rerun focused tests, validator and compile.
+
+- Transaction lifecycle/recovery suite passed 10/10, direct research-state validation passed, and compileall passed after adding direct-script import resolution. Exact next action: poll Ghidra attempt-2 session 74123; capture final exit/output hashes and inspect the isolated project.
+
+- Ghidra analysis is still active in session 74123; no final output yet. Research transaction suite and validators pass. Exact next independent action: inspect and port pytest-only test modules to unittest if equivalent, then run full stdlib discovery without disturbing Ghidra.
+
+- Full unittest discovery enumerated 43 cases but failed to import three test modules because pytest is absent; the tests use only local fixtures, temporary paths, parameterization, and environment patching. Exact next action: port them to unittest without reducing coverage, then rerun complete discovery. Ghidra session 74123 remains active.
+
+- Converted pytest-dependent safety, setup, and triage tests to stdlib unittest; parameter variants remain individually checked via subtests, and all 46 triage bodies are retained via an explicit fixture adapter. Exact next action: run complete unittest discovery, compileall, and verify no remaining pytest imports.
+
+- Complete local unittest discovery passed 95/95 with no pytest import errors; compileall passed and `rg` found no remaining pytest imports in tests. Exact next action: poll Ghidra session 74123, capture its final output/log hashes, verify project artifacts, then run the real function/xref/decompilation query if analysis completed.
+
+- Ghidra attempt-2 is still active after the latest 30-second poll; output is buffered until completion. Exact next action: inspect only the sanitized analysis-log tail/metadata, then poll session 74123 and wait to completion or explicit timeout.
+
+- Ghidra log tail continues to record function/thunk work (52,770 bytes/508 lines) and the project lock is held; analysis is live. Exact next action: poll session 74123 again and inspect only bounded log progress if still running, until completion/timeout.
+
+- Sanitized Ghidra analysis log records active thunk/function processing (52,770 bytes/508 lines at last check); project lock remains held. Exact next action: poll session 74123 for completion, capture its full outputs, and inspect project metadata before scripting a read-only function/xref/decompilation query.
+
+- Ghidra native analysis continues; full unittest suite passes 95/95. Exact next independent action: inspect local SKSE runtime DLLs/Address Library version files and check whether SkyrimSE/DevBench is live using read-only status only; do not connect or mutate.
+
+- SKSE compatibility inventory: loader and runtime DLL ProductVersion `0.2.2.6`; the `skse64_1_6_1170.dll` and Address Library `versionlib-1-6-1170-0.bin` names match the verified runtime. No SkyrimSE process and no configured DevBench port were present; no live handshake was attempted. Exact next action: preserve hashes in ignored metadata, then run an explicit-file AE record query without claiming a winner.
+
+- `plugin_reader.py record` ran against actual AE `Skyrim.esm` (SHA256 `2bbc77fdec35a70ef96b710f8c525e50a1db9e63e11a391a0eb9ee8f56d36107`): 17 NPC_ rows matched `Ebony`; one QUST result is `DA08EbonyBladeTracking` (`0010FAEC`). This does not establish a winning override. Exact next action: filter results, hash local DA14 captures, and add source-provenance evidence entries.
+
+- 2026-10-14 15:01 UTC — Checkpoint before record provenance and Ghidra completion inspection. Next: Filter the saved NPC_ capture for the exact Ebony Warrior record, hash plugin and DA14 capture provenance, append evidence, then inspect Ghidra analysis completion.
+
+- 2026-10-14 15:01 UTC — Checkpoint. Next: Inspect the 74-row checklist and evidence schema; then record provenance-safe evidence for the actual plugin-reader operations and recheck Ghidra progress.
+
+- 2026-10-14 15:02 UTC — Checkpoint. Next: Inspect the active plugin-reader invocation and saved tool configuration, then query Skyrim.esm NPC_ editor IDs containing Warrior and inspect Ghidra progress.
+
+- 2026-10-14 15:02 UTC — Checkpoint. Next: Map existing Python research entrypoints, local path configuration, and active docs that still describe Ghidra/JDK or xEdit capability, then repair the agent-facing Ghidra route.
+
+- 2026-10-14 15:02 UTC — Checkpoint. Next: Read the ignored tool configuration and successful Ghidra wrapper, then implement a Python-dispatched read-only Ghidra query route with identity checks.
+
+- 2026-10-14 15:04 UTC — Checkpoint. Next: Review AE target regressions and Ghidra route syntax; add precise unit coverage, then run the new Python-dispatched Ghidra query once analysis releases its project lock.
+
+- 2026-10-14 15:04 UTC — Checkpoint. Next: Run focused AE-target/Ghidra adapter regressions and inspect the actual Ghidra analysis exit metadata; when its project lock clears, run the Python-dispatched query.
+
+- 2026-10-14 15:04 UTC — Checkpoint. Next: Run tools/ghidra_probe.py on the saved Ghidra project read-only; capture exact function/xref/decompilation output and repair any real invocation or script failure.
+
+- 2026-10-14 15:05 UTC — Checkpoint. Next: Retry the read-only Ghidra query and AE ProductVersion bridge with escalated Windows interop; if that remains blocked, preserve the exact failure and continue independent audit work.
+
+- 2026-10-14 15:06 UTC — Checkpoint. Next: Make the Ghidra adapter treat script errors as failures, then add an unattended-safe Python analyze mode with a longer per-file timeout and fresh ignored project; separately restore raw quest subrecord inspection.
+
+- 2026-10-14 15:07 UTC — Checkpoint. Next: Inspect plugin-reader fixture tests and ignored Skyrim data configuration; add raw-subrecord regression coverage and run real DA14 reader queries against both installed masters.
+
+- 2026-10-14 15:07 UTC — Checkpoint. Next: Run the raw-subrecord fixture and actual Skyrim.esm/Update.esm DA14 queries, hash the masters and captures, then record the bounded C04 evidence.
+
+- 2026-10-14 15:08 UTC — Checkpoint. Next: Run Python-dispatched Ghidra import/analysis in a fresh ignored project with a 7,200-second per-file budget and no outer kill timer; preserve final logs and continue independent work while it runs.
+
+- 2026-10-14 15:08 UTC — Checkpoint; long Ghidra process session 40253 active. Next: Inspect accepted evidence kinds/fields and active capability docs, then append sourced target, Ghidra and DA14 observations with explicit scope and limitations.
+
+- 2026-10-14 15:11 UTC — Checkpoint. Long Ghidra process 40253 is active. Next: Check the evidence validator, recovery state schema, and retained-tool skill for accepted evidence fields and stale capability claims, then append actual operation evidence.
+
+- 2026-10-14 15:11 UTC — Checkpoint; Ghidra analysis session 40253 remains active. Next: Read the exact accepted evidence lane values, hash the actual Ghidra query logs and raw DA14 captures, then append evidence records and linked claim/frontier updates.
+
+- 2026-10-14 15:12 UTC — Checkpoint; Ghidra long analysis session 40253 remains active. Next: Locate saved target/preflight captures, hash their durable metadata, then append validated EV records for target, actual file-level DA14 inspection, and Ghidra partial analysis.
+
+- 2026-10-14 15:12 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Rerun full read-only AE preflight through the escalated Windows bridge, preserve raw stdout/stderr under .local, then record its verified target and exact profile blocker.
+
+- 2026-10-14 15:12 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Read the sanitized full-preflight error and determine whether the failure is ProductVersion transport, plugin-list resolution, or dispatcher state; preserve the exact blocker and continue with Ghidra/docs independently.
+
+- 2026-10-14 15:12 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Capture the executable-only ProductVersion probe and inspect CI plus domain-doctor routing; then update current target metadata and native-tool status.
+
+- 2026-10-14 15:13 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Review CI, target preflight and doctor tests; then replace stale product/version and Ghidra-unavailable reporting with measured Python-dispatched status.
+
+- 2026-10-14 15:15 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Implement the checked-in Markdown/reference/legacy-language audit and inventory generator; run it to classify all Markdown and repair any active-document findings.
+
+- 2026-10-14 15:16 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Run the Markdown policy audit and inventory generator, collect every active-link/legacy-language finding, add only line-scoped justified exceptions, and rerun in check mode.
+
+- 2026-10-14 15:16 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Regenerate the active/archival Markdown inventory with explicit line-scoped exceptions for audit quotations, rerun --check, and review any remaining findings.
+
+- 2026-10-14 15:16 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Rerun Markdown inventory write/check after excluding the generated inventory from phrase scanning, then validate its counts and local links.
+
+- 2026-10-14 15:17 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Inspect local-path doctor tests and ignored target metadata; make doctor dynamically report actual ProductVersion while keeping active-order status fail-closed.
+
+- 2026-10-14 15:18 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Run local-path doctor regressions and invoke the Python domain doctor through escalated Windows interop; save sanitized tool status and update ignored target metadata.
+
+- 2026-10-14 15:18 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Append evidence records for the AE target/probe blocker, both DA14 file queries, and the bounded Ghidra import/query; update ignored target metadata and link the evidence to claims/frontier.
+
+- 2026-10-14 15:19 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Inspect claims/frontier/transaction schemas and saved UESP/Apocrypha captures; select three evidence-backed pilot IDs and map the newly appended EV references into durable records.
+
+- 2026-10-14 15:19 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Read research transaction command syntax and transition requirements, then begin the P0 quest-gate transaction and exercise a precise external block with automatic independent reselection.
+- 2026-10-14T15:20:25+00:00 transaction `TX-0001` begin: frontier Q-0001; next action: Verify the current AE executable and full selected active order before evaluating the level-one quest-gate candidate.
+- 2026-10-14T15:20:26+00:00 transaction `TX-0001` update: executable-only-probe: Windows ProductVersion probe returned AE 1.6.1170; executable SHA256 is in EV-0109. This verifies target identity only.; next action: Run the full active-order preflight; do not launch xEdit unless it passes.
+- 2026-10-14T15:20:26+00:00 transaction `TX-0001` update: full-order-preflight: Full preflight stopped because the resolved active plugin list has no active plugins; EV-0110 preserves the exact output.; next action: Obtain the selected MO2 profile plugins.txt; independently continue armor XP path analysis.
+- 2026-10-14T15:20:26+00:00 transaction `TX-0001` block: The selected MO2 profile is unidentified and the resolved global plugins.txt has no active plugins, so a complete active AE load order cannot be verified.; independently selected Q-0003
+
+- 2026-10-14 15:21 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Begin the automatically selected P0 armor-XP transaction, record rival event-path models and discriminants, link the actual partial Ghidra operation, then complete this bounded tool/evidence investigation with an explicit unresolved outcome.
+- 2026-10-14T15:21:01+00:00 transaction `TX-0002` begin: frontier Q-0003; next action: Define and test the available event-path discriminant for armor skill XP on the verified Steam AE binary.
+- 2026-10-14T15:21:01+00:00 transaction `TX-0002` update: competing-hit-path-models: H1: the incoming-hit branch awards armor skill only after positive-damage and worn-armor guards, with blocked-hit routing separate. H2: armor protection classification and skill-award eligibility share a different path, so protection can remain positive while XP credit is skipped. Discriminant: on a build-matched call graph, identify the incoming-hit handler, its UseSkill caller and guards, then measure raw HitData and armor/Block XP separately on an ordinary hit and a blocked hit.; next action: Inspect the current-build Ghidra result and retain the historical GOG evidence only as a lead.
+- 2026-10-14T15:21:01+00:00 transaction `TX-0002` update: current-build-ghidra-import: Ghidra 12.0.4 imported the verified Steam AE executable SHA in EV-0113. Its first analysis timed out at 1,200 seconds; the read-only query on the saved partial project counted 92,219 functions but returned a script error because no call reference was available (EV-0114). A fresh 7,200-second analysis is running.; next action: After the fresh Ghidra analysis completes, rerun the read-only xref/decompilation query; do not reuse GOG 1.6.1179 offsets.
+- 2026-10-14T15:21:02+00:00 transaction `TX-0002` complete: Completed a bounded tool-and-evidence survey for Q-0003: current AE identity is verified and native Ghidra import ran, but the saved partial analysis produced no usable call edge before timeout. The source-path question remains open.; selected Q-0015 next
+
+- 2026-10-14 15:21 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Begin auto-selected P0 Q-0015; compare reachable-writer versus cleanup-only models, search current Skyrim.esm MGEF EditorIDs for resistance candidates, preserve raw output, and complete the bounded search with its unresolved scope.
+- 2026-10-14T15:21:38+00:00 transaction `TX-0003` begin: frontier Q-0015; next action: Search the current AE base master for resistance-related magic-effect candidates and preserve file-level identity; do not infer an active winner or player reachability.
+- 2026-10-14T15:21:39+00:00 transaction `TX-0003` update: rival-negative-av39-models: H1: an ordinary player-reachable effect or script can write negative AV39 before a blocked hit. H2: negative values reported historically come only from inaccessible, cleanup-reversed, or diagnostic paths. Discriminant: identify a current winning effect/script, its target ActorValue and magnitude, full owner/start route, cleanup inverse, then measure raw AV39 and separate armor/Block XP on a verified hit.; next action: Search the installed Skyrim.esm base file for resistance-related MGEF EditorIDs; record only candidate presence and file scope.
+
+- 2026-10-14 15:22 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Query resistance and weakness candidate EditorIDs plus raw data for Skyrim.esm MGEF 000CAB90; preserve hashes, add bounded evidence, and complete TX-0003 without claiming AV39 semantics or reachability.
+- 2026-10-14T15:23:00+00:00 transaction `TX-0003` update: resistance-mgef-screen: The exact Skyrim.esm MGEF EditorID substring Resist query returned 27 rows, including AbResistDamage 000CAB90; EV-0116 preserves the one-file result.; next action: Inspect raw DATA bytes for the named AbResistDamage candidate without decoding or winner claims.
+- 2026-10-14T15:23:00+00:00 transaction `TX-0003` update: weakness-mgef-screen: The exact Skyrim.esm MGEF EditorID substring Weak query returned 10 rows; EV-0117 records this limited screen.; next action: Inspect raw DATA bytes for the named AbResistDamage candidate without decoding or winner claims.
+- 2026-10-14T15:23:01+00:00 transaction `TX-0003` update: raw-damage-resistance-effect: MGEF 000CAB90 AbResistDamage returned raw DATA length 152 and DNAM length 4; no field decoder was applied (EV-0118).; next action: Complete this bounded base-master screen; resolve current winners and AV target only after the selected order is configured.
+- 2026-10-14T15:23:01+00:00 transaction `TX-0003` complete: Completed a bounded Skyrim.esm candidate screen for Q-0015: 27 Resist and 10 Weak MGEF EditorID substrings, plus raw bytes for AbResistDamage 000CAB90. No AV39 sign, target, player reachability, or active winner is established.; selected Q-0003 next
+
+- 2026-10-14 15:23 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Run durable recovery/validation after TX-0003 completion and inspect the live long-Ghidra log; confirm Q-0003 is the next task and that analysis continues.
+
+- 2026-10-14 15:24 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Run the complete plugin-reader fixture tests, including the new two-record winner resolver and fail-closed partial-order case; fix any regression and preserve raw test output.
+
+- 2026-10-14 15:25 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Capture the plugin-reader winner-fixture test output, add a hashed EV record and claim for C02, then update xEdit/tool docs to distinguish fixture resolution from real active-order winner lookup.
+
+- 2026-10-14 15:25 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Correct EV-0119 to hash the unittest stderr capture where verbose results were emitted, verify the six fixture results in that artifact, then update active docs and rerun the Markdown audit.
+
+- 2026-10-14 15:26 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Regenerate and check Markdown inventory, then run research-state and evidence validators after the winner fixture evidence and routing-doc edits.
+
+- 2026-10-14 15:26 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Probe the configured xEdit executable version/hash, Windows Node/npm and CMake availability, and preserved xEditLib source/runtime files without launching xEdit; then report only verified capability boundaries.
+
+- 2026-10-14 15:28 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Search only bounded legacy xEditLib/xelib package paths and matching script/config references, preserving files read-only; then decide whether a gated Python-to-Node adapter is actionable without launching xEdit.
+
+- 2026-10-14 15:28 UTC — Checkpoint; Ghidra long analysis session 40253 active. Next: Hash and register the verified xEdit/Node/CMake metadata; locate the exact preserved Python BSA/PEX and save-analysis source files in bounded legacy directories, then determine whether a current Python route can be restored.
+- 2026-10-14 15:31 UTC — Checkpoint; bounded legacy filename search found `extract_misc_bsa_pex.py`, `disassemble_papyrus_pex.py`, `scan_bsa_target_actor_values.py`, and `inventory_papyrus_stage_writers.py`. Next: Read these exact files and their dependencies; assess a safe current Python restoration and verify on local AE inputs.
+- 2026-10-14 15:33 UTC — Checkpoint; inspected four preserved scripts: narrow PEX extraction, classic PEX bytecode decoding, literal ActorValue scan, and event/SetStage-to-VMAD candidate inventory. All depend on retired `skyrim_tool.py`, GOG paths, and legacy plugin parsing. Next: inspect current dispatcher/configured AE paths, active save/PEX/archive tooling, and local inputs; restore only safely testable routes.
+- 2026-10-14 15:36 UTC — Checkpoint; current local registry points to verified Steam AE data with loose PEX and `Skyrim - Misc.bsa`; active repo already has a save reader/co-save parser but no PEX/BSA analysis tool. Next: implement bounded read-only PEX decoding and archive extraction/scanning through current Python tools, with ignored `.local/` outputs and real AE input tests.
+- 2026-10-14 15:37 UTC — Restored active BSA/PEX inspection: fixed `SKYRIM_DATA` synchronization; 9 focused tests pass; extracted and decoded actual DA14Script.psc from verified Steam Skyrim - Misc.bsa; bounded base-archive literal scan completed with 0 matches. Optional 6.26 GB Creation Club scan stopped without a result. Next: register xEdit/Node/CMake and PEX evidence, add scoped claim, update routing/capability docs.
+- 2026-10-14 15:38 UTC — Registered EV-0120–0123 (tool metadata, actual Steam BSA extraction, PEX decode, bounded literal scan), added CL-TOOL-002, and updated active routes/capability/path docs. Next: validate evidence/research, Markdown audit and focused tests; inspect outstanding criteria and Ghidra long analysis.
+- 2026-10-14 15:39 UTC — Research/evidence/recovery validation passes; Markdown inventory/check passes (155 total; 70 active, 85 archival); focused PEX/path tests 9/9 pass; Ghidra session 40253 still active. Next: audit Git baseline, recovery artifacts, skills, and branch-specific setup instructions; close remaining local gaps.
+- 2026-10-14 15:40 UTC — Git baseline confirmed: branch `glitch-hunting-setup`, HEAD `e13ae4b253a6f5fd66f0f8abc3e49e6f9b29a6cc`; existing mission-file deletion and user-provided mission recognized. Updated branch-specific setup and archive skill for the tested PEX route. Next: synchronize recovery pointers and test a fresh Codex context.
+- 2026-10-14 15:41 UTC — Codex CLI 0.162.0-alpha.17.2 identified; fresh read-only ephemeral recovery invocation exited 1 with output preserved in `.local/readiness/codex/fresh-context.stdout.raw`. Next: inspect error and fix the invocation if actionable, else record precise F08 blocker.
+- 2026-10-14 15:41 UTC — Fresh Codex recovery failed before file reads because the managed read-only sandbox denied runtime DB initialization; exact raw error is hashed under `.local/readiness/codex/`. Next: retry ephemeral/read-only with runtime state initialization allowed and repository/private data still read-only/excluded.
+- 2026-10-14 15:42 UTC — Auto-review rejected sending repository recovery documents to external Codex; reason: specific sensitive payload/destination not explicitly authorized. No retry through an indirect route. Next: check local-only provider availability; otherwise record F08 as externally blocked and continue.
+- 2026-10-14 15:42 UTC — Local-only Codex providers unavailable; F08 remains externally blocked per auto-review. Next: inspect transaction lifecycle/UESP route and run Q-0005 breadth transaction with actual source revision.
+- 2026-10-14 15:43 UTC — Local UESP page `Skyrim:Enchanting` retrieved at revision 3538992 (2026-04-08T15:03:34Z); no durable capture yet. Transaction lifecycle functions exist but no entrypoint. Next: add/test a small Python CLI, then run TX-0004/Q-0005 breadth investigation and retain the page artifact.
+- 2026-10-14 15:43 UTC — Transaction CLI first invocation exposed missing root import path (`ModuleNotFoundError: No module named scripts`). Next: fix script import path and verify CLI lifecycle/ledger on temporary data before a real breadth transaction.
+- 2026-10-14 15:44 UTC — Transaction CLI/help and real ledger validation pass; 7 transaction tests including isolated subprocess lifecycle pass. Next: begin TX-0004/Q-0005 breadth investigation using the captured local `Skyrim:Enchanting` revision.
+- 2026-10-14T15:45:02+00:00 transaction `TX-0004` begin: frontier Q-0005; next action: Retrieve the local Skyrim:Enchanting page at revision 3538992, cite its exact revision, compare it against the existing historical XP model without treating it as current-build proof, and record a numeric follow-up discriminant.
+- 2026-10-14 15:45 UTC — TX-0004/Q-0005 running; captured `Skyrim:Enchanting` local page revision 3538992 (2026-04-08T15:03:34Z), raw SHA256 30f000a2d6750e573935bc6cefcc1a99a4e8405eba394b9b4cbcdc4c19019a28. Next: inspect XP section, register source evidence and discriminant, then complete and auto-select successor.
+- 2026-10-14 15:46 UTC — Inspected UESP Enchanting revision 3538992 XP section: 1 base XP per enchantment; base unaffected by item value, enchantment choice, soul level; XP enhancers affect it; pre-1.6.318 Myrwatch overgrant reported. Source statements only. Next: compare with legacy claims, register EV-0124, add discriminant, complete TX-0004.
+- 2026-10-14T15:47:06+00:00 transaction `TX-0004` update: uesp-enchanting-xp-section: UESP revision 3538992 attributes a one-base-XP-per-enchantment statement and names item value, chosen enchantment, and soul level as nonfactors for base XP; this is source text, not a current-build result.; next action: Design a paired raw Enchanting skill-XP observation: hold effect count and XP enhancers fixed while varying item value/soul level, then compare one versus two enchantments and preserve the exact runtime/build.
+- 2026-10-14T15:47:06+00:00 transaction `TX-0004` complete: Completed a breadth source investigation: retrieved and revision-cited the local Enchanting article; it gives an attributed base-XP statement and a specific pre-1.6.318 Myrwatch report, but does not establish behavior on the verified 1.6.1170 executable.; selected Q-0003 next
+- 2026-10-14 15:47 UTC — TX-0004/Q-0005 completed with EV-0124 and a falsifiable raw-XP successor protocol; normal completion selected Q-0003 next. Next: finish readiness checklist and continue Ghidra session 40253, then query only after analysis completes.
+- 2026-10-14 15:47 UTC — Audited 12 skills; seven have missing invocation/evidence/failure details. Evidence register contains no co-save observation despite matrix wording; C13 needs revalidation. Ghidra session 40253 active. Next: fix skills, inspect permitted co-save artifacts, and continue Ghidra.
+- 2026-10-14 15:50 UTC — Seven flagged skills updated; archive skill now documents the working narrow PEX extraction/inspection route. Next: validate metadata and tool routes; check designated save/co-save availability and correct C13 status; continue Ghidra.
+- 2026-10-14 15:51 UTC — Skill metadata is valid/unique; quest-gate failure wording repaired. No designated save input exists, but retained `SAVE-LOCAL-001.cosave-info.stdout` shows a prior 2,617-byte, 19-chunk, 100% structural parse with source path/hash missing. Co-save tests are pytest-style and skipped by stdlib unittest. Next: convert tests, verify routes, inspect provenance, and retest parser.
+- 2026-10-14 15:53 UTC — Co-save parser unittest 6/6; current synthetic 244-byte fixture parses at 100%. Retained local co-save output reports 2,617 bytes/19 chunks/15 opcodes/100%, but source input hash/path absent. SKSE binaries and Address Library 1.6.1170 file found and hashed. Next: verify Windows version resources and register bounded evidence; no live call.
+- 2026-10-14 15:54 UTC — SKSE probe and co-save fixture tests pass 8/8; normal-sandbox Windows version-resource bridge failed (`PowerShell did not return a Skyrim ProductVersion`, raw SHA256 5a1eb43179f6458ce94dc80f31328121f4bc71fed0a3e1d10ac212aaf51fe9e1). Next: retry read-only local metadata through approved host interop, no launch/write.
+- 2026-10-14 15:54 UTC — Approved local metadata-only Windows host interop returned exit 1; raw output saved in ignored `.local/readiness/skse/metadata-elevated.stdout.raw`. Next: inspect exact error, fix only if safe, otherwise report boundary.
+- 2026-10-14 15:55 UTC — Elevated Windows target verification succeeded; SKSE probe exposed a local `KeyError` because the target helper returns no `sha256` field. Raw failure SHA256 d070a94ebc91360a87b91adc13b02d4e2a1f34b4c075f159c9a1309cc37c83be. Next: hash verified executable directly, retest probe.
+- 2026-10-14 15:55 UTC — SKSE metadata probe PASS: target 1.6.1170; loader/DLL ProductVersion `0, 2, 2, 6`; matching Address Library runtime filename; no live handshake. Next: register output hashes and bounded co-save evidence, update C11/C13 docs, revalidate.
+- 2026-10-14 15:57 UTC — Registered EV-0125–0128 and scoped claims; updated SKSE/co-save, routing, capability, README, and setup docs. Next: verify CI discovers pytest-style tests, run complete suite/validators, inspect Ghidra.
+- 2026-10-14 15:58 UTC — Confirmed pytest is declared but CI used unittest discovery, skipping module-level pytest tests. Updated Linux/Windows CI and quickstart commands to pytest. Next: run full suite and validators, then poll Ghidra session 40253.
+- 2026-10-14 15:59 UTC — First full pytest attempt found Conda unavailable and system Python missing pytest; tee could not capture because `.local/readiness/tests/` was absent. Next: create capture directory, inspect offline/isolated dependency options without changing host Python.
+- 2026-10-14 15:59 UTC — Created `.local/readiness/tests/`; local Python has neither pip nor pytest, pip cache query unavailable, and no local pytest executable was found. Next: check Windows/local Python installations and venv support before running feasible validations.
+- 2026-10-14 16:00 UTC — Confirmed no uv/Conda/micromamba/virtualenv; venv creation fails because `ensurepip`/`python3.12-venv` is missing; normal-sandbox Windows interop fails with WSL `UtilBindVsockAnyPort`. Next: capture these blockers, inspect local dependency artifacts, run dependency-free validators, and assess a scoped host setup route.
+- 2026-10-14 16:01 UTC — Full pytest blocked by missing pytest; research validation, compileall, and pre-push audit returned exit 0. Overlay and Markdown audit returned nonzero; unittest discovery was still running at the first poll.
+- 2026-10-14 16:02 UTC — Unittest discovery finished 117 tests OK. Overlay failure is `tools/ghidra_scripts/ReadOnlyTargetedQuery.java`; Markdown inventory is stale. Raw logs and SHA256s saved in `.local/readiness/tests/`. Next: refresh inventory and inspect policy/test discovery before repair.
+- 2026-10-14 16:03 UTC — Refreshed Markdown inventory (155 files: 70 active, 85 archival). Overlay rejects all non-Python extensions, including the required GhidraScript API payload paired with `tools/ghidra_probe.py`; pytest-only tests use tmp_path/monkeypatch. Next: implement a constrained exception and convert those tests for standard-library discovery.
+- 2026-10-14 16:04 UTC — Added a one-path Ghidra API payload exception requiring a Python companion; converted pytest-only test modules to unittest and replaced the stale Node-specific invariant. Next: run the full suite and repository validators, capture results, and poll Ghidra.
+- 2026-10-14 16:05 UTC — Full stdlib unittest discovery passed 132 tests; compileall, research, overlay, and pre-push checks passed. Markdown `--check` still stale after `--write`. Next: inspect report generator inputs and resolve invalidation.
+- 2026-10-14 16:06 UTC — Confirmed inventory self-hash is omitted; the active `STATE.md` row hash changes with later checkpoint edits, explaining staleness. Defer final `--write`/`--check` until the final Markdown checkpoint. Next: poll Ghidra 40253 and then reconcile criteria/gates.
+- 2026-10-14 16:07 UTC — Ghidra session 40253 remains active after a 10-second poll with no new log output. Next: reconcile all 74 mission criteria against durable evidence while the analysis continues; do not claim completion or absence.
+- 2026-10-14 16:08 UTC — Read complete A01–F12 criterion ledger and mission evidence/gate rules. All 74 checklist rows remain PENDING and report/blockers are skeletons. Next: map criterion evidence and raw artifact provenance before writing final statuses.
+- 2026-10-14 16:09 UTC — Mapped EV-0109–0128 and capability matrix to target, records, Ghidra partial, PEX, UESP, co-save and SKSE facts. RECOVERY still has a stale next_action. Next: check Windows Python read-only through host interop, sync recovery, and continue criterion mapping.
+- 2026-10-14 16:10 UTC — Approved Windows PowerShell availability query exited 0 but produced no stdout, so it is inconclusive. No host package/file changes. Next: repeat with explicit sentinels/captured output, then continue evidence mapping.
+- 2026-10-14 16:11 UTC — Explicit Windows query confirms neither `py` nor `python` is on PATH; output SHA256 cc3773eb07823cdcaa1715ad47b8cfd44f1a9a07176cf615badb14db1a1e040c. Next: check conventional install directories read-only, then close evidence mapping.
+- 2026-10-14 16:12 UTC — Standard per-user/system Windows Python 3.12/3.13 and Conda locations all returned False; path-list capture SHA256 d05dd1883e582c8893a94420f4ece89503c5e432d8917f231803330bfd7b3ed6. Next: check local CommonLib build toolchain/source and map remaining knowledge criteria.
+- 2026-10-14 16:13 UTC — Linux has g++/make but no CMake/clang/ninja; Windows CMake is absent. Original checkout exposes `observer/CMakeLists.txt` and a CommonLib GDT, but bounded source search found no CommonLib tree. Next: inspect dependencies and paths before marking C10 blocked.
+- 2026-10-14 16:14 UTC — Original observer CMakeCache records Visual Studio CMake and CommonLibSSE-NG at `C:\dev\skyrim-re-toolkit\type-importer\vendor\CommonLibSSE-NG`; prior shallow search missed the external candidate. Next: verify both exact paths read-only and test a fresh isolated build if available.
+- 2026-10-14 16:15 UTC — First exact-path PowerShell probe failed at parse time because Bash expanded unescaped `$null`; raw failure SHA256 2c0fb4e529f53c98ef3f02620c4714e700e6ca41fa77fa70b332ed95c8993e71. Next: retry without redirection, read-only.
+- 2026-10-14 16:16 UTC — Exact CMake and CommonLib paths and CMakeLists exist; PowerShell Git is absent and native `--version` output was not captured. Raw SHA256 5f1d5f486f11331358c5fe740786ddd22fc2725b643c741a1d853cba00e4333c. Next: verify with WSL Git and explicit CMake output.
+- 2026-10-14 16:17 UTC — WSL Git verifies CommonLib HEAD b93280e832f263dbef44e44cbe2936622a02f91a; CMakeLists reports 3.6.0; cache records VS 2022 generator. Next: capture executable version and inspect build dependencies before isolated configuration.
+- 2026-10-14 16:18 UTC — Cached CMake runs as 3.30.5-msvc23, output SHA256 c7edf3d0896c5e8a0bec04e1ff2130442b504eeb330441e5af2d4daf320a82fb. Existing observer-local vcpkg prefix lacks `spdlog` and `rapidcsv.h`; next: check global prefix/MSVC and manifests before no-network configure.
+- 2026-10-14 16:19 UTC — VS 2022 `cl.exe` found under toolset 14.43.34808 (SHA256 bb37ac7fe9c4114a1c37f4dec52e08ae3a25b3723e2b2defd627b82bce5d65ba). Global and observer-local installed prefixes lack manifest dependencies `spdlog` and `rapidcsv`; next: safe no-network CMake configure in `.local`.
+- 2026-10-14 16:20 UTC — Local vcpkg source confirms `VCPKG_MANIFEST_INSTALL=OFF` prevents manifest install; the package store includes rapidcsv headers but spdlog remains unverified. Next: inspect spdlog/fmt caches and build only from local packages if available.
+- 2026-10-14 16:21 UTC — vcpkg cache contains static-md packages for spdlog, fmt and rapidcsv; CMake/VS/MSVC are executable. Next: configure a fresh observer build only in ignored `.local` with `VCPKG_MANIFEST_INSTALL=OFF` and cached package paths.
+- 2026-10-14 16:22 UTC — Fresh CMake configure generated CommonLib/observer Visual Studio projects in `.local/readiness/commonlib-observer-20261014-1621`; output shows MSVC 19.43.34809.0, SDK 10.0.22621, AE ON and SE/VR OFF. Wrapper exit still needs confirmation before building.
+- 2026-10-14 16:23 UTC — CMake configure logs show completion but the PowerShell wrapper session remains active with no exit output. Next: inspect Windows cmake/msbuild/cl process state and captured logs before starting the build.
+- 2026-10-14 16:24 UTC — `cmake`, `MSBuild`, and `cl` are absent from Get-Process; capture SHA256 7248afec41d0d34e1cd2a93d7e4cb68a92940502aeb135479c364f5abe9bd3ab. Configure stdout/stderr hashes 7fea02a29d8b0319d4dd235bc46b21a062842e96db23bd4e061f8538f6998518 / d3ae7356bfe227657e4c48891b086471ba13e91c0622ea184f0139249cd2289c. Wrapper session still hasn't returned; next inspect Win32 process details and build separately.
+- 2026-10-14 16:25 UTC — Win32 query identifies only our own `configure-commonlib.ps1` PowerShell wrapper PID 17400; no cmake/MSBuild/cl process remains. Capture SHA256 a8d93afe7c65fdb9f9702be692e986e6d2f7d93298a3c636e2fa7d3e9ab75761. Next: interrupt that wrapper and build separately in `.local`.
+- 2026-10-14 16:26 UTC — Interrupted only our own stuck configure wrapper session after confirming CMake/MSBuild/cl were not running; tool session returned exit 1 on Ctrl-C, while complete CMake generation logs remain. Next: run direct observer build via temporary ignored `.cmd`, capturing native exit.
+- 2026-10-14 16:27 UTC — First cmd.exe build attempt failed because Bash consumed unquoted Windows path backslashes; raw SHA256 cd4d491b8a62824580a99e56ff1940a7f0864cae6545236849c01c85f625d5d8. No build ran. Next: retry with preserved path quoting.
+- 2026-10-14 16:28 UTC — Correctly quoted cmd.exe build is active; output shows MSBuild 17.13 and CommonLib C++ sources compiling in the `.local` build tree. Next: inspect D/E/F knowledge/continuity records and poll build completion.
+- 2026-10-14 16:37 UTC — Saved process snapshot shows MSVC `cl`/CMake/MSBuild active for the CommonLib observer build; the build log is 7,586 bytes, SHA256 3f8e725ebfc463591d9bb56f353758021f81909c9608208e70ca475501ae160a, and compilation has reached TESCondition.cpp. Ghidra Java remains active with the long-analysis project lock; log is 267,526 bytes, SHA256 38bd6e968b35dc9ef6802b43fd3ab4de0761e51408c5915d738266fab6ca0ffd, currently emitting decompiler constructor-resolution warnings. Process snapshot SHA256 7890b5bad404cbf28bd69a9c61452d0b769c27cb4f4345c31c2742348ba8d740. Next: keep both operations running while completing the 74-row checklist and gate assessments; poll for final results afterward.
+
+- 2026-10-14 16:46 UTC — Observer/CommonLib session 60759 exited 1. `.local/readiness/tests/commonlib-build.stdout.raw` is 53,386 bytes, SHA256 `747565ed7610e2d4eeee26268ad08162360fcd767340da449a30c95aaf7e4332`; CommonLibSSE.lib exists, while `SkyrimStateObserver.dll` was not produced. The Observer translation unit fails in CommonLib `REL/Version.h` on missing `std::size_t` and `std::strong_ordering` declarations. Ghidra analysis session 40253 remains active; latest log hash is `38bd6e968b35dc9ef6802b43fd3ab4de0761e51408c5915d738266fab6ca0ffd`. Next: inspect compiler/include configuration and try a source-copy-only repair in ignored `.local`, then finish criteria/gates and poll Ghidra.
+
+- 2026-10-14 16:47 UTC — Build diagnosis: the generated `__SkyrimStateObserverPlugin.cpp` includes CommonLib headers before `<cstddef>`/`<compare>`; CMake specifies C++23. CommonLibSSE.lib exists. The error is in a generated source copy within ignored `.local`; original source remains read-only. Next: add those standard headers only to the local copy and rebuild.
+
+- 2026-10-14 16:48 UTC — Added `<cstddef>` and `<compare>` to generated Observer source under ignored `.local`. Two rebuild invocations returned `<3>WSL (2 - ) ERROR: UtilBindVsockAnyPort:307: socket failed 1` before CMake/MSBuild ran, so no corrected-build result is claimed. Original source remained untouched. Next: retry if Windows interop recovers; complete criteria/gates and poll Ghidra.
+
+- 2026-10-14 16:48 UTC — Verified CommonLibSSE.vcxproj output `CommonLibSSE.lib` in `.local/readiness/commonlib-observer-20261014-1621/commonlibsse-ng/Release`: 200,524,092 bytes, SHA256 `230929f4ac49b5dbd8c3c143c43e3983ad788891a3c83baa9201060f32addda2`. Build log proves CommonLib target generated; enclosing Observer DLL target failed on missing standard-library names in REL/Version.h. CMake source commit b93280e832f263dbef44e44cbe2936622a02f91a; AE enabled, SE/VR disabled, MSVC 19.43.34809.0. Next: register this operation and its limits, update C10/tool matrices, finish report/gates, poll Ghidra.
+
+- 2026-10-14 16:48 UTC — Registered EV-0130 for the real CommonLib library build, with artifact/log hashes and the separate failed Observer target. C10 is PASS for CommonLib library compilation only. Updated tool path/capability matrices; no runtime capability is inferred. Next: finish the report, blockers, resume checkpoint, B10 final Markdown audit, gate decisions, and remaining Ghidra query status.
+
+- 2026-10-14 16:49 UTC — EV-0130 records the actual CommonLib library compilation and separate Observer DLL failure. C10 and capability matrices now reflect the bounded native result. Transaction ledger contains four complete/blocked investigations, with TX-0001 selecting Q-0003 after preflight failure and later synthesis/frontier successors. Next: inspect Ghidra query contract/saved partial project and attempt a current-AE function/xref/disassembly result while long analysis continues; then finish docs/gates.
+
+- 2026-10-14 16:50 UTC — Ghidra script audit found the current read-only payload throws on the first no-xref case, so no function disassembly/decompilation is exported from the valid 92,219-function partial AE project. A separate 7,200-second full analysis remains active. Next: repair the payload to return function lookup/disassembly and explicit xref-found status, then run against attempt2.
+
+- 2026-10-14 16:51 UTC — Repaired the Ghidra query payload to always emit a bounded real function disassembly and attempt decompilation; a missing xref is now an explicit result rather than a thrown script error. Added a focused unittest and launched test session 48660 plus native Ghidra query session 42869 against the unlocked partial AE project. Full analysis 40253 continues. Next: poll both and record hashes/results; do not claim C07 unless an edge appears.
+
+- 2026-10-14 16:51 UTC — Focused Ghidra adapter tests passed 3/3; raw stderr SHA256 `05c54abdae4185feca53c76613e86a431690a6d873729aa1a7553e0efef3c2ca`. Native query returned before Ghidra launch because the PowerShell target recheck did not return a Skyrim ProductVersion. No native query result is claimed. Next: inspect target guard and verified import metadata for a safe hash-bound existing-project query fallback; retain strict checks for new imports.
+
+- 2026-10-14 16:52 UTC — Verified EV-0109 records ProductVersion 1.6.1170 for executable SHA `c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9`; EV-0113 and attempt2 project metadata cite the same hash. Proposed fallback is read-only and query-only, with fresh byte hashing; new imports, xEdit and live tools retain PowerShell ProductVersion checks. Next: implement/tests and retry Ghidra query.
+
+- 2026-10-14 16:53 UTC — Added a hash-attested fallback restricted to the existing attempt2 project; it verifies current executable bytes, both evidence artifacts, EV-0109 ProductVersion, EV-0113 import and project metadata. New analyses remain on the strict ProductVersion reader. Added positive and changed-image tests; focused suite session 55024 and native query session 67307 launched. Next: poll and record results; poll full analysis 40253.
+
+- 2026-10-14 16:54 UTC — Focused Ghidra suite passed 5/5; raw stderr SHA256 `e72fb88e12a585b200c9e97f3d1dbed27e880b2bc5f8ecaf217fd86b4b473525`. The hash-attested identity fallback passed, but native query stdout records `cmd.exe` failure `<3>WSL (7 - ) ERROR: UtilBindVsockAnyPort:307: socket failed 1` (raw JSON SHA256 `8233cf2baadf33af013f6b3f033ae39578403e3d619762e85dfc7c836764a6e4`); Ghidra was not invoked. Next: register this outcome, test deterministic fresh-process recovery and finish report/gates; poll long analysis 40253.
+
+- 2026-10-14 16:54 UTC — Reviewed the deterministic recovery test: it creates a running transaction and invokes separate fresh processes for recovery and resume, then checks the active checkpoint. Full suite will rerun after current Ghidra changes. Next: register EV-0131 for the WSL-blocked native query and fix TargetError CLI serialization.
+
+- 2026-10-14 16:55 UTC — EV-0131 registered exact pre-Ghidra WSL bridge failure. Ghidra adapter focused suite passed 6/6 (stderr SHA256 `5cac8155ef8b0cdc2f6abdb5328d1793bd7f8c97a76c9d38b96236eed252df33`); targeted compileall passed. No function/xref/disassembly/decompilation from the failed query. Next: finalize all readiness artifacts/gates, poll analysis 40253, and run full final validation.
+
+- 2026-10-14 16:56 UTC — Final CommonLib compile error review shows the generated Observer metadata translation unit lacks the project’s normal `observer/Observer.h` include, while the original plugin source includes that header. Plan is a local `.local` source-copy patch only; no original checkout write. Next: stage include, retry only if WSL interop returns, then finalize readiness docs/gates.
+
+- 2026-10-14 16:56 UTC — Added `observer/Observer.h` to the generated Observer source copy under ignored `.local`. Rebuild again failed before native tools: `<3>WSL (2 - ) ERROR: UtilBindVsockAnyPort:307: socket failed 1`. Source-copy repair is unverified and original source remains unchanged. Next: finish all report/gate documents, poll Ghidra, decide C07/C08 from actual results, then run full final checks.
+
+- 2026-10-14 16:58 UTC — Reconciled C01–C16: actual DA14 PEX parsing reaches EOF and exposes object/function bytecode (not a full decompiler); BSA extraction and triage fixture are bounded. Found C10 Markdown row missing its closing delimiter and focused Ghidra regression log not yet in EVIDENCE. Next: register EV-0132 and repair the row, then complete report/gates.
+
+- 2026-10-14 16:58 UTC — Registered EV-0132 for the six passing Ghidra adapter tests and corrected C10 table syntax. Native query remains blocked before launcher by EV-0131. Next: poll long analysis 40253 and retry only if the Windows bridge is available; otherwise finalize C07/C08 blockers and gates.
+
+- 2026-10-14 16:59 UTC — Ghidra long-analysis session 40253 remains active after a 10-second poll with no new stdout. Next: inspect log progress/time, complete non-Ghidra readiness artifacts, and poll again before final C07/C08 verdict.
+
+- 2026-10-14 17:00 UTC — Expanded the mission report with tool-by-tool operations and limits, four pilot transactions, three gate snapshot, and prioritized user-only actions. Current acceptance tally is marked provisional pending C07/C08 and final audits. Ghidra log remains 267,526 bytes; session 40253 is active. Next: update tool matrices with EV-0131 and run full local validations.
+
+- 2026-10-14 17:01 UTC — Updated Ghidra and CommonLib capability matrices with the actual operation/failure split. Full unittest discovery session 87386 launched through the Python dispatcher with raw outputs under ignored `.local`. Next: poll it, register results, run all remaining validators/privacy checks, and poll Ghidra 40253.
+
+- 2026-10-14 17:01 UTC — D01–D13 audit review found the Apocrypha local retrieval is referenced by a private alias but lacks a dedicated evidence row. Will hash only file metadata under ignored `.local`; do not print or open message bodies. Next: register sanitized evidence and update D12/report.
+
+- 2026-10-14 17:02 UTC — Hash-only Apocrypha audit recorded ignored `context.stdout` (17,445 bytes, SHA256 `e3a592fef499db309b31d81adcee625444e42e35835c9baf523d7998f2e55987`) without reading private text. Existing session log records a UESP Ebony Warrior revision 3580051 comparison but EVIDENCE lacks its exact capture. Next: register EV-0133, re-fetch exact UESP revision and register EV-0134, update D12/D13/report.
+
+- 2026-10-14 17:03 UTC — Registered EV-0133 from hash-only Apocrypha captures: 60,873 indexed messages, four bounded searches, one focused private context; no message body/identifier copied. Next: inspect UESP CLI syntax, retrieve exact Ebony Warrior rev 3580051 as raw, register EV-0134, and record the three-source cross-check.
+
+- 2026-10-14 17:03 UTC — Verified `tools.uesp page` exact-title invocation accepts positional `title`, `--db`, and `--raw`. Next: retrieve local `Skyrim:Ebony Warrior` raw wikitext and register stable page revision/hash as EV-0134.
+
+- 2026-10-14 17:04 UTC — Exact local UESP raw retrieval for `Skyrim:Ebony Warrior` succeeded at revision 3580051; stable oldid URL and capture hash f5ebdf5c3aff51741745d1bf49aaeac5380d833adf3e816a02e12258729847dc. Next: register EV-0134 and privacy-safely confirm the private context threshold mention without exposing body/IDs, then update the bounded cross-source claim.
+
+- 2026-10-14 17:04 UTC — Registered EV-0134 for local UESP `Skyrim:Ebony Warrior` revision 3580051 (raw SHA f5ebdf5c3aff51741745d1bf49aaeac5380d833adf3e816a02e12258729847dc). Privacy-safe in-memory checks found the private context includes the threshold term; no body or message ID was printed. Added CL-L064 and graph/frontier links documenting source agreement plus hard-gate uncertainty. D12/D13 and tool/report matrices updated; no current AE winner or transition claimed.
+
+- 2026-10-14 17:05 UTC — EV-0133/0134 and CL-L064 are linked across evidence/claims/knowledge graph/frontier; D12/D13 and tool/report rows updated. Private Apocrypha body and identifiers remain unexposed. Next: validate the new cross-references, poll full tests and Ghidra, then finalize readiness statuses/gates.
+
+- 2026-10-14 17:05 UTC — Launched the final validator batch, but the orchestration output omitted the nested exec session envelope. Each validator writes `.local/readiness/tests/{name}.meta.json` after completion. Next: inspect these files, recover exit codes, rerun incomplete checks with visible session status, and poll full tests/Ghidra.
+
+- 2026-10-14 17:06 UTC — Full stdlib unittest suite passed 136 tests in 18.961s; captured stderr SHA256 `c2cfee6d54c4d71ba00266b7641d059fef168c913b898983a6512a22b58564e0`. Research/evidence, transaction, overlay, and compileall validators all returned exit 0 from final capture files. Ghidra 40253 remains active. Next: register full test evidence, run privacy/pre-push/diff checks, poll Ghidra and finish statuses/gates.
+
+- 2026-10-14 17:06 UTC — EV-0135 records the 136-test full suite; EV-0136 records research, transaction, overlay and compileall validators. F07 and F10 now cite current outcomes. Next: run pre-push, tracked diff privacy scan and diff check, then poll long Ghidra analysis.
+
+
+- 2026-10-14 17:07 UTC — `git diff --check` passed; tracked diff scan found zero exact user Windows/home path matches. Pre-push audit session 20541 is running; HEAD remains e13ae4b253a6f5fd66f0f8abc3e49e6f9b29a6cc. Next: poll 20541 for counts/hash, poll Ghidra 40253, then finalize criteria/gates.
+
+- 2026-10-14 17:07 UTC — Final pre-push audit passed (raw stdout SHA256 `977d98205733ac3d2e24fbec4f67d855dfac578ff3258daafeb8b3456bcd6868`): 253 tracked files; 0 tracked raw; 0 tracked heavy; 0 unignored raw; 11/11 ignore probes; 8 ignored local heavy files totaling 3,180.9 MiB. Ghidra session 40253 remains active. Next: register EV-0137/update A09, poll Ghidra and finalize statuses/gates.
+
+- 2026-10-14 17:07 UTC — Registered EV-0137 for the final pre-push audit and updated A09/report. Hash `977d98205733ac3d2e24fbec4f67d855dfac578ff3258daafeb8b3456bcd6868`; 253 tracked files, 0 tracked raw/heavy, 0 unignored raw, 11/11 ignore probes; eight ignored heavy files total 3,180.9 MiB. `git diff --check` and exact user/home path scan pass.
+
+- 2026-10-14 17:08 UTC — Ghidra analysis session 40253 remains active after 10-second poll. Existing attempt2 partial project is unlocked and independent. Next: retry the hash-attested query now; if WSL bridge fails again, finalize C07/C08 as external blockers.
+
+- 2026-10-14 17:08 UTC — Repeated repaired hash-attested Ghidra query against unlocked attempt2 returned the same pre-launch WSL `UtilBindVsockAnyPort:307: socket failed 1` as EV-0131; no Ghidra script ran. Full analysis 40253 remains active. Next: register EV-0138, finalize C07/C08 blockers and gates, then poll full analysis to terminal before final audit.
+
+- 2026-10-14 17:08 UTC — Registered EV-0138 for the second native Ghidra query retry. C07/C08 are now BLOCKED_EXTERNAL for this run: both attempts failed before Ghidra with WSL UtilBindVsockAnyPort; no xref/disassembly/decompilation result exists. Updated checklist, blocker, capability matrix, resume/report text. Full analysis 40253 remains active and will be polled to terminal.
+
+
+## Final readiness checkpoint — 2026-10-14T17:26:49Z
+
+- Session 40253 terminated after its 7,200-second per-file analysis timeout and saved an incomplete project (EV-0139). The third query passed the exact executable/project attestation but WSL failed before Ghidra (EV-0141); no current xref, disassembly, or decompilation output exists.
+- Full local unittest discovery passed 139 tests (EV-0142). Research/evidence, transaction, overlay and compileall validators passed (EV-0143); 9 focused attestation tests passed (EV-0140).
+- Four exact local-path matches were confined to deleted lines in the pre-existing deleted user mission file; added-line scan found zero. Keep both the deletion and untracked user-supplied mission file out of staging.
+- Current exact next action: Stage and review only changes made for this readiness audit, excluding both user-supplied mission-file states; run pre-push/privacy/diff checks, finalize results and statuses, run the final Markdown inventory --write/--check, then commit only the reviewed audit changes; do not push.
+
+
+## Staged whitespace repair — 2026-10-14T17:27:48Z
+
+ - The first staged diff check found new blank lines at EOF in four files. Removed the trailing blank lines; both user mission-file states remain outside the index.
+ - Current exact next action: Restage only mission changes excluding both user mission file states, rerun git diff --cached --check, inspect the staged file list, and execute the final pre-push/privacy audit. Then finalize the checklist, run the final Markdown inventory write/check, and commit only if the reviewed diff is clean; do not push.
+
+
+## Final staged pre-push result — 2026-10-14T17:29:30Z
+
+- EV-0144 records the final staged pre-push audit: 273 tracked files, zero raw/heavy tracked files, zero unignored raw, 11/11 ignore probes, and nine ignored local heavy files totaling 3,349.3 MiB.
+- The added staged-line privacy scan found zero exact workspace/home path matches. The four matches seen in the full working diff are only removed lines from the pre-existing deleted mission file; both user mission-file states were excluded.
+- Current exact next action: EV-0144 records the staged pre-push/privacy pass and zero added-line path matches. Update A09/F12 and report, run final evidence/state validators, finalize B10 with the Markdown audit, then commit the reviewed changes; do not push.
+
+
+## Post-audit validation checkpoint — 2026-10-14T17:30:05Z
+
+- Full unittest discovery plus research, transaction, overlay and compileall validators completed after the EV-0144 staged privacy audit; every command exited 0. Captures are under ignored .local/readiness/final-verification/.
+- Exact next action: The post-EV-0144 full test suite and validators all exited 0. Inspect exact test count and output hashes, register the final test/validator evidence, then complete B10 Markdown audit and the final 74-row tally.
+
+
+## Final suite output inspected — 2026-10-14T17:30:20Z
+
+- Post-EV-0144 unittest discovery passed 139 tests in 14.250 seconds; research, transaction, overlay and compileall validators all exited 0. Raw captures and hashes are verified.
+- Exact next action: EV-0145/EV-0146 capture the passing final test and validator batch. Register them and update F07/F10/report, then run the research validator after those evidence additions before the final Markdown audit.
+
+
+## Evidence ledger validation — 2026-10-14T17:30:42Z
+
+- The research validator exited 0 after EV-0145 and EV-0146 were added to the evidence register. Raw output is captured under ignored .local/readiness/final-verification/.
+- Exact next action: The research validator passed after EV-0145/EV-0146 were added. Inspect and record its hash, then finalize B10 and the 64/10/0 tally, regenerate/check the Markdown inventory, and prepare the commit.
+
+
+## Final prose review checkpoint — 2026-10-14T17:31:07Z
+
+- Evidence validator passed after EV-0145/EV-0146 were added; 74 checklist rows reconcile to 63 PASS, 10 BLOCKED_EXTERNAL, and B10 pending.
+- Exact next action: The evidence validator passed after EV-0145/EV-0146, and the 74-row tally is 63 PASS, 10 BLOCKED_EXTERNAL, 1 PENDING. Review the final checklist/report/resume text for stale wording, then run the Markdown inventory write/check.
+
+
+## Final tally correction checkpoint — 2026-10-14T17:31:54Z
+
+- Reviewed final checklist/report/resume for stale wording; B10 is the only remaining pending row.
+- Exact next action: Correct stale checklist/report/resume wording and reconcile the tally to 64 PASS, 10 BLOCKED_EXTERNAL, 0 pending before writing the final Markdown inventory.
+
+
+## Readiness text repair checkpoint — 2026-10-14T17:32:18Z
+
+- Identified stale A08, B01, E03 and pending-count text in the checklist/report/resume.
+- Exact next action: Revise stale readiness text, gate wording, final test references and the 64/10/0 target tally; keep B10 pending until the final audit output is captured.
+
+
+## Final report and commit checkpoint — 2026-10-14T17:34:24Z
+
+- Preliminary Markdown inventory write/check passed for 155 files (70 active, 85 archival); stale counts and final status language are being reconciled.
+- Exact next action: Finalize the 64 PASS / 10 BLOCKED_EXTERNAL / 0 pending checklist and report, run the final Markdown inventory write/check, register audit evidence and validate the evidence graph, then stage, review, privacy-check, and commit the local changes without pushing.
+
+
+## Final readiness reconciliation checkpoint — 2026-10-14T17:36:06Z
+
+- Preliminary Markdown inventory write/check passed: 155 files, 70 active and 85 archival. The final criterion tally is 64 PASS, 10 BLOCKED_EXTERNAL, and zero pending/fixable/not-applicable rows.
+- Exact next action: Finalize the 64 PASS / 10 BLOCKED_EXTERNAL / 0 pending checklist and report, run the final Markdown inventory write/check, register audit evidence and validate the evidence graph, then stage, review, privacy-check, and commit the local changes without pushing.
+
+
+## Staged-status guard correction — 2026-10-14T17:37:45Z
+
+- Final Markdown, research, staged diff, privacy, and path checks passed; a local closeout assertion mistook normal staged status codes for unstaged changes and stopped before commit. No commit was made.
+- Exact next action: Correct the staged-status guard, rerun final Markdown inventory write/check after checkpoint edits, register EV-0149 and validate research, restage with the two mission states excluded, rerun cached diff and privacy checks, then commit without pushing.
+
+
+## Git identity checkpoint — 2026-10-14T17:38:32Z
+
+- The staged 60-file set passed diff, pre-push and zero-match added-path checks. Commit stopped before creating a commit because Git has no configured author name.
+- Exact next action: Inspect recent author metadata; if it is a single consistent repository identity, configure it locally, rerun the final Markdown/evidence/privacy checks after this checkpoint edit, and commit without pushing.
+
+
+## Final commit identity checkpoint — 2026-10-14T17:39:13Z
+
+- The last eight repository commits share one author identity. Git identity will be configured locally for this repository only; global configuration will not be changed.
+- Exact next action: Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.

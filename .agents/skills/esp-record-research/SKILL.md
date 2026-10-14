@@ -18,9 +18,13 @@ attachment, or effective override.
    verify the local parser, then query an exact plugin with
    `python3 scripts/python_env.py run tools/plugin_reader.py record <plugin>
    --signature QUST --form-id <local-id>`. The Python reader exposes record
-   fields without third-party libraries. It does not resolve winning records
-   across the active order; do not claim a winner or complete override chain
-   until Windows SSEEdit has passed the exact target/profile gate.
+   fields without third-party libraries. Add `--include-subrecords` to capture
+   raw CTDA, ALST, ALID, and VMAD bytes for inspection; the reader does not
+   semantically decode all of them or load the complete active order. The
+   tested `resolve_record_winner(candidates, active_order)` helper selects the
+   last matching candidate only when supplied a complete validated order; its
+   current test is synthetic. Do not claim a real winner or complete override
+   chain until the selected profile is verified and the full record set is read.
 4. For quests, follow the actual initiation path across QUST, dialogue INFO,
    story-manager nodes, aliases, scripts, and attached conditions. Distinguish
    quest start from journal display, stage completion, alias fill, and encounter
@@ -35,3 +39,17 @@ attachment, or effective override.
    an incomplete load is not negative evidence.
 7. Do not save changes to plugins. Use copied fixtures for serializer round trips;
    this skill is for read-only evidence collection.
+
+## Evidence and failure modes
+
+- Route file queries through `python3 scripts/python_env.py run
+  tools/plugin_reader.py record <plugin> --signature <SIG> --form-id <ID>
+  --include-subrecords`; before xEdit or live-game work run
+  `python3 scripts/python_env.py run tools/ae_preflight.py` and require a
+  verified complete selected-profile order.
+- Save concise stdout, plugin filename/hash, runtime, exact record identity,
+  and raw artifact SHA-256 under ignored `.local/`; link the resulting EV ID
+  from claims/frontier. Do not copy plugin binaries into the repo.
+- Parser errors, missing records, incomplete orders, and absent overrides are
+  explicit coverage limits. A partial-order no-hit cannot support a negative
+  finding or a real winning-record claim.

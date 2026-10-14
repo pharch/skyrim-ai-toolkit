@@ -12,17 +12,21 @@ archive workflows are outside this harness.
    size, SHA-256, archive version if available, and private source path; never
    modify or replace the original.
 2. Run `python3 scripts/python_env.py run tools/domain_doctor.py` to record the
-   available archive/toolchain status. This checkout has no active Python BSA
-   parser; do not call retired shell/Node wrappers or claim archive coverage.
-   Treat archive inspection as `AWAITING_TOOL_ACCESS` until a reviewed
-   Python-only reader is installed and tested.
-3. Search for the smallest relevant plugin/script set. Preserve archive-relative
-   paths and map every extracted file to the archive hash and tool command.
-4. Do not extract or mutate an archive in this harness. If an authorized offline source requires extraction, use a separately
-   reviewed tool/procedure that verifies a new scratch destination outside the
-   game, active profile, and original source before writing.
+   available archive/toolchain status. For the tested classic PEX stream in
+   `Skyrim - Misc.bsa`, use `python3 scripts/python_env.py run
+   tools/papyrus_pex.py extract <script>`; it reads configured `SKYRIM_DATA`,
+   validates the PEX source header, and writes only under ignored `.local/`.
+   This is a narrow uncompressed-stream extractor, not a general BSA parser.
+3. Inspect the extracted artifact with `python3 scripts/python_env.py run
+   tools/papyrus_pex.py disassemble <pex>`. It supports bounded classic PEX 3.2
+   forms and is not a complete decompiler. EV-0121/0122 record the actual
+   DA14Script extraction, BSA/PEX hashes, output, and limitations.
+4. Preserve archive-relative source identity, size, SHA-256, exact extraction
+   command, output SHA-256, and raw results. Never write to the game, active
+   profile, original archive, or a path outside ignored `.local/`.
 5. Check for loose-file overrides and inspect the complete AE active load order
    before claiming which data the game uses.
-6. Do not use archive create, extract, add, remove, update, replace, merge, or
-   optimize operations through this harness. Preserve raw listings and negative
-   search results.
+6. `scan-literals` scans only the base Misc BSA by default; its Creation Club
+   option traverses all installed `cc*.bsa` archives and can read several GB.
+   Preserve exact archive coverage. A no-hit literal scan does not exclude
+   dynamically built strings or native writers (EV-0123).

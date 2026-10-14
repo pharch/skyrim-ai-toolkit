@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT))
 
 from scripts.local_config import read_local_config  # noqa: E402
 from scripts.local_paths import _native_path  # noqa: E402
-from tools.ae_target import TargetError, read_executable_version  # noqa: E402
+from tools.ae_target import TargetError, assert_ae_target  # noqa: E402
 
 
 def _path(value: str) -> Path | None:
@@ -58,7 +58,8 @@ def _tool_paths(config: dict[str, str]) -> dict[str, object]:
     java_home = _path(config.get("JAVA_HOME", ""))
     java_bin = (java_home / "bin" / ("java.exe" if os.name == "nt" else "java")) if java_home else None
     ghidra_launchers = [
-        ghidra_home / "support" / ("analyzeHeadless.bat" if os.name == "nt" else "analyzeHeadless")
+        ghidra_home / "support" / "analyzeHeadless.bat",
+        ghidra_home / "support" / "analyzeHeadless",
     ] if ghidra_home else []
     return {
         "ae_executable_configured_exists": bool(exe and exe.is_file()),
@@ -74,9 +75,50 @@ def _tool_paths(config: dict[str, str]) -> dict[str, object]:
     }
 
 
+def _windows_command(command: str, *, timeout: int = 30) -> dict[str, object]:
+    """Run a fixed, read-only host query through Windows interop without a shell file."""
+    executable = shutil.which("cmd.exe") or shutil.which("cmd")
+    if not executable and os.name != "nt":
+        candidate = Path("/mnt/c/Windows/System32/cmd.exe")
+        if candidate.is_file():
+            executable = str(candidate)
+    if not executable:
+        return {"available": False, "reason": "Windows command bridge not found"}
+    try:
+        result = subprocess.run(
+            [executable, "/d", "/s", "/c", command],
+            capture_output=True, text=False, timeout=timeout, check=False,
+        )
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return {"available": False, "reason": type(exc).__name__}
+    output = (result.stdout + b"\n" + result.stderr).decode("utf-8", errors="replace").strip()
+    return {"available": result.returncode == 0, "exit_code": result.returncode, "output": output[:1200]}
+
+
+def _host_java() -> dict[str, object]:
+    result = _windows_command("java.exe -version")
+    output = str(result.get("output", ""))
+    version_line = next((line.strip() for line in output.splitlines() if "version" in line.lower()), "")
+    return {
+        "available": result.get("available", False),
+        "version_line": version_line,
+        "bridge_reason": result.get("reason"),
+    }
+
+
+def _verified_target(config: dict[str, str], root: Path) -> dict[str, object]:
+    try:
+        target = assert_ae_target(config, root=root)
+        return {"verified": True, "edition": target["edition"], "runtime": target["version"]}
+    except (TargetError, OSError, UnicodeError) as exc:
+        return {"verified": False, "error": str(exc)}
+
+
 def run_doctor(root: Path = ROOT) -> dict[str, object]:
     config = read_local_config(root)
     paths = _tool_paths(config)
+    java = _host_java()
+    target = _verified_target(config, root)
     reports: dict[str, object] = {}
 
     # A synthetic fixture proves the parser returns a complete, machine-readable
@@ -88,23 +130,29 @@ def run_doctor(root: Path = ROOT) -> dict[str, object]:
     except Exception as exc:  # a concise doctor should still report later domains
         reports["SKSE"] = {"status": "technical_failure", "error": type(exc).__name__}
 
-    ghidra_ready = bool(paths["ghidra_standard_launcher_exists"] and paths["java_home_configured_exists"])
+    ghidra_ready = bool(paths["ghidra_standard_launcher_exists"] and java["available"])
+    ghidra_meta = sorted((root / ".local" / "readiness" / "ghidra").glob("*.meta.json"))
     reports["Ghidra"] = {
-        "status": "configured_toolchain_present" if ghidra_ready else "blocked_external",
+        "status": "native_launcher_and_jdk_verified" if ghidra_ready else "blocked_external",
         "configured_home_exists": paths["ghidra_home_configured_exists"],
         "configured_headless_path_exists": paths["ghidra_headless_configured_exists"],
         "standard_launcher_exists": paths["ghidra_standard_launcher_exists"],
         "java_home_executable_exists": paths["java_home_configured_exists"],
+        "host_java": java,
         "path_invocation_available": bool(shutil.which("analyzeHeadless") or shutil.which("ghidraRun")),
-        "analysis_run": False,
+        "analysis_run": bool(ghidra_meta),
+        "analysis_metadata_count": len(ghidra_meta),
     }
 
+    cmake = _windows_command("cmake.exe --version")
+
     reports["CommonLibSSE"] = {
-        "status": "ready_to_build" if paths["commonlibsse_source_configured_exists"] and shutil.which("cmake") else "blocked_external",
+        "status": "ready_to_build" if paths["commonlibsse_source_configured_exists"] and cmake["available"] else "blocked_external",
         "source_candidate_present": bool(paths["commonlibsse_source_configured_exists"]),
         "source_directory_exists": paths["commonlibsse_source_configured_exists"],
         "cmake_project_present": paths["commonlibsse_cmake_project_present"],
-        "cmake_available": bool(shutil.which("cmake")),
+        "cmake_available": bool(shutil.which("cmake") or cmake["available"]),
+        "host_cmake_probe": {key: cmake[key] for key in cmake if key != "output"},
         "native_compiler_available": any(shutil.which(command) for command in ("cl", "clang++", "g++")),
         "build_run": False,
     }
@@ -113,7 +161,8 @@ def run_doctor(root: Path = ROOT) -> dict[str, object]:
         "status": "configured_executable_present_but_unverified" if paths["sseedit_executable_configured_exists"] else "blocked_external",
         "configured_executable_exists": paths["sseedit_executable_configured_exists"],
         "windows_host": os.name == "nt",
-        "product_version_verified": False,
+        "product_version_verified": target["verified"],
+        "runtime": target.get("runtime"),
         # A configured file path is only a candidate. Target preflight must
         # parse and validate the entire current profile before this is true.
         "full_active_order_verified": False,
@@ -169,7 +218,9 @@ def run_doctor(root: Path = ROOT) -> dict[str, object]:
 
     reports["target_gate"] = {
         "executable_candidate_exists": paths["ae_executable_configured_exists"],
-        "product_version_verified": False,
+        "product_version_verified": target["verified"],
+        "runtime": target.get("runtime"),
+        "target_error": target.get("error"),
         "full_active_order_configured": paths["explicit_plugins_txt_configured_exists"],
         "preflight_command": "python3 scripts/python_env.py run tools/ae_preflight.py",
         "live_or_xedit_calls_permitted": False,

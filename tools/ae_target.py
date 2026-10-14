@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import ctypes
+import base64
+import binascii
 import hashlib
 import os
 from pathlib import Path, PureWindowsPath
@@ -109,26 +111,42 @@ def _read_version_from_wsl(executable: str | Path) -> str:
     """Use the host Windows version API through its installed PowerShell bridge in WSL."""
     shell = shutil.which("powershell.exe") or shutil.which("pwsh.exe")
     if not shell:
+        # WSL interop often exposes cmd.exe without importing the full Windows
+        # PATH. Check the inbox PowerShell path directly before failing closed.
+        candidate = Path("/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe")
+        if candidate.is_file():
+            shell = str(candidate)
+    if not shell:
         raise TargetError("Skyrim ProductVersion inspection requires Windows or its PowerShell bridge")
     native = Path(executable).resolve().as_posix()
     match = re.match(r"^/mnt/([a-z])(?:/(.*))?$", native, re.IGNORECASE)
     if not match:
         raise TargetError("WSL ProductVersion inspection requires the executable under a mounted Windows drive")
     windows_path = match.group(1).upper() + ":\\" + (match.group(2) or "").replace("/", "\\")
-    child_env = dict(os.environ)
-    child_env["SKYRIM_EXE_PATH_FOR_VERSION"] = windows_path
-    command = "$ErrorActionPreference='Stop'; [Diagnostics.FileVersionInfo]::GetVersionInfo($env:SKYRIM_EXE_PATH_FOR_VERSION).ProductVersion"
+    path_payload = base64.b64encode(windows_path.encode("utf-8")).decode("ascii")
+    # Put the path inside an encoded script rather than an environment value:
+    # WSL's Windows process bridge can otherwise transform drive paths.
+    command = (
+        "$ErrorActionPreference='Stop'; "
+        f"$p=[Text.Encoding]::UTF8.GetString([Convert]::FromBase64String('{path_payload}')); "
+        "$v=[Diagnostics.FileVersionInfo]::GetVersionInfo($p).ProductVersion; "
+        "[Console]::Out.Write([Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes([string]$v)))"
+    )
+    encoded_command = base64.b64encode(command.encode("utf-16le")).decode("ascii")
     try:
         result = subprocess.run(
-            [shell, "-NoProfile", "-NonInteractive", "-Command", command],
-            env=child_env, capture_output=True, text=True, timeout=30, check=False,
+            [shell, "-NoProfile", "-NonInteractive", "-EncodedCommand", encoded_command],
+            capture_output=True, text=False, timeout=30, check=False,
         )
     except (OSError, subprocess.TimeoutExpired) as exc:
         raise TargetError("PowerShell could not read the Skyrim executable version resource") from exc
-    version = result.stdout.strip()
-    if result.returncode != 0 or not version:
+    encoded = result.stdout.strip()
+    if result.returncode != 0 or not encoded:
         raise TargetError("PowerShell did not return a Skyrim ProductVersion")
-    return version
+    try:
+        return base64.b64decode(encoded, validate=True).decode("utf-8")
+    except (binascii.Error, UnicodeDecodeError) as exc:
+        raise TargetError("PowerShell returned an invalid ProductVersion payload") from exc
 
 
 def assert_ae_target(

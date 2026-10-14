@@ -4,14 +4,15 @@
     "edition": "AE",
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
-    "note": "Repository target policy only; no Windows executable or game runtime was available. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Legacy source files are hashed in migration/legacy_markdown_manifest.tsv; source commit is unavailable. Pre-push setup checkpoint: Python AE target, plugin-reader, environment dispatcher, and six-domain doctor exist; retired non-Python launchers, the Node lockfile, and old DevBench shell fixtures are archived; module flags dispatch correctly; configured profile files are not reported as verified active orders. UESP/Apocrypha skills use the dispatcher. Current skill/tool capability docs describe Python routes and domain blockers. Exact next action: remove tracked raw-format local artifacts from the Git index without deleting their working copies, confirm ignore coverage, then rerun the pre-push audit and finalize the reviewer summary."
+    "note": "Repository target policy is AE runtime 1.6.318+. Steam SkyrimSE.exe ProductVersion 1.6.1170.0 is verified (EV-0109), but no live game session or complete active MO2 order is verified. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Legacy source files are hashed in migration/legacy_markdown_manifest.tsv; source commit is unavailable. Active Python routes and native tool limits are documented in the capability matrix. Four evidence-linked transactions exercise blocker reselection, rival armor hypotheses, an AV39 record screen, and breadth synthesis; process-isolated recovery is tested.",
+    "next_action": "The evidence validator passed after EV-0145/EV-0146, and the 74-row tally is 63 PASS, 10 BLOCKED_EXTERNAL, 1 PENDING. Review the final checklist/report/resume text for stale wording, then run the Markdown inventory write/check."
   },
   "items": [
     {
       "id": "Q-0001",
       "objective": "OBJ-1",
       "kind": "baseline",
-      "status": "open",
+      "status": "blocked_environment",
       "question": "Which candidate vanilla quest/event has a verifiable player-level gate, and at which transition is the gate evaluated?",
       "hypotheses": [
         {
@@ -36,16 +37,43 @@
       ],
       "blocked_by": [],
       "evidence": [
-        "EV-0108"
+        "EV-0108",
+        "EV-0109",
+        "EV-0110",
+        "EV-0129",
+        "EV-0133",
+        "EV-0134"
       ],
       "priority": 1.0,
       "information_gain": 0.8,
-      "next_action": "Select a named candidate from authorized dated source material, then verify its prerequisite against the winning record in the complete active AE order.",
+      "next_action": "Obtain the selected MO2 profile plugins.txt; independently continue armor XP path analysis.",
       "linked_claims": [
-        "CL-L062"
+        "CL-L062",
+        "CL-L063",
+        "CL-L064"
       ],
+      "cross_source_assessment": "Legacy static scan EV-0108 reports DA14 >=14; local UESP revision 3593351 EV-0129 independently lists ReqLevel=14. This is a threshold consistency check only. The current record reader has raw CTDA bytes but no semantic decode, and EV-0110 shows the active order is incomplete.",
       "successors": [],
-      "attempts": []
+      "attempts": [
+        {
+          "action_key": "executable-only-probe",
+          "outcome": "Windows ProductVersion probe returned AE 1.6.1170; executable SHA256 is in EV-0109. This verifies target identity only.",
+          "evidence": [
+            "EV-0109"
+          ],
+          "new_discriminant": null,
+          "recorded_utc": "2026-10-14T15:20:26+00:00"
+        },
+        {
+          "action_key": "full-order-preflight",
+          "outcome": "Full preflight stopped because the resolved active plugin list has no active plugins; EV-0110 preserves the exact output.",
+          "evidence": [
+            "EV-0110"
+          ],
+          "new_discriminant": null,
+          "recorded_utc": "2026-10-14T15:20:26+00:00"
+        }
+      ]
     },
     {
       "id": "Q-0002",
@@ -89,7 +117,7 @@
       "id": "Q-0003",
       "objective": "OBJ-2",
       "kind": "baseline",
-      "status": "open",
+      "status": "in_progress",
       "question": "What event and native-use path awards armor skill XP from an incoming hit, independently of armor protection?",
       "hypotheses": [
         {
@@ -118,11 +146,12 @@
         "EV-0039",
         "EV-0049",
         "EV-0050",
-        "EV-0051"
+        "EV-0051",
+        "EV-0113"
       ],
       "priority": 1.0,
       "information_gain": 0.9,
-      "next_action": "Review retained source/protocol knowledge and define independent hit, damage, armor-rating, skill-XP, and character-XP observables before seeking a matching binary.",
+      "next_action": "After WSL Windows process interop is restored, run the hash-attested read-only query against the saved longanalysis project. If the bridge remains blocked, select the next independent research question and keep the call-edge hypothesis open.",
       "linked_claims": [],
       "successors": [
         "Q-0004"
@@ -141,6 +170,29 @@
           ],
           "action_key": "Q-0003-legacy-armor-audit-review",
           "new_discriminant": "On a verified matching build, compare physical and pure-spell hit routing while logging player receiver, damage fields, armor AV11/12, blocked AV9, EP22 aggregate, and raw AVSK deltas; ignore projectile-owner death as a receiver-side predictor."
+        },
+        {
+          "action_key": "competing-hit-path-models",
+          "outcome": "H1: the incoming-hit branch awards armor skill only after positive-damage and worn-armor guards, with blocked-hit routing separate. H2: armor protection classification and skill-award eligibility share a different path, so protection can remain positive while XP credit is skipped. Discriminant: on a build-matched call graph, identify the incoming-hit handler, its UseSkill caller and guards, then measure raw HitData and armor/Block XP separately on an ordinary hit and a blocked hit.",
+          "evidence": [
+            "EV-0036"
+          ],
+          "new_discriminant": "Build-matched call edge and guard sequence plus independent armor rating, physical health damage, armor-skill XP, and Block XP deltas.",
+          "recorded_utc": "2026-10-14T15:21:01+00:00"
+        },
+        {
+          "action_key": "current-build-ghidra-import",
+          "outcome": "Ghidra 12.0.4 imported the verified Steam AE executable SHA in EV-0113. Its first analysis timed out at 1,200 seconds; the read-only query on the saved partial project counted 92,219 functions but returned a script error because no call reference was available (EV-0114). A separate 7,200-second run terminated after 7,260.809 seconds, reported analysis timeout, and saved an incomplete project (EV-0139). Two query launches failed before Ghidra with WSL errors; a third passed the EV-0139 project and executable hash checks then failed at native invocation (EV-0131/0138/0141). Nine query-attestation regression tests pass (EV-0140).",
+          "evidence": [
+            "EV-0113",
+            "EV-0131",
+            "EV-0138",
+            "EV-0139",
+            "EV-0140",
+            "EV-0141"
+          ],
+          "new_discriminant": "A completed current 1.6.1170 analysis must expose a real call edge from incoming-hit code to skill-use code or falsify that candidate; then compare raw hit and independent XP/protection deltas.",
+          "recorded_utc": "2026-10-14T15:21:01+00:00"
         }
       ]
     },
@@ -194,8 +246,8 @@
       "id": "Q-0005",
       "objective": "OBJ-3",
       "kind": "numeric",
-      "status": "open",
-      "question": "How does enchanting credit and round skill XP, and can a useful enchantment be crafted below the relevant 15→16 or 20→21 XP threshold?",
+      "status": "in_progress",
+      "question": "How does enchanting credit and round skill XP, and can a useful enchantment be crafted below the relevant 15\u219216 or 20\u219221 XP threshold?",
       "hypotheses": [
         {
           "id": "Q5-H1",
@@ -222,19 +274,45 @@
         "EV-0065",
         "EV-0066",
         "EV-0084",
-        "EV-0087"
+        "EV-0087",
+        "EV-0124"
       ],
       "priority": 0.7,
       "information_gain": 0.7,
-      "next_action": "Define input values, raw skill-XP observables, threshold baselines, and controls; treat ULP/rounding explanations as hypotheses until raw representations are recorded.",
+      "next_action": "Design a paired raw Enchanting skill-XP observation: hold effect count and XP enhancers fixed while varying item value/soul level, then compare one versus two enchantments and preserve the exact runtime/build.",
       "linked_claims": [
         "CL-L025",
         "CL-L026",
         "CL-L039",
-        "CL-L042"
+        "CL-L042",
+        "CL-SYN-001"
       ],
+      "cross_domain_assessment": "EV-0124's wiki XP statement and legacy callback/furniture/cap reports EV-0065/0066/0084/0087 do not support one shared engine primitive. Keep those paths separate until raw XP deltas and callback order are measured on the verified target. Successor: compare one versus two effects and vary item value or soul level with XP modifiers fixed.",
       "successors": [],
-      "attempts": []
+      "attempts": [
+        {
+          "action_key": "uesp-enchanting-xp-section",
+          "outcome": "UESP revision 3538992 attributes a one-base-XP-per-enchantment statement and names item value, chosen enchantment, and soul level as nonfactors for base XP; this is source text, not a current-build result.",
+          "evidence": [
+            "EV-0124"
+          ],
+          "new_discriminant": "H1 predicts repeatable discrete raw-XP steps at boundary-adjacent operations; H2 predicts measurable cumulative change before displayed level changes. A matched one-versus-two-enchantment comparison, plus item-value/soul-level controls, discriminates step size from display-threshold masking without treating the wiki as ground truth.",
+          "recorded_utc": "2026-10-14T15:47:06+00:00"
+        },
+        {
+          "action_key": "tx-0004-cross-domain-synthesis",
+          "outcome": "No supported causal bridge was found between the wiki's base-XP statement and historical furniture/callback/cap audits. They remain separate hypotheses, not a shared mechanism.",
+          "evidence": [
+            "EV-0065",
+            "EV-0066",
+            "EV-0084",
+            "EV-0087",
+            "EV-0124"
+          ],
+          "new_discriminant": "Measure matched raw Enchanting XP deltas and inspect the current-build craft callback; hold XP modifiers and effect count fixed while varying item value/soul level, then compare one versus two enchantments.",
+          "recorded_utc": "2026-10-14T16:31:48+00:00"
+        }
+      ]
     },
     {
       "id": "Q-0006",
@@ -356,7 +434,7 @@
       "objective": "OBJ-1",
       "kind": "mechanism",
       "status": "in_progress",
-      "question": "Can DA07’s pamphlet alias start the gated quest before its level-20 helper fills the alias?",
+      "question": "Can DA07\u2019s pamphlet alias start the gated quest before its level-20 helper fills the alias?",
       "hypotheses": [
         {
           "id": "Q-0009-H1",
@@ -410,7 +488,7 @@
       "objective": "OBJ-1",
       "kind": "mechanism",
       "status": "in_progress",
-      "question": "Can Haknir’s death stage writer be reached while the level-36 Story Manager gate is still closed?",
+      "question": "Can Haknir\u2019s death stage writer be reached while the level-36 Story Manager gate is still closed?",
       "hypotheses": [
         {
           "id": "Q-0010-H1",
@@ -496,7 +574,7 @@
       ],
       "priority": 0.93,
       "information_gain": 0.82,
-      "next_action": "Verify the reference chain and owner quest from the report’s raw record artifact.",
+      "next_action": "Verify the reference chain and owner quest from the report\u2019s raw record artifact.",
       "linked_claims": [],
       "successors": [],
       "attempts": [
@@ -637,7 +715,7 @@
         },
         {
           "id": "Q-0014-H2",
-          "model": "The branch removes the relevant hit/protection or the candidate’s Block cost defeats the level budget.",
+          "model": "The branch removes the relevant hit/protection or the candidate\u2019s Block cost defeats the level budget.",
           "predicted_discriminant": "The hit/protection changes materially or the Block delta crosses its threshold; skipped armor calls alone do not meet the objective.",
           "status": "proposed",
           "evidence": [
@@ -678,7 +756,7 @@
       "objective": "OBJ-2",
       "kind": "mechanism",
       "status": "in_progress",
-      "question": "Can a vanilla-reachable negative AV39 state make a blocked hit’s Block points non-positive while armor remains useful?",
+      "question": "Can a vanilla-reachable negative AV39 state make a blocked hit\u2019s Block points non-positive while armor remains useful?",
       "hypotheses": [
         {
           "id": "Q-0015-H1",
@@ -712,11 +790,14 @@
         "EV-0021",
         "EV-0020",
         "EV-0036",
-        "EV-0037"
+        "EV-0037",
+        "EV-0116",
+        "EV-0117",
+        "EV-0118"
       ],
       "priority": 0.99,
       "information_gain": 0.97,
-      "next_action": "First prove an ordinary AV39 writer and exact target effect; then use separate controls for hit/no-hit and block.",
+      "next_action": "Complete this bounded base-master screen; resolve current winners and AV target only after the selected order is configured.",
       "linked_claims": [
         "CL-L007"
       ],
@@ -733,6 +814,42 @@
             "EV-0037"
           ],
           "action_key": "Q-0015-legacy-import-review"
+        },
+        {
+          "action_key": "rival-negative-av39-models",
+          "outcome": "H1: an ordinary player-reachable effect or script can write negative AV39 before a blocked hit. H2: negative values reported historically come only from inaccessible, cleanup-reversed, or diagnostic paths. Discriminant: identify a current winning effect/script, its target ActorValue and magnitude, full owner/start route, cleanup inverse, then measure raw AV39 and separate armor/Block XP on a verified hit.",
+          "evidence": [
+            "EV-0037"
+          ],
+          "new_discriminant": "Current file candidate identity plus decoded AV target/magnitude and ordinary player reachability; profile order is required for winner claims.",
+          "recorded_utc": "2026-10-14T15:21:39+00:00"
+        },
+        {
+          "action_key": "resistance-mgef-screen",
+          "outcome": "The exact Skyrim.esm MGEF EditorID substring Resist query returned 27 rows, including AbResistDamage 000CAB90; EV-0116 preserves the one-file result.",
+          "evidence": [
+            "EV-0116"
+          ],
+          "new_discriminant": null,
+          "recorded_utc": "2026-10-14T15:23:00+00:00"
+        },
+        {
+          "action_key": "weakness-mgef-screen",
+          "outcome": "The exact Skyrim.esm MGEF EditorID substring Weak query returned 10 rows; EV-0117 records this limited screen.",
+          "evidence": [
+            "EV-0117"
+          ],
+          "new_discriminant": null,
+          "recorded_utc": "2026-10-14T15:23:00+00:00"
+        },
+        {
+          "action_key": "raw-damage-resistance-effect",
+          "outcome": "MGEF 000CAB90 AbResistDamage returned raw DATA length 152 and DNAM length 4; no field decoder was applied (EV-0118).",
+          "evidence": [
+            "EV-0118"
+          ],
+          "new_discriminant": null,
+          "recorded_utc": "2026-10-14T15:23:01+00:00"
         }
       ]
     },
@@ -776,7 +893,7 @@
       ],
       "priority": 0.94,
       "information_gain": 0.92,
-      "next_action": "The source report’s Sovngarde node is only a lead; establish ordinary location access before a user test.",
+      "next_action": "The source report\u2019s Sovngarde node is only a lead; establish ordinary location access before a user test.",
       "linked_claims": [
         "CL-L004",
         "CL-L005"
@@ -859,7 +976,7 @@
       "objective": "OBJ-2",
       "kind": "mechanism",
       "status": "open",
-      "question": "Does the candidate preserve armor’s effective protection across a verified incoming hit while suppressing the target armor-skill award?",
+      "question": "Does the candidate preserve armor\u2019s effective protection across a verified incoming hit while suppressing the target armor-skill award?",
       "hypotheses": [
         {
           "id": "Q-0018-H1",
@@ -913,9 +1030,20 @@
       ]
     }
   ],
-  "session_next_action": "Archive retired Node/shell/Java launchers and remove Node runtime manifests; finish active docs and skill references; run the pre-push ignore/heavy-artifact audit, domain doctor, Python test suites, validators, and update all remaining checklist statuses and reviewer summary.",
+  "session_next_action": "Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.",
   "session_checkpoint": {
     "date": "2026-10-14",
-    "next_action": "At the next research session, run python3 scripts/python_env.py run tools/ae_preflight.py against the selected Windows AE executable and complete active MO2 plugins.txt. If target verification is unavailable, continue offline Q-0001. The user reviews, commits, and pushes this checkout."
+    "phase": "Final local mission verification and handoff",
+    "current_criterion": "All 74 criteria classified; final checkpoint audit, evidence validation, and local commit",
+    "last_successful_test": "139 unittest tests EV-0145; research, transaction, overlay and compileall validators EV-0146; staged diff, pre-push and added-line path checks passed.",
+    "current_tool_or_target": "Final Markdown inventory and staged change set; no active native session",
+    "actual_blocker_if_any": "External dependencies: selected MO2 profile, WSL process bridge, Windows/remote CI, disposable save/ReSaver, UESP source provenance, and separate Codex context.",
+    "next_exact_action": "Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.",
+    "working_tree_and_commit": "branch glitch-hunting-setup; starting HEAD e13ae4b253a6f5fd66f0f8abc3e49e6f9b29a6cc; preserve the pre-existing deleted migration/RESEARCH_READINESS_MISSION.md and untracked user mission file."
+  },
+  "last_session_checkpoint": {
+    "recorded_utc": "2026-10-14T17:26:49Z",
+    "next_action": "Stage and review only changes made for this readiness audit, excluding both user-supplied mission-file states; run pre-push/privacy/diff checks, finalize results and statuses, run the final Markdown inventory --write/--check, then commit only the reviewed audit changes; do not push.",
+    "active_process": "none; Ghidra session 40253 terminated with analysis timeout EV-0139"
   }
 }

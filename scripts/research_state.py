@@ -7,10 +7,13 @@ import argparse
 import datetime as dt
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
 STATUSES = {
     "open",
     "in_progress",
@@ -255,9 +258,15 @@ def record_attempt(
     new_discriminant: str = "",
 ) -> None:
     attempts = item.setdefault("attempts", [])
-    repeated = any(attempt.get("action_key") == action_key for attempt in attempts)
-    if repeated and not new_discriminant.strip():
-        raise ValueError("repeating an action requires a new predicted discriminant")
+    previous = [attempt for attempt in attempts if attempt.get("action_key") == action_key]
+    known_evidence = {
+        evidence_id
+        for attempt in previous
+        for evidence_id in attempt.get("evidence", [])
+    }
+    has_new_evidence = bool(set(evidence_ids or []) - known_evidence)
+    if previous and not new_discriminant.strip() and not has_new_evidence:
+        raise ValueError("repeating an action requires new evidence or a new predicted discriminant")
     attempts.append({
         "action_key": action_key,
         "outcome": outcome,
@@ -290,6 +299,7 @@ def validate_repository(root: Path = ROOT) -> list[str]:
         frontier = read_json(root / "research/FRONTIER.json")
         evidence = read_json(root / "research/EVIDENCE.json")
         recovery = read_json(root / "research/RECOVERY.json")
+        transactions = read_json(root / "research/TRANSACTIONS.json")
     except (OSError, json.JSONDecodeError, ValueError) as exc:
         return [f"cannot read research state: {exc}"]
     evidence_ids = {
@@ -297,6 +307,9 @@ def validate_repository(root: Path = ROOT) -> list[str]:
         if isinstance(entry, dict) and isinstance(entry.get("id"), str)
     }
     errors.extend(validate_frontier(frontier, evidence_ids))
+    from scripts.research_transactions import validate_transaction_ledger
+
+    errors.extend(validate_transaction_ledger(transactions, recovery, evidence_ids))
     if recovery.get("schema_version") != 2:
         errors.append("recovery schema_version must be 2")
     if recovery.get("status") not in {"idle", "running", "interrupted", "resumable"}:
@@ -314,21 +327,93 @@ def validate_repository(root: Path = ROOT) -> list[str]:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subcommands = parser.add_subparsers(dest="command", required=True)
-    subcommands.add_parser("validate", help="validate frontier, evidence links, and recovery state")
-    recover = subcommands.add_parser("recover", help="mark a running checkpoint interrupted")
+    validate = subcommands.add_parser("validate", help="validate frontier, evidence links, transactions, and recovery state")
+    validate.add_argument("--root", type=Path, default=ROOT)
+    recover = subcommands.add_parser("recover", help="mark a running transaction interrupted")
     recover.add_argument("--root", type=Path, default=ROOT)
+    begin = subcommands.add_parser("begin", help="begin a validated frontier transaction")
+    begin.add_argument("--root", type=Path, default=ROOT)
+    begin.add_argument("--transaction-id", required=True)
+    begin.add_argument("--frontier-id", required=True)
+    begin.add_argument("--next-action", required=True)
+    update = subcommands.add_parser("update", help="append a transaction observation and checkpoint")
+    update.add_argument("--root", type=Path, default=ROOT)
+    update.add_argument("--transaction-id", required=True)
+    update.add_argument("--action-key", required=True)
+    update.add_argument("--outcome", required=True)
+    update.add_argument("--next-action", required=True)
+    update.add_argument("--evidence", action="append", default=[])
+    update.add_argument("--artifact", action="append", default=[])
+    update.add_argument("--new-discriminant", default="")
+    complete = subcommands.add_parser("complete", help="complete one transaction and select the next ready item")
+    complete.add_argument("--root", type=Path, default=ROOT)
+    complete.add_argument("--transaction-id", required=True)
+    complete.add_argument("--summary", required=True)
+    complete.add_argument("--cross-domain-assessment", required=True)
+    complete.add_argument("--evidence", action="append", default=[])
+    complete.add_argument("--artifact", action="append", default=[])
+    block = subcommands.add_parser("block", help="block one line and automatically select an independent item")
+    block.add_argument("--root", type=Path, default=ROOT)
+    block.add_argument("--transaction-id", required=True)
+    block.add_argument("--blocker", required=True)
+    block.add_argument("--blocker-status", choices=("blocked_tool", "blocked_environment"), required=True)
+    block.add_argument("--evidence", action="append", required=True)
+    block.add_argument("--artifact", action="append", default=[])
+    resume = subcommands.add_parser("resume", help="resume an interrupted transaction in a new process")
+    resume.add_argument("--root", type=Path, default=ROOT)
+    resume.add_argument("--transaction-id", required=True)
     args = parser.parse_args(argv)
     if args.command == "validate":
-        errors = validate_repository()
+        errors = validate_repository(args.root)
         for error in errors:
             print(f"FAIL {error}")
         if not errors:
             print("PASS research frontier, evidence links, and recovery state")
         return 1 if errors else 0
-    path = args.root / "research/RECOVERY.json"
-    recovery = recover_checkpoint(read_json(path))
-    path.write_text(json.dumps(recovery, indent=2) + "\n", encoding="utf-8")
-    print(f"{recovery['status']}: {recovery.get('resume_action', 'checkpoint unchanged')}")
+    from scripts.research_transactions import (
+        begin_transaction,
+        block_transaction,
+        complete_transaction,
+        recover_transaction,
+        resume_transaction,
+        update_transaction,
+    )
+
+    try:
+        if args.command == "recover":
+            recovery = recover_transaction(args.root)
+            print(f"{recovery['status']}: {recovery.get('resume_action', 'checkpoint unchanged')}")
+        elif args.command == "begin":
+            transaction = begin_transaction(args.root, args.transaction_id, args.frontier_id, args.next_action)
+            print(f"running: {transaction['id']} on {transaction['frontier_id']}")
+        elif args.command == "update":
+            transaction = update_transaction(
+                args.root, args.transaction_id, action_key=args.action_key,
+                outcome=args.outcome, next_action=args.next_action,
+                evidence_ids=args.evidence, artifacts=args.artifact,
+                new_discriminant=args.new_discriminant,
+            )
+            print(f"updated: {transaction['id']}; next action: {transaction['next_action']}")
+        elif args.command == "complete":
+            result = complete_transaction(
+                args.root, args.transaction_id, summary=args.summary,
+                cross_domain_assessment=args.cross_domain_assessment,
+                evidence_ids=args.evidence, artifacts=args.artifact,
+            )
+            print(f"completed: {args.transaction_id}; next frontier {result['next_item']['id']}: {result['next_item']['next_action']}")
+        elif args.command == "block":
+            result = block_transaction(
+                args.root, args.transaction_id, blocker=args.blocker,
+                blocker_status=args.blocker_status, evidence_ids=args.evidence,
+                artifacts=args.artifact,
+            )
+            print(f"{args.blocker_status}: {args.transaction_id}; independently selected {result['next_item']['id']}: {result['next_item']['next_action']}")
+        elif args.command == "resume":
+            transaction = resume_transaction(args.root, args.transaction_id)
+            print(f"running: resumed {transaction['id']}; next action: {transaction['next_action']}")
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"ERROR {exc}", file=__import__("sys").stderr)
+        return 2
     return 0
 
 

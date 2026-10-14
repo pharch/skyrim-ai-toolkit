@@ -1,0 +1,423 @@
+{
+  "schema_version": 1,
+  "transactions": [
+    {
+      "id": "TX-0001",
+      "frontier_id": "Q-0001",
+      "question": "Which candidate vanilla quest/event has a verifiable player-level gate, and at which transition is the gate evaluated?",
+      "hypotheses": [
+        {
+          "id": "Q1-H1",
+          "model": "A candidate gate is evaluated at a single event or quest-start transition.",
+          "predicted_discriminant": "A controlled trace would show the level predicate on one transition, and alternate initiation routes would not evaluate it.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q1-H2",
+          "model": "The candidate gate is checked repeatedly or at a later alias, dialogue, or encounter transition.",
+          "predicted_discriminant": "A trace would show later or repeated level-dependent checks, with different intermediate states after an alternate route.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "status": "blocked_environment",
+      "started_utc": "2026-10-14T15:20:25+00:00",
+      "updated_utc": "2026-10-14T15:20:26+00:00",
+      "next_action": "Obtain the selected MO2 profile plugins.txt; independently continue armor XP path analysis.",
+      "evidence": [
+        "EV-0109",
+        "EV-0110"
+      ],
+      "artifacts": [
+        ".local/readiness/ae-executable-probe.stdout.raw",
+        ".local/readiness/ae-preflight.stderr.raw"
+      ],
+      "event_ids": [
+        "TE-000001",
+        "TE-000002",
+        "TE-000003",
+        "TE-000004"
+      ],
+      "blocker": "The selected MO2 profile is unidentified and the resolved global plugins.txt has no active plugins, so a complete active AE load order cannot be verified.",
+      "blocked_utc": "2026-10-14T15:20:26+00:00",
+      "next_frontier_id": "Q-0003"
+    },
+    {
+      "id": "TX-0002",
+      "frontier_id": "Q-0003",
+      "question": "What event and native-use path awards armor skill XP from an incoming hit, independently of armor protection?",
+      "hypotheses": [
+        {
+          "id": "Q3-H1",
+          "model": "Armor skill XP is credited on a hit event after protection/damage is computed.",
+          "predicted_discriminant": "The award path is reached only after a validated incoming-hit event and can be separated from armor rating.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q3-H2",
+          "model": "Armor skill XP is credited through a distinct event/use route whose prerequisites are not identical to damage calculation.",
+          "predicted_discriminant": "Native/control traces show a separately gated skill-use call while protection remains effective.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "status": "completed",
+      "started_utc": "2026-10-14T15:21:01+00:00",
+      "updated_utc": "2026-10-14T15:21:02+00:00",
+      "next_action": "After the fresh Ghidra analysis completes, rerun the read-only xref/decompilation query; do not reuse GOG 1.6.1179 offsets.",
+      "evidence": [
+        "EV-0036",
+        "EV-0113"
+      ],
+      "artifacts": [
+        ".local/readiness/ghidra/analysis-attempt2.meta.json"
+      ],
+      "event_ids": [
+        "TE-000005",
+        "TE-000006",
+        "TE-000007",
+        "TE-000008"
+      ],
+      "summary": "Completed a bounded tool-and-evidence survey for Q-0003: current AE identity is verified and native Ghidra import ran, but the saved partial analysis produced no usable call edge before timeout. The source-path question remains open.",
+      "cross_domain_assessment": "No cross-system causal model is supported yet: historical GOG receiver reports EV-0036/EV-0020/EV-0021 are not build-matched to the Steam 1.6.1170 target, and current Ghidra call evidence is incomplete. Prediction remains: a successful current-build trace must separate protection, physical health damage, armor AV11/12 award, and Block AV9 award at the hit transaction.",
+      "completed_utc": "2026-10-14T15:21:02+00:00",
+      "next_frontier_id": "Q-0015"
+    },
+    {
+      "id": "TX-0003",
+      "frontier_id": "Q-0015",
+      "question": "Can a vanilla-reachable negative AV39 state make a blocked hit’s Block points non-positive while armor remains useful?",
+      "hypotheses": [
+        {
+          "id": "Q-0015-H1",
+          "model": "Negative Damage Resist causes `physicalDamage - totalDamage <= 0`; the shared guard then rejects AV9 while blocked routing skips AV11/12.",
+          "predicted_discriminant": "With negative AV39 and a valid blocked hit, recorded `physicalDamage - totalDamage` is <= 0; the wrapper rejects AV9 and AV11/12 remain absent while armor still reduces damage versus no-armor control.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0021",
+            "EV-0020",
+            "EV-0036"
+          ]
+        },
+        {
+          "id": "Q-0015-H2",
+          "model": "Damage construction clamps/reorders the fields, or the only AV39 route also removes effective protection or is unreachable.",
+          "predicted_discriminant": "The argument is positive or is clamped/recomputed, AV9 advances, or the candidate fails the positive armor-protection control.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0021",
+            "EV-0020"
+          ]
+        }
+      ],
+      "status": "completed",
+      "started_utc": "2026-10-14T15:21:38+00:00",
+      "updated_utc": "2026-10-14T15:23:01+00:00",
+      "next_action": "Complete this bounded base-master screen; resolve current winners and AV target only after the selected order is configured.",
+      "evidence": [
+        "EV-0037",
+        "EV-0116",
+        "EV-0117",
+        "EV-0118"
+      ],
+      "artifacts": [
+        ".local/readiness/records/skyrim-mgef-resist.stdout.raw",
+        ".local/readiness/records/skyrim-mgef-weakness.stdout.raw",
+        ".local/readiness/records/skyrim-mgef-abresistdamage.stdout.raw"
+      ],
+      "event_ids": [
+        "TE-000009",
+        "TE-000010",
+        "TE-000011",
+        "TE-000012",
+        "TE-000013",
+        "TE-000014"
+      ],
+      "summary": "Completed a bounded Skyrim.esm candidate screen for Q-0015: 27 Resist and 10 Weak MGEF EditorID substrings, plus raw bytes for AbResistDamage 000CAB90. No AV39 sign, target, player reachability, or active winner is established.",
+      "cross_domain_assessment": "Legacy EV-0037 reports two resistance-writer candidates failing reachability/cleanup checks. Current one-file MGEF names and raw DATA bytes neither confirm nor refute those paths. Predicted discriminant remains a complete-order effect/script chain with decoded target/magnitude and a measured raw AV39 value immediately before a verified hit.",
+      "completed_utc": "2026-10-14T15:23:01+00:00",
+      "next_frontier_id": "Q-0003"
+    },
+    {
+      "id": "TX-0004",
+      "frontier_id": "Q-0005",
+      "question": "How does enchanting credit and round skill XP, and can a useful enchantment be crafted below the relevant 15→16 or 20→21 XP threshold?",
+      "hypotheses": [
+        {
+          "id": "Q5-H1",
+          "model": "The operation grants skill XP according to a quantized or rounded function of enchantment inputs.",
+          "predicted_discriminant": "Boundary-adjacent inputs yield repeatable steps or discontinuities in raw skill XP.",
+          "status": "proposed",
+          "evidence": []
+        },
+        {
+          "id": "Q5-H2",
+          "model": "The operation grants a smooth/cumulative amount whose displayed skill level hides the threshold crossing.",
+          "predicted_discriminant": "Raw XP changes before the displayed level changes, and cumulative controls expose the threshold.",
+          "status": "proposed",
+          "evidence": []
+        }
+      ],
+      "status": "completed",
+      "started_utc": "2026-10-14T15:45:02+00:00",
+      "updated_utc": "2026-10-14T15:47:06+00:00",
+      "next_action": "Design a paired raw Enchanting skill-XP observation: hold effect count and XP enhancers fixed while varying item value/soul level, then compare one versus two enchantments and preserve the exact runtime/build.",
+      "evidence": [
+        "EV-0124"
+      ],
+      "artifacts": [
+        "private-local:.local/readiness/uesp/cli/breadth-enchanting.stdout.raw"
+      ],
+      "event_ids": [
+        "TE-000015",
+        "TE-000016",
+        "TE-000017"
+      ],
+      "summary": "Completed a breadth source investigation: retrieved and revision-cited the local Enchanting article; it gives an attributed base-XP statement and a specific pre-1.6.318 Myrwatch report, but does not establish behavior on the verified 1.6.1170 executable.",
+      "cross_domain_assessment": "No shared native/record/save primitive is supported by this wiki page. Historical furniture/callback/cap reports EV-0065/0066/0084/0087 are legacy static findings with unavailable raw sources and are not build-matched. A falsifiable successor is to measure raw skill-XP deltas before/after matched crafts, compare one versus two enchantments, and vary item value or soul level while holding effect count and XP modifiers fixed; this is an experiment prediction, not a result.",
+      "synthesis_claim_ids": [
+        "CL-SYN-001"
+      ],
+      "completed_utc": "2026-10-14T15:47:06+00:00",
+      "next_frontier_id": "Q-0003"
+    }
+  ],
+  "events": [
+    {
+      "id": "TE-000001",
+      "transaction_id": "TX-0001",
+      "operation": "begin",
+      "recorded_utc": "2026-10-14T15:20:25+00:00",
+      "frontier_id": "Q-0001",
+      "next_action": "Verify the current AE executable and full selected active order before evaluating the level-one quest-gate candidate."
+    },
+    {
+      "id": "TE-000002",
+      "transaction_id": "TX-0001",
+      "operation": "update",
+      "recorded_utc": "2026-10-14T15:20:26+00:00",
+      "action_key": "executable-only-probe",
+      "outcome": "Windows ProductVersion probe returned AE 1.6.1170; executable SHA256 is in EV-0109. This verifies target identity only.",
+      "evidence": [
+        "EV-0109"
+      ],
+      "artifacts": [
+        ".local/readiness/ae-executable-probe.stdout.raw"
+      ],
+      "new_discriminant": null,
+      "next_action": "Run the full active-order preflight; do not launch xEdit unless it passes."
+    },
+    {
+      "id": "TE-000003",
+      "transaction_id": "TX-0001",
+      "operation": "update",
+      "recorded_utc": "2026-10-14T15:20:26+00:00",
+      "action_key": "full-order-preflight",
+      "outcome": "Full preflight stopped because the resolved active plugin list has no active plugins; EV-0110 preserves the exact output.",
+      "evidence": [
+        "EV-0110"
+      ],
+      "artifacts": [
+        ".local/readiness/ae-preflight.stderr.raw"
+      ],
+      "new_discriminant": null,
+      "next_action": "Obtain the selected MO2 profile plugins.txt; independently continue armor XP path analysis."
+    },
+    {
+      "id": "TE-000004",
+      "transaction_id": "TX-0001",
+      "operation": "block",
+      "recorded_utc": "2026-10-14T15:20:26+00:00",
+      "blocker": "The selected MO2 profile is unidentified and the resolved global plugins.txt has no active plugins, so a complete active AE load order cannot be verified.",
+      "blocker_status": "blocked_environment",
+      "evidence": [
+        "EV-0110"
+      ],
+      "artifacts": [
+        ".local/readiness/ae-preflight.stderr.raw"
+      ],
+      "reselected_frontier_id": "Q-0003",
+      "next_action": "Review retained source/protocol knowledge and define independent hit, damage, armor-rating, skill-XP, and character-XP observables before seeking a matching binary."
+    },
+    {
+      "id": "TE-000005",
+      "transaction_id": "TX-0002",
+      "operation": "begin",
+      "recorded_utc": "2026-10-14T15:21:01+00:00",
+      "frontier_id": "Q-0003",
+      "next_action": "Define and test the available event-path discriminant for armor skill XP on the verified Steam AE binary."
+    },
+    {
+      "id": "TE-000006",
+      "transaction_id": "TX-0002",
+      "operation": "update",
+      "recorded_utc": "2026-10-14T15:21:01+00:00",
+      "action_key": "competing-hit-path-models",
+      "outcome": "H1: the incoming-hit branch awards armor skill only after positive-damage and worn-armor guards, with blocked-hit routing separate. H2: armor protection classification and skill-award eligibility share a different path, so protection can remain positive while XP credit is skipped. Discriminant: on a build-matched call graph, identify the incoming-hit handler, its UseSkill caller and guards, then measure raw HitData and armor/Block XP separately on an ordinary hit and a blocked hit.",
+      "evidence": [
+        "EV-0036"
+      ],
+      "artifacts": [],
+      "new_discriminant": "Build-matched call edge and guard sequence plus independent armor rating, physical health damage, armor-skill XP, and Block XP deltas.",
+      "next_action": "Inspect the current-build Ghidra result and retain the historical GOG evidence only as a lead."
+    },
+    {
+      "id": "TE-000007",
+      "transaction_id": "TX-0002",
+      "operation": "update",
+      "recorded_utc": "2026-10-14T15:21:01+00:00",
+      "action_key": "current-build-ghidra-import",
+      "outcome": "Ghidra 12.0.4 imported the verified Steam AE executable SHA in EV-0113. Its first analysis timed out at 1,200 seconds; the read-only query on the saved partial project counted 92,219 functions but returned a script error because no call reference was available (EV-0114). A fresh 7,200-second analysis is running.",
+      "evidence": [
+        "EV-0113"
+      ],
+      "artifacts": [],
+      "new_discriminant": "A completed current 1.6.1170 analysis must expose a real call edge from incoming-hit code to skill-use code or falsify that candidate; then compare raw hit and independent XP/protection deltas.",
+      "next_action": "After the fresh Ghidra analysis completes, rerun the read-only xref/decompilation query; do not reuse GOG 1.6.1179 offsets."
+    },
+    {
+      "id": "TE-000008",
+      "transaction_id": "TX-0002",
+      "operation": "complete",
+      "recorded_utc": "2026-10-14T15:21:02+00:00",
+      "summary": "Completed a bounded tool-and-evidence survey for Q-0003: current AE identity is verified and native Ghidra import ran, but the saved partial analysis produced no usable call edge before timeout. The source-path question remains open.",
+      "cross_domain_assessment": "No cross-system causal model is supported yet: historical GOG receiver reports EV-0036/EV-0020/EV-0021 are not build-matched to the Steam 1.6.1170 target, and current Ghidra call evidence is incomplete. Prediction remains: a successful current-build trace must separate protection, physical health damage, armor AV11/12 award, and Block AV9 award at the hit transaction.",
+      "evidence": [
+        "EV-0113"
+      ],
+      "artifacts": [
+        ".local/readiness/ghidra/analysis-attempt2.meta.json"
+      ],
+      "next_frontier_id": "Q-0015"
+    },
+    {
+      "id": "TE-000009",
+      "transaction_id": "TX-0003",
+      "operation": "begin",
+      "recorded_utc": "2026-10-14T15:21:38+00:00",
+      "frontier_id": "Q-0015",
+      "next_action": "Search the current AE base master for resistance-related magic-effect candidates and preserve file-level identity; do not infer an active winner or player reachability."
+    },
+    {
+      "id": "TE-000010",
+      "transaction_id": "TX-0003",
+      "operation": "update",
+      "recorded_utc": "2026-10-14T15:21:39+00:00",
+      "action_key": "rival-negative-av39-models",
+      "outcome": "H1: an ordinary player-reachable effect or script can write negative AV39 before a blocked hit. H2: negative values reported historically come only from inaccessible, cleanup-reversed, or diagnostic paths. Discriminant: identify a current winning effect/script, its target ActorValue and magnitude, full owner/start route, cleanup inverse, then measure raw AV39 and separate armor/Block XP on a verified hit.",
+      "evidence": [
+        "EV-0037"
+      ],
+      "artifacts": [],
+      "new_discriminant": "Current file candidate identity plus decoded AV target/magnitude and ordinary player reachability; profile order is required for winner claims.",
+      "next_action": "Search the installed Skyrim.esm base file for resistance-related MGEF EditorIDs; record only candidate presence and file scope."
+    },
+    {
+      "id": "TE-000011",
+      "transaction_id": "TX-0003",
+      "operation": "update",
+      "recorded_utc": "2026-10-14T15:23:00+00:00",
+      "action_key": "resistance-mgef-screen",
+      "outcome": "The exact Skyrim.esm MGEF EditorID substring Resist query returned 27 rows, including AbResistDamage 000CAB90; EV-0116 preserves the one-file result.",
+      "evidence": [
+        "EV-0116"
+      ],
+      "artifacts": [
+        ".local/readiness/records/skyrim-mgef-resist.stdout.raw"
+      ],
+      "new_discriminant": null,
+      "next_action": "Inspect raw DATA bytes for the named AbResistDamage candidate without decoding or winner claims."
+    },
+    {
+      "id": "TE-000012",
+      "transaction_id": "TX-0003",
+      "operation": "update",
+      "recorded_utc": "2026-10-14T15:23:00+00:00",
+      "action_key": "weakness-mgef-screen",
+      "outcome": "The exact Skyrim.esm MGEF EditorID substring Weak query returned 10 rows; EV-0117 records this limited screen.",
+      "evidence": [
+        "EV-0117"
+      ],
+      "artifacts": [
+        ".local/readiness/records/skyrim-mgef-weakness.stdout.raw"
+      ],
+      "new_discriminant": null,
+      "next_action": "Inspect raw DATA bytes for the named AbResistDamage candidate without decoding or winner claims."
+    },
+    {
+      "id": "TE-000013",
+      "transaction_id": "TX-0003",
+      "operation": "update",
+      "recorded_utc": "2026-10-14T15:23:01+00:00",
+      "action_key": "raw-damage-resistance-effect",
+      "outcome": "MGEF 000CAB90 AbResistDamage returned raw DATA length 152 and DNAM length 4; no field decoder was applied (EV-0118).",
+      "evidence": [
+        "EV-0118"
+      ],
+      "artifacts": [
+        ".local/readiness/records/skyrim-mgef-abresistdamage.stdout.raw"
+      ],
+      "new_discriminant": null,
+      "next_action": "Complete this bounded base-master screen; resolve current winners and AV target only after the selected order is configured."
+    },
+    {
+      "id": "TE-000014",
+      "transaction_id": "TX-0003",
+      "operation": "complete",
+      "recorded_utc": "2026-10-14T15:23:01+00:00",
+      "summary": "Completed a bounded Skyrim.esm candidate screen for Q-0015: 27 Resist and 10 Weak MGEF EditorID substrings, plus raw bytes for AbResistDamage 000CAB90. No AV39 sign, target, player reachability, or active winner is established.",
+      "cross_domain_assessment": "Legacy EV-0037 reports two resistance-writer candidates failing reachability/cleanup checks. Current one-file MGEF names and raw DATA bytes neither confirm nor refute those paths. Predicted discriminant remains a complete-order effect/script chain with decoded target/magnitude and a measured raw AV39 value immediately before a verified hit.",
+      "evidence": [
+        "EV-0116"
+      ],
+      "artifacts": [
+        ".local/readiness/records/skyrim-mgef-resist.stdout.raw"
+      ],
+      "next_frontier_id": "Q-0003"
+    },
+    {
+      "id": "TE-000015",
+      "transaction_id": "TX-0004",
+      "operation": "begin",
+      "recorded_utc": "2026-10-14T15:45:02+00:00",
+      "frontier_id": "Q-0005",
+      "next_action": "Retrieve the local Skyrim:Enchanting page at revision 3538992, cite its exact revision, compare it against the existing historical XP model without treating it as current-build proof, and record a numeric follow-up discriminant."
+    },
+    {
+      "id": "TE-000016",
+      "transaction_id": "TX-0004",
+      "operation": "update",
+      "recorded_utc": "2026-10-14T15:47:06+00:00",
+      "action_key": "uesp-enchanting-xp-section",
+      "outcome": "UESP revision 3538992 attributes a one-base-XP-per-enchantment statement and names item value, chosen enchantment, and soul level as nonfactors for base XP; this is source text, not a current-build result.",
+      "evidence": [
+        "EV-0124"
+      ],
+      "artifacts": [
+        "private-local:.local/readiness/uesp/cli/breadth-enchanting.stdout.raw"
+      ],
+      "new_discriminant": "H1 predicts repeatable discrete raw-XP steps at boundary-adjacent operations; H2 predicts measurable cumulative change before displayed level changes. A matched one-versus-two-enchantment comparison, plus item-value/soul-level controls, discriminates step size from display-threshold masking without treating the wiki as ground truth.",
+      "next_action": "Design a paired raw Enchanting skill-XP observation: hold effect count and XP enhancers fixed while varying item value/soul level, then compare one versus two enchantments and preserve the exact runtime/build."
+    },
+    {
+      "id": "TE-000017",
+      "transaction_id": "TX-0004",
+      "operation": "complete",
+      "recorded_utc": "2026-10-14T15:47:06+00:00",
+      "summary": "Completed a breadth source investigation: retrieved and revision-cited the local Enchanting article; it gives an attributed base-XP statement and a specific pre-1.6.318 Myrwatch report, but does not establish behavior on the verified 1.6.1170 executable.",
+      "cross_domain_assessment": "No shared native/record/save primitive is supported by this wiki page. Historical furniture/callback/cap reports EV-0065/0066/0084/0087 are legacy static findings with unavailable raw sources and are not build-matched. A falsifiable successor is to measure raw skill-XP deltas before/after matched crafts, compare one versus two enchantments, and vary item value or soul level while holding effect count and XP modifiers fixed; this is an experiment prediction, not a result.",
+      "synthesis_claim_ids": [
+        "CL-SYN-001"
+      ],
+      "evidence": [
+        "EV-0124"
+      ],
+      "artifacts": [
+        "private-local:.local/readiness/uesp/cli/breadth-enchanting.stdout.raw"
+      ],
+      "next_frontier_id": "Q-0003"
+    }
+  ]
+}

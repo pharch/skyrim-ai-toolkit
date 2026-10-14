@@ -11,9 +11,42 @@ import struct
 import sys
 import zlib
 
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from tools.ae_target import TargetError, parse_active_plugins
+
 
 class PluginFormatError(ValueError):
     pass
+
+
+def resolve_record_winner(candidates: list[dict], active_order: list[str]) -> dict:
+    """Select the last active file row for one logical FormID.
+
+    This small resolver supports explicit, already validated order data. It is
+    not an xEdit replacement and must not be used with an incomplete profile.
+    """
+    if not candidates:
+        raise PluginFormatError("no record candidates were supplied")
+    try:
+        order = parse_active_plugins("\n".join("*" + name for name in active_order))
+    except (TypeError, TargetError) as exc:
+        raise PluginFormatError(f"active order is not a complete AE plugin list: {exc}") from exc
+    ranks = {name.casefold(): index for index, name in enumerate(order)}
+    keys = set()
+    for row in candidates:
+        plugin = str(row.get("plugin", ""))
+        origin = str(row.get("origin_plugin", ""))
+        if plugin.casefold() not in ranks:
+            raise PluginFormatError(f"candidate plugin is absent from active order: {plugin or 'unknown'}")
+        if not origin or origin == "UNRESOLVED":
+            raise PluginFormatError("candidate has an unresolved FormID origin")
+        keys.add((row.get("signature"), origin.casefold(), str(row.get("local_form_id", "")).upper()))
+    if len(keys) != 1:
+        raise PluginFormatError("candidate rows do not identify the same logical record")
+    return max(candidates, key=lambda row: ranks[str(row["plugin"]).casefold()])
 
 
 def _records(data: mmap.mmap, start: int = 0, end: int | None = None):
@@ -70,7 +103,7 @@ def _subrecords(payload: bytes, flags: int):
         raise PluginFormatError("record ends after an XXXX size marker")
 
 
-def read_plugin(path: str | Path, signature: str | None = None):
+def read_plugin(path: str | Path, signature: str | None = None, *, include_subrecords: bool = False):
     plugin_path = Path(path).expanduser()
     if not plugin_path.is_file():
         raise FileNotFoundError("plugin file is missing or inaccessible")
@@ -87,7 +120,7 @@ def read_plugin(path: str | Path, signature: str | None = None):
             origin_index = form_id >> 24
             origin = (masters + [plugin_path.name])[origin_index] if origin_index <= len(masters) else "UNRESOLVED"
             editor_id = next((value.rstrip(b"\0").decode("cp1252") for sub_sig, value in fields if sub_sig == "EDID"), "")
-            yield {
+            row = {
                 "signature": sig,
                 "plugin": plugin_path.name,
                 "origin_plugin": origin,
@@ -98,6 +131,17 @@ def read_plugin(path: str | Path, signature: str | None = None):
                 "editor_id": editor_id,
                 "subrecord_signatures": [sub_sig for sub_sig, _ in fields],
             }
+            if include_subrecords:
+                row["subrecords"] = [
+                    {
+                        "signature": sub_sig,
+                        "length": len(value),
+                        "value_hex": value.hex(),
+                        "text_cp1252": value.rstrip(b"\0").decode("cp1252", "replace")[:512],
+                    }
+                    for sub_sig, value in fields
+                ]
+            yield row
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -111,6 +155,7 @@ def main(argv: list[str] | None = None) -> int:
     record.add_argument("--signature", required=True)
     record.add_argument("--form-id", help="plugin-local hexadecimal FormID")
     record.add_argument("--editor-id", help="case-insensitive EditorID substring")
+    record.add_argument("--include-subrecords", action="store_true", help="include raw subrecord bytes and bounded CP1252 view")
     args = parser.parse_args(argv)
     if args.command == "doctor":
         print(json.dumps({"tool": "plugin_reader", "status": "ready", "backend": "Python standard library", "read_only": True, "xedit_loaded": False}, indent=2))
@@ -124,7 +169,7 @@ def main(argv: list[str] | None = None) -> int:
             parser.error("record requires --form-id and/or --editor-id")
         form_id = int(args.form_id.removeprefix("0x"), 16) if args.form_id else None
         matched = 0
-        for row in read_plugin(args.plugin, args.signature):
+        for row in read_plugin(args.plugin, args.signature, include_subrecords=args.include_subrecords):
             if form_id is not None and int(row["local_form_id"], 16) != form_id & 0x00FFFFFF:
                 continue
             if args.editor_id and args.editor_id.casefold() not in row["editor_id"].casefold():

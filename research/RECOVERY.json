@@ -4,7 +4,9 @@
   "transaction_id": null,
   "frontier_id": null,
   "started_utc": null,
-  "checkpoint_utc": "2026-10-13T12:10:29Z",
+  "checkpoint_utc": "2026-10-14T17:39:13Z",
   "artifacts": [],
-  "next_action": "Read STATE.md and the latest research/SESSION_LOG.md entry, then select the highest-priority ready frontier item."
+  "next_action": "Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.",
+  "next_frontier_id": "Q-0003",
+  "last_transaction_id": "TX-0004"
 }

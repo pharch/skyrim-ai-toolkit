@@ -9,7 +9,8 @@ Use Python entrypoints for every agent-facing command. Set up the Conda
 environment with `conda env create -f environment.yml`; then dispatch through
 `python3 scripts/python_env.py run ...`. The dispatcher uses the named Conda
 environment when available and falls back to the current Python interpreter
-when Conda is absent. It never launches Node or a shell wrapper.
+when Conda is absent. Native applications can be dispatched by a tested Python
+adapter; do not add agent-facing Node, shell, or Java launchers.
 
 ## Target and record tools
 
@@ -19,16 +20,16 @@ when Conda is absent. It never launches Node or a shell wrapper.
   `plugins.txt`. A typed version is not evidence. `--probe-executable` is
   diagnostic only and does not authorize xEdit/live access.
 - Run `python3 scripts/python_env.py run tools/plugin_reader.py doctor` to test
-  the stdlib TES4 reader. Query one file with `record` or `inventory`. This
-  reader does not establish the active order or determine winning overrides;
+  the stdlib TES4 reader. Query one file with `record` or `inventory`; use
+  `--include-subrecords` to preserve raw CTDA, alias, and VMAD data. This reader
+  does not establish the active order or determine winning overrides;
   incomplete inputs cannot support negative findings.
 - `python3 scripts/python_env.py run tools/domain_doctor.py` tests the installed local routes and reports
   external prerequisites without printing configured paths or private message
   rows. Run it before selecting an external domain tool.
-- The old xEditLib/xelib Node integration is retired. Native SSEEdit remains a
-  Windows-only external tool; there is no tested Python binding for its winner
-  API in this checkout. Do not use archived scripts or describe the Python
-  reader as xEdit output.
+- Native SSEEdit remains a Windows-only tool. The current selected profile is
+  unknown, so full preflight fails and xEdit must remain unlaunched. Do not use
+  archived scripts or describe the Python reader as xEdit output.
 
 ## Logs, saves, and SKSE
 
@@ -49,15 +50,21 @@ when Conda is absent. It never launches Node or a shell wrapper.
 
 ## Ghidra, CommonLibSSE, SSEEdit, and archives
 
-- `python3 scripts/python_env.py run tools/domain_doctor.py` reports local tool candidates and actual
-  prerequisites. The current session has a Ghidra candidate but lacks Java,
-  a CommonLibSSE source candidate but lacks CMake, and an SSEEdit candidate
-  without a verified AE target/order. It does not pretend these native tools
-  ran.
-- Use the Python TES4 reader for static record fields. Winning-record queries,
-  Ghidra decompilation, CommonLib builds, and BSA listing/extraction remain
-  blocked until their external runtimes are available and a Python entrypoint
-  has a passing test. Do not invoke the archived shell/Node/Java wrappers.
+- Run `python3 scripts/python_env.py run tools/ghidra_probe.py --analyze
+  --analysis-timeout 7200` to import the verified executable into a fresh ignored
+  project. Use the same Python command without `--analyze` to query an existing
+  project read-only. Inspect logs for analyzer timeouts and script errors; a
+  process exit code of zero alone is insufficient.
+- The installed route is Ghidra 12.0.4 with Java 21. The initial 1,200-second
+  analysis imported the verified Steam 1.6.1170 executable but timed out during
+  Disassemble Entry Points. A longer analysis is running; no native hook or
+  address result is established yet.
+- CommonLibSSE source exists, but no compatible build has passed because CMake
+  is not available in the checked environment. xEdit winner queries remain
+  gated on the selected complete active profile.
+- Keep archive/Papyrus extraction and save analysis read-only. State input
+  coverage and preserve raw artifacts under ignored .local/; do not invoke
+  retired wrappers or infer a runtime stage call from PEX strings alone.
 - Never write to original game files, plugins, archives, saves, or co-saves.
   If a later tool writes a derived artifact, keep it in ignored local storage
   and preserve the source hash and exact command.

@@ -12,3 +12,17 @@ Prefer measurements that separate multiple plausible mechanisms. Observe precise
 For AE work, attach the verified runtime and active-profile identity to the
 manifest. If either is unavailable, do not schedule an in-game action: write
 the missing prerequisite and the offline discriminant into the frontier.
+
+## Python routes and evidence
+
+- Use `python3 scripts/python_env.py run tools/ghidra_probe.py` for native
+  binary evidence, `tools/plugin_reader.py record` for one explicit plugin,
+  `scripts/read-save.py` / `tools/cosave-info.py` for read-only save structure,
+  and `scripts/validate_research.py` to verify durable links.
+- Save experiment protocol and raw outputs under ignored `.local/`; cite EV
+  IDs, executable/plugin hashes, exact measurements, lane, controls, and
+  coverage in the experiment record. Do not expose personal save paths.
+- Missing runtime/profile, failed tool invocation, dropped samples, or an
+  unsupported parser path blocks the dependent experiment. Continue with an
+  independent offline frontier item and keep interventions out of vanilla
+  reproduction claims.

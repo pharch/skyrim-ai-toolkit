@@ -20,3 +20,16 @@ edge. For each proposed connection, state the observable that could disprove
 it and keep edition/build provenance attached to both endpoints. Mark an edge
 as an analogy until a shared call path or discriminating experiment supports
 causality.
+
+## Validation and provenance
+
+- Read source IDs from `research/EVIDENCE.json` and inspect linked claim,
+  mechanism, and experiment records. After edits, run
+  `python3 scripts/python_env.py run scripts/validate_research.py` and
+  `python3 scripts/python_env.py run scripts/research_state.py validate`.
+- Put the proposed edge, its two source IDs, the causal/analogy status, and a
+  falsifying observation into `research/KNOWLEDGE_GRAPH.md`, `CLAIMS.md`, and
+  `FRONTIER.json`; summarize the change in `STATE.md` and `SESSION_LOG.md`.
+- If a source, native call edge, or compatible build is missing, record the
+  exact gap and keep the connection unsupported. Validation failure is not
+  permission to promote an analogy.

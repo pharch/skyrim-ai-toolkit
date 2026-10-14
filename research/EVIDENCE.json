@@ -1002,7 +1002,7 @@
         "historical source report; tool/version/input identity not independently revalidated"
       ],
       "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
-      "result": "Reports Bone Meal + Hagraven Feathers + Ogre’s Teeth as a Fortify Conjuration payload candidate with modeled craft XP 89.2167511 against a zero-progress level-20 threshold 615.970670...; recipe/acquisition were not tested."
+      "result": "Reports Bone Meal + Hagraven Feathers + Ogre\u2019s Teeth as a Fortify Conjuration payload candidate with modeled craft XP 89.2167511 against a zero-progress level-20 threshold 615.970670...; recipe/acquisition were not tested."
     },
     {
       "id": "EV-0060",
@@ -1104,7 +1104,7 @@
         "historical source report; tool/version/input identity not independently revalidated"
       ],
       "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
-      "result": "Reports signed WBDT.usesSkill outside 6–23 skipping the skill call. Two type-3 records were identified, with no placed references or player-accessible writer found; no craft was run."
+      "result": "Reports signed WBDT.usesSkill outside 6\u201323 skipping the skill call. Two type-3 records were identified, with no placed references or player-accessible writer found; no craft was run."
     },
     {
       "id": "EV-0066",
@@ -1836,6 +1836,784 @@
       ],
       "coverage": "One hashed source report. Record counts, conditions, and native paths are historical and scoped; no current AE target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
       "result": "Reports a corrected CTDA comparison decoder and 109 expanded GetLevel conditions (51 QUST, 42 INFO, 1 PACK, 15 SMQN), including DA14 >=14, DA07 >=20, DA06 GLOB threshold 9, and Ebony Warrior >=80. Actor::GetLevel is an integer reader; no generic stale-level writer was identified."
+    },
+    {
+      "id": "EV-0109",
+      "kind": "tool",
+      "source": "Steam SkyrimSE.exe ProductVersion probe through Windows FileVersionInfo; input SHA256 c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9",
+      "artifact": "private-local:.local/readiness/ae-executable-probe.stdout.raw",
+      "sha256": "d3ed5cf4eb7306bf7feaa148bc8b84871f96c59776540cdd33eb1fea7f522ebf",
+      "captured_utc": "2026-10-14T15:19:10Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/ae_preflight.py --probe-executable; Python 3.12.3; Windows FileVersionInfo"
+      ],
+      "coverage": "Raw bounded operation output in ignored .local/readiness/ae-executable-probe.stdout.raw; exact input identity and scope stated in source/result. No gameplay state or winning-record conclusion is inferred.",
+      "result": "Executable-only probe returned edition AE and runtime 1.6.1170. It does not verify the active profile or authorize xEdit/live access."
+    },
+    {
+      "id": "EV-0110",
+      "kind": "tool",
+      "source": "Full ae_preflight.py against current local config; ProductVersion probe had already succeeded",
+      "artifact": "private-local:.local/readiness/ae-preflight.stderr.raw",
+      "sha256": "50e18ee16f744a95eaf037ab0fbb92cc84f5d702ea53b117c862243de96b6a87",
+      "captured_utc": "2026-10-14T15:19:10Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/ae_preflight.py; Python 3.12.3"
+      ],
+      "coverage": "Raw bounded operation output in ignored .local/readiness/ae-preflight.stderr.raw; exact input identity and scope stated in source/result. No gameplay state or winning-record conclusion is inferred.",
+      "result": "Full preflight stopped at active-plugin validation with \u201cactive plugin list contains no active plugins.\u201d Selected MO2 profile remains unidentified; no xEdit/game call occurred."
+    },
+    {
+      "id": "EV-0111",
+      "kind": "record",
+      "source": "Skyrim.esm file-level QUST 0001BB9B; plugin SHA256 2bbc77fdec35a70ef96b710f8c525e50a1db9e63e11a391a0eb9ee8f56d36107",
+      "artifact": "private-local:.local/readiness/records/quest-DA14-Skyrim-esm.stdout.raw",
+      "sha256": "5e1779c22048c8fdd5d3877a97adc529924161e245c11459d0c5e3a9997f97bf",
+      "captured_utc": "2026-10-14T15:19:10Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/plugin_reader.py; Python 3.12.3; raw subrecord mode"
+      ],
+      "coverage": "Raw bounded operation output in ignored .local/readiness/records/quest-DA14-Skyrim-esm.stdout.raw; exact input identity and scope stated in source/result. No gameplay state or winning-record conclusion is inferred.",
+      "result": "One DA14 QUST row, origin Skyrim.esm, 288 subrecord headers: 2 CTDA, 26 ALST, 26 ALID, 1 VMAD. Raw values preserved. This is one-file evidence and makes no winner or semantic claim."
+    },
+    {
+      "id": "EV-0112",
+      "kind": "record",
+      "source": "Update.esm file-level QUST 0001BB9B; plugin SHA256 c1795e0a1218da45dbfd523f064f1857b42805c49714c46091e75277e525aed9",
+      "artifact": "private-local:.local/readiness/records/quest-DA14-Update-esm.stdout.raw",
+      "sha256": "ac792d89e704f5293ae1232466720fb98ed260d1048a70c761e6d8e97e3992bd",
+      "captured_utc": "2026-10-14T15:19:10Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/plugin_reader.py; Python 3.12.3; raw subrecord mode"
+      ],
+      "coverage": "Raw bounded operation output in ignored .local/readiness/records/quest-DA14-Update-esm.stdout.raw; exact input identity and scope stated in source/result. No gameplay state or winning-record conclusion is inferred.",
+      "result": "One DA14 QUST row, origin Skyrim.esm, 288 subrecord headers: 2 CTDA, 26 ALST, 26 ALID, 1 VMAD. Raw values preserved. Same FormID in this file does not establish the active-order winner."
+    },
+    {
+      "id": "EV-0113",
+      "kind": "native",
+      "source": "Ghidra 12.0.4 headless import; input SHA256 c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9",
+      "artifact": "private-local:.local/readiness/ghidra/analysis-attempt2.meta.json",
+      "sha256": "9272c557e01b4f866b12ebff51848631c73469ed08a88ece0927ed573c2a9c2a",
+      "captured_utc": "2026-10-14T15:19:10Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "Ghidra 12.0.4; Java 21.0.10; tools/ghidra_probe.py predecessor wrapper"
+      ],
+      "coverage": "Raw bounded operation output in ignored .local/readiness/ghidra/analysis-attempt2.meta.json; exact input identity and scope stated in source/result. No gameplay state or winning-record conclusion is inferred.",
+      "result": "Real executable import saved in the ignored project and process exited 0 after 1,200 seconds. Ghidra reported an analysis timeout in Disassemble Entry Points; import succeeded but processing was incomplete."
+    },
+    {
+      "id": "EV-0114",
+      "kind": "native",
+      "source": "Ghidra 12.0.4 read-only script query on the partial 1.6.1170 project",
+      "artifact": "private-local:.local/readiness/ghidra/readonly-query.log",
+      "sha256": "bd2f2c4eed367fbb24200dc8e4681ec50d82622fb075403aa17ad744d72a81a7",
+      "captured_utc": "2026-10-14T15:19:10Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "Ghidra 12.0.4; Java 21.0.10; ReadOnlyTargetedQuery.java"
+      ],
+      "coverage": "Raw bounded operation output in ignored .local/readiness/ghidra/readonly-query.log; exact input identity and scope stated in source/result. No gameplay state or winning-record conclusion is inferred.",
+      "result": "Program identity was SkyrimSE.exe, language x86:LE:64:default, Windows compiler, with 92,219 functions. The script reported no direct call reference; Ghidra process exit remained 0 despite script error. Because analysis was incomplete, this is not a binary-wide negative finding."
+    },
+    {
+      "id": "EV-0115",
+      "kind": "tool",
+      "source": "Local domain doctor report including native Windows Java/CMake probes and target gate",
+      "artifact": "private-local:.local/readiness/domain-doctor.stdout.json",
+      "sha256": "034200809b3c1713a4cfdfc023c0c4f37f081d714b8a769c56fdb0bd962379f2",
+      "captured_utc": "2026-10-14T15:19:10Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/domain_doctor.py; Python 3.12.3; cmd.exe host probes"
+      ],
+      "coverage": "Raw bounded operation output in ignored .local/readiness/domain-doctor.stdout.json; exact input identity and scope stated in source/result. No gameplay state or winning-record conclusion is inferred.",
+      "result": "Doctor detected Java 21.0.10 and Ghidra 12.0.4 launcher, recorded an analysis attempt, and verified runtime 1.6.1170. It did not find CMake; full order and xEdit call remain false."
+    },
+    {
+      "id": "EV-0116",
+      "kind": "record",
+      "source": "MGEF Skyrim.esm EditorID substring Resist; plugin SHA256 2bbc77fdec35a70ef96b710f8c525e50a1db9e63e11a391a0eb9ee8f56d36107",
+      "artifact": "private-local:.local/readiness/records/skyrim-mgef-resist.stdout.raw",
+      "sha256": "005d839d88a313cd65c31adaab945837eab40cfbeaf2df742092e6ac995271f1",
+      "captured_utc": "2026-10-14T15:23:00Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/plugin_reader.py; Python 3.12.3; Skyrim.esm read-only record query"
+      ],
+      "coverage": "One explicit Skyrim.esm file; EditorID substring or exact FormID scope only. Complete active order and semantic field decoding are not represented.",
+      "result": "27 rows returned for this exact substring query in Skyrim.esm. Names included AbResistDamage 000CAB90. This is not a full-order result or proof of AV39 target/magnitude/reachability."
+    },
+    {
+      "id": "EV-0117",
+      "kind": "record",
+      "source": "MGEF Skyrim.esm EditorID substring Weak; same plugin SHA256 2bbc77fdec35a70ef96b710f8c525e50a1db9e63e11a391a0eb9ee8f56d36107",
+      "artifact": "private-local:.local/readiness/records/skyrim-mgef-weakness.stdout.raw",
+      "sha256": "ad1efc2eff815e7e9b3900d98518232a4baec34eec9a2d02d863f300e4652056",
+      "captured_utc": "2026-10-14T15:23:00Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/plugin_reader.py; Python 3.12.3; Skyrim.esm read-only record query"
+      ],
+      "coverage": "One explicit Skyrim.esm file; EditorID substring or exact FormID scope only. Complete active order and semantic field decoding are not represented.",
+      "result": "10 rows returned for this exact substring query in Skyrim.esm, including AlchWeaknessPoison and elemental/magic weakness EditorIDs. No semantic target or player reachability inferred."
+    },
+    {
+      "id": "EV-0118",
+      "kind": "record",
+      "source": "Skyrim.esm MGEF FormID 000CAB90 EditorID AbResistDamage; plugin SHA256 2bbc77fdec35a70ef96b710f8c525e50a1db9e63e11a391a0eb9ee8f56d36107",
+      "artifact": "private-local:.local/readiness/records/skyrim-mgef-abresistdamage.stdout.raw",
+      "sha256": "87ef265e7a8d54f4ee1481ffafd6e506539f334f5f8b606fe44a9ccea529a211",
+      "captured_utc": "2026-10-14T15:23:00Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/plugin_reader.py; Python 3.12.3; Skyrim.esm read-only record query"
+      ],
+      "coverage": "One explicit Skyrim.esm file; EditorID substring or exact FormID scope only. Complete active order and semantic field decoding are not represented.",
+      "result": "One MGEF row exposed raw DATA length 152 and DNAM length 4. The bytes were not decoded; this does not establish an AV39 writer or sign."
+    },
+    {
+      "id": "EV-0119",
+      "kind": "tool",
+      "source": "Standard-library unittest: synthetic two-record Skyrim.esm/Update.esm override fixture; no game file input",
+      "artifact": "private-local:.local/readiness/records/winner-fixture.combined.raw",
+      "sha256": "30a5768281b6ad2dbbee39a72095daf2940ba79cf990a1e7a1c0a1bc1ac0178b",
+      "captured_utc": "2026-10-14T15:25:20Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "Python 3.12.3 unittest",
+        "tools/plugin_reader.py resolve_record_winner"
+      ],
+      "coverage": "One synthetic logical record with two candidates and a complete five-master test order; separate negative case supplies an incomplete order. No real profile/plugin winner result.",
+      "result": "The fixture selected Update.esm as the last active candidate, preserving origin Skyrim.esm, and the partial-order test rejected an incomplete list; six plugin-reader unit tests passed."
+    },
+    {
+      "id": "EV-0120",
+      "kind": "tool",
+      "source": "Read-only xEdit/SSEEdit executable metadata and Windows Node/npm/CMake availability probe",
+      "artifact": "private-local:.local/readiness/tool-probes/xedit-node-metadata.json",
+      "sha256": "02e9b7824ef0483de1c13acf3cb8a466aca73574df7c9a500226664f137be076",
+      "captured_utc": "2026-10-14T15:28:06Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "Windows host PowerShell metadata probe",
+        "Python 3.12.3"
+      ],
+      "coverage": "Executable file metadata and host tool version/availability only. xEdit was not launched; selected active MO2 profile is unknown and the full-order preflight fails closed.",
+      "result": "xEdit ProductVersion 4.1.5.0, size 24,580,608, SHA256 ccb7ca9e6d826868b186b0b9a0fc012affb3fdc9688250583353e6d84e6a2545; Node v22.19.0 and npm present; Windows cmake.exe unavailable. application_launched=false."
+    },
+    {
+      "id": "EV-0121",
+      "kind": "tool",
+      "source": "Read-only extraction of DA14Script.psc from Steam Skyrim AE Skyrim - Misc.bsa",
+      "artifact": "private-local:.local/readiness/papyrus/extract-da14.stdout.raw",
+      "sha256": "72ffd7e5dbe7648e8a4d49032eae05a545e533cbeeb5bf8bcfdf2bb913755b83",
+      "captured_utc": "2026-10-14T15:33:28Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/papyrus_pex.py extract",
+        "Python 3.12.3",
+        "Steam Skyrim - Misc.bsa"
+      ],
+      "coverage": "One exact source name in the installed Skyrim - Misc.bsa. Archive is read-only; extracted PEX was written under ignored .local/readiness/papyrus/. This does not represent a general BSA extractor.",
+      "result": "Found DA14Script.psc at source-string offset 16246331; extracted PEX bytes [16246313,16246820), length 507. Archive SHA256 ddb19908dcd5c135b8bba240e8dfcdb95395b569852f715d330396e9c1390b9d; output PEX SHA256 24d5993e6fd6553638c70274b3922b7877b59b62ab2454acb6ed822e48339e5d; PEX 3.2 reader consumed all 507 bytes."
+    },
+    {
+      "id": "EV-0122",
+      "kind": "tool",
+      "source": "Classic PEX 3.2 bytecode inspection of extracted DA14Script.psc",
+      "artifact": "private-local:.local/readiness/papyrus/disassemble-da14.stdout.raw",
+      "sha256": "01fccff067a1805abbd2455eb7618b6fdfdd35b3dfeb80bd9be9159e5b867c34",
+      "captured_utc": "2026-10-14T15:33:28Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/papyrus_pex.py disassemble",
+        "Python 3.12.3"
+      ],
+      "coverage": "One extracted 507-byte classic PEX 3.2 file. Supported opcodes/forms only; compiler user/machine fields are redacted. This is bytecode inspection, not source-level reconstruction or proof of runtime reachability.",
+      "result": "Reader identified source DA14Script.psc, object DA14Script parent Quest, and decoded GotoState/GetState function instructions; consumed_bytes=507 and trailing_bytes=0."
+    },
+    {
+      "id": "EV-0123",
+      "kind": "tool",
+      "source": "Literal ActorValue-name scan of installed Steam Skyrim - Misc.bsa",
+      "artifact": "private-local:.local/readiness/papyrus/actor-value-scan-base.stdout.raw",
+      "sha256": "b6feab5f82b0f83f9cbab36cfb6c4913f3f2379ef03be5ed8e6194da54dbd57f",
+      "captured_utc": "2026-10-14T15:36:36Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/papyrus_pex.py scan-literals",
+        "Python 3.12.3"
+      ],
+      "coverage": "One archive (Skyrim - Misc.bsa), six exact literal PowerModifier names. Creation Club archives were not included in the completed scan; an optional 6.26 GB scan was interrupted without a result.",
+      "result": "No exact target ActorValue literals were found in Skyrim - Misc.bsa. This literal-only result does not exclude dynamic string construction, unscanned Creation Club archives, or native writers."
+    },
+    {
+      "id": "EV-0124",
+      "kind": "wiki",
+      "source": "Local UESP dump b3ccaea9d10c653a1bf702d0da5d32c2bc9a5cafdcd374d258f5a063d6074ddb; Skyrim:Enchanting page revision 3538992; https://en.uesp.net/w/index.php?title=Skyrim:Enchanting&oldid=3538992",
+      "artifact": "private-local:.local/readiness/uesp/cli/breadth-enchanting.stdout.raw",
+      "sha256": "30f000a2d6750e573935bc6cefcc1a99a4e8405eba394b9b4cbcdc4c19019a28",
+      "captured_utc": "2026-10-14T15:45:13Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m tools.uesp page",
+        "local UESP SQLite snapshot"
+      ],
+      "coverage": "One exact article revision; 16,601 returned content characters. Local dump source URL/license/completeness are unverified. Article statements are secondary-source leads, not executable or current-build observations.",
+      "result": "Revision 3538992 states that crafting grants 1 base XP per enchantment, with base XP unaffected by item value, chosen enchantment, or soul level, while XP enhancers affect it. The same article reports a Myrwatch Staff Enchanter overgrant before 1.6.318 and a later correction; this is attributed to the page only."
+    },
+    {
+      "id": "EV-0125",
+      "kind": "save",
+      "source": "Retained local co-save structural-survey output for alias SAVE-LOCAL-001; original input path/hash unavailable",
+      "artifact": "private-local:.local/readiness/cosave/SAVE-LOCAL-001.stdout.raw",
+      "sha256": "84f501a2fcd5fd9c2ea168ea509b03ca98255c25f24f20f4153fdc6b6c93bd88",
+      "captured_utc": "2026-10-14T15:52:49Z",
+      "edition": "unknown",
+      "runtime": "0x01064920 (header field; executable match unverified)",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/cosave-info.py; retained local output capture"
+      ],
+      "coverage": "One retained stdout capture only; no original .skse bytes, source path, or input hash remain. This is a structural chunk inventory, not internal PLGN/mod-state decoding.",
+      "result": "The retained parser output reports size 2,617 bytes, SKSE magic, 19 chunks, 15 distinct opcodes, 0 resyncs, 2,617 bytes covered, and 100.0% coverage. No field-level save state is inferred."
+    },
+    {
+      "id": "EV-0126",
+      "kind": "save",
+      "source": "Current Python co-save parser run on a synthetic structural fixture",
+      "artifact": "private-local:.local/readiness/cosave/synthetic.stdout.raw",
+      "sha256": "65bf17be45693b8f73a98b957b5113a6853f6ba1456e755e31e84d4364d322a2",
+      "captured_utc": "2026-10-14T15:52:50Z",
+      "edition": "unknown",
+      "runtime": "synthetic fixture",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/cosave-info.py",
+        "Python 3.12.3"
+      ],
+      "coverage": "One 244-byte synthetic SKSE-like fixture with one DATA chunk; generated only for parser validation, not a real save.",
+      "result": "Current parser reports one DATA chunk, zero resyncs, 244/244 bytes covered, 100% coverage. This validates structural handling only."
+    },
+    {
+      "id": "EV-0127",
+      "kind": "tool",
+      "source": "Current stdlib unittest coverage for co-save parser outcomes",
+      "artifact": "private-local:.local/readiness/cosave/unittest.stdout.raw",
+      "sha256": "a68bc43898d7c1f897993ff1aeb749b086f073e688824fadfd3166742c105ff4",
+      "captured_utc": "2026-10-14T15:52:52Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest tests.test_cosave -v",
+        "Python 3.12.3"
+      ],
+      "coverage": "Six synthetic unit cases: valid fixture, zero-chunk stub, wrong magic, truncated header, missing input, and no-argument usage.",
+      "result": "All six co-save parser tests passed; no real save was read by this test run."
+    },
+    {
+      "id": "EV-0128",
+      "kind": "tool",
+      "source": "Read-only Windows ProductVersion/hash probe of local Skyrim AE, SKSE loader/runtime DLL, and Address Library",
+      "artifact": "private-local:.local/readiness/skse/metadata-verified.stdout.raw",
+      "sha256": "fa7ad80cf29196dd912041f50fe8278e4e0bbcb20b739045b5a0dc467fceb0e9",
+      "captured_utc": "2026-10-14T15:55:21Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/skse_probe.py",
+        "Windows PowerShell FileVersionInfo",
+        "Python 3.12.3"
+      ],
+      "coverage": "Metadata/file hashes only; the probe verifies the AE executable and reads local SKSE/Address Library files. It does not launch Skyrim, inject/load SKSE, or perform a DevBench handshake.",
+      "result": "Verified target executable SHA256 c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9. `skse64_loader.exe` ProductVersion `0, 2, 2, 6`, SHA256 730c2743f6871fbaeb8606c1d3b7a55feca045c3d74858a41b0c6d03cd989fbc; `skse64_1_6_1170.dll` same ProductVersion, SHA256 c9a2c8a80df6bf2372c5f49468bb2e5ab67786157265b6f29ece9f4eac075d54; `versionlib-1-6-1170-0.bin` exists, size 795,129, SHA256 c4093c569a3c83b26587f4b9ea4c55de9ae6e73b84a2af9fb3fbd30e2fe0d452. Filename/runtime match is observed; live compatibility is untested."
+    },
+    {
+      "id": "EV-0129",
+      "kind": "wiki",
+      "source": "Local UESP dump b3ccaea9d10c653a1bf702d0da5d32c2bc9a5cafdcd374d258f5a063d6074ddb; Skyrim:A Night To Remember page revision 3593351; https://en.uesp.net/w/index.php?title=Skyrim:A_Night_To_Remember&oldid=3593351",
+      "artifact": "private-local:.local/readiness/uesp/cli/quest-da14-page-wikitext.stdout.raw",
+      "sha256": "f26c395e423a981627abd72942a56f248f5ae7137e5cee3c46ca2be6cf587216",
+      "captured_utc": "2026-10-14T16:31:48Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m tools.uesp page --db .local/uesp.sqlite3 --raw",
+        "local UESP SQLite snapshot"
+      ],
+      "coverage": "One exact raw-wikitext article revision. The header contains ReqLevel=14, identifies Sam Guevenne, and lists Any tavern. Local dump URL, license, acquisition date, and completeness remain unverified; wiki content is a secondary-source lead, not a native record or runtime result.",
+      "result": "Revision 3593351's Quest Header sets ReqLevel=14 for A Night To Remember. This is consistent with legacy scan EV-0108's DA14 >=14 report; it does not independently establish a current load-order winner, the condition's evaluated transition, or a level-one bypass."
+    },
+    {
+      "id": "EV-0130",
+      "kind": "tool",
+      "source": "Native CommonLibSSE-NG CMake/MSVC build from original Observer project at commit b93280e832f263dbef44e44cbe2936622a02f91a",
+      "artifact": "private-local:.local/readiness/tests/commonlib-build.stdout.raw; .local/readiness/commonlib-observer-20261014-1621/commonlibsse-ng/Release/CommonLibSSE.lib",
+      "sha256": "747565ed7610e2d4eeee26268ad08162360fcd767340da449a30c95aaf7e4332",
+      "captured_utc": "2026-10-14T16:48:52Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "CMake 3.30.5-msvc23",
+        "Visual Studio 2022 MSBuild 17.13",
+        "MSVC 19.43.34809.0",
+        "Windows SDK 10.0.22621",
+        "CommonLibSSE-NG CMake commit b93280e832f263dbef44e44cbe2936622a02f91a"
+      ],
+      "coverage": "Fresh CMake configure with AE enabled, SE/VR disabled, cached dependencies only and VCPKG_MANIFEST_INSTALL=OFF; actual CommonLibSSE.vcxproj compiled in a local .local build tree. Combined SkyrimStateObserver target did not complete.",
+      "result": "CommonLibSSE.lib was produced (200524092 bytes; SHA256 230929f4ac49b5dbd8c3c143c43e3983ad788891a3c83baa9201060f32addda2). The enclosing Observer DLL translation unit failed in CommonLib REL/Version.h because standard-library declarations such as std::array, std::string_view, std::uint16_t and std::strong_ordering were unavailable; no SkyrimStateObserver.dll or live SKSE handshake was produced. A local-only include edit was staged but could not be rebuilt because WSL Windows interop failed before CMake/MSBuild invocation."
+    },
+    {
+      "id": "EV-0131",
+      "kind": "native",
+      "source": "Attempted read-only query against the verified Steam AE 1.6.1170 Ghidra attempt2 project; hash-attested fallback passed, but WSL Windows process bridge failed before native launcher",
+      "artifact": "private-local:.local/readiness/ghidra/readonly-query-round3.stdout.raw",
+      "sha256": "8233cf2baadf33af013f6b3f033ae39578403e3d619762e85dfc7c836764a6e4",
+      "captured_utc": "2026-10-14T16:54:00Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --timeout 300",
+        "Ghidra 12.0.4 existing project",
+        "hash-attested EV-0109/EV-0113 fallback",
+        "WSL cmd.exe bridge"
+      ],
+      "coverage": "The existing-project fallback rehashed the configured SkyrimSE.exe and matched the recorded ProductVersion/import identity and project metadata. Native launcher invocation then failed before Ghidra with WSL UtilBindVsockAnyPort socket failure. Companion stderr `.local/readiness/ghidra/readonly-query-round3.stderr.raw` SHA256 2cd08e1fdc13e7e1dd15fae409fca05f3cfada79284ccb49b44bbfb2a6581d23.",
+      "result": "No new Ghidra script ran and no function, xref, disassembly or decompilation was emitted. This is an environment/bridge failure, not a negative binary result. The long analysis in the separate project remains active."
+    },
+    {
+      "id": "EV-0132",
+      "kind": "tool",
+      "source": "Focused regression suite for the read-only hash-attested existing-project Ghidra query adapter",
+      "artifact": "private-local:.local/readiness/tests/ghidra-query-test-round3.stderr.raw",
+      "sha256": "5cac8155ef8b0cdc2f6abdb5328d1793bd7f8c97a76c9d38b96236eed252df33",
+      "captured_utc": "2026-10-14T16:55:13Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest tests.test_ghidra_probe -v",
+        "Python 3.12.3"
+      ],
+      "coverage": "Six tests cover mounted Windows path mapping, out-of-root rejection, explicit no-xref behavior, ProductVersion/import hash-bound project identity, changed executable rejection, and JSON target-error output. These are adapter tests, not a native Ghidra query result.",
+      "result": "All six tests passed. The separate native query attempt is EV-0131 and failed before Ghidra launch due WSL Windows process bridge."
+    },
+    {
+      "id": "EV-0133",
+      "kind": "tool",
+      "source": "Private local Apocrypha export; bounded search/context retrieval alias APO-LOCAL-0001; body and source metadata remain in ignored local capture",
+      "artifact": "private-local:.local/readiness/apocrypha/cli/context.stdout",
+      "sha256": "e3a592fef499db309b31d81adcee625444e42e35835c9baf523d7998f2e55987",
+      "captured_utc": "2026-10-14T14:21:32Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "local Apocrypha index doctor/search/context CLI",
+        "Python dispatcher"
+      ],
+      "coverage": "Doctor reports 60,873 indexed messages. Four bounded phrase searches and one focused context retrieval are captured under ignored .local; the context response retains local message/source metadata and neighboring discussion. Raw context is private and is not reproduced in this register.",
+      "result": "Local retrieval and provenance fields are preserved by the private capture hash. Community text remains an untrusted historical lead; no private body or message identifier is promoted into public claims."
+    },
+    {
+      "id": "EV-0134",
+      "kind": "wiki",
+      "source": "Local UESP dump b3ccaea9d10c653a1bf702d0da5d32c2bc9a5cafdcd374d258f5a063d6074ddb; Skyrim:Ebony Warrior page revision 3580051; https://en.uesp.net/w/index.php?title=Skyrim:Ebony_Warrior&oldid=3580051",
+      "artifact": "private-local:.local/readiness/uesp/cli/ebony-warrior-page.stdout.raw",
+      "sha256": "f5ebdf5c3aff51741745d1bf49aaeac5380d833adf3e816a02e12258729847dc",
+      "captured_utc": "2026-10-14T17:03:42Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m tools.uesp page --db .local/uesp.sqlite3 --raw Skyrim:Ebony Warrior",
+        "local UESP SQLite snapshot"
+      ],
+      "coverage": "Exact-title raw wikitext retrieval; page title and revision returned as Skyrim:Ebony Warrior, 3580051. Raw command output is 9,763 bytes; body is 9,371 bytes. Snapshot acquisition URL, license and completeness are not established.",
+      "result": "This revision reports the Ebony Warrior level-80 encounter threshold and is consistent with the historical >=80 gate inventory in EV-0108. The private Apocrypha context EV-0133 also reports the threshold while retaining uncertainty about whether it is a hard prerequisite or a prompt. This is source agreement, not proof of the current AE gate or transition."
+    },
+    {
+      "id": "EV-0135",
+      "kind": "tool",
+      "source": "Complete local stdlib unittest discovery after readiness code/evidence updates",
+      "artifact": "private-local:.local/readiness/tests/unittest-final.stderr.raw",
+      "sha256": "c2cfee6d54c4d71ba00266b7641d059fef168c913b898983a6512a22b58564e0",
+      "captured_utc": "2026-10-14T17:06:13Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "system Python 3.12.3 fallback; Conda unavailable"
+      ],
+      "coverage": "Full local stdlib unittest discovery, including transaction recovery/resume subprocess tests and the hash-attested Ghidra adapter regressions.",
+      "result": "All 136 tests passed in 18.961 seconds. This is Linux/system-Python fixture and repository validation; it does not establish Windows MO2/xEdit, WSL interop, or in-game runtime behavior."
+    },
+    {
+      "id": "EV-0136",
+      "kind": "tool",
+      "source": "Final research/evidence, transaction ledger, overlay and Python compile validators",
+      "artifact": "private-local:.local/readiness/tests/validate-transactions.stdout.raw",
+      "sha256": "56f71f154452039ff0a52ea4abfd400ddc731e93839a73be7b7d0d1624debe8e",
+      "captured_utc": "2026-10-14T17:05:48Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "scripts/validate_research.py",
+        "scripts/research_transactions.py validate",
+        "scripts/validate_overlay.py",
+        "python -m compileall -q scripts tools tests",
+        "Python 3.12.3"
+      ],
+      "coverage": "All four final validator commands completed with exit code 0; raw stdout/stderr and per-command hashes are stored in ignored .local/readiness/tests/.",
+      "result": "RESEARCH DATA PASS; transaction validator ok=true with 4 transactions and 17 events; CODEX AE RESEARCH HARNESS PASS; compileall completed without errors."
+    },
+    {
+      "id": "EV-0137",
+      "kind": "tool",
+      "source": "Final repository pre-push/privacy audit after readiness changes",
+      "artifact": "private-local:.local/readiness/tests/pre-push-final.stdout.raw",
+      "sha256": "977d98205733ac3d2e24fbec4f67d855dfac578ff3258daafeb8b3456bcd6868",
+      "captured_utc": "2026-10-14T17:07:10Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run scripts/pre_push_audit.py",
+        "Python 3.12.3"
+      ],
+      "coverage": "Tracked raw/heavy file checks, unignored raw checks, and 11 repository ignore probes. Raw output and metadata stay ignored under .local.",
+      "result": "PASS: 253 tracked files; zero tracked raw artifacts, zero tracked heavy files, zero unignored untracked raw artifacts, 11/11 ignore probes. Eight ignored local heavy files total 3,180.9 MiB."
+    },
+    {
+      "id": "EV-0138",
+      "kind": "native",
+      "source": "Second hash-attested read-only query attempt against existing AE Ghidra attempt2 project; Windows process bridge failed before Ghidra launch",
+      "artifact": "private-local:.local/readiness/ghidra/readonly-query-round4.stdout.raw",
+      "sha256": "8233cf2baadf33af013f6b3f033ae39578403e3d619762e85dfc7c836764a6e4",
+      "captured_utc": "2026-10-14T17:08:34Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --timeout 300",
+        "Ghidra 12.0.4 attempt2 project",
+        "hash-attested EV-0109/EV-0113 fallback",
+        "WSL cmd.exe bridge"
+      ],
+      "coverage": "Existing project hash/evidence checks succeeded and the adapter reached native launcher invocation. WSL failed at process start before Ghidra; companion stderr SHA256 2cd08e1fdc13e7e1dd15fae409fca05f3cfada79284ccb49b44bbfb2a6581d23.",
+      "result": "No Ghidra script ran; no function lookup, xref, disassembly or decompilation was emitted. This is a repeated environment bridge failure, not a negative executable result."
+    },
+    {
+      "id": "EV-0139",
+      "kind": "native",
+      "source": "Terminal result of the independent long Ghidra analysis session; input SHA256 c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9",
+      "artifact": "private-local:.local/readiness/ghidra/AE_SkyrimSE_1_6_1170_longanalysis.stdout.raw",
+      "sha256": "bf5b4831f05668374fc1c8ac51a6109239d6fab80921e19e03cb0bd3881628a4",
+      "metadata_artifact": "private-local:.local/readiness/ghidra/AE_SkyrimSE_1_6_1170_longanalysis.meta.json",
+      "metadata_sha256": "b58c72d3f0916eeb1e6a62c4afccb9a73600fec09471387b11c9434f4b55fd03",
+      "captured_utc": "2026-10-14T17:10:00Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "tools/ghidra_probe.py native_headless_import_and_analysis",
+        "Ghidra 12.0.4",
+        "Java 21.0.10"
+      ],
+      "coverage": "Exact input hash matches EV-0109. Session ran 7,260.809 seconds with a 7,200-second per-file analysis limit, reported analysis_timeout_reported=true, and saved project AE_SkyrimSE_1_6_1170_longanalysis. Raw output is 134,783 bytes; companion stderr is empty. The saved project and command artifacts remain under ignored .local/readiness/ghidra/.",
+      "result": "Ghidra import and project save succeeded, but automatic analysis timed out after 7,199 seconds of analyzer time. The result is an incomplete project, not a binary-wide negative and not a targeted xref/decompilation query."
+    },
+    {
+      "id": "EV-0140",
+      "kind": "tool",
+      "source": "Focused Ghidra query-fallback regression tests and post-change research evidence validator",
+      "artifact": "private-local:.local/readiness/tests/ghidra-fallback-tests.stdout.raw",
+      "sha256": "1b1022d228b4c5c19f4802ace9728fe13301ecc87cdf97eaa60b9c5b8ac22890",
+      "validator_artifact": "private-local:.local/readiness/tests/validate-research-after-ghidra.txt",
+      "validator_sha256": "640339ffd8ebd48005dfec1399aded4f28b38c0881e205d8c014964c2f5dbd7c",
+      "captured_utc": "2026-10-14T17:11:00Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -p test_ghidra_probe.py -v",
+        "python3 scripts/validate_research.py",
+        "system Python 3.12.3 fallback; Conda unavailable"
+      ],
+      "coverage": "Focused tests validate attempt2 and EV-0139 project admission, current executable hash binding, changed metadata rejection, unknown project rejection, Windows path mapping, query output semantics, and target-error JSON. Research/evidence links and schema were checked after adding EV-0139 metadata hash fields.",
+      "result": "All 9 focused Ghidra adapter tests passed in 0.035 seconds; the research validator returned RESEARCH DATA PASS. Linux/system-Python fixtures do not demonstrate Windows process interop or a live Ghidra query."
+    },
+    {
+      "id": "EV-0141",
+      "kind": "native",
+      "source": "Bounded read-only query against the EV-0139 longanalysis project; executable input SHA256 c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9",
+      "artifact": "private-local:.local/readiness/ghidra/readonly-query-round5-cli.stdout.raw",
+      "sha256": "a1f3ed316b974e20d18a8580c18d65ba0fb71050ad9491da1aab03298c80b4c7",
+      "metadata_artifact": "private-local:.local/readiness/ghidra/readonly-query-round5-cli.meta.json",
+      "metadata_sha256": "c36174734fee05a639db9be30af724e0d59db63e7c3a601f01149650c3869b93",
+      "stderr_sha256": "2cd08e1fdc13e7e1dd15fae409fca05f3cfada79284ccb49b44bbfb2a6581d23",
+      "captured_utc": "2026-10-14T17:16:19Z",
+      "edition": "AE",
+      "runtime": "1.6.1170",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --project-dir .local/readiness/ghidra/project_AE_SkyrimSE_1_6_1170_longanalysis --project-name AE_SkyrimSE_1_6_1170_longanalysis --timeout 300",
+        "Ghidra 12.0.4 native headless launcher",
+        "EV-0109/EV-0139/EV-0140 query-only attestation"
+      ],
+      "coverage": "The query adapter rechecked the ProductVersion-backed executable bytes, EV-0139 raw analysis output, exact longanalysis metadata hash, project name and path before native invocation. Launcher call failed within 1.44 seconds; stdout is 742 bytes and companion stderr 62 bytes. WSL stderr hash matches EV-0138.",
+      "result": "WSL failed before Ghidra with UtilBindVsockAnyPort:307: socket failed 1. No Ghidra script ran; function lookup, call edge, disassembly and decompilation were not exported. This is an environment bridge failure, not a negative executable finding."
+    },
+    {
+      "id": "EV-0142",
+      "kind": "tool",
+      "source": "Final full local unittest discovery after Ghidra fallback attestation changes",
+      "artifact": "private-local:.local/readiness/final-verification/unittest-final.stdout.raw",
+      "sha256": "24e655459560ce7a716084dade3652de0c176f056e7f3308e47a60d1df251ac7",
+      "captured_utc": "2026-10-14T17:19:17Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "system Python 3.12.3 fallback; Conda unavailable"
+      ],
+      "coverage": "Full stdlib unittest discovery across tests/, including transaction recovery/resume in fresh subprocesses and the 9 Ghidra adapter regression tests.",
+      "result": "All 139 tests passed in 14.087 seconds. Linux/system-Python results do not establish Windows MO2/xEdit, WSL interop, or in-game AE behavior."
+    },
+    {
+      "id": "EV-0143",
+      "kind": "tool",
+      "source": "Final repository research, transaction, overlay, and compileall validator batch",
+      "artifact": "private-local:.local/readiness/final-verification/research-final.stdout.raw",
+      "sha256": "640339ffd8ebd48005dfec1399aded4f28b38c0881e205d8c014964c2f5dbd7c",
+      "captured_utc": "2026-10-14T17:19:17Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/validate_research.py",
+        "python3 scripts/research_transactions.py validate",
+        "python3 scripts/validate_overlay.py",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests"
+      ],
+      "coverage": "Additional ignored captures: transactions-final.stdout.raw SHA256 56f71f154452039ff0a52ea4abfd400ddc731e93839a73be7b7d0d1624debe8e; overlay-final.stdout.raw SHA256 858980e195e8ac9775792b3f43962b7db63ea4be8c0573ed946717662a779b77; compileall-final.stdout.raw SHA256 2cd08e1fdc13e7e1dd15fae409fca05f3cfada79284ccb49b44bbfb2a6581d23. All four commands returned exit code 0.",
+      "result": "RESEARCH DATA PASS; transaction validation reports 4 transactions and 17 events; overlay validation reports CODEX AE RESEARCH HARNESS PASS; compileall completed without errors."
+    },
+    {
+      "id": "EV-0144",
+      "kind": "tool",
+      "source": "Final staged pre-push/privacy audit for the 60-file local readiness change set",
+      "artifact": "private-local:.local/readiness/final-verification/pre-push-staged.stdout.raw",
+      "sha256": "3cf6922e338b7e8be808f0ada63f19584c5b2ff4efcf944601fbab83804cf41d",
+      "path_scan_artifact": "private-local:.local/readiness/final-verification/staged-path-scan.stdout.raw",
+      "path_scan_sha256": "7a50b51255f899936c94ad8782e296935093ba71cd45cd0b2e056bbcc4d89ec4",
+      "captured_utc": "2026-10-14T17:29:30Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run scripts/pre_push_audit.py",
+        "git diff --cached --check",
+        "staged exact local-path scan",
+        "git status --short and cached name list"
+      ],
+      "coverage": "The staged audit included 60 files and excluded the pre-existing deletion of migration/RESEARCH_READINESS_MISSION.md and the untracked user-supplied migration/LOCAL_RESEARCH_READINESS_MISSION.md. The path scan checked added staged lines and found zero exact workspace/home path matches. Raw captures remain under ignored .local.",
+      "result": "PASS: 273 tracked files, zero tracked raw artifacts, zero tracked files at least 5 MiB, zero unignored untracked raw artifacts, all 11 ignore probes passed. Nine ignored local heavy files total 3,349.3 MiB. Cached diff check passed."
+    },
+    {
+      "id": "EV-0145",
+      "kind": "tool",
+      "source": "Final full local unittest discovery after the staged privacy check and final research-state updates",
+      "artifact": "private-local:.local/readiness/final-verification/unittest-post-evidence.stdout.raw",
+      "sha256": "e3cb2b07944e2e8879bf4199197b765a7e5ae60f90ad6bd3e0229ddabbdc61a2",
+      "captured_utc": "2026-10-14T17:30:33Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "system Python 3.12.3 fallback; Conda unavailable"
+      ],
+      "coverage": "Full stdlib unittest discovery after EV-0144 and final state/evidence updates, including transaction recovery/resume subprocess tests and nine Ghidra query-attestation regressions.",
+      "result": "All 139 tests passed in 14.250 seconds. Linux/system-Python results do not establish Windows MO2/xEdit, WSL interop, or in-game AE behavior."
+    },
+    {
+      "id": "EV-0146",
+      "kind": "tool",
+      "source": "Final research, transaction, overlay and compileall validator batch after staged privacy audit",
+      "artifact": "private-local:.local/readiness/final-verification/research-post-evidence.stdout.raw",
+      "sha256": "640339ffd8ebd48005dfec1399aded4f28b38c0881e205d8c014964c2f5dbd7c",
+      "captured_utc": "2026-10-14T17:30:33Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/validate_research.py",
+        "python3 scripts/research_transactions.py validate",
+        "python3 scripts/validate_overlay.py",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests"
+      ],
+      "coverage": "Additional captures: transactions-post-evidence.stdout.raw SHA256 56f71f154452039ff0a52ea4abfd400ddc731e93839a73be7b7d0d1624debe8e; overlay-post-evidence.stdout.raw SHA256 858980e195e8ac9775792b3f43962b7db63ea4be8c0573ed946717662a779b77; compileall-post-evidence.stdout.raw SHA256 2cd08e1fdc13e7e1dd15fae409fca05f3cfada79284ccb49b44bbfb2a6581d23. All four commands returned exit code 0.",
+      "result": "Research data validation passes; transaction validation reports 4 transactions and 17 events; overlay reports CODEX AE RESEARCH HARNESS PASS; compileall completed without errors."
+    },
+    {
+      "id": "EV-0147",
+      "kind": "tool",
+      "source": "Final Markdown inventory write and hash check after synchronized final report/checkpoint edits",
+      "artifact": "private-local:.local/readiness/final-verification/markdown-policy-audit-final.stdout.raw",
+      "sha256": "897bb36396bf159153307303d0d259693adc24c4e5f9e19f426f0ed1d9869aaa",
+      "captured_utc": "2026-10-14T17:36:06Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/markdown_policy_audit.py --write",
+        "python3 scripts/markdown_policy_audit.py --check"
+      ],
+      "coverage": "Final active Markdown inventory after the 64/10/0 checklist, report, resume note, and synchronized research checkpoint edits; 155 Markdown files classified as 70 active and 85 archival.",
+      "result": "Both the inventory write and final hash check exited 0."
+    },
+    {
+      "id": "EV-0148",
+      "kind": "tool",
+      "source": "Final staged pre-push/privacy and added-line path audit for the synchronized readiness changes",
+      "artifact": "private-local:.local/readiness/final-verification/pre-push-final.stdout.raw",
+      "sha256": "c4bc8a2f5d23930c00532823110de62bd1b1ef2dd2a3f314c918e294f8302213",
+      "path_scan_artifact": "private-local:.local/readiness/final-verification/staged-path-scan-final.stdout.raw",
+      "path_scan_sha256": "983eb237cb10abfffd4016134e74d7d4591d38dc952e2c40bbc8abec9824e6af",
+      "captured_utc": "2026-10-14T17:36:06Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run scripts/pre_push_audit.py",
+        "git diff --cached --check",
+        "staged added-line exact local-path scan"
+      ],
+      "coverage": "The final synchronized audit change set contained 60 staged files. The cached diff check passed, the pre-push audit exited 0, added staged lines had zero exact workspace/home path matches, and both user-supplied mission-file states were excluded.",
+      "result": "PASS: staged pre-push/privacy audit and path scan completed; raw captures are kept in ignored .local."
+    },
+    {
+      "id": "EV-0149",
+      "kind": "tool",
+      "source": "Final Markdown inventory write/check after the last state checkpoint and staged-status recovery note",
+      "artifact": "private-local:.local/readiness/final-verification/markdown-policy-audit-closeout.stdout.raw",
+      "sha256": "897bb36396bf159153307303d0d259693adc24c4e5f9e19f426f0ed1d9869aaa",
+      "captured_utc": "2026-10-14T17:37:45Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/markdown_policy_audit.py --write",
+        "python3 scripts/markdown_policy_audit.py --check"
+      ],
+      "coverage": "Final Markdown inventory after synchronized STATE, frontier, RECOVERY, session log, checklist, report, changes, and resume updates; 155 Markdown files, 70 active and 85 archival.",
+      "result": "Both the inventory write and final hash check exited 0 after the final checkpoint edits."
+    },
+    {
+      "id": "EV-0150",
+      "kind": "tool",
+      "source": "Final Markdown inventory write/check after the repository-local author and checkpoint synchronization",
+      "artifact": "private-local:.local/readiness/final-verification/markdown-policy-audit-commit.stdout.raw",
+      "sha256": "897bb36396bf159153307303d0d259693adc24c4e5f9e19f426f0ed1d9869aaa",
+      "captured_utc": "2026-10-14T17:39:13Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/markdown_policy_audit.py --write",
+        "python3 scripts/markdown_policy_audit.py --check"
+      ],
+      "coverage": "Final Markdown inventory after all final report, checklist, state and resume edits; 155 Markdown files, 70 active and 85 archival.",
+      "result": "Both final inventory write and hash check exited 0."
     }
   ]
 }

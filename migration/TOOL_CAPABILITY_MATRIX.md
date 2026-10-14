@@ -1,23 +1,25 @@
-# Python tool capability matrix
+# Local tool capability matrix
 
-All checked-in agent entrypoints under `tools/` and `scripts/` are Python. Use
-`python3 scripts/python_env.py run ...` to select the named Conda environment
-when it exists. The retired Node, shell, and Java launchers are preserved only
-as historical source under `archived_tools/legacy_nonpython/`.
+Agent-facing operations use Python entrypoints through
+python3 scripts/python_env.py run. Those Python tools may dispatch a verified
+native application when its platform and safety gates allow it.
 
-| Domain | Python response tested | Readiness and limit |
+| Domain | Verified operation | Current status and limit |
 |---|---|---|
-| AE executable/profile gate | `python3 scripts/python_env.py run tools/ae_preflight.py --probe-executable` returns a structured fail-closed response. | **BLOCKED_EXTERNAL:** this WSL session cannot retrieve the Windows executable ProductVersion; the complete selected profile `plugins.txt` is not configured. No SSEEdit or live call is allowed. |
-| Plugin record inspection | `python3 scripts/python_env.py run tools/plugin_reader.py doctor` and synthetic record/compression fixtures. | **PASS (limited parser):** standard-library TES4 file reader responds and is read-only. It does not load the active order or select winning overrides. |
-| SKSE co-save | `python3 scripts/python_env.py run tools/cosave-info.py <copy.skse>`; domain doctor uses a synthetic fixture. | **PASS (fixture only):** one synthetic chunk parsed with 100% fixture coverage. No real co-save or live SKSE handshake was tested. |
-| Ghidra | `python3 scripts/python_env.py run tools/domain_doctor.py`. | **BLOCKED_EXTERNAL:** doctor responds; configured installation/headless paths exist, but Java is unavailable and no analysis ran. |
-| CommonLibSSE-NG | `python3 scripts/python_env.py run tools/domain_doctor.py`. | **BLOCKED_EXTERNAL:** doctor responds; source and CMake project candidates exist, but CMake is unavailable and no build ran. |
-| SSEEdit/xEdit | `python3 scripts/python_env.py run tools/domain_doctor.py`; narrow file parsing uses `tools/plugin_reader.py`. | **BLOCKED_EXTERNAL:** an executable candidate exists, but this is Linux and neither exact AE ProductVersion nor the full active order is verified. No SSEEdit call ran. |
-| UESP local corpus | `python3 scripts/python_env.py run -m tools.uesp doctor|search|page|related ...`. | **PASS (local retrieval):** doctor, search, and revision-cited `Skyrim:Karstaag` page lookup responded (revision 3629292). Corpus provenance, license, and completeness remain unverified. |
-| Apocrypha local corpus | `python3 scripts/python_env.py run -m tools.apocrypha doctor|search|context ...`. | **PASS (private local index):** doctor and aggregate-only search responded; indexed and declared totals are 60,873. Search content/identifiers remain private and untrusted. |
-| Local Python environment | `python3 scripts/python_env.py check`; create with `conda env create -f environment.yml`. | **PARTIAL:** Python 3.12.3 fallback is available; environment manifest is present, but Conda is absent and the named environment is not installed in this shell. |
-| Raw/heavy artifact boundary | `python scripts/pre_push_audit.py`. | Run the final audit before review. Local corpora stay in ignored `.local/`; tracked findings are summarized in Markdown/JSON. |
+| AE executable | Windows FileVersionInfo ProductVersion and SHA256 read-only query. | PASS: Steam AE 1.6.1170.0 (normalized 1.6.1170), SHA256 c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9. The WSL bridge requires Windows interop. |
+| Active AE profile | Full ae_preflight.py attempted against configured PLUGINS_TXT. | BLOCKED_EXTERNAL: selected MO2 profile is not identified. Resolver reached global plugins.txt, with zero active entries and all five required masters missing. No xEdit or game call followed. |
+| Plugin records | plugin_reader.py queried real Skyrim.esm and Update.esm DA14 QUST records and emitted raw subrecord bytes; a two-record synthetic winner fixture passed. | PASS (bounded): same real FormID 0001BB9B, each with 2 CTDA, 26 ALST, 26 ALID, and 1 VMAD. The resolver fixture selects the last explicit-order candidate. No real active-profile winner or Papyrus semantics inferred. |
+| Ghidra | Python-dispatched Ghidra 12.0.4/Java 21 native import of the verified AE image; repaired read-only function/xref/disassembly query adapter. | NATIVE IMPORT VERIFIED; QUERY NOT YET VERIFIED. Partial attempt2 contains 92,219 functions after a 1,200-second timeout. Three query launches failed before Ghidra with WSL `UtilBindVsockAnyPort` (EV-0131/0138/0141); the latest passed longanalysis evidence and executable hash checks before bridge failure. Independent session 40253 also reached its 7,200-second per-file analysis limit, then saved an incomplete project (EV-0139). No successful current xref, disassembly, or decompilation is claimed. |
+| CommonLibSSE-NG | Actual CMake/MSBuild compiled `CommonLibSSE.lib` for AE from commit b93280e832f263dbef44e44cbe2936622a02f91a; AE on, SE/VR off, MSVC 19.43.34809.0. | PASS for the library build (EV-0130). The Observer DLL target failed due missing standard-library declarations in REL/Version.h; a local source-copy header repair is staged but unverified. CMakeLists version 3.6.0 and vcpkg manifest 3.7.0 differ; outputs remain ignored in `.local`. No SKSE load or runtime handshake. |
+| SKSE / Address Library / co-save | Read-only `skse_probe.py` verifies local AE/SKSE/Address Library file metadata; `cosave-info.py` inventories co-save chunk structure. | PASS (bounded): loader/runtime DLL ProductVersion `0, 2, 2, 6`, runtime filename and Address Library filename match AE 1.6.1170 (EV-0128). Retained co-save output EV-0125 reports 19 chunks/15 opcodes/100% flat coverage, but source input bytes/path/hash are unavailable; current parser synthetic checks pass EV-0126/0127. No internal save-state decode or live game/DevBench handshake (C12 blocked). |
+| xEdit / SSEEdit | Executable candidate configured; file-level metadata available. | BLOCKED_EXTERNAL: no selected complete active profile, so preflight failed closed and xEdit was not launched. No real winner query claimed; the synthetic Python fixture is not an xEdit operation. |
+| UESP | Local indexed snapshot supports exact title, full text, search, related pages, and revision-cited retrieval. | PASS (retrieval only): database works. Snapshot source URL, license, and completeness remain unknown. |
+| Apocrypha | Local SQLite lookup/context operations executed with private-field safeguards. | PASS (private untrusted leads): 60,873 messages indexed; content and identifiers remain ignored. Community statements are not runtime evidence. |
+| Papyrus / BSA / logs | Python entrypoint extracted actual DA14Script.psc from verified Steam AE `Skyrim - Misc.bsa`, decoded the 507-byte PEX 3.2 stream, and ran a bounded literal scan. | PASS (current local operation): extraction/bytecode evidence EV-0121/0122; base archive scan EV-0123. A historical scan EV-0083 reported 14,025 streams over its archived scope. The 74 installed Creation Club archives total 6.26 GB; the optional scan was stopped without result. Neither scan proves absence of dynamic strings/native writers. |
+| xEdit metadata / Node / CMake | Read-only Windows metadata and host-tool lookup; xEdit application deliberately not launched. | xEdit 4.1.5.0, Node v22.19.0, npm present, Windows CMake absent (EV-0120). xEdit integration remains blocked by the unidentified selected profile and failed full-order preflight. |
+| Python environment | python3 scripts/python_env.py check and stdlib test suite. | PARTIAL: system Python 3.12.3 is in use; Conda is unavailable, so the named environment is unverified. |
 
-Linux fixture checks do not validate Windows MO2/xEdit behavior, Ghidra
-analysis, CommonLib builds, or in-game AE behavior. Current target and profile
-verification are prerequisites for those operations.
+Raw binaries, private corpora, logs, saves, and heavyweight Ghidra projects stay
+in ignored .local/. Linux fixture results do not establish Windows MO2, xEdit,
+live handshake, or gameplay behavior. See LOCAL_READINESS_REPORT.md and
+LOCAL_READINESS_BLOCKERS.md.

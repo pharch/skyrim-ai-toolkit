@@ -28,3 +28,17 @@ description: Use read-only Skyrim save and co-save analysis to test quest-state,
 7. Treat all save-mutation operations (`--apply`, cleanup, reset, or write modes) as
    out of scope unless the user explicitly authorizes a disposable copy and the
    protocol records the independently verified copy path.
+
+## Evidence and failure modes
+
+- Run the documented commands through `python3 scripts/python_env.py run`.
+  Keep raw output and source hashes in ignored `.local/`; record file size,
+  timestamp, hash, save/runtime identity, tool version, coverage, and EV ID.
+- A retained local co-save output alias exists at
+  `.local/readiness/cosave/SAVE-LOCAL-001.stdout.raw` (EV-0125), but the
+  original input bytes, source path, and input hash are unavailable. Treat its
+  structural result as a bounded retained capture, not a re-identifiable save.
+  Current synthetic fixtures (EV-0126/0127) validate parser behavior only.
+- Truncation, low co-save coverage, unknown plugin mapping, and missing ReSaver
+  are failures/limits to record. Do not treat a parser launch or a zero-result
+  scan as proof that a state is absent.

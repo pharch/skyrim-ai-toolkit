@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "exceptions": {
+    "migration/LOCAL_RESEARCH_READINESS_MISSION.md": [
+      {
+        "rule": "timed_or_game_root_launcher",
+        "line_regex": "(?i)(45[- ]minute|research_supervisor\\.py|setup\\.sh)",
+        "reason": "The active audit mission names retired patterns as targets to detect; it does not prescribe those workflows."
+      },
+      {
+        "rule": "legacy_agent_control",
+        "line_regex": "(?i)(Claude|\\.claude/)",
+        "reason": "The active audit mission explicitly requires detecting conflicting Claude hooks; this is a prohibition/audit criterion."
+      },
+      {
+        "rule": "non_ae_workflow",
+        "line_regex": "(?i)(Skyrim\\s*VR|SkyrimVR\\.exe|Legendary Edition|Skyrim LE)",
+        "reason": "The mission lists non-AE paths as audit targets; those mentions do not add supported workflows."
+      }
+    ],
+    "migration/LOCAL_READINESS_CHECKLIST.md": [
+      {
+        "rule": "timed_or_game_root_launcher",
+        "line_regex": "(?i)(45[- ]minute|research_supervisor\\.py|setup\\.sh)",
+        "reason": "Checklist criteria name retired instructions to verify their absence; they are not active commands."
+      },
+      {
+        "rule": "legacy_agent_control",
+        "line_regex": "(?i)(Claude|\\.claude/)",
+        "reason": "Checklist criterion B04 audits for conflicting legacy agent control and does not activate it."
+      }
+    ],
+    "migration/LANGUAGE_AUDIT.md": [
+      {
+        "rule": "timed_or_game_root_launcher",
+        "line_regex": "(?i)(45[- ]minute|research_supervisor\\.py|setup\\.sh)",
+        "reason": "This document is the retired-language audit record and quotes examples only as reviewed historical text."
+      },
+      {
+        "rule": "legacy_agent_control",
+        "line_regex": "(?i)(Claude|\\.claude/)",
+        "reason": "This document records the disposition of legacy agent instructions; no such hook is active."
+      },
+      {
+        "rule": "non_ae_workflow",
+        "line_regex": "(?i)(Skyrim\\s*VR|SkyrimVR\\.exe|Legendary Edition|Skyrim LE)",
+        "reason": "This audit file records rejected compatibility wording as historical source text only."
+      }
+    ],
+    "research/SESSION_LOG.md": [
+      {
+        "rule": "legacy_agent_control",
+        "line_regex": "(?i)(Claude|\\.claude/)",
+        "reason": "Session-log mentions report an earlier audit finding and do not describe an active agent-control path."
+      }
+    ]
+  }
+}

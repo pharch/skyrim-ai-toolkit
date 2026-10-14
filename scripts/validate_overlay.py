@@ -156,6 +156,11 @@ def _validate_python_tool_surface(root: Path) -> list[str]:
                 continue
             relative = path.relative_to(root).as_posix()
             if path.suffix.casefold() in {".js", ".sh", ".java", ".bat", ".ps1"}:
+                if relative == "tools/ghidra_scripts/ReadOnlyTargetedQuery.java":
+                    source = path.read_text(encoding="utf-8")
+                    launcher = root / "tools" / "ghidra_probe.py"
+                    if launcher.is_file() and "extends ghidra.app.script.GhidraScript" in source:
+                        continue
                 errors.append(f"non-Python agent tool remains active: {relative}")
     try:
         environment = yaml.safe_load((root / "environment.yml").read_text(encoding="utf-8"))

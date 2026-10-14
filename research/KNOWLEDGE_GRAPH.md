@@ -72,3 +72,18 @@ The new evidence IDs connect to these topic groups: Speech selection/family and 
 ## Imported-source boundaries
 
 The poison surface's 148 recipes are candidates from a historical scan, not verified recipes or delivery routes. The 89.2167511 Conjuration value is a cost-model prediction. The AV148 robe and its level gate are static source claims. Potion cleanup reports do not establish an all-load-order absence of writers. The deadload frozen-time statement is an unlogged historical user report; MGR21 and direct spell membership remain independent save/revert hypotheses. Enchanting furniture reports do not identify an accessible route. All new links point to historical reports and must retain those epistemic limits.
+
+## Local mission cross-source and cross-domain synthesis
+
+### DA14 level threshold (D13)
+
+`EV-0108` is a hashed legacy static gate scan reporting `DA14 >=14`; local UESP page revision 3593351 (`EV-0129`) sets `ReqLevel=14` on *A Night To Remember* and names Sam Guevenne. The independent report and wiki page are consistent on a level-14 threshold lead. This is a cross-source check, not proof of a current runtime gate or bypass. The actual Steam AE file queries show the same 288-subrecord DA14 record in Skyrim.esm and Update.esm (`EV-0111`, `EV-0112`), but the active Python record reader preserves raw CTDA bytes and does not decode their semantics. The active profile/order is still incomplete (`EV-0110`), so no current winner or initiation transition is established.
+
+
+### Ebony Warrior level threshold (D03)
+
+`EV-0108` is a hashed legacy gate inventory reporting the Ebony Warrior threshold as `>=80`. Local UESP revision 3580051 (`EV-0134`) identifies the level-80 encounter. A private Apocrypha context capture (`EV-0133`) reports the same threshold but preserves uncertainty about whether it is a hard prerequisite or a prompt; the message body and identifiers remain in ignored storage. These sources agree on a reported threshold, but none establish the current AE winner or the exact transition. This scoped source agreement is recorded as `CL-L064`.
+
+### Enchanting boundary and unsupported bridge (E12)
+
+`EV-0124` is a local wiki statement about one base XP per crafted enchantment and named nonfactors. The legacy Staff Enchanter, furniture callback, and base-skill-cap findings (`EV-0065`, `EV-0066`, `EV-0084`, `EV-0087`) arise from different static/native investigations and lack matched current-build raw XP observations. No shared native function, record predicate, save field, or callback boundary is supported by these sources. They remain separate models under `CL-SYN-001` and Q-0005; the predicted discriminant is a paired 1.6.1170 test measuring raw Enchanting XP before/after matched crafts, comparing one versus two effects and varying item value or soul level while holding XP modifiers fixed. That prediction is not an observed result.

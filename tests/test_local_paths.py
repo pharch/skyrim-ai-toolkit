@@ -4,12 +4,26 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from scripts.local_paths import doctor, sync
 from scripts.local_config import read_local_config
 
 
 class LocalPathRegistryTests(unittest.TestCase):
+    def test_doctor_can_report_verified_runtime_without_exposing_target_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / ".local").mkdir()
+            (root / "config").mkdir()
+            (root / "config" / "local.env").write_text("SKYRIM_EDITION=AE\n", encoding="utf-8")
+            with patch("tools.ae_target.assert_ae_target", return_value={"edition": "AE", "version": "1.6.1170"}):
+                status = doctor(root, verify_target=True)
+        self.assertTrue(status["product_version_verified"])
+        self.assertEqual(status["runtime"], "1.6.1170")
+        self.assertFalse(status["complete_active_order_verified"])
+        self.assertNotIn(str(root), json.dumps(status))
+
     def test_sync_fills_empty_values_and_doctor_hides_path_values(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -26,9 +40,10 @@ class LocalPathRegistryTests(unittest.TestCase):
             source = root / "private_export.json"
             source.write_text('{"messages": []}', encoding="utf-8")
             registry = f'''\n[target]\nraw_uesp_dump = "{source.as_posix()}"\n[configured_paths]\nskyrim_exe = "{exe.as_posix()}"\nsseedit_exe = "{xedit.as_posix()}"\n[private_sources]\napocrypha_json = "{source.as_posix()}"\n'''
+            registry = registry.replace("[private_sources]", f'skyrim_data = "{game.as_posix()}"\n[private_sources]')
             (local / "research-paths.toml").write_text(registry, encoding="utf-8")
-            (config / "local.env.example").write_text("SKYRIM_EDITION=AE\nGAME_ROOT=\nPLUGINS_TXT=\n", encoding="utf-8")
-            (config / "local.env").write_text("SKYRIM_EDITION=AE\nGAME_ROOT=\nPLUGINS_TXT=\n", encoding="utf-8")
+            (config / "local.env.example").write_text("SKYRIM_EDITION=AE\nGAME_ROOT=\nSKYRIM_DATA=\nPLUGINS_TXT=\n", encoding="utf-8")
+            (config / "local.env").write_text("SKYRIM_EDITION=AE\nGAME_ROOT=\nSKYRIM_DATA=\nPLUGINS_TXT=\n", encoding="utf-8")
 
             report = sync(root)
             values = read_local_config(root)
@@ -37,6 +52,7 @@ class LocalPathRegistryTests(unittest.TestCase):
             self.assertGreater(report["updated_values"], 0)
             self.assertEqual(values["GAME_ROOT"], game.as_posix())
             self.assertEqual(values["SKYRIM_EXE_PATH"], exe.as_posix())
+            self.assertEqual(values["SKYRIM_DATA"], game.as_posix())
             self.assertEqual(values["PLUGINS_TXT"], "")
             self.assertTrue(status["configured_executable_exists"])
             self.assertFalse(status["active_plugins_txt_configured"])

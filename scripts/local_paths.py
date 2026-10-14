@@ -32,6 +32,7 @@ def _registry_values(registry: dict) -> dict[str, str]:
         "SKYRIM_EDITION": "AE",
         "GAME_ROOT": ntpath.dirname(exe) if exe else "",
         "SKYRIM_EXE_PATH": exe,
+        "SKYRIM_DATA": str(paths.get("skyrim_data") or ""),
         "SSEEDIT_EXE": str(paths.get("sseedit_exe") or ""),
         "GHIDRA_HOME": str(paths.get("ghidra_home") or ""),
         "GHIDRA_HEADLESS": str(paths.get("ghidra_headless") or ""),
@@ -101,7 +102,7 @@ def _native_path(value: str) -> Path | None:
     return Path(value).expanduser()
 
 
-def doctor(root: Path = ROOT) -> dict[str, object]:
+def doctor(root: Path = ROOT, *, verify_target: bool = False) -> dict[str, object]:
     try:
         registry = _read_registry(root)
     except (FileNotFoundError, tomllib.TOMLDecodeError):
@@ -112,6 +113,15 @@ def doctor(root: Path = ROOT) -> dict[str, object]:
     existing = sum(bool((_native_path(value) or Path("/nonexistent")).exists()) for value in candidates)
     exe = _native_path(config.get("SKYRIM_EXE_PATH", ""))
     plugins = _native_path(config.get("PLUGINS_TXT", ""))
+    target: dict[str, object] = {"verified": False}
+    if verify_target:
+        try:
+            from tools.ae_target import assert_ae_target
+
+            verified = assert_ae_target(root=root)
+            target = {"verified": True, "runtime": verified["version"]}
+        except (OSError, ValueError, UnicodeError) as exc:
+            target = {"verified": False, "error": str(exc)}
     return {
         "registry_present": bool(registry),
         "local_env_present": (root / "config" / "local.env").is_file(),
@@ -120,7 +130,9 @@ def doctor(root: Path = ROOT) -> dict[str, object]:
         "configured_executable_exists": bool(exe and exe.is_file()),
         "active_plugins_txt_configured": bool(config.get("PLUGINS_TXT", "").strip()),
         "active_plugins_txt_exists": bool(plugins and plugins.is_file()),
-        "product_version_verified": False,
+        "product_version_verified": target["verified"],
+        "runtime": target.get("runtime"),
+        "target_error": target.get("error"),
         "complete_active_order_verified": False,
     }
 
@@ -133,7 +145,7 @@ def main(argv: list[str] | None = None) -> int:
     subs.add_parser("doctor", help="report local path readiness without printing path values")
     args = parser.parse_args(argv)
     try:
-        result = sync(overwrite=args.overwrite) if args.command == "sync" else doctor()
+        result = sync(overwrite=args.overwrite) if args.command == "sync" else doctor(verify_target=True)
         print(json.dumps(result, indent=2))
         return 0
     except (OSError, ValueError, tomllib.TOMLDecodeError) as exc:

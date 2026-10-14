@@ -1,67 +1,60 @@
-# Python-first Skyrim AE tool routing
+# Skyrim AE research tool routing
 
-Agent-facing commands are Python entrypoints. Create the named environment with
-`conda env create -f environment.yml`; use
-`python3 scripts/python_env.py run <script-or-module>` to route through it. When
-Conda is absent, that dispatcher reports that it is using the current Python.
-Native research applications remain external platforms, and the domain doctor
-reports when they did not run.
+Use Python entrypoints through python3 scripts/python_env.py run.
+The dispatcher selects skyrim-ae-research when Conda is installed and
+reports when it falls back to current Python. Python adapters may dispatch
+native applications; do not add shell, Java, or Node agent-facing launchers.
 
-## Mandatory target and order gate
+## Target and profile gate
 
-Before SSEEdit or any live-game operation, run:
+Before xEdit or live-game access, run:
 
-```text
-python3 scripts/python_env.py run tools/ae_preflight.py
-```
+    python3 scripts/python_env.py run tools/ae_preflight.py
 
-The gate reads the `SkyrimSE.exe` ProductVersion through the Windows version
-API, requires 1.6.318 or newer, hashes the executable, and validates the full
-active order. `SKYRIM_EDITION=AE` is only a scope declaration. MO2 requires its
-selected profile's explicit `plugins.txt`. The diagnostic option
-`--probe-executable` checks only the executable and never passes the full
-xEdit/live gate.
+The gate reads ProductVersion from the actual SkyrimSE.exe resource, requires
+AE 1.6.318 or newer, hashes the executable, and checks the complete active
+plugin list. For MO2, PLUGINS_TXT must name the selected profile's explicit
+plugins.txt. --probe-executable verifies only the executable and never
+authorizes xEdit or game access.
 
-## Local Python tools
+## Python and native operations
 
-| Evidence need | Python command | Boundary |
+| Evidence need | Python command | Scope |
 |---|---|---|
-| Local tool and corpus readiness | `python3 scripts/python_env.py run tools/domain_doctor.py` | Read-only; suppresses configured paths and Apocrypha message fields. A reported candidate is not proof the native application ran. |
-| Plugin record fields | `python3 scripts/python_env.py run tools/plugin_reader.py record <plugin> --signature QUST --form-id <local-id>` | Python stdlib TES4 parser; does not load the active order or determine the winning override. |
-| Plugin record inventory | `python3 scripts/python_env.py run tools/plugin_reader.py inventory <plugin>` | Counts signatures from one explicit file only. |
-| SKSE co-save structure | `python3 scripts/python_env.py run tools/cosave-info.py <copy.skse>` | Read-only structural survey; does not decode all mod chunks or prove actor state. |
-| Papyrus log coverage | `python3 scripts/python_env.py run tools/papyrus-triage.py <log>` | Counts entries rather than continuation lines; keep input private. |
-| Crash signatures | `python3 scripts/python_env.py run tools/crash-triage.py <file-or-dir>` | Preserve total, unreadable, and matched file counts; keep input private. |
-| UESP local source | `python3 scripts/python_env.py run -m tools.uesp doctor|search|page|related ...` | Emits revision citations; source provenance/completeness remain separate. Do not save large excerpts. |
-| Apocrypha local source | `python3 scripts/python_env.py run -m tools.apocrypha doctor|search|context ...` | Private untrusted data. Keep message content/IDs local; use aggregate-only `doctor` for audits. |
-| Save header/string scans | `python3 scripts/python_env.py run scripts/read-save.py ...` | Limited read-only parser; does not establish quest/effect state. |
+| Local readiness | python3 scripts/python_env.py run tools/domain_doctor.py | Reports detected tools and external gates without exposing paths or private message fields. |
+| One-plugin record and raw fields | python3 scripts/python_env.py run tools/plugin_reader.py record <plugin> --signature QUST --form-id <id> --include-subrecords | Read-only file parser; raw bytes, not a winner or Papyrus decode. |
+| Named PEX extraction and bytecode inspection | `python3 scripts/python_env.py run tools/papyrus_pex.py extract DA14Script` then `python3 scripts/python_env.py run tools/papyrus_pex.py disassemble .local/readiness/papyrus/DA14Script.pex` | Narrow extraction from configured `SKYRIM_DATA` `Skyrim - Misc.bsa`; output stays under ignored `.local/`. Classic PEX 3.2 forms only; not a general BSA extractor or full decompiler. |
+| Papyrus literal-string scan | `python3 scripts/python_env.py run tools/papyrus_pex.py scan-literals` | Scans only base `Skyrim - Misc.bsa` by default. `--include-creations` opts into every installed `cc*.bsa` archive (multi-GB); a stopped scan is not evidence. No literal hits do not exclude dynamic strings or native writers. |
+| Plugin inventory | python3 scripts/python_env.py run tools/plugin_reader.py inventory <plugin> | Counts records in one explicit file. |
+| Native Ghidra analysis | python3 scripts/python_env.py run tools/ghidra_probe.py --analyze --analysis-timeout 7200 | Verifies the AE target, imports into a fresh ignored project, and waits for Ghidra. |
+| Native Ghidra query | python3 scripts/python_env.py run tools/ghidra_probe.py --project-dir <ignored-project> --project-name <name> | Existing project opens read-only with analysis disabled; script errors are treated as failures. |
+| SKSE co-save | python3 scripts/python_env.py run tools/cosave-info.py <copy.skse> | Read-only structure; not full actor-state decoding. |
+| Local SKSE/Address Library identity | `python3 scripts/python_env.py run tools/skse_probe.py` | Verifies AE ProductVersion and hashes runtime-named SKSE/Address Library files; metadata only, no DLL load or live handshake. |
+| Papyrus and crash logs | python3 scripts/python_env.py run tools/papyrus-triage.py <log> and tools/crash-triage.py <file-or-dir> | Preserve coverage counts and keep inputs private. |
+| UESP | python3 scripts/python_env.py run -m tools.uesp doctor/search/page/related | Emits revision citations; source provenance is separate. |
+| Apocrypha | python3 scripts/python_env.py run -m tools.apocrypha doctor/search/context | Private untrusted source; keep identifiers and text local. |
 
-## Native and external research domains
+## Gated domains
 
-- **SSEEdit/xEdit:** A configured executable candidate is present, but there is
-  no tested Python winner-record binding. Use the Python plugin reader for
-  narrow file inspection. The exact Windows target/profile and native SSEEdit
-  call remain blocked until tested.
-- **Ghidra:** `domain_doctor.py` checks the configured installation/headless
-  paths. This shell has no usable Java launcher, so no Ghidra analysis ran.
-- **CommonLibSSE:** `domain_doctor.py` checks the configured source and build
-  prerequisites. A source candidate exists, but CMake is unavailable here;
-  no build ran.
-- **SKSE runtime:** the Python co-save parser passes a synthetic fixture. A
-  live process/DevBench handshake requires a verified Windows target and a
-  running game, neither of which is established here.
-- **BSA/archive tools:** no active Python archive reader is available. Do not
-  invoke retired shell wrappers or claim empty-search coverage.
+- xEdit/SSEEdit: selected profile is not identified, so full preflight fails
+  and xEdit remains unlaunched. The Python winner helper has only a synthetic
+  two-record fixture; do not report a real winner from file parsing.
+- Ghidra: the verified executable imports in Ghidra 12.0.4. First analysis
+  stopped at its 1,200-second per-file limit; a longer fresh analysis is
+  running. Do not reuse GOG 1.6.1179 offsets for Steam 1.6.1170.
+- CommonLibSSE-NG: no build is verified until a compatible CMake toolchain
+  succeeds in an ignored workspace copy.
+- Live SKSE/DevBench requires a verified target and already running game
+  with a read-only probe. Do not launch a game or mutator automatically.
+- Keep archive and save work read-only; raw captures remain in ignored .local/.
 
-## Evidence requirements
+## Evidence boundary
 
-Preserve exact command, exit status, tool/build version, executable and input
-identity/hash, profile/order identity, and coverage denominator for every
-result. Empty results without verified coverage are unknown. Do not expose live
-mutators to unattended runs. Never write to original game files, plugins,
+Record tool/build version, input identity/hash, exact operation, exit status,
+coverage, and durable output ID. Distinguish observation, inference,
+community lead, diagnostic intervention, and vanilla reproduction. A zero
+row result without verified coverage is not a negative finding.
+
+Linux fixture tests do not establish Windows MO2 virtualization, xEdit
+behavior, or live AE gameplay. Never write to original game files, plugins,
 archives, saves, or co-saves.
-
-Linux validation can test Python parsers, fixtures, schemas, and workflow
-policy. It cannot prove Windows ProductVersion verification, MO2 profile
-virtualization, SSEEdit behavior, Ghidra analysis, CommonLib builds, or an
-in-game result.
