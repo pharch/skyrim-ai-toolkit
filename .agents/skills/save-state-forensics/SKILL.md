@@ -8,11 +8,13 @@ description: Use read-only Skyrim save and co-save analysis to test quest-state,
 1. Confirm the save belongs to the stated edition and test lane; record its path
    privately, file size, modification time, and cryptographic hash. Never edit,
    overwrite, or clean the original save.
-2. Prefer read-only ReSaver CLI operations for changeforms, globals, quest state,
-   references, and effect-lifecycle questions. Use `scripts/read-save.py` only for
-   its documented header/string/byte scans; it does not parse Papyrus variables or
-   prove an ActiveEffect remains active. The file is present at
-   `scripts/read-save.py` and is intentionally read-only.
+2. Use `python3 scripts/python_env.py run scripts/read-save.py` only for its
+   documented header/string/byte scans, and
+   `python3 scripts/python_env.py run tools/cosave-info.py <copy.skse>` for a
+   structural co-save survey. These tools do not parse Papyrus variables or
+   prove an ActiveEffect remains active. Structured ReSaver analysis is not an
+   active Python tool in this checkout; do not invoke retired Java/shell
+   entrypoints.
 3. Record exact command, tool/JAR version, exit code, and complete output. Resolve
    FormIDs against the matching plugin set before interpreting them.
 4. For quest experiments, distinguish a quest's changeform/stage from actual event

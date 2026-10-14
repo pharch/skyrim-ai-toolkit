@@ -1,3 +1,5 @@
+> Historical porting checklist from an earlier audit. It is not an active execution plan; the current acceptance checklist is `LOCAL_SETUP_CHECKLIST.md`. Do not run any embedded Git removal commands.
+
 # Upstream → Codex port implementation checklist
 
 ### P0: preserve and inventory

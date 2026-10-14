@@ -1,4 +1,1841 @@
 {
   "schema_version": 1,
-  "items": []
+  "items": [
+    {
+      "id": "EV-0001",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::research/CLAIMS.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/research/CLAIMS.md",
+      "sha256": "d27a406261a846fed28f5fb7a5cfdf52fc47f1c247518f1ed1e9d79e4a023437",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical claims index; individual claims remain unverified until primary artifacts are rechecked."
+    },
+    {
+      "id": "EV-0002",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::research/KNOWLEDGE_GRAPH.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/research/KNOWLEDGE_GRAPH.md",
+      "sha256": "b40cb4724f908eba9f9a010449d76339ab570f1a38f32169192dfd3b072fe010",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical mechanism-to-glitch graph; arrows are implications proposed by the source, not independently confirmed causal edges."
+    },
+    {
+      "id": "EV-0003",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::research/CONTRADICTIONS.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/research/CONTRADICTIONS.md",
+      "sha256": "f53dc26b8497e6f8f610f69f0c1434ad3fdd69c02672712011d66550cdbcd8c2",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical competing models for alchemy ordering, poison scaling, deadload timing, and Peak-key stacking."
+    },
+    {
+      "id": "EV-0004",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::mechanisms/M-0001-speech-cached-result-late-xp.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/mechanisms/M-0001-speech-cached-result-late-xp.md",
+      "sha256": "b6f9ba02c04d8be6d3795809072e1023ec15590e291a3c6d925d591a9d57794a",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical model separates dialogue result selection from late skill-use calculation."
+    },
+    {
+      "id": "EV-0005",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::mechanisms/M-0002-float32-actor-value-aggregate.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/mechanisms/M-0002-float32-actor-value-aggregate.md",
+      "sha256": "29543202df647ae671166a5da291fd7198cb76102da6e06e05b796333298a41a",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical numeric model; reachable independent writers and raw float behavior remain required."
+    },
+    {
+      "id": "EV-0006",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::mechanisms/M-0003-alchemy-classification-and-peak-key.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/mechanisms/M-0003-alchemy-classification-and-peak-key.md",
+      "sha256": "bea7811ec462fc5b8457299cc24e128293498ac504c3dfaaa83d816c952c3ebd",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical static model separates item classification, cost ordering, Peak key, and resistance scaling."
+    },
+    {
+      "id": "EV-0007",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::mechanisms/M-0004-poison-resistance-scaling.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/mechanisms/M-0004-poison-resistance-scaling.md",
+      "sha256": "989e1cb67c08bd78c5ce216e0b5ec59abda106b12bd2f445e5d7a2bea692c385",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical report says poison sensitivity depends on item class and effect data; effect-by-effect validation incomplete."
+    },
+    {
+      "id": "EV-0008",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::mechanisms/M-0005-deadload-queued-cleanup.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/mechanisms/M-0005-deadload-queued-cleanup.md",
+      "sha256": "626c2702df88229416f0c5810f251867b7476554c724ed6196e7ce5305bf6b4d",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical static model of queue/load cleanup; functional retained payload is unknown."
+    },
+    {
+      "id": "EV-0009",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::mechanisms/M-0006-positive-skill-use-guard.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/mechanisms/M-0006-positive-skill-use-guard.md",
+      "sha256": "0c75cacf40069fdd51860b9b957a948f9c106ddac57fecb99bb4d2a2bbc1b8d3",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical native analysis describes a non-positive skill-use amount guard."
+    },
+    {
+      "id": "EV-0010",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::mechanisms/M-0007-craft-transaction-boundaries.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/mechanisms/M-0007-craft-transaction-boundaries.md",
+      "sha256": "206d99f90beb9a1110d42ab52f091e89fb00ad194f15931304cabd39635eb013",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical static analysis of synchronous craft and skill-use paths; no interposition route established."
+    },
+    {
+      "id": "EV-0011",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::mechanisms/M-0008-no-caster-hazard-path.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/mechanisms/M-0008-no-caster-hazard-path.md",
+      "sha256": "8edb3216f1837b09046a70751e7fa1f29531e7bb1adfc151ca3ce496933b1951",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical native analysis proposes a no-caster hazard path; player-controlled entry remains unproven."
+    },
+    {
+      "id": "EV-0012",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::glitches/G-0001-speech-xp-exploit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/glitches/G-0001-speech-xp-exploit.md",
+      "sha256": "035365a647d1e1358501e072c95cf85a7f9f1685b2e8c8f550b69df0b9a10404",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical user-reported Speech behavior plus static model; family breadth not established."
+    },
+    {
+      "id": "EV-0013",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::glitches/G-0002-mixed-poison-classification.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/glitches/G-0002-mixed-poison-classification.md",
+      "sha256": "f5a8f316db0e9d2da6c4d9181ea9fe0dbea592a6d5147df15b3c1bcbbac6455b",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical mixed-alchemy candidate; recipe, order, and delivery validation pending."
+    },
+    {
+      "id": "EV-0014",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::glitches/G-0003-shifting-float-residue.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/glitches/G-0003-shifting-float-residue.md",
+      "sha256": "c136bd0c257ecba6b3ce26c237f8b42ba874005ce8d54ecaf3a347202b299f7c",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical float-residue candidate; target-specific reachable composition remains open."
+    },
+    {
+      "id": "EV-0015",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::glitches/G-0004-deadload-cleanup-retention.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/glitches/G-0004-deadload-cleanup-retention.md",
+      "sha256": "661726d459e9f1215c494c6719cc559e76dda88256b00f9be7d251deff274d6d",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical deadload hypothesis; functional non-equipment retention unvalidated."
+    },
+    {
+      "id": "EV-0016",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::glitches/G-0005-blizzard-no-xp-candidate.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/glitches/G-0005-blizzard-no-xp-candidate.md",
+      "sha256": "9c47e90092b8d7e738961391f72820552d650f56efd0b3992a8f317fd1c90371",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical no-caster candidate; no confirmed exploit."
+    },
+    {
+      "id": "EV-0017",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::glitches/G-0006-enchanting-preview-mismatch.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/glitches/G-0006-enchanting-preview-mismatch.md",
+      "sha256": "ed56276423698aa9dfea701d71fcf825bf92d9b43e80ef94de2f5b4862d9f867",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical static result rules out the ordinary preview-publication theory within audited paths."
+    },
+    {
+      "id": "EV-0018",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::glitches/G-0007-armor-hit-xp-routing.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/glitches/G-0007-armor-hit-xp-routing.md",
+      "sha256": "51328a1f0b0d9342f4a2e2a6b05952a4b30d94ac97e953181a2cbc21f698cef1",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical armor-hit routing candidates; only the negative Heavy Armor value subcase is reported closed."
+    },
+    {
+      "id": "EV-0019",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/quest-level-gate-expansion.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/quest-level-gate-expansion.md",
+      "sha256": "859626a10ef013ce26e67e8ced67d67882f7e7c23b2e64dae1aa42b533be0d95",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical five-master GOG static scan reports 109 GetLevel conditions; quest access and runtime reachability are separate."
+    },
+    {
+      "id": "EV-0020",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/armor-block-redirect-candidate.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/armor-block-redirect-candidate.md",
+      "sha256": "4e0da5007b1bceddc8263202a2aab4f86930cdcadacf1b3cee2207ee2c89cf65",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical GOG native analysis reports blocked receiver path to Block and omission of Heavy/Light armor calls; Block XP may remain."
+    },
+    {
+      "id": "EV-0021",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/armor-negative-resistance-block-suppression.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/armor-negative-resistance-block-suppression.md",
+      "sha256": "be667d5f96e569af9f3c42fef0101841192b7e4c559593de09e9523597bd080a",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical arithmetic/static candidate for non-positive blocked points under negative Damage Resist; vanilla writer/reachability remains open."
+    },
+    {
+      "id": "EV-0022",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/armor-marked-for-death-world-interaction-candidate.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/armor-marked-for-death-world-interaction-candidate.md",
+      "sha256": "b6ca647b93c95260046935efa39600f131e5e5452fd4d28eeaf5048a7ab25a28",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical records and script analysis link Marked for Death to WICast world interactions; actor/location selection remains unobserved."
+    },
+    {
+      "id": "EV-0023",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/armor-hitdata-total-vs-physical.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/armor-hitdata-total-vs-physical.md",
+      "sha256": "6b59d1350396f1206baae6e84a9b347675f13dbc173591a4359ca812e04c6745",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical static comparison of hit-data total and physical damage fields; runtime values are not provided here."
+    },
+    {
+      "id": "EV-0024",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/armor-ethereal-damage-gate.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/armor-ethereal-damage-gate.md",
+      "sha256": "ce4b57165452db77039915308527d4ee11eb04b582a01f0b6cb3a0fea8ad7756",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical audit distinguishes avoiding hit/XP through Ethereal from preserving effective armor protection."
+    },
+    {
+      "id": "EV-0025",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-stacking-classifier-and-peak-key.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-stacking-classifier-and-peak-key.md",
+      "sha256": "5b29eff8931b4333423867c898ba92dba30508f085142218e0b2405189436495",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical static alchemy matcher and Peak-key analysis; runtime order cases remain competing hypotheses."
+    },
+    {
+      "id": "EV-0026",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/poison-resistance-duration-amplification.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/poison-resistance-duration-amplification.md",
+      "sha256": "a86abe8793de3262d409d30df79d8d3798b4239907110309343c8747643e8e69",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical poison resistance effect-path analysis; no universal beneficial-effect rule is established."
+    },
+    {
+      "id": "EV-0027",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/deadload-unequip.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/deadload-unequip.md",
+      "sha256": "e51a586f9de112fb1d390b1acf3f7bc3bdc237647ba015cab535ec5d6746fda6",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical native/Papyrus queue analysis; first-load membership is not functional proof."
+    },
+    {
+      "id": "EV-0028",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/active-effect-save-load-cleanup-split.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/active-effect-save-load-cleanup-split.md",
+      "sha256": "328f1404b3ceec56113eb9597669459049371ca1f0c5e3e19192650e342b9171",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical static analysis distinguishes ActiveEffect reconstruction from script-owned cleanup."
+    },
+    {
+      "id": "EV-0029",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/xp-skill-core-state-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/xp-skill-core-state-audit.md",
+      "sha256": "b7ae624d40bbaf15c3fa3ba3ef033ff001078ca33c027379ff06df583184ff02",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical native audit of shared skill-use entry and amount handling."
+    },
+    {
+      "id": "EV-0030",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-craft-xp-transaction-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-craft-xp-transaction-audit.md",
+      "sha256": "278e9bfead3cabde337b89a6cc73d13a398ca216b094758aaae98b250f5e0d56",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical native transaction audit; diagnostic intervention is not a vanilla route."
+    },
+    {
+      "id": "EV-0031",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/blizzard-hazard-xp-native-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/blizzard-hazard-xp-native-audit.md",
+      "sha256": "3752f2d7bac6046436cc8a6c5cd1f89c66aaaae44fad048d674bf7494c393b37",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical no-caster hazard path audit; payload-preserving player creation is unproven."
+    },
+    {
+      "id": "EV-0032",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/enchanting-preview-object-escape.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/enchanting-preview-object-escape.md",
+      "sha256": "ea5f4fc2f8ad5491515a3bbe0be30e40f3a5d614dc75af430800c941f1062329",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical static audit found no ordinary preview publication path in the examined call graph."
+    },
+    {
+      "id": "EV-0033",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/headless-smoke-test.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/headless-smoke-test.md",
+      "sha256": "b3ffeaabf1a10fd476ad03ece3355a17a2fae9bbf90340cc81d99b88b7b9e5f3",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical headless Ghidra smoke-test report; current local executable identity still needs verification."
+    },
+    {
+      "id": "EV-0034",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::experiments/EXP-0004-observer-build-and-fixtures/results.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/experiments/EXP-0004-observer-build-and-fixtures/results.md",
+      "sha256": "18a0c292a5ea87995778010324c07a779f7e8812abea9caf018b7fd33d86ae67",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical report records seven offline analyzer tests passing and native DLL build unavailable; it does not validate Windows runtime behavior."
+    },
+    {
+      "id": "EV-0035",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::experiments/EXP-0005-marked-death-world-interaction/results.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/experiments/EXP-0005-marked-death-world-interaction/results.md",
+      "sha256": "02007561cc39d8e110b3de464798b06e81bd17cb37381801fcef0754ab204614",
+      "captured_utc": "2026-10-14T08:33:31Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "unknown; tool/version identity is not independently verified in this migration"
+      ],
+      "coverage": "One hashed historical Markdown artifact. Scope and omissions are those recorded in that file; linked raw artifacts are not included or independently re-run here.",
+      "result": "Historical static continuation identifies WICast event/list/location predicates; runtime result is explicitly absent."
+    },
+    {
+      "id": "EV-0036",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/armor-skill-xp-suppression.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/armor-skill-xp-suppression.md",
+      "sha256": "a491888f9cad3068dc39590040d058239b3224bc2c2dd97bbde5c6bbd7931c10",
+      "captured_utc": "2026-10-14T08:58:10Z",
+      "edition": "unknown",
+      "runtime": "unknown (source report asserts GOG 1.6.1179; not independently verified)",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy static report; underlying tool/version identity was not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown report. Its stated disassembly/script/record scope is summarized in result; raw executable, active plugin order, and source revision are unavailable for independent checking.",
+      "result": "Legacy GOG 1.6.1179 static report describes the player receiver damage branch, positive-DNAM worn-armor scan, AV11/12 call, blocked AV9 redirect, and a non-positive UseSkill guard. It states no armor gameplay measurement was taken and does not identify a vanilla writer that preserves useful combat while making points non-positive. The executable, offsets, master set, and active order were not reverified."
+    },
+    {
+      "id": "EV-0037",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/negative-resistance-script-writers.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/negative-resistance-script-writers.md",
+      "sha256": "0f2587450703a76c2a77da428f393b6ea6f2b33e55042344512cf11b06a8d6f1",
+      "captured_utc": "2026-10-14T08:58:10Z",
+      "edition": "unknown",
+      "runtime": "unknown (source report asserts GOG 1.6.1179; not independently verified)",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy static report; underlying tool/version identity was not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown report. Its stated disassembly/script/record scope is summarized in result; raw executable, active plugin order, and source revision are unavailable for independent checking.",
+      "result": "Legacy static script/record audit reports Ice Form resistance writer as orphaned and the Ash Rune writer as caster-hostile with paired start/finish cleanup. It found no actionable player-targeted negative-resistance route in the audited scripts. This does not audit every native or record-based AV39 writer and does not rule out the separate WICast candidate."
+    },
+    {
+      "id": "EV-0038",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/generic-use-skill-caller-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/generic-use-skill-caller-audit.md",
+      "sha256": "111c22b54e64939a5c80c817861446febeaecb629784b51c2b6c571c34402b9b",
+      "captured_utc": "2026-10-14T08:58:10Z",
+      "edition": "unknown",
+      "runtime": "unknown (source report asserts GOG 1.6.1179; not independently verified)",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy static report; underlying tool/version identity was not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown report. Its stated disassembly/script/record scope is summarized in result; raw executable, active plugin order, and source revision are unavailable for independent checking.",
+      "result": "Legacy GOG static caller audit reports a shared Player UseSkill wrapper that rejects non-positive and unordered points, with direct callers checked for useful-result coupling. It found no global skip-UseSkill switch within the enumerated callers. Runtime, executable identity, and completeness of caller inventory were not independently verified."
+    },
+    {
+      "id": "EV-0039",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/armor-invulnerability-total-zero-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/armor-invulnerability-total-zero-audit.md",
+      "sha256": "8464675aa2cbdd3800648b1177e7a88127515fc875182277754075443727dd1e",
+      "captured_utc": "2026-10-14T08:58:10Z",
+      "edition": "unknown",
+      "runtime": "unknown (source report asserts GOG 1.6.1179; not independently verified)",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy static report; underlying tool/version identity was not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown report. Its stated disassembly/script/record scope is summarized in result; raw executable, active plugin order, and source revision are unavailable for independent checking.",
+      "result": "Legacy GOG static report states IsInvulnerable clears HitData totalDamage before the armor-skill gate, suppressing AV11/12 for that transaction while also removing physical health damage. Player invulnerability writers were limited to protected race/transport transitions with explicit cleanup in the audited scripts. No persistent or useful-hit exploit was reported; no runtime test was run."
+    },
+    {
+      "id": "EV-0040",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/root-docs/SHIFTING.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/root-docs/SHIFTING.md",
+      "sha256": "a6083c3859b34e279aa29047e53a207b4ae3664396cf70e9d70250acde6c1599",
+      "captured_utc": "2026-10-14T09:02:14Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy source document; underlying tools and version identities are not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown source. Content is summarized as historical/user-reported/prospective context only; source Git identity and any linked primary artifacts are unavailable for independent verification.",
+      "result": "Historical root summary attributes the shift-kit result to signed 32-bit magnitude wrap plus float32 ActorValue aggregation and gives numerical examples. The detailed mechanism record refines the model around effective magnitudes, independent source identity, operation order, and cleanup; the root examples and target applicability were not independently checked."
+    },
+    {
+      "id": "EV-0041",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/root-docs/ALCHEMY_STACKING.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/root-docs/ALCHEMY_STACKING.md",
+      "sha256": "a38a591b057ac5983a6ca946682a335eb839572785e55c21f4d3c5b6b00e0ff2",
+      "captured_utc": "2026-10-14T09:02:14Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy source document; underlying tools and version identities are not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown source. Content is summarized as historical/user-reported/prospective context only; source Git identity and any linked primary artifacts are unavailable for independent verification.",
+      "result": "Historical user-authored note reports recipe-class variation and a Weakness-to-Poison potion/poison stacking observation, but does not preserve exact dynamic forms, recipe identity, raw ActorValues, save, or a reproducible protocol. Treat as a user report and unresolved lead, not a verified mechanic."
+    },
+    {
+      "id": "EV-0042",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/root-docs/BUILD_CONTEXT.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/root-docs/BUILD_CONTEXT.md",
+      "sha256": "0d49e605f0294f64400db0f92f5b072395868c589913bf808f739499d3e27435",
+      "captured_utc": "2026-10-14T09:02:14Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy source document; underlying tools and version identities are not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown source. Content is summarized as historical/user-reported/prospective context only; source Git identity and any linked primary artifacts are unavailable for independent verification.",
+      "result": "Historical build brief describes a level-one, low-skill progression objective and an older priority order emphasizing Speech and enchanting before quest access and armor XP. The current user-supplied AE objectives supersede that priority order; its technical claims remain linked to detailed reports where available."
+    },
+    {
+      "id": "EV-0043",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/root-docs/BUILD_RESEARCH_MAP.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/root-docs/BUILD_RESEARCH_MAP.md",
+      "sha256": "5fdb26e80e841fbfea02245ac6fc21ef148f71305146900833d9c9d247d29088",
+      "captured_utc": "2026-10-14T09:02:14Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy source document; underlying tools and version identities are not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown source. Content is summarized as historical/user-reported/prospective context only; source Git identity and any linked primary artifacts are unavailable for independent verification.",
+      "result": "Dated historical synthesis summarizes prior build capability/status, including a user-reported Speech result and an armor blocked-hit redirect candidate. It is a navigation summary whose detailed claims require the linked source reports; no current runtime result is established."
+    },
+    {
+      "id": "EV-0044",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/root-docs/CHECKPOINT.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/root-docs/CHECKPOINT.md",
+      "sha256": "e5582d11c08fdd02bf37dce8feec21edf38d4ed8d454bbec6a635d0613982a86",
+      "captured_utc": "2026-10-14T09:02:14Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy source document; underlying tools and version identities are not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown source. Content is summarized as historical/user-reported/prospective context only; source Git identity and any linked primary artifacts are unavailable for independent verification.",
+      "result": "Historical 2026-09-17 handoff records prior branch statuses, test boundaries, and claimed Steam/GOG runtime identities. Those identities and environment values were not revalidated in this setup; the current AE preflight and active-order requirements govern."
+    },
+    {
+      "id": "EV-0045",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/root-docs/NEXT_RESEARCH_SESSION_ROADMAP.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/root-docs/NEXT_RESEARCH_SESSION_ROADMAP.md",
+      "sha256": "e329120a41baf25e4265413a3faef77eba8e2e0bb947de3ac34f38c2f65e688b",
+      "captured_utc": "2026-10-14T09:02:14Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy source document; underlying tools and version identities are not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown source. Content is summarized as historical/user-reported/prospective context only; source Git identity and any linked primary artifacts are unavailable for independent verification.",
+      "result": "Historical prospective roadmap proposes static analysis and future controlled tests across enchanting, armor, and state persistence. Its steps are planning hypotheses, not observations, and are superseded by the current P0 frontier and runtime safeguards."
+    },
+    {
+      "id": "EV-0046",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/root-docs/ENGINE_RESEARCH.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/root-docs/ENGINE_RESEARCH.md",
+      "sha256": "b691ae19016e1c5474b39574153578458a5e56acfa0cd1162df497fb25b56b27",
+      "captured_utc": "2026-10-14T09:02:14Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy source document; underlying tools and version identities are not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown source. Content is summarized as historical/user-reported/prospective context only; source Git identity and any linked primary artifacts are unavailable for independent verification.",
+      "result": "Historical engine workflow guide recommends exact executable identity, read-only Ghidra work, multi-direction call/field searches, stable evidence exports, and explicit hypotheses. Its old GOG/Steam target recommendations are not current target evidence."
+    },
+    {
+      "id": "EV-0047",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/root-docs/RESEARCH_PROTOCOL.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/root-docs/RESEARCH_PROTOCOL.md",
+      "sha256": "ec20ccc81494f2b5c906462190ec5344c850d45c5dfb004cf2f79d9a4a328928",
+      "captured_utc": "2026-10-14T09:02:14Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy source document; underlying tools and version identities are not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown source. Content is summarized as historical/user-reported/prospective context only; source Git identity and any linked primary artifacts are unavailable for independent verification.",
+      "result": "Historical protocol prioritizes direct records, scripts, reproducible tests, and version metadata; it says community sources are leads and game files must remain read-only. Current AE-specific AGENTS and privacy constraints supersede its older data-handling details."
+    },
+    {
+      "id": "EV-0048",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/root-docs/EXPLOIT_DISCOVERY.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/root-docs/EXPLOIT_DISCOVERY.md",
+      "sha256": "7a342518e349cb85569289ac069f870fc2e8c41a2a0d89ac7334a367c389309d",
+      "captured_utc": "2026-10-14T09:02:14Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy source document; underlying tools and version identities are not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown source. Content is summarized as historical/user-reported/prospective context only; source Git identity and any linked primary artifacts are unavailable for independent verification.",
+      "result": "Historical playbook models a candidate through invariant, reader, writer, cleanup, official reachability, interruption boundary, instrumentation, and reproduction. This is methodological context, not a mechanics result."
+    },
+    {
+      "id": "EV-0049",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/armor-projectile-owner-death-window.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/armor-projectile-owner-death-window.md",
+      "sha256": "b2dcd380d7eaaa4e9dfcb44c24f94f015bde5c7950337cd8709ba159008d99ea",
+      "captured_utc": "2026-10-14T09:10:48Z",
+      "edition": "unknown",
+      "runtime": "unknown (source report asserts GOG 1.6.1179; not independently verified)",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy static report; underlying tool/version identity was not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown report. Its stated static record/native scope is summarized in result; raw executable, active profile, and source revision are unavailable for independent checking.",
+      "result": "Legacy GOG static audit reports that owner-death and child predicates are on the outgoing weapon-XP branch, while the incoming player armor branch checks receiver damage and worn armor without owner liveness. It rules out projectile-owner death as a way to retain a physical hit while skipping armor XP. No runtime test or current-build verification was performed."
+    },
+    {
+      "id": "EV-0050",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/armor-spell-projectile-gate.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/armor-spell-projectile-gate.md",
+      "sha256": "40595835da1b87d782ae9363db9d0ce0c9334aaf77d25b2d9f87d7a589594061",
+      "captured_utc": "2026-10-14T09:10:48Z",
+      "edition": "unknown",
+      "runtime": "unknown (source report asserts GOG 1.6.1179; not independently verified)",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy static report; underlying tool/version identity was not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown report. Its stated static record/native scope is summarized in result; raw executable, active profile, and source revision are unavailable for independent checking.",
+      "result": "Legacy GOG static audit reports pure spell projectiles follow a magic-effect path that does not enter the physical armor-skill sink. It classifies this as nonphysical armor-XP avoidance, not a physical hit with XP suppressed. No runtime XP delta was measured and current-build compatibility is unverified."
+    },
+    {
+      "id": "EV-0051",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/xp-gain-negation-perk-scan.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/xp-gain-negation-perk-scan.md",
+      "sha256": "852cf3cc344ed73fcab5137f2b942c1cb9fa8d812fb4f18f662fd140a3025cf3",
+      "captured_utc": "2026-10-14T09:10:48Z",
+      "edition": "unknown",
+      "runtime": "unknown (source report asserts GOG 1.6.1179; not independently verified)",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy static report; underlying tool/version identity was not independently verified"
+      ],
+      "coverage": "One hashed historical Markdown report. Its stated static record/native scope is summarized in result; raw executable, active profile, and source revision are unavailable for independent checking.",
+      "result": "Legacy GOG clean five-master static scan reports all official Mod Skill Use EP22 multipliers are positive; the 0.05 staff entry is furniture/recipe gated. It found no generic official perk multiplier that negates XP. This closes only the audited perk family; caller-side amount/state mismatches remain open. Runtime and executable identity were not revalidated."
+    },
+    {
+      "id": "EV-0052",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::experiments/EXP-0001-enchanting-preview-escape/results.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/experiments/EXP-0001-enchanting-preview-escape/results.md",
+      "sha256": "4f48c27fb42c2c68bdbccac8b4af361543c06a4cc1408ec8da110fedb4c59eb5",
+      "captured_utc": "2026-10-14T09:15:56Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy experiment report; underlying runtime/tool identity was not independently verified"
+      ],
+      "coverage": "One hashed legacy experiment results file. Its source folder is preserved under migration/legacy_experiments with a data-only notice; raw game saves/exports are not included.",
+      "result": "Legacy result states a static ownership/alternate-caller audit closed the ordinary enchanting-preview publication theory; no runtime test was claimed. The underlying detailed source reports are not independently revalidated here."
+    },
+    {
+      "id": "EV-0053",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::experiments/EXP-0002-mixed-poison-payload/results.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/experiments/EXP-0002-mixed-poison-payload/results.md",
+      "sha256": "5982117e3b0d918b60c931e53db3b1f37fab8f46fc97726397c74d41f9eca6ac",
+      "captured_utc": "2026-10-14T09:15:56Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy experiment report; underlying runtime/tool identity was not independently verified"
+      ],
+      "coverage": "One hashed legacy experiment results file. Its source folder is preserved under migration/legacy_experiments with a data-only notice; raw game saves/exports are not included.",
+      "result": "Legacy result contains a user report that a poison-classified mixed item amplified a beneficial secondary effect under negative Poison Resistance and proposes a recipe candidate. Exact recipe, save, raw values, skill budget, and delivery capture are missing; treat as user-reported lead only."
+    },
+    {
+      "id": "EV-0054",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::experiments/EXP-0003-deadload-functional-payload/results.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/experiments/EXP-0003-deadload-functional-payload/results.md",
+      "sha256": "4deeaa57f6dd622be47bcdb6ce3eab979be6d9722b1885abb1ab07309bdb4d7d",
+      "captured_utc": "2026-10-14T09:15:56Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy experiment report; underlying runtime/tool identity was not independently verified"
+      ],
+      "coverage": "One hashed legacy experiment results file. Its source folder is preserved under migration/legacy_experiments with a data-only notice; raw game saves/exports are not included.",
+      "result": "Legacy result reports no runtime result and a static continuation that set aside one Karstaag counter-spell route and promoted Bend Will as a future functional-payload test. Neither conclusion was revalidated in this setup."
+    },
+    {
+      "id": "EV-0055",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::experiments/EXP-0007-hazard-caster-family/results.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/experiments/EXP-0007-hazard-caster-family/results.md",
+      "sha256": "254f286748c10cbdcd6f481201628a5387f13fdc41e352cad09f39144b69f2a3",
+      "captured_utc": "2026-10-14T09:15:56Z",
+      "edition": "unknown",
+      "runtime": "unknown",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "legacy experiment report; underlying runtime/tool identity was not independently verified"
+      ],
+      "coverage": "One hashed legacy experiment results file. Its source folder is preserved under migration/legacy_experiments with a data-only notice; raw game saves/exports are not included.",
+      "result": "Legacy static result reports actor-cause copying for ordinary player hazards and a no-caster path for fixed environmental payloads, with no alternate caller that removes cause while retaining the player-selected Blizzard payload. Runtime validation remains unperformed."
+    },
+    {
+      "id": "EV-0056",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::out/findings.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/out/findings.md",
+      "sha256": "f75a457e8087325825e87d0c2c1a3369cab41cbfe4102bf719716e472ad15bef",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179 static report; Steam 1.6.1170 probe described but not source-verified",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports 50 PoisonResist MGEFs, 319 reverse-reference rows, and 148 candidate mixed recipes. A historical Steam probe is said to support hostile-first classification only; recipe identity, resistance amplification, delivery, and XP were not established."
+    },
+    {
+      "id": "EV-0057",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-peak-shift-cleanup-arithmetic.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-peak-shift-cleanup-arithmetic.md",
+      "sha256": "2cf5d6cad2fb9d3cb7d24f4de7171ffa0afb65347ddff8a8f4f0be2086ff2bb0",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Corrects the cleanup account: Recover subtracts the negated effective magnitude; +0x94 is written with the observed slot change afterward. Float32 residue examples are calculations, not gameplay observations; cited robe access is not level-one."
+    },
+    {
+      "id": "EV-0058",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/potion-expiration-native-cleanup-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/potion-expiration-native-cleanup-audit.md",
+      "sha256": "12a5d0c4ad6460c97a3facab51ab40d6ffb7f4a2bbc8418beac1238cc283d7cb",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports native Finish and Recover cleanup before Papyrus OnEffectFinish; no official alchemy writer for +Inf or the 0x4100 finish bypass was identified. Raw executable and records were not revalidated."
+    },
+    {
+      "id": "EV-0059",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-20-conjuration-poison-prerequisite.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-20-conjuration-poison-prerequisite.md",
+      "sha256": "cde00a866b8ee40970e34bbd39d131c496f5c3939b6c5808b558c65ff86f821d",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical record/cost analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports Bone Meal + Hagraven Feathers + Ogre’s Teeth as a Fortify Conjuration payload candidate with modeled craft XP 89.2167511 against a zero-progress level-20 threshold 615.970670...; recipe/acquisition were not tested."
+    },
+    {
+      "id": "EV-0060",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-null-associated-form-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-null-associated-form-audit.md",
+      "sha256": "22242dabfb3d9bf6eca8431105a4e3986eff5bdee26338e4d85d47ad0602f3cd",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179; 79-plugin static scan reported",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports Peak matching by non-null Keyword plus ActorValue and a distinct-key CC AV148 robe effect; no alternate school AV137/147/149/150/151 writer was found in the audited scope. No AV148 runtime stacking test."
+    },
+    {
+      "id": "EV-0061",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-vmad-cc-writer-inventory.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-vmad-cc-writer-inventory.md",
+      "sha256": "bf20d4344a9883074a2bcf43223ef1fd598017f854f5750ef597618c37b6c682",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179; 79-plugin static scan reported",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports 731 scripted MGEFs and 282 ALCH links; the only direct player perk writer identified was the fixed Blades reward. Compiled/dynamic writer cases and current load order were not rechecked."
+    },
+    {
+      "id": "EV-0062",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/self-poison-delivery-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/self-poison-delivery-audit.md",
+      "sha256": "1a53f817cea1934b1d33f740d111e3a847a49825f145f3b4271489b64430da49",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports ExtraPoison on inventory entries and no target rewrite in the inspected HitData path; a fixed Poison Rune was identified as an NPC-free control candidate, not a crafted-poison self-delivery route."
+    },
+    {
+      "id": "EV-0063",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/self-poison-transfer-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/self-poison-transfer-audit.md",
+      "sha256": "2c737625aa92f2a308bfc9ae95a60df787260b771711add6c81c26d883136415",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Inspected RemoveItem/AddObjectToContainer paths appear to carry ExtraDataList, but stack identity preservation and a deterministic level-one follower/equip/attack chain were not established."
+    },
+    {
+      "id": "EV-0064",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/cc-necromancer-robes-reachability.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/cc-necromancer-robes-reachability.md",
+      "sha256": "2743eb1dc73e983b70347676d75f7384a212fcdaaf614ab57f3a46f81ebb582d",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical record/reachability analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports robe entries at levels 32/40 and a fixed level-21 boss; the outfit resolver uses the selected base level. No level-one AV148 robe route was found in the audited path."
+    },
+    {
+      "id": "EV-0065",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/enchanting-255-furniture-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/enchanting-255-furniture-audit.md",
+      "sha256": "88994cd3e0a4ae2d3f2179d6a2e4b9430ad06920c93ea42ac6b46b9089eb30df",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static record/native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports signed WBDT.usesSkill outside 6–23 skipping the skill call. Two type-3 records were identified, with no placed references or player-accessible writer found; no craft was run."
+    },
+    {
+      "id": "EV-0066",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/enchanting-alternate-cobj-output-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/enchanting-alternate-cobj-output-audit.md",
+      "sha256": "0b8bb70c88cd8f0e75d135f27e313cb5306b1391bada0652f287f7718a206772",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static record audit",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports 195 enchanted COBJ outputs across fixed tempering/quest, staff, and Aetherial Forge records; no arbitrary runtime enchant selection was identified."
+    },
+    {
+      "id": "EV-0067",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/enchanting-condition-function-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/enchanting-condition-function-audit.md",
+      "sha256": "4278dd7e5bfd4ad4dc379b0edbb633c46540303702ee479ab45c96aeb9d17187",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports condition IDs 438/439 mapping to PlayerCreatePotion/PlayerEnchantObject routines that inspect/register dynamic data but do not themselves make an inventory transaction."
+    },
+    {
+      "id": "EV-0068",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/speech-check-xp-exploit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/speech-check-xp-exploit.md",
+      "sha256": "b1daaae8aef08d11dec1a1ff842a28e8ae101ff72c76db966411eba2d759e986",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "unknown",
+      "runtime": "Steam 1.6.1170 claimed by source; executable/hash unavailable",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports 269 INFO paths and a cached-success/late-XP model; a user success-without-XP observation is explicitly unlogged. The proposed +10 residue plus expiring +50 source prediction is untested."
+    },
+    {
+      "id": "EV-0069",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/speech-check-family-state-matrix.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/speech-check-family-state-matrix.md",
+      "sha256": "6f606fa9021ad30b5a9e5cf87ae2dd60928528fbd5116086e1b72182e513a08a",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static record/script/native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports distinct Persuade/Bribe/Intimidate ordering and an Intimidate XP suppression candidate while DGIntimidateQuest is running. The retained-brawl sequence is static and untested."
+    },
+    {
+      "id": "EV-0070",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::out/runtime/xp-probe-initial-findings.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/out/runtime/xp-probe-initial-findings.md",
+      "sha256": "efe8c5b64c0e029e3a913bac831102d8657563a42f41e74357ca0955824a6b39",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "unknown",
+      "runtime": "Steam 1.6.1170 claimed by source; executable/hash and raw log unavailable",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Historical loaded-save baseline reports Speech 15 and Enchanting 20 at zero progress and a stationary idle window. No player action or XP transaction was tested."
+    },
+    {
+      "id": "EV-0071",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::out/runtime/school-selection-live-result.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/out/runtime/school-selection-live-result.md",
+      "sha256": "f875c9048a8baf9415f37d4f1611010b407031cf2625e0a3d2d7c1d569720df4",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "unknown",
+      "runtime": "Steam AE 1.6.1170 claimed by source; executable/hash and raw log unavailable",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Historical probe report says ten dynamic alchemy items matched GetCostliestEffectItem and GetAVEffect; equal-cost selected effects followed first-effect order. Not independently reproduced."
+    },
+    {
+      "id": "EV-0072",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/magic-skill-use-multiplier-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/magic-skill-use-multiplier-audit.md",
+      "sha256": "cd3112951180273012330c1d4ccfa910add4a886b0d3174e2e4cfc5522b29013",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports ScrollItem declining skill-use while ordinary SpellItem may provide it; cited low multipliers are small-XP examples, not a generic XP suppression route."
+    },
+    {
+      "id": "EV-0073",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/mgef-skill-use-multiplier-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/mgef-skill-use-multiplier-audit.md",
+      "sha256": "9b9565d7845747954e9184dcb479ec24ed5affcab7150017c8d5c7cc0b7ae53f",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179; five-master static scan reported",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports two exact zero multipliers had magic_skill=-1 and no valid-skill negative/sub-one multiplier in 1,573 winning MGEFs. Current plugin order was not revalidated."
+    },
+    {
+      "id": "EV-0074",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/active-effect-enchanting-flag.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/active-effect-enchanting-flag.md",
+      "sha256": "3e2ecf833f2def66066d07e1fd28f0c2515c9ec97a80ca175e5b1bb283aeb3f7",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native/record analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports kEnchanting requires an armor source and matching inventory entry; scanned finite alchemy/spell sources did not reach the writer. No runtime timer bypass was observed."
+    },
+    {
+      "id": "EV-0075",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/deadload-direct-spell-residue-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/deadload-direct-spell-residue-audit.md",
+      "sha256": "11400adb9738a091b811cd7eb398e3d1982ad7f6bcc139426d1dfeeb35e2e702",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static script/native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports an official queued RemoveSpell inverse for two Dragonborn items. Both useful casts have Destruction sinks; acquisition and a functional deadload residue remain unresolved."
+    },
+    {
+      "id": "EV-0076",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/deadload-spell-favorites-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/deadload-spell-favorites-audit.md",
+      "sha256": "d80449c0a72151e67e6b3e24185e1791c4d4dbadf57cc8864c7c07961427e466",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179; historical user report and static analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports that favorites EquipSpell assigns a hand slot but does not cast or create an ActiveEffect. The source also reports frozen game time in deadload; no raw runtime artifact is attached."
+    },
+    {
+      "id": "EV-0077",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/mgr21-perk-save-revert-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/mgr21-perk-save-revert-audit.md",
+      "sha256": "20f4938de31c1cdff173697a3deaecab9f9a0faf969a9ad790e8b145553acdb2",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static script/native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports MGR21 start/finish scripts adding/removing two perks and leaves a save/revert mismatch as a hypothesis. No callback replay or retained-perk result was tested."
+    },
+    {
+      "id": "EV-0078",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/finite-effect-cleanup-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/finite-effect-cleanup-audit.md",
+      "sha256": "06b060da5fedaa58c007525c02fe439507a98a7fc79f4605463d46cc767d8970",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179; historical user report and static analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports frozen game time during deadload, which closes expiry-during-deadload as described; native cleanup is queued. Functional non-equipment persistence is not established."
+    },
+    {
+      "id": "EV-0079",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/potion-transform-lifecycle-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/potion-transform-lifecycle-audit.md",
+      "sha256": "22c98969e9a63380b6a957c376a5cb191f634e6744ba4ea22486ff75774bf534",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native/script analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports race switching does not clear the inspected alchemy effects or bypass timer/Recover cleanup. This is a scoped static rule-out, not a persistence test."
+    },
+    {
+      "id": "EV-0080",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/engine-observer-completeness-and-testing-protocol.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/engine-observer-completeness-and-testing-protocol.md",
+      "sha256": "62669aa6d33309aaf49f01ad914ec18f6c4a5789243fdb7081cbf1fb8ea2fedf",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "unknown",
+      "runtime": "Historical observer design; Steam target claims not reverified",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Defines observer lens fields and blind spots; explicitly warns missing lenses/trace gaps downgrade results. It does not establish that the native bridge was built or loaded."
+    },
+    {
+      "id": "EV-0081",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/engine-to-player-validation-matrix.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/engine-to-player-validation-matrix.md",
+      "sha256": "4314f1edd1e9a4a92a7052492448c6d54964fa9d92e1b3cf889034192e796c97",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "unknown",
+      "runtime": "Historical protocol; no current runtime validation",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Provides control-first validation recipes and minimum evidence fields; event-sink output without native observation is only a lead. Recipes require current target and prerequisite checks."
+    },
+    {
+      "id": "EV-0082",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-scripted-permanent-effects-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-scripted-permanent-effects-audit.md",
+      "sha256": "74ffddbae2852e9e0d4ed208a33c58e2b6cd55ac8f671f26748f542675b46e9c",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static script/record analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports a fixed Blades quest/reward state writer without an inverse; it is not an arbitrary school AV or crafted payload writer."
+    },
+    {
+      "id": "EV-0083",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/papyrus-bsa-power-modifier-scan.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/papyrus-bsa-power-modifier-scan.md",
+      "sha256": "1d06d1bf6494bba504c72977a0e5f99df43a4615ab6cbc921f0723724633e26b",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "unknown",
+      "runtime": "Historical scan of 75 archives; runtime/tool identity unverified",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports zero literal school PowerModifier names in the scanned packaged scripts; dynamic name construction was not excluded."
+    },
+    {
+      "id": "EV-0084",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/enchanting-craft-use-skill-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/enchanting-craft-use-skill-audit.md",
+      "sha256": "3924a7df5236df142ee6d9ec847e67e74a18fa90d2ce691272bac5776416e3cf",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native/record analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports the ordinary enchant callback prepares output/input state before fixed positive AV23 skill use, with no identified yield/save boundary; not a low-XP crafting result."
+    },
+    {
+      "id": "EV-0085",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/enchanting-staff-workbench-lead.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/enchanting-staff-workbench-lead.md",
+      "sha256": "0d3f3556a402ff8f6cb7af208fe8ac621a0ebdbd812a8fcc8ef6be2c66ec9dde",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static record/native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports a 0.05 entry-point-22 modifier gated on staff-workbench furniture and a stale occupiedFurniture hypothesis whose clear/replace path remains unproven as player-accessible."
+    },
+    {
+      "id": "EV-0086",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/mgef-skill-use-multiplier-cc-refresh.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/mgef-skill-use-multiplier-cc-refresh.md",
+      "sha256": "44fc1f0f2e5b33f78241980c13923b23304c450250bcf049517866a4deb5604e",
+      "captured_utc": "2026-10-14T09:30:09Z",
+      "edition": "unknown",
+      "runtime": "Historical installed-plugin scan; complete manifest unavailable",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "result": "Reports no valid-skill sub-one/non-finite MGEF multiplier in its scanned plugin set; missing full manifest prevents a current-order negative claim."
+    },
+    {
+      "id": "EV-0087",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/enchanting-base-av-cap-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/enchanting-base-av-cap-audit.md",
+      "sha256": "446ff74025978223480be8a92224bb055cd1ca4f8e32abed0d62a2c671b426ff",
+      "captured_utc": "2026-10-14T09:38:19Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in migration/KNOWLEDGE_IMPORT_AUDIT.md; referenced raw game/tool artifacts were not bundled or re-run in this migration.",
+      "result": "Reports that the ordinary Enchanting skill cap checks base ActorValue rather than effective ActorValue; shifting effective Enchanting does not bypass the reported base-skill ceiling."
+    },
+    {
+      "id": "EV-0088",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/karstaag-spell-count-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/karstaag-spell-count-audit.md",
+      "sha256": "35e7071e8d4869454c9919443f733966a26cb50ddeef7effd9c91a1ea13f0465",
+      "captured_utc": "2026-10-14T09:38:19Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native/record analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in migration/KNOWLEDGE_IMPORT_AUDIT.md; referenced raw game/tool artifacts were not bundled or re-run in this migration.",
+      "result": "Reports that a Power cast inserts a spell node into the native cast-power list before callbacks, that the list is serialized, and that the type-2 cast check rejects the same spell; losing Papyrus RemoveSpell may leave membership/icon without proving a usable extra cast."
+    },
+    {
+      "id": "EV-0089",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/permanent-enchantment-residue.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/permanent-enchantment-residue.md",
+      "sha256": "8bda3563bc609725ca4414e8dc7f1d0cf702538721917881ba32d2d1daebd9ab",
+      "captured_utc": "2026-10-14T09:38:19Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in migration/KNOWLEDGE_IMPORT_AUDIT.md; referenced raw game/tool artifacts were not bundled or re-run in this migration.",
+      "result": "Reports that the disenchant menu resolves the first ExtraDataList and passes it to RemoveItem while row filter flags differ from the enabled byte; ordinary equipment reconciliation remains, so retained ActiveEffect residue was not established."
+    },
+    {
+      "id": "EV-0090",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::research/EXPLOIT_CANDIDATES.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/research/EXPLOIT_CANDIDATES.md",
+      "sha256": "f5b7f19b42f7e0ba9a7c935fe0ae62be86791371399fb0f5232af10dd7551d24",
+      "captured_utc": "2026-10-14T09:38:19Z",
+      "edition": "unknown",
+      "runtime": "Historical candidate index; underlying recipe/delivery evidence is not logged in this document",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in migration/KNOWLEDGE_IMPORT_AUDIT.md; referenced raw game/tool artifacts were not bundled or re-run in this migration.",
+      "result": "Labels EC-0001 poison amplification and follower/frenzy delivery confirmed while leaving exact recipe validation and delivery optimization as remaining work; preserve this as a source status assertion contradicted by the linked evidence limits, not as a reproduced exploit."
+    },
+    {
+      "id": "EV-0091",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::domains/poisons/README.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/domains/poisons/README.md",
+      "sha256": "694dfd9eb3b20e683b38908c9aa1ebd2f024a502a6bd2ba54f9e0310b9577ce1",
+      "captured_utc": "2026-10-14T09:39:15Z",
+      "edition": "unknown",
+      "runtime": "Historical domain index; no underlying delivery log is cited",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source document; no underlying test artifact identified"
+      ],
+      "coverage": "One hashed legacy Markdown source. Its status wording is preserved as a source claim only; see migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for mapping.",
+      "result": "Calls follower delivery of a crafted poison an established cumbersome control. The README supplies no recipe, save, telemetry, or source artifact proving that delivery; treat the wording as a historical status claim."
+    },
+    {
+      "id": "EV-0092",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::STATE.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/STATE.md",
+      "sha256": "8985d3e3c0ea75d8e7f1caae397dd5d2df58f97ed636fd68f82212ae835bb242",
+      "captured_utc": "2026-10-14T09:39:15Z",
+      "edition": "unknown",
+      "runtime": "Historical source-state summary; underlying Speech test artifacts unavailable in this snapshot",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source document; no underlying test artifact identified"
+      ],
+      "coverage": "One hashed legacy Markdown source. Its status wording is preserved as a source claim only; see migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for mapping.",
+      "result": "Labels the Speech no-XP result a confirmed exploit despite the associated report describing an unlogged user observation without save, form, timing, or raw XP delta."
+    },
+    {
+      "id": "EV-0093",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-all-archetype-keyword-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-all-archetype-keyword-audit.md",
+      "sha256": "253f7b98947bb3ff2a1d2fcab7e7e3211c2137cc867247216443b8610ef1a69d",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "unknown",
+      "runtime": "Historical installed-plugin scan; static record data",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports 79 plugins and 2,108 MGEFs scanned; none of 1,167 empty-KWDA records targets AV137/147/148/149/150/151. The Creation Club AV148 robe MGEF has nonempty KWDA and null associatedForm."
+    },
+    {
+      "id": "EV-0094",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-duration-and-poison-classification.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-duration-and-poison-classification.md",
+      "sha256": "be53bafc71887c6c0e8ca845dec0dd9e48fa54c80858dede1bf37386321bc27c",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native/record analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports that poison classification selects Poison Resistance from the item flag and derives class from the first raw matched effect before scaling; the Jarrin GetAVEffect disagreement is only predicted under extreme scaling and does not provide a useful qualifying payload."
+    },
+    {
+      "id": "EV-0095",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-duration-cc-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-duration-cc-audit.md",
+      "sha256": "b9e14d55567669d219fe0082a09a83100f096b1c8bd2ba56c8ad342fea5e2f8a",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "unknown",
+      "runtime": "Historical 79-plugin Creation Club record/script scan",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports 101 alchemy-referenced MGEFs and no target-school MGEF with No Duration in the scanned set. Bittercup uses a fixed AV26 Actor.ModAV(+20/-20) writer without a finish inverse; this is not a school PowerModifier effect."
+    },
+    {
+      "id": "EV-0096",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-nonfinite-duration-gate.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-nonfinite-duration-gate.md",
+      "sha256": "6f11120100a07f06cafe1962b5e1eaeb0a132a847e87bfdc9217f299d59dee66",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports no ordinary vanilla writer for the cited non-finite potion timer or expiration bypass; diagnostic +Inf could persist in the traced timer path, while NaN and -Inf finish. No reachable player writer was identified."
+    },
+    {
+      "id": "EV-0097",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/alchemy-record-duration-flags-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/alchemy-record-duration-flags-audit.md",
+      "sha256": "46f4708c4f50a2d6f29793f104cdc335ac7cf1368440d1f5f9f5212c7f41f7a7",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "AE",
+      "runtime": "Historical five-master static record scan",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports no ENIT bit 0x8 among 407 ALCH and 115 INGR records and no expiry-path read of that bit in the inspected path; API naming alone does not prove a timer bypass."
+    },
+    {
+      "id": "EV-0098",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/ingredient-zero-duration-finite-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/ingredient-zero-duration-finite-audit.md",
+      "sha256": "55813f621edf547927f6e3bdda4817a8cc2e8c05f1feb0b5a2c172a654039025",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static record/native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports Thistle01 Resist Poison magnitude 3 with authored duration 0 and FX Persist; the native expiration path reaches finish at elapsed zero and Recover cleanup reverses it."
+    },
+    {
+      "id": "EV-0099",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/potion-dispel-queue-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/potion-dispel-queue-audit.md",
+      "sha256": "099af9b6d2a066d62e0f3f41dcdd7f3c0a00805d03882c1dcf3879aa59582373",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports deferred Dispel sets a pending bit that Update clears/retries when CanFinish fails; no official ALCH/INGR caller was found, and ordinary expiry remains responsible for cleanup."
+    },
+    {
+      "id": "EV-0100",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/player-spell-writer-lifecycle-inventory.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/player-spell-writer-lifecycle-inventory.md",
+      "sha256": "275f9d73859de882b61c51bc758f1b0695115ad44868d5ec7ea99f6e35718aef",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native/Papyrus analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Separates direct spell membership, hand-slot assignment, and ActiveEffects; reports Apocrypha reward SetPower synchronously removes the prior power bundle and adds the new one, with no queued cleanup gap identified."
+    },
+    {
+      "id": "EV-0101",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/self-poison-and-blizzard.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/self-poison-and-blizzard.md",
+      "sha256": "74ebff5ca24b5434cb873fae32018ecad10efea3505bf02eb2cbd0215366b44c",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports HitData keeps aggressor and target separately and reflection damage accounting is not a target rewrite. Blizzard hazard damage may award Destruction XP; empty-area casting is only a prevention candidate."
+    },
+    {
+      "id": "EV-0102",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/self-poison-fixed-payload-and-observer-protocol.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/self-poison-fixed-payload-and-observer-protocol.md",
+      "sha256": "93445154681266602d3b251304c4ade988479c748be5188c478e4644de21d41c",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static analysis and proposed observer protocol",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports poison-gas traps use fixed explosion forms and do not read/copy weapon ExtraPoison or a crafted AlchemyItem; proposes a read-only lens for hit source, explosion/MGEFs, resistance, effect identity, and finish."
+    },
+    {
+      "id": "EV-0103",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/self-poison-reflection-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/self-poison-reflection-audit.md",
+      "sha256": "72d65b71d87434e1285274d9657cbfafd5dbbd2a5b738d35fe210462a1d56604",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static script/native analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports Dawnguard reflection scripts cast fixed charge spells and no inspected script copies weapon ExtraPoison into the reflected spell."
+    },
+    {
+      "id": "EV-0104",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/out/diagnostics/shalidors-insights-static-audit.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/out/diagnostics/shalidors-insights-static-audit.md",
+      "sha256": "f074e197f7c4a4a52728adb4f8a4d46a0d9a1e7d6509010b31163221b92abc8b",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static record/script analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports school MGR21 scroll effects use script archetypes and fixed perks rather than school PowerModifier AVs; the Magicka scroll has a separate AV156 null-key effect."
+    },
+    {
+      "id": "EV-0105",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::legacy/root-docs/DEADLOAD_UNEQUIP_BRIEF.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/legacy/root-docs/DEADLOAD_UNEQUIP_BRIEF.md",
+      "sha256": "2cd82062142534c938dbdfe7d69791a2b227ccbbcc1ddf750444d2591af11f09",
+      "captured_utc": "2026-10-14T09:41:37Z",
+      "edition": "unknown",
+      "runtime": "Historical user description; no raw trace or build identity",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Describes perceived equipment/perk retention around a deadload sequence and explicitly leaves the engine mechanism unknown; retain as a user report, not a reproduction."
+    },
+    {
+      "id": "EV-0106",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::out/roadmap_session/hazard-cause-ownership.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/out/roadmap_session/hazard-cause-ownership.md",
+      "sha256": "de97c31b29017abec8c7a881f66e50599e00ba23a4aea6fec4e117fe03b67cc1",
+      "captured_utc": "2026-10-14T09:43:38Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native/record/script analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. Record counts, conditions, and native paths are historical and scoped; no current AE target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports that player-cast hazard creation copies the ordinary player ActorCause into the Hazard owner handle before ticking; no official setter for a missing cause, owner, internal spell multiplier, or caster was found. Environmental non-actor hazards are controls and do not transfer an arbitrary player payload."
+    },
+    {
+      "id": "EV-0107",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::out/roadmap_session/poison-consume-and-delivery.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/out/roadmap_session/poison-consume-and-delivery.md",
+      "sha256": "3503511158019518fc911611091e348d47d014960f4ffeaa0da83865135f1541",
+      "captured_utc": "2026-10-14T09:43:38Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179, historical static native/record analysis",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. Record counts, conditions, and native paths are historical and scoped; no current AE target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports no public vanilla stale poison-classification writer past Actor::DrinkPotion and normal serialization reconstruction. BirdEgg03 plus BYOHHawkEgg01 is a bounded long-duration Waterbreathing candidate under negative Poison Resistance; Fortify Destruction has magnitude rather than duration semantics, and the Jarrin candidate retains fatal Damage Health."
+    },
+    {
+      "id": "EV-0108",
+      "kind": "legacy",
+      "source": "LEGACY-20261014-A::out/roadmap_session/level-gate-triage.md; source commit unavailable",
+      "artifact": "private-local:legacy-repo/out/roadmap_session/level-gate-triage.md",
+      "sha256": "ca94497599255374b0199efdcc5d061bb928aec8ef616c97652d49828bf8c695",
+      "captured_utc": "2026-10-14T09:43:38Z",
+      "edition": "AE",
+      "runtime": "Historical complete winning-QUST/source-record scan; executable/load order not revalidated",
+      "modified_state": false,
+      "lane": "mechanism_inference",
+      "tools": [
+        "historical source report; tool/version/input identity not independently revalidated"
+      ],
+      "coverage": "One hashed source report. Record counts, conditions, and native paths are historical and scoped; no current AE target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "result": "Reports a corrected CTDA comparison decoder and 109 expanded GetLevel conditions (51 QUST, 42 INFO, 1 PACK, 15 SMQN), including DA14 >=14, DA07 >=20, DA06 GLOB threshold 9, and Ebony Warrior >=80. Actor::GetLevel is an integer reader; no generic stale-level writer was identified."
+    }
+  ]
 }

@@ -1,21 +1,21 @@
-# Retained tool audit
+# Current agent-tool audit
 
-Status reports repository support and fixture behavior, not Windows/game
-integration. No Windows Skyrim AE runtime was available during this migration.
+Current tools are Python entrypoints. The prior Node, shell, and Java launchers
+and their retired tests are stored under
+[`archived_tools/legacy_nonpython/`](archived_tools/legacy_nonpython/README.md)
+and must not be called by a skill.
 
-| Tool | Research use | Required environment | Current verification |
+| Entry point | Purpose | Current evidence | Boundary |
 |---|---|---|---|
-| `tools/ae-target.js` / `ae-preflight.js` | Verify executable identity and active plugin order | Windows for PE ProductVersion; local absolute paths | Parser and fail-closed behavior tested on fixtures; no real PE tested. |
-| xEditLib / `tools/xelib/active-plugins.js` | Full-order record inspection | Windows, matching registry mapping, xEditLib DLL; explicit AE profile | Pure load-order parsing tested; DLL/registry not tested. |
-| `tools/skyrim-winner.sh` | Winning record and override chain | Windows + xEditLib + full load order | Argument/parser tests only; no live xEdit result. |
-| Spriggit CLI | Read-only plugin serialization | .NET and a copied AE plugin | Not installed/fixture-tested in this environment. Never deserialize in research mode. |
-| AutoMod archive commands | Inspect/extract AE BSA research inputs | AutoMod CLI, BSArch where required | Wrapper retained; binary not installed here. Archive writes excluded. |
-| `tools/resaver-cli.sh` | Read-only save/changeform diagnostics | JDK 17+ and operator-supplied ReSaver jar/lib | Not installed/run; no save provided. |
-| `tools/cosave-cli.sh` | Structural SKSE co-save survey | Python 3 | Read-only source and tests retained; no real AE co-save supplied. |
-| Papyrus/crash triage | Count and attribute log entries/dumps | Python 3 | Offline script/test coverage; no AE logs supplied. |
-| Champollion / Caprica | Decompile/compile isolated Papyrus probes | Windows binaries | Not available; no deployment or compilation performed. |
-| DevBench | Optional live AE observational reads | Windows, user-installed compatible SKSE plugin, verified process | Wrapper gated by AE preflight; live server/game not available. |
+| `tools/ae_preflight.py` / `tools/ae_target.py` | Verify executable ProductVersion and complete active plugin order. | Six Python policy fixtures pass; direct probe fails closed when ProductVersion is unavailable. | Windows executable identity and active order are still unverified. |
+| `tools/plugin_reader.py` | Read TES4 headers, record inventory, and one-plugin record fields. | Three synthetic fixtures pass, including a compressed record. | It does not resolve winning overrides or replace xEdit. |
+| `tools/cosave-info.py` | Read-only SKSE co-save structure survey. | Synthetic domain-doctor fixture returns one chunk and full fixture coverage. | Real co-save and live SKSE bridge were not tested. |
+| `tools/domain_doctor.py` | Bounded readiness/query checks for six requested domains. | Produces a structured response for SKSE, Ghidra, CommonLibSSE, SSEEdit, UESP, and Apocrypha. | Native tools are reported honestly; doctor does not invoke them. |
+| `tools/uesp/` and `tools/apocrypha/` | Query ignored local SQLite corpora. | Local doctor and query paths respond; output policy separates UESP citations from private Apocrypha text. | Corpus acquisition provenance/license remain unverified for UESP. |
+| `scripts/python_env.py` | Dispatch to `skyrim-ae-research` with Conda when installed. | Dispatcher fixtures pass; `run -m` now forwards arguments. | Conda is missing in this shell; current Python fallback is explicit. |
+| `tools/papyrus-triage.py`, `tools/crash-triage.py` | Analyze supplied logs/dumps without modifying inputs. | Python CLI entrypoints are documented. | No user log/dump or live failure was supplied for a real-file example. |
 
-Linux validation is not evidence of runtime compatibility. See
-`docs/getting-started.md` for exact Windows steps and record all outcomes in
-the evidence register.
+No current native analysis or game integration is claimed. See
+[`TOOL_CAPABILITY_MATRIX.md`](TOOL_CAPABILITY_MATRIX.md) for domain-specific
+status and [`PRE_PUSH_SETUP_SUMMARY.md`](PRE_PUSH_SETUP_SUMMARY.md) for the
+reviewer status.

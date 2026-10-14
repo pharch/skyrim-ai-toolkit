@@ -11,16 +11,14 @@ archive workflows are outside this harness.
 1. Verify AE runtime and identify the exact archive source. Record its filename,
    size, SHA-256, archive version if available, and private source path; never
    modify or replace the original.
-2. Use only enabled read-only wrapper commands:
-   `bash tools/automod-cli.sh archive info <archive> --json`,
-   `archive list <archive> --filter <pattern> --json`,
-   `archive validate <archive> --json`, or `archive diff <a> <b> --json`.
-   Capture stdout, stderr, exit code, and AutoMod version.
-   Missing tools, parser errors, or empty results mean unknown coverage.
+2. Run `python3 scripts/python_env.py run tools/domain_doctor.py` to record the
+   available archive/toolchain status. This checkout has no active Python BSA
+   parser; do not call retired shell/Node wrappers or claim archive coverage.
+   Treat archive inspection as `AWAITING_TOOL_ACCESS` until a reviewed
+   Python-only reader is installed and tested.
 3. Search for the smallest relevant plugin/script set. Preserve archive-relative
    paths and map every extracted file to the archive hash and tool command.
-4. This wrapper intentionally does not expose archive extraction or mutation.
-   If an authorized offline source requires extraction, use a separately
+4. Do not extract or mutate an archive in this harness. If an authorized offline source requires extraction, use a separately
    reviewed tool/procedure that verifies a new scratch destination outside the
    game, active profile, and original source before writing.
 5. Check for loose-file overrides and inspect the complete AE active load order

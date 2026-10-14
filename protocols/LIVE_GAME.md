@@ -12,7 +12,7 @@
 
 ## AE identity gate
 
-Before any live tool call, run `node tools/ae-preflight.js` on Windows. Confirm
+Before any live tool call, run `python3 scripts/python_env.py run tools/ae_preflight.py` on Windows. Confirm
 the detected `SkyrimSE.exe` ProductVersion is 1.6.318+, the executable hash
 matches the intended install, and the load-order path/hash identifies the
 selected AE profile. `GAME_ROOT` and a named plugin are not sufficient identity

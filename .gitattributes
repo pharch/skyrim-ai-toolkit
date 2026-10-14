@@ -5,12 +5,15 @@
 # committed with CRLF fails at exec time with "bad interpreter: /bin/bash^M",
 # so these types are pinned to LF in the repository regardless of the author's
 # core.autocrlf setting.
+*       text=auto eol=lf
 *.sh    text eol=lf
 *.py    text eol=lf
 *.js    text eol=lf
 *.yml   text eol=lf
 *.yaml  text eol=lf
 *.json  text eol=lf
+*.md    text eol=lf
+*.mdx   text eol=lf
 
 # Windows-side helpers stay CRLF.
 *.bat   text eol=crlf

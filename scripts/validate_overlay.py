@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Validate Codex discovery, AE policy, research state, and finalization closure."""
+"""Validate Codex discovery, AE policy, research state, and the current setup audit."""
 
 from __future__ import annotations
 
 import json
 import re
+import sys
 import tomllib
 from pathlib import Path
 from urllib.parse import urlparse
@@ -17,6 +18,9 @@ except ImportError:
     from validate_research import validate as validate_research
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from tools.setup_audit import parse_prompt as parse_setup_prompt  # noqa: E402
+from tools.setup_audit import validate as validate_setup_checklist  # noqa: E402
 REQUIRED = (
     "AGENTS.md", "NORTH_STAR.md", "STATE.md", "ROADMAP.md",
     "research/FRONTIER.json", "research/EVIDENCE.json",
@@ -24,16 +28,21 @@ REQUIRED = (
     "research/CONTRADICTIONS.md", "research/KNOWLEDGE_GRAPH.md",
     "research/SESSION_LOG.md", "research/RECOVERY.json",
     "research/schema/frontier.schema.json", "research/schema/evidence.schema.json",
+    "research/schema/markdown-entities.md",
     "protocols/TOOL_ROUTING.md", "protocols/LIVE_GAME.md",
     "migration/FINAL_SETUP_BRIEF.md", "migration/FINALIZATION_CHECKLIST.md",
+    "session-brief/LOCAL_CODEX_FINAL_AUDIT_PROMPT.md",
+    "migration/local_setup_checklist.json", "migration/LOCAL_SETUP_CHECKLIST.md",
+    "tools/setup_audit.py", "scripts/python_env.py", "scripts/pre_push_audit.py",
+    "tools/ae_target.py", "tools/ae_preflight.py", "tools/plugin_reader.py",
+    "tools/domain_doctor.py", "environment.yml", "migration/PRE_PUSH_SETUP_SUMMARY.md",
     "migration/FINALIZATION_LOG.md", "migration/SOURCE_MAP.md",
     "migration/SKILL_MIGRATION.md", "migration/TOOL_AUDIT.md",
     "migration/PRUNE_REPORT.md", "migration/UNRESOLVED.md",
     "migration/MIGRATION_PROGRESS.md", "migration/RESUME.md",
     ".github/copilot-instructions.md", ".codex/config.toml",
     "scripts/setup_research.py", "scripts/validate_research.py",
-    "scripts/research_state.py", "tools/ae-target.js",
-    "tools/ae-preflight.js", "tools/README.md", "docs/README.md",
+    "scripts/research_state.py", "tools/README.md", "docs/README.md",
     "docs/CODEX_START_PROMPT.md", "docs/WINDOWS_AE_VERIFICATION.md",
     "docs/SKSE_MCP_INTEGRATION.md", "experiments/TRANSACTION_TEMPLATE.md",
 )
@@ -42,13 +51,19 @@ SKILL_KEYS = {
     "disable-model-invocation", "license", "compatibility", "metadata",
 }
 SKILL_NAME = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
-CHECKLIST_LINE = re.compile(
-    r"^-\s+\[ \]\s+\*\*([A-Z]\d{2})\*\*\s+(.+?)\s+\*\*Status:\s*"
-    r"(TODO|IN_PROGRESS|PASS|BLOCKED_ENV|FAIL)\*\*\s+\|\s+Evidence:\s*(.+)$",
+CHECKLIST_ROW = re.compile(
+    r"^\|\s*([A-G]\d{2})\s*\|\s*`(TODO|IN_PROGRESS|PASS|BLOCKED_EXTERNAL|FAIL|NOT_APPLICABLE)`"
+    r"\s*\|\s*(.*?)\s*\|\s*(.*?)\s*\|\s*(?:—|\d{4}-\d{2}-\d{2})\s*\|$",
     re.M,
 )
-BRIEF_CRITERION = re.compile(r"^-\s+\[ \]\s+\*\*([A-Z]\d{2})\*\*\s+(.+?)\s*$", re.M)
-ALLOWED_ENV_BLOCKERS = {"I05"}
+ARCHIVED_MARKDOWN = {
+    "CHANGELOG.md", "KNOWLEDGEBASE.md",
+    "migration/FINAL_SETUP_BRIEF.md", "migration/FINALIZATION_CHECKLIST.md",
+    "migration/FINALIZATION_LOG.md", "migration/FINAL_VALIDATION.md",
+    "migration/LEGACY_FINALIZATION_CHECKLIST_82.md", "migration/PORTING_CHECKLIST.md",
+    "migration/PRUNE_PLAN.md", "migration/PRUNE_REPORT.md", "migration/RESUME.md",
+    "migration/MIGRATION_PROGRESS.md", "migration/SKILL_MIGRATION.md",
+}
 
 
 def _relative_links(markdown: str):
@@ -114,6 +129,10 @@ def _validate_skills(root: Path) -> list[str]:
         if "paths" in metadata:
             errors.append(f"{relative}: Claude-only paths metadata is not supported")
         body = text[match.end():]
+        if re.search(r"(?im)^\s*(?:node|npm|npx|bash|sh|java|javac|dotnet)\s+(?:tools|scripts|npm|node)", body):
+            errors.append(f"{relative}: agent skills must use Python tool entrypoints")
+        if re.search(r"(?im)^\s*python3?\s+(?!scripts/python_env\.py\b)(?:-m\s+(?:tools|scripts)\.|(?:tools|scripts)/)", body):
+            errors.append(f"{relative}: agent Python commands must use scripts/python_env.py")
         for link in _relative_links(body):
             target = _resolve_reference(path, root, link)
             if not target.exists():
@@ -125,44 +144,87 @@ def _validate_skills(root: Path) -> list[str]:
     return errors
 
 
-def _validate_checklist(root: Path) -> list[str]:
-    brief_path = root / "migration/FINAL_SETUP_BRIEF.md"
-    checklist_path = root / "migration/FINALIZATION_CHECKLIST.md"
-    if not brief_path.is_file() or not checklist_path.is_file():
-        return ["authoritative brief and exact finalization checklist must both exist"]
-    brief = brief_path.read_text(encoding="utf-8")
-    section = brief.split("## 15. Closure checklist", 1)
-    if len(section) != 2:
-        return ["authoritative brief has no Section 15 closure checklist"]
-    expected = BRIEF_CRITERION.findall(section[1].split("\n## 16.", 1)[0])
-    checklist = checklist_path.read_text(encoding="utf-8")
-    actual = CHECKLIST_LINE.findall(checklist)
+def _validate_python_tool_surface(root: Path) -> list[str]:
     errors: list[str] = []
-    expected_ids = [criterion_id for criterion_id, _ in expected]
-    actual_ids = [criterion_id for criterion_id, _, _, _ in actual]
-    if len(expected) != 82 or expected_ids != [f"{letter}{number:02d}" for letter, count in zip("ABCDEFGHIJ", [7, 8, 10, 9, 9, 6, 11, 5, 12, 5]) for number in range(1, count + 1)]:
-        errors.append(f"brief Section 15 must contain its 82 ordered A01..J05 items; found {len(expected)}")
-    if actual_ids != expected_ids:
-        errors.append("checklist IDs or ordering do not exactly match the authoritative Section 15")
-    if len(actual) != 82:
-        errors.append(f"checklist must contain 82 complete status/evidence fields; found {len(actual)}")
-    expected_by_id = dict(expected)
-    for criterion_id, text, status, evidence in actual:
-        if expected_by_id.get(criterion_id) != text:
-            errors.append(f"{criterion_id}: criterion wording differs from the authoritative brief")
-        if not evidence.strip():
-            errors.append(f"{criterion_id}: evidence field is empty")
-        if status in {"TODO", "IN_PROGRESS", "FAIL"}:
-            errors.append(f"{criterion_id}: finalization status is {status}")
-        if status == "BLOCKED_ENV":
-            if criterion_id not in ALLOWED_ENV_BLOCKERS:
-                errors.append(f"{criterion_id}: BLOCKED_ENV is not an approved external criterion")
-            if criterion_id == "I05":
-                guide = root / "docs/WINDOWS_AE_VERIFICATION.md"
-                if not guide.is_file() or "node tools/ae-preflight.js" not in guide.read_text(encoding="utf-8"):
-                    errors.append("I05: BLOCKED_ENV requires actionable Windows AE verification instructions")
-    if not re.search(r"^\s*-\s+\*\*I05\*\*:", checklist, re.M):
-        errors.append("checklist must explain why I05 is environment-blocked")
+    retired = {"package.json", "package-lock.json", ".node-version"}
+    for name in retired:
+        if (root / name).exists():
+            errors.append(f"retired non-Python runtime file remains active: {name}")
+    for folder in (root / "tools", root / "scripts"):
+        for path in folder.rglob("*"):
+            if not path.is_file():
+                continue
+            relative = path.relative_to(root).as_posix()
+            if path.suffix.casefold() in {".js", ".sh", ".java", ".bat", ".ps1"}:
+                errors.append(f"non-Python agent tool remains active: {relative}")
+    try:
+        environment = yaml.safe_load((root / "environment.yml").read_text(encoding="utf-8"))
+    except (OSError, yaml.YAMLError) as exc:
+        return [f"invalid Conda environment manifest: {exc}"]
+    if not isinstance(environment, dict) or environment.get("name") != "skyrim-ae-research":
+        errors.append("environment.yml must define the skyrim-ae-research Conda environment")
+    workflow = root / ".github/workflows/ci.yml"
+    if workflow.is_file():
+        text = workflow.read_text(encoding="utf-8")
+        if re.search(r"setup-node|npm ci|npm test|node --test", text, re.I):
+            errors.append("CI must run Python-only research validation")
+    return errors
+
+
+def _validate_markdown_links(root: Path) -> list[str]:
+    errors: list[str] = []
+    archived_dirs = (
+        "references/upstream/", "migration/legacy_experiments/",
+        "migration/archived_tools/",
+    )
+    generated_dirs = {".git", ".local", "node_modules", "build", "dist"}
+    for path in root.rglob("*"):
+        if not path.is_file() or path.suffix.lower() not in {".md", ".mdx"}:
+            continue
+        relative = path.relative_to(root).as_posix()
+        if relative in ARCHIVED_MARKDOWN or relative.startswith(archived_dirs):
+            continue
+        if any(part in generated_dirs for part in path.relative_to(root).parts):
+            continue
+        try:
+            markdown = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError) as exc:
+            errors.append(f"{relative}: cannot read Markdown: {exc}")
+            continue
+        markdown = re.sub(r"```.*?```|~~~.*?~~~", "", markdown, flags=re.S)
+        for target in _relative_links(markdown):
+            resolved = _resolve_reference(path, root, target)
+            if not resolved.exists():
+                errors.append(f"{relative}: broken internal link {target}")
+    return errors
+
+
+def _validate_checklist(root: Path) -> list[str]:
+    prompt_path = root / "session-brief/LOCAL_CODEX_FINAL_AUDIT_PROMPT.md"
+    json_path = root / "migration/local_setup_checklist.json"
+    markdown_path = root / "migration/LOCAL_SETUP_CHECKLIST.md"
+    missing = [p.relative_to(root).as_posix() for p in (prompt_path, json_path, markdown_path) if not p.is_file()]
+    if missing:
+        return [f"current 86-item audit files missing: {', '.join(missing)}"]
+    try:
+        data = json.loads(json_path.read_text(encoding="utf-8"))
+        errors = validate_setup_checklist(data)
+        expected = parse_setup_prompt()
+    except (OSError, json.JSONDecodeError, ValueError) as exc:
+        return [f"cannot validate current setup checklist: {exc}"]
+    rows = data.get("criteria", [])
+    if [(x.get("id"), x.get("criterion")) for x in rows] != [
+        (x["id"], x["criterion"]) for x in expected
+    ]:
+        errors.append("86-item checklist IDs/wording/order differ from the authoritative session prompt")
+    rendered = CHECKLIST_ROW.findall(markdown_path.read_text(encoding="utf-8"))
+    if len(rendered) != 86:
+        errors.append(f"rendered setup checklist must contain 86 complete rows; found {len(rendered)}")
+    elif [(x[0], x[1]) for x in rendered] != [(x["id"], x["status"]) for x in rows]:
+        errors.append("rendered checklist IDs/statuses do not match the JSON source of truth")
+    for row in rows:
+        if row.get("status") in {"PASS", "BLOCKED_EXTERNAL", "FAIL", "NOT_APPLICABLE"} and not str(row.get("evidence", "")).strip():
+            errors.append(f"{row.get('id')}: terminal status requires criterion-specific evidence")
     return errors
 
 
@@ -197,15 +259,9 @@ def validate(root: Path = ROOT) -> list[str]:
         if "SKYRIM_GAME_VERSION" in values:
             errors.append("typed SKYRIM_GAME_VERSION must not substitute for executable detection")
 
-    try:
-        package = json.loads((root / "package.json").read_text(encoding="utf-8"))
-        node_engine = str(package.get("engines", {}).get("node", ""))
-        if not re.search(r"(?:\^|>=)?20(?:\.|$)", node_engine):
-            errors.append("Node.js 20 or newer must be declared")
-    except (OSError, json.JSONDecodeError, ValueError, AttributeError) as exc:
-        errors.append(f"invalid package.json engine metadata: {exc}")
-
     errors.extend(_validate_skills(root))
+    errors.extend(_validate_python_tool_surface(root))
+    errors.extend(_validate_markdown_links(root))
     errors.extend(validate_research(root))
     errors.extend(_validate_checklist(root))
 

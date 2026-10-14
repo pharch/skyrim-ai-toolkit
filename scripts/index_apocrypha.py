@@ -1,43 +1,36 @@
 #!/usr/bin/env python3
-"""Local DiscordChatExporter JSON (or JSONL) -> provenance-preserving SQLite FTS5.
-No network calls, no upload; raw export stays outside tracked Git. Requires Python SQLite FTS5.
+"""Compatibility wrapper for private Apocrypha indexing.
+
+The database is restricted to ignored `.local/`; the command prints only
+aggregate count and source hash. It never prints private message content.
 """
-import argparse, json, sqlite3
+from __future__ import annotations
+
+import argparse
+import json
+import sys
 from pathlib import Path
 
-ap=argparse.ArgumentParser()
-ap.add_argument('export',type=Path,help='Locally authorized Discord export JSON/JSONL')
-ap.add_argument('--db',type=Path,default=Path('research/apocrypha-index.sqlite'))
-args=ap.parse_args()
-raw=args.export.read_text(encoding='utf-8-sig')
-if args.export.suffix.lower()=='.jsonl':
-    rows=[json.loads(x) for x in raw.splitlines() if x.strip()]
-    meta={}
-else:
-    dat=json.loads(raw)
-    meta=dat if isinstance(dat,dict) else {}
-    rows=dat.get('messages',[]) if isinstance(dat,dict) else dat
-if not isinstance(rows,list): raise SystemExit('Expected JSON messages array or JSONL')
-channel=meta.get('channel') or {}
-channel_id=channel.get('id','unknown') if isinstance(channel,dict) else str(channel)
-args.db.parent.mkdir(parents=True,exist_ok=True)
-con=sqlite3.connect(str(args.db))
-con.executescript('''CREATE TABLE IF NOT EXISTS messages(message_key TEXT PRIMARY KEY, message_id TEXT, channel TEXT, timestamp TEXT, author TEXT, content TEXT, source TEXT);
-CREATE VIRTUAL TABLE IF NOT EXISTS message_fts USING fts5(content, message_key UNINDEXED, tokenize='unicode61');''')
-with con:
-    n=0
-    for i,r in enumerate(rows):
-        mid=str(r.get('id') or f'row-{i}')
-        c=str(r.get('content',''))
-        ch=r.get('channelId') or channel_id
-        ch=str(ch)
-        a=r.get('author') or {}
-        author=str((a.get('name') or a.get('id') or 'unknown') if isinstance(a,dict) else a)
-        ts=str(r.get('timestamp') or r.get('timestampEdited') or '')
-        key=f'{args.export.name}:{ch}:{mid}'
-        con.execute('INSERT OR REPLACE INTO messages VALUES (?,?,?,?,?,?,?)',(key,mid,ch,ts,author,c,str(args.export)))
-        n+=1
-    con.execute('DELETE FROM message_fts')
-    con.execute('INSERT INTO message_fts(content,message_key) SELECT content,message_key FROM messages')
-con.close()
-print(f'Indexed {n} messages into {args.db} (private, local only).')
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from scripts.local_config import read_local_config
+
+from tools.apocrypha.core import ArchiveError, ingest
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("export", type=Path, nargs="?", help="authorized local DiscordChatExporter JSON; defaults to ignored local config")
+parser.add_argument("--db", type=Path, default=Path(".local/apocrypha.sqlite3"))
+parser.add_argument("--rebuild", action="store_true")
+args = parser.parse_args()
+config = read_local_config()
+raw_input = str(args.export) if args.export else config.get("APOCRYPHA_EXPORT_PATH", "").strip()
+if not raw_input:
+    parser.error("provide EXPORT or set APOCRYPHA_EXPORT_PATH in ignored config/local.env")
+input_path = Path(raw_input)
+database = args.db if args.db != Path(".local/apocrypha.sqlite3") else Path(config.get("APOCRYPHA_INDEX_PATH", ".local/apocrypha.sqlite3"))
+try:
+    print(json.dumps(ingest(input_path, database, rebuild=args.rebuild), indent=2))
+except (ArchiveError, OSError, json.JSONDecodeError) as exc:
+    print(json.dumps({"error": str(exc)}), file=sys.stderr)
+    raise SystemExit(2)

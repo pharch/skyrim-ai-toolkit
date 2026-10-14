@@ -1,3 +1,5 @@
+> Historical prune-plan report. No deletions were made by the current audit. See `LEGACY_SOURCE_INDEX.md` for the actual current source disposition.
+
 # Active-surface prune report
 
 The current pass converts the active onboarding, research instructions,

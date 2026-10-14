@@ -6,6 +6,7 @@ import re
 import subprocess
 
 from conftest import REPO
+from scripts.validate_overlay import _validate_markdown_links
 
 
 def test_node_test_command_runs_registered_tests():
@@ -48,22 +49,4 @@ def test_active_codex_config_has_no_live_mcp_or_provider_hook():
 
 
 def test_active_docs_have_no_broken_relative_links():
-    documents = [
-        REPO / "README.md",
-        REPO / "AGENTS.md",
-        *sorted((REPO / "docs").glob("*.md")),
-        *sorted((REPO / "protocols").glob("*.md")),
-        *sorted((REPO / ".agents/skills").glob("*/SKILL.md")),
-        *sorted((REPO / "migration").glob("*.md")),
-    ]
-    broken = []
-    for document in documents:
-        for label, target in re.findall(
-            r"\[([^\]]*)\]\(([^)\s]+)\)", document.read_text(encoding="utf-8")
-        ):
-            if re.match(r"^(?:https?:|mailto:|#)", target):
-                continue
-            local = (document.parent / target.split("#", 1)[0]).resolve()
-            if not local.exists():
-                broken.append(f"{document.relative_to(REPO)} [{label}]({target})")
-    assert not broken, "\n".join(broken)
+    assert not _validate_markdown_links(REPO)

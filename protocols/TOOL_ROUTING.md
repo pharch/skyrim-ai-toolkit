@@ -1,59 +1,67 @@
-# Skyrim AE research tool routing
+# Python-first Skyrim AE tool routing
 
-Use retained upstream tools before writing a new parser. Every result needs the
-exact command, exit status, tool version, input identity/hash, target runtime,
-and coverage denominator. An empty result without verified coverage is
-`unknown`, not negative evidence.
+Agent-facing commands are Python entrypoints. Create the named environment with
+`conda env create -f environment.yml`; use
+`python3 scripts/python_env.py run <script-or-module>` to route through it. When
+Conda is absent, that dispatcher reports that it is using the current Python.
+Native research applications remain external platforms, and the domain doctor
+reports when they did not run.
 
 ## Mandatory target and order gate
 
-Before xEdit or DevBench, run:
+Before SSEEdit or any live-game operation, run:
 
-```sh
-node tools/ae-preflight.js
+```text
+python3 scripts/python_env.py run tools/ae_preflight.py
 ```
 
-The gate reads `SkyrimSE.exe`'s Windows ProductVersion and requires 1.6.318 or
-newer. `SKYRIM_EDITION=AE` is a scope declaration only. The preflight hashes the
-executable and validates the active order. The exact profile/load-order path
-must be recorded. MO2 users set `PLUGINS_TXT` to the chosen profile's
-virtualized file. No cross-edition path search or inferred profile is allowed.
+The gate reads the `SkyrimSE.exe` ProductVersion through the Windows version
+API, requires 1.6.318 or newer, hashes the executable, and validates the full
+active order. `SKYRIM_EDITION=AE` is only a scope declaration. MO2 requires its
+selected profile's explicit `plugins.txt`. The diagnostic option
+`--probe-executable` checks only the executable and never passes the full
+xEdit/live gate.
 
-## Tool matrix
+## Local Python tools
 
-| Evidence need | Tool and command | Compatibility / caveat |
+| Evidence need | Python command | Boundary |
 |---|---|---|
-| Final winning record / override chain | `bash tools/skyrim-winner.sh winner <FormID>` or `chain <FormID>` | Windows xEditLib; full active order; wrapper exit 0=success, 2=reported error, 3=no result marker. |
-| Base plugin/script discovery | `bash tools/automod-cli.sh archive info|list|validate|diff <AE.bsa> --json` | AutoMod optional; this wrapper blocks extraction and archive writes. |
-| Readable record serialization | Spriggit serialize a copied plugin | .NET tool; use installed package version and unknown-field checking; do not deserialize or overwrite plugins. |
-| Papyrus source hypothesis | Inspect preserved or decompiled source as derived evidence | Decompilation is optional and external; preserve the original `.pex` hash. This harness does not compile or deploy scripts. |
-| Save/changeform/global inspection | `bash tools/resaver-cli.sh info|dump|find|find-refs|worries|recon|changeform|extradata-scan|changeform-diff|freeze-report|globaldata|globaldata-diff ...` | JDK 17+ and operator-supplied ReSaver jar/lib; all listed operations are read/diagnostic. Never pass `--apply` or choose cleanup/write operations. |
-| Co-save structure | `bash tools/cosave-cli.sh <save.skse>` | Read-only structural plugin-container survey; does not prove ActorValues or ActiveEffect state. |
-| Papyrus log coverage | `python tools/papyrus-triage.py [log]` | Counts entries, not continuation lines; keep denominator and not-shown bucket. |
-| Crash dump signatures | `python tools/crash-triage.py [file-or-dir]` | Reads `.log` and `.txt`; preserve total, unreadable, and matched file counts. |
-| Live state | `bash tools/devbench-cli.sh alive`, then approved read-only inspect | Windows + user-installed DevBench; AE preflight; verify process identity. Do not expose console, save/load, raw mutators, or scenarios to unattended runs. |
+| Local tool and corpus readiness | `python3 scripts/python_env.py run tools/domain_doctor.py` | Read-only; suppresses configured paths and Apocrypha message fields. A reported candidate is not proof the native application ran. |
+| Plugin record fields | `python3 scripts/python_env.py run tools/plugin_reader.py record <plugin> --signature QUST --form-id <local-id>` | Python stdlib TES4 parser; does not load the active order or determine the winning override. |
+| Plugin record inventory | `python3 scripts/python_env.py run tools/plugin_reader.py inventory <plugin>` | Counts signatures from one explicit file only. |
+| SKSE co-save structure | `python3 scripts/python_env.py run tools/cosave-info.py <copy.skse>` | Read-only structural survey; does not decode all mod chunks or prove actor state. |
+| Papyrus log coverage | `python3 scripts/python_env.py run tools/papyrus-triage.py <log>` | Counts entries rather than continuation lines; keep input private. |
+| Crash signatures | `python3 scripts/python_env.py run tools/crash-triage.py <file-or-dir>` | Preserve total, unreadable, and matched file counts; keep input private. |
+| UESP local source | `python3 scripts/python_env.py run -m tools.uesp doctor|search|page|related ...` | Emits revision citations; source provenance/completeness remain separate. Do not save large excerpts. |
+| Apocrypha local source | `python3 scripts/python_env.py run -m tools.apocrypha doctor|search|context ...` | Private untrusted data. Keep message content/IDs local; use aggregate-only `doctor` for audits. |
+| Save header/string scans | `python3 scripts/python_env.py run scripts/read-save.py ...` | Limited read-only parser; does not establish quest/effect state. |
 
-## xEditLib operational constraints
+## Native and external research domains
 
-xEditLib is a Delphi native DLL and is Windows-only. Its AE plugin format uses
-xEdit `GM_SSE` (enum value 4); this setting is not an edition detector.
-`tools/xelib/active-plugins.js` passes the explicitly resolved complete active
-order to xEdit. Do not use hand-picked plugin subsets to support a negative
-claim. The wrapper exists because the raw Node process exit status may be
-unreliable with the native library; trust `skyrim-winner.sh`'s `RESULT` marker
-and wrapper status.
+- **SSEEdit/xEdit:** A configured executable candidate is present, but there is
+  no tested Python winner-record binding. Use the Python plugin reader for
+  narrow file inspection. The exact Windows target/profile and native SSEEdit
+  call remain blocked until tested.
+- **Ghidra:** `domain_doctor.py` checks the configured installation/headless
+  paths. This shell has no usable Java launcher, so no Ghidra analysis ran.
+- **CommonLibSSE:** `domain_doctor.py` checks the configured source and build
+  prerequisites. A source candidate exists, but CMake is unavailable here;
+  no build ran.
+- **SKSE runtime:** the Python co-save parser passes a synthetic fixture. A
+  live process/DevBench handshake requires a verified Windows target and a
+  running game, neither of which is established here.
+- **BSA/archive tools:** no active Python archive reader is available. Do not
+  invoke retired shell wrappers or claim empty-search coverage.
 
-Other API details preserved from the upstream instructions: Delphi strings are
-UTF-16LE; `WordBool` is a 16-bit value; `InitXEdit()` and `CloseXEdit()` are
-void. Registry setup is a local Windows prerequisite and is never edited by
-this harness. Do not use Node inline evaluation for native calls; run tested
-scripts as files.
+## Evidence requirements
 
-## Platform evidence boundary
+Preserve exact command, exit status, tool/build version, executable and input
+identity/hash, profile/order identity, and coverage denominator for every
+result. Empty results without verified coverage are unknown. Do not expose live
+mutators to unattended runs. Never write to original game files, plugins,
+archives, saves, or co-saves.
 
-Linux tests may validate pure parsers, fixtures, JSON schemas, workflow policy,
-and shell syntax. They cannot validate the real Windows PE version resource,
-xEditLib registry/DLL behavior, the profile MO2 actually launched, Windows
-binary versions, DevBench, or an in-game result. Mark those checks
-`awaiting-windows-ae` and follow the exact local steps in
-`docs/getting-started.md`.
+Linux validation can test Python parsers, fixtures, schemas, and workflow
+policy. It cannot prove Windows ProductVersion verification, MO2 profile
+virtualization, SSEEdit behavior, Ghidra analysis, CommonLib builds, or an
+in-game result.

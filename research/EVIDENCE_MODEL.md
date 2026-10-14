@@ -32,3 +32,8 @@ must distinguish direct observations from inference. Contradictions retain
 both sides and point to competing evidence IDs. Preserve negative results and
 raw outputs; never rewrite evidence to fit a hypothesis. Do not store saves,
 co-saves, private exports, or game binaries in Git.
+
+
+## Legacy snapshot references
+
+Imported legacy items use `kind=legacy`, a stable snapshot ID, source-relative path, and SHA-256. The `private-local:legacy-repo/<relative-path>` artifact alias resolves through ignored local configuration; it is not a committed absolute path. Missing source Git metadata means edition/runtime, original capture time, and source revision must remain `unknown` unless the source artifact itself proves them. A hashed summary or historical user report does not become a reproduced result.

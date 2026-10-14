@@ -1,3 +1,5 @@
+> **Historical authority notice (2026-10-14):** This 82-item Copilot-oriented brief belongs to an earlier migration pass. For the current user-requested session, it is superseded by [`session-brief/LOCAL_CODEX_FINAL_AUDIT_PROMPT.md`](../session-brief/LOCAL_CODEX_FINAL_AUDIT_PROMPT.md) and the canonical 86-item [`LOCAL_SETUP_CHECKLIST.md`](LOCAL_SETUP_CHECKLIST.md). Treat this file as source material, not current instructions.
+
 # Execute the complete Skyrim AE glitch-research harness finalization
 
 > **Use this document as the first instruction in a new GitHub Copilot coding-agent session.**

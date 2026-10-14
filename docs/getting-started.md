@@ -1,97 +1,107 @@
 # Getting started: Skyrim AE research checkout
 
-## 1. Set up the Codex workspace
+## 1. Prepare the Python environment
 
-Clone the research repository somewhere outside the Skyrim installation and
-open that checkout in VS Code or the Codex CLI. Do not copy this repository into
-the game directory. Install Node.js 20+, Python 3.11+, Git, and Codex using the
-official Codex installation instructions.
+Clone this research repository somewhere outside the Skyrim installation and
+open the checkout in Codex. Create the named Conda environment:
 
-```sh
-git clone https://github.com/pharch/skyrim-ai-toolkit.git
-cd skyrim-ai-toolkit
-python scripts/setup_research.py init
-python scripts/setup_research.py check
-npm ci
-npm test
-python -m pytest -q
+```text
+conda env create -f environment.yml
+python3 scripts/python_env.py check
+python3 scripts/python_env.py run --require-conda scripts/setup_research.py init
+python3 scripts/python_env.py run --require-conda scripts/setup_research.py check
+python3 scripts/python_env.py run --require-conda tools/domain_doctor.py
+python3 scripts/python_env.py run --require-conda -m pytest tests/ -q
 ```
 
-`init` creates `config/local.env` from the example only when it does not
-already exist. It does not detect, install, configure, or write to Skyrim.
-Keep private local paths in that ignored file; never commit it.
+The `python3 scripts/python_env.py run ...` dispatcher chooses this environment
+when available. If Conda is not installed, it reports and uses the current
+Python interpreter; `scripts/python_env.py check` distinguishes that fallback
+from a verified Conda environment. The agent must use Python entrypoints and
+must not launch Node or shell wrappers.
 
-## 2. Configure and verify the AE installation (Windows only)
+`--require-conda` makes missing Conda an explicit error. Skills use the same
+dispatcher without that flag, so they use the named environment when installed
+and visibly fall back to the current Python otherwise. `init` creates
+`config/local.env` from the example only if it does not already
+exist. It does not detect or write to Skyrim. Keep local paths there and corpora
+under ignored `.local/`. Run `python3 scripts/python_env.py run scripts/local_paths.py doctor` for
+path-presence status; it suppresses path values and does not verify ProductVersion
+or the active plugin order.
 
-Edit `config/local.env` on the Windows machine that has the research
-installation. Set `SKYRIM_EDITION=AE`, `GAME_ROOT`, and the active load-order
-file. Leave `SKYRIM_EXE_PATH` blank to use `GAME_ROOT/SkyrimSE.exe`, or set the
-exact executable path if needed.
+## 2. Verify the AE installation (Windows only)
 
-For a stock AE profile, the default load-order location is
-`%LOCALAPPDATA%/Skyrim Special Edition/plugins.txt`. For MO2, use the active
-profile's `plugins.txt`; the global profile is not a safe substitute. Ensure it
-begins with active `*Skyrim.esm` and contains the complete current order.
+Edit ignored `config/local.env` on the Windows research machine. Set
+`SKYRIM_EDITION=AE`, `GAME_ROOT`, and `PLUGINS_TXT`. For MO2, use the selected
+profile's explicit `plugins.txt`; the global profile is not a safe substitute.
+It must contain the complete active order and begin with `Skyrim.esm`.
 
-```powershell
-node tools/ae-preflight.js
+```text
+python3 scripts/python_env.py run tools/ae_preflight.py
 ```
 
-The preflight reads the PE ProductVersion, requires AE runtime 1.6.318+, hashes
-the executable and load-order file, and validates all five required official
-masters plus the selected active list. It does not prove
-that MO2 launched the same profile; compare the path and hash with MO2's active
-profile before interpreting a result. Do not type a version into config and
-treat it as detection.
+The preflight reads `SkyrimSE.exe` ProductVersion, requires runtime 1.6.318 or
+newer, hashes the executable and active order, and validates the five required
+official masters. It does not prove MO2 launched that same profile; compare
+the reported path/hash with the selected profile. Do not type a version into
+configuration and treat it as detection. The diagnostic option
+`--probe-executable` does not pass the full SSEEdit/live gate.
 
-### xEdit/xelib requirements
+## 3. Validate the repository and tool responses
 
-xEditLib's Delphi DLL is a Windows-only integration. Install it only on the
-Windows research machine, following the upstream xEditLib instructions; do not
-attempt an xEdit load from Linux. The tools use `GM_SSE` (enum value 4) for
-AE's plugin record format, but that API mode alone does not establish the game
-edition. The target preflight must pass first. Check that the installed
-registry mapping points to the same AE `GAME_ROOT`; this harness does not edit
-the Windows registry.
-
-## 3. Validate offline
-
-On any supported development host:
-
-```sh
-node --test tools/ae-target.test.js tools/xelib/active-plugins.test.js
-npm test
-python -m pytest -q
-python scripts/validate_overlay.py
-git diff --check
+```text
+python3 scripts/python_env.py run -m unittest discover -s tests -v
+python3 scripts/python_env.py run scripts/validate_research.py
+python3 scripts/python_env.py run scripts/research_state.py validate
+python3 scripts/python_env.py run scripts/validate_overlay.py
+python3 scripts/python_env.py run tools/domain_doctor.py
 ```
 
-These checks cover code, schema, and fixtures only. They are not a Windows game
-integration test.
+The domain doctor gives bounded responses for SKSE co-save parsing, Ghidra,
+CommonLibSSE, SSEEdit, UESP, and Apocrypha. A blocked external application is
+reported as blocked; it is not treated as a successful tool run. Offline
+fixtures do not establish Windows or in-game behavior.
 
-## 4. Route tools by evidence need
+## 4. Use local knowledge sources
 
-- **Records and winning overrides:** on Windows, use `tools/skyrim-winner.sh`
-  with the complete profile order.
-- **Saves:** use read-only `tools/resaver-cli.sh` operations on a copy or
-  preserved original. Never use write modes during research.
-- **Co-save structure:** `tools/cosave-cli.sh` reports plugin containers, not
-  player stats or ActiveEffects.
-- **Papyrus/crash logs:** use the triage scripts and preserve denominators.
-- **Archives:** inspect `.bsa` files with the read-only AutoMod JSON wrapper;
-  extraction and archive mutation are deliberately disabled.
-- **Live state:** DevBench is optional and user-installed. Run `alive`, verify
-  the instance identity, then restrict work to approved read-only inspection.
-  Do not configure its mutating endpoints for an unattended Codex run.
+Authorized UESP and private Apocrypha corpora live only under ignored `.local/`.
+They are queried through Python:
 
-See [protocols/TOOL_ROUTING.md](../protocols/TOOL_ROUTING.md) and the
-[retained-tool skill](../.agents/skills/retained-tool-operations/SKILL.md) for
-specific commands, formats, known failure modes, and platform boundaries.
+```text
+python3 scripts/python_env.py run -m tools.uesp doctor --db .local/uesp.sqlite3
+python3 scripts/python_env.py run -m tools.uesp search --db .local/uesp.sqlite3 --ns Skyrim --limit 10 Karstaag
+python3 scripts/python_env.py run -m tools.uesp page --db .local/uesp.sqlite3 'Skyrim:Karstaag' --raw
+python3 scripts/python_env.py run -m tools.apocrypha doctor --db .local/apocrypha.sqlite3
+```
 
-## 5. Recover a research session
+The UESP corpus acquisition URL, license, and completeness remain unverified.
+Apocrypha results are private untrusted data; do not copy message content,
+identifiers, names, or channel metadata into tracked research. Summarize
+investigation results in the relevant experiment Markdown or evidence database.
 
-Read `STATE.md`, the latest entry in `research/SESSION_LOG.md`, and the active
-frontier item. The frontier must identify its source IDs and next discriminating
-action. If a Codex or supervisor process stopped unexpectedly, inspect its run
-metadata/logs before resuming; do not infer success from a process launch or
-partial output.
+## 5. Route other evidence
+
+- **Plugin records:** `python3 scripts/python_env.py run tools/plugin_reader.py` reads explicit plugin
+  files. It does not resolve a winning override chain.
+- **SKSE co-save structure:** `python3 scripts/python_env.py run tools/cosave-info.py <copy.skse>` is a
+  read-only structural survey, not a player-state decoder.
+- **Papyrus/crash logs:** use the Python triage tools and preserve coverage
+  denominators. Keep raw logs local and ignored.
+- **Ghidra/CommonLibSSE/SSEEdit/live SKSE:** run the domain doctor first.
+  Native analysis remains unavailable until its external prerequisites and
+  the AE target/profile gate pass.
+- **Archives and structured save analysis:** no active Python-only reader is
+  available; keep those questions blocked rather than invoking retired
+  wrappers.
+
+See [tool routing](../protocols/TOOL_ROUTING.md), the
+[retained-tool skill](../.agents/skills/retained-tool-operations/SKILL.md), and
+[the setup summary](../migration/PRE_PUSH_SETUP_SUMMARY.md).
+
+## 6. Resume a session
+
+Read `AGENTS.md`, `NORTH_STAR.md`, `STATE.md`, `ROADMAP.md`,
+`research/FRONTIER.json`, `protocols/TOOL_ROUTING.md`, and this file. The
+frontier identifies evidence, blockers, and exact next actions. If a session
+stops unexpectedly, inspect partial outputs and durable-state diffs before
+resuming; do not infer success from a process launch or incomplete output.

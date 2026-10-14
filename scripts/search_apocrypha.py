@@ -1,6 +1,34 @@
 #!/usr/bin/env python3
-import argparse,sqlite3,json
-ap=argparse.ArgumentParser();ap.add_argument('terms');ap.add_argument('--db',default='research/apocrypha-index.sqlite');ap.add_argument('--limit',type=int,default=15);a=ap.parse_args()
-con=sqlite3.connect(a.db);con.row_factory=sqlite3.Row
-rows=con.execute('SELECT m.message_id,m.channel,m.timestamp,m.author,m.content,m.source FROM message_fts f JOIN messages m ON f.message_key=m.message_key WHERE message_fts MATCH ? ORDER BY bm25(message_fts) LIMIT ?', (a.terms,min(a.limit,100))).fetchall()
-print(json.dumps([dict(r) for r in rows],ensure_ascii=False,indent=2))
+"""Privacy-preserving compatibility search for the local Apocrypha index.
+
+This wrapper intentionally emits only a match count. Use the private
+`python3 -m tools.apocrypha` interface for local contextual review; never save
+its output in tracked research files.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from scripts.local_config import read_local_config
+
+from tools.apocrypha.core import ArchiveError, search
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("terms")
+parser.add_argument("--db", type=Path, default=Path(".local/apocrypha.sqlite3"))
+parser.add_argument("--limit", type=int, default=15)
+args = parser.parse_args()
+config = read_local_config()
+database = args.db if args.db != Path(".local/apocrypha.sqlite3") else Path(config.get("APOCRYPHA_INDEX_PATH", ".local/apocrypha.sqlite3"))
+try:
+    matches = search(database, args.terms, limit=args.limit, summary_only=True)
+    print(json.dumps({"match_count": len(matches), "private_fields_emitted": False, "source_text_is_untrusted": True}))
+except (ArchiveError, OSError) as exc:
+    print(json.dumps({"error": str(exc)}), file=sys.stderr)
+    raise SystemExit(2)

@@ -1,0 +1,2 @@
+source_path	sha256	bytes	exclusion_reason
+observer/build/vcpkg_installed/vcpkg/issue_body.md	ae978a868a0fe3e6b20a41eeacc060986d0d5ef3a77b7d6c6de4de2572710e58	58314	Generated third-party vcpkg issue-body text inside a build dependency tree; not first-party research, procedure, or source documentation. Excluded from the candidate manifest and not copied.

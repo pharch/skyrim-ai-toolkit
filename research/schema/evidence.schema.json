@@ -22,7 +22,7 @@
           "artifact": { "type": "string", "minLength": 1 },
           "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
           "captured_utc": { "type": "string", "format": "date-time" },
-          "edition": { "const": "AE" },
+          "edition": { "enum": ["AE", "unknown"] },
           "runtime": { "type": "string", "minLength": 1 },
           "modified_state": { "type": "boolean" },
           "lane": {

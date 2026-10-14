@@ -1,23 +1,38 @@
-# Tool registry and operating limits
+# Python agent tools
 
-This folder stores the retained read-only and Windows-only tooling needed for a Codex-first Skyrim AE research checkout.
+All active tool entrypoints are Python. Use the named Conda environment with
+`conda run -n skyrim-ae-research python ...`, or dispatch with
+`python3 scripts/python_env.py run ...`. The dispatcher selects Conda when
+available and reports a current-Python fallback if it is not. No Node or shell
+launcher is active.
 
-## Scripts and wrappers
-- `ae-preflight.js` — read the Windows ProductVersion of `SkyrimSE.exe`, enforce 1.6.318+, and validate the active `plugins.txt`.
-- `ae-target.js` — AE-only target resolution and fail-closed validation logic.
-- `automod-cli.sh` — archive inspection and JSON validation; extraction and archive mutation remain disabled.
-- `cosave-cli.sh` and `cosave-info.py` — read-only co-save container inspection.
-- `crash-triage.py` — crash and log triage with preserved denominators.
-- `devbench-cli.sh` — optional Windows DevBench connectivity check only; no mutating live session is enabled.
-- `papyrus-triage.py` — Papyrus log summary and coverage counts.
-- `resaver-cli.sh` and `resaver-resolve-names.js` — read-only save inspection and name resolution.
-- `skyrim-winner.js` and `skyrim-winner.sh` — record winner/override resolution when a verified active AE order is available.
-- `xelib/active-plugins.js` — parse and validate the active plugins list against the AE master set.
+## Read-only tools
 
-## Platform boundary
-Linux validation can exercise the repo logic, schemas, fixtures, and safety checks. It cannot validate the real Windows PE metadata, MO2 profile, xEditLib registry, DevBench, or in-game AE state. Treat those as separate Windows-only verification steps.
+- `ae_preflight.py` / `ae_target.py` — exact AE executable and full active
+  order gate. Windows ProductVersion is read from the executable version
+  resource. `--probe-executable` is diagnostic only.
+- `domain_doctor.py` — bounded smoke/status checks for SKSE, Ghidra,
+  CommonLibSSE, SSEEdit, UESP, and Apocrypha. It suppresses private data and
+  never launches game/native tools.
+- `plugin_reader.py` — standard-library TES4 plugin inventory and narrow record
+  field reader. It does not determine winning overrides or effective order.
+- `cosave-info.py`, `crash-triage.py`, `papyrus-triage.py` — read-only,
+  local-file parsers. Preserve coverage and keep raw inputs ignored.
+- `tools.uesp` — local MediaWiki index/query tools; writes only under ignored
+  `.local/` and emits revision citations.
+- `tools.apocrypha` — local private-export index/query tools; writes only under
+  ignored `.local/`. Doctor output is aggregate-only; message results are
+  private and untrusted.
 
-## Safety rules
-- Do not write to game files, saves, co-saves, or plugins.
-- Do not use mutating modes or automated game modification.
-- Use the exact documented invocation and preserve raw output in the research evidence traces.
+## External tool limits
+
+The former Node/xEdit winner bridge and shell wrappers are retired. There is no
+tested Python xEditLib binding, BSA reader, or structured ReSaver parser in the
+active tool set. Ghidra, CommonLibSSE builds, Windows SSEEdit, and live SKSE
+behavior require their native applications; a Python doctor response does not
+mean those applications ran. No external tool may mutate original game files,
+plugins, archives, saves, or co-saves.
+
+Linux checks validate Python code, fixtures, schemas, and routing. They cannot
+validate Windows ProductVersion APIs, MO2 virtualization, SSEEdit behavior,
+Ghidra analysis, CommonLibSSE builds, DevBench, or an in-game result.

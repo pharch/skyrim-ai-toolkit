@@ -21,13 +21,16 @@ source documents relevant to the selected question.
   preserved legacy path. Unsupported claims remain unverified.
 - Verify the target from `SkyrimSE.exe` ProductVersion (AE runtime 1.6.318+);
   do not accept a manually typed version as executable evidence. Use
-  `node tools/ae-preflight.js` before xEdit or live-game access.
+  `python3 scripts/python_env.py run tools/ae_preflight.py` before xEdit or
+  live-game access.
 - Load the complete active AE profile order. An empty, partial, stale, or
   unverified order cannot support a negative finding. MO2 requires its selected
   profile's explicit `plugins.txt`.
 - Keep the research checkout separate from the game installation. Never write
-  to original game files, plugins, archives, saves, or co-saves. Preserve raw
-  evidence and negative results.
+  to original game files, plugins, archives, saves, or co-saves. Keep raw
+  captures in ignored `.local/` storage; put concise results and negative
+  findings in Markdown/JSON research records so a new session starts without
+  raw or heavy investigation files.
 - Separate `diagnostic_intervention`, `vanilla_candidate`,
   `vanilla_reproduction`, and `mechanism_inference`. Console stage/level
   forcing or altered plugins can diagnose, never validate a vanilla exploit.
@@ -35,6 +38,19 @@ source documents relevant to the selected question.
   live-game mutators to unattended runs.
 - Linux validation does not establish Windows xEdit/MO2/DevBench behavior or
   in-game AE behavior. State that boundary explicitly.
+
+## Python environment
+
+- The named environment is defined in `environment.yml` as
+  `skyrim-ae-research`. Create it with `conda env create -f environment.yml`.
+- Run agent tools through `python3 scripts/python_env.py run <script-or-module>`
+  so an active Conda environment is selected when available. If Conda is not
+  installed, the dispatcher reports a system-Python fallback; record that
+  environment limitation and do not claim the Conda environment was verified.
+- Active research tools are Python entrypoints. Do not add Node, shell, Java,
+  or other-language launchers to agent skills. A domain requiring an external
+  native app remains blocked until its Python entrypoint and behavior are
+  tested.
 
 ## Research loop
 

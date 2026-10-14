@@ -1,38 +1,45 @@
-# Unresolved migration and verification items
+# Current external blockers and research limits
 
-## Blocking specification input
+The authoritative setup audit is the 86-item ledger in
+[`LOCAL_SETUP_CHECKLIST.md`](LOCAL_SETUP_CHECKLIST.md). There are no unfinished
+status labels after final reconciliation; external blockers remain explicit.
 
-`migration/FINAL_SETUP_BRIEF.md`, named as the authoritative definition of done,
-is absent from the working tree, tracked history, and both visible remote
-branches. The user requires its exact 82 acceptance criteria in
-`migration/FINALIZATION_CHECKLIST.md`. They cannot be reconstructed from the
-shorter `PORTING_CHECKLIST.md` without inventing criteria. Obtain the exact
-brief, transcribe its 82 items verbatim, then execute and record evidence for
-each one. Do not mark repository ready before that audit passes.
+## Windows and runtime
 
-## Windows / game-specific validation
+- The configured `SkyrimSE.exe` ProductVersion could not be obtained from this
+  WSL session. Run `python3 scripts/python_env.py run tools/ae_preflight.py` on
+  Windows and preserve the result before any xEdit/live-game operation.
+- Configure the selected MO2 profile's explicit full `plugins.txt`. A present
+  candidate file is not a verified active order.
+- Ghidra returned a doctor response but could not run because Java is missing.
+  CommonLibSSE returned a doctor response but could not build because CMake is
+  missing. SSEEdit's candidate exists, but its Windows call remains blocked by
+  the unverified target and profile.
+- SKSE parsing responded on a synthetic fixture only; no live bridge handshake
+  or real co-save was available.
+- No controlled runtime snapshot or immutable raw runtime capture exists. The
+  experiment protocols are ready for a verified Windows target and disposable
+  level-one save.
 
-These tasks cannot be completed from the current Linux environment:
+## Corpus and source provenance
 
-1. On the research Windows host, run `node tools/ae-preflight.js` against the
-   intended `SkyrimSE.exe`; retain its JSON, executable SHA-256, and the
-   reported ProductVersion.
-2. Verify `PLUGINS_TXT` points to the active AE profile. On MO2, verify the
-   selected virtualized profile in MO2 itself; compare its path and content
-   hash with preflight output.
-3. Verify xEditLib/DLL and registry mapping resolve to the same AE installation;
-   test `tools/skyrim-winner.sh` on one known-present record and one known-absent
-   record, preserving the complete result and exit code.
-4. Test each optional retained tool only if its prerequisites are installed;
-   capture exact versions, known-positive and known-negative fixtures, and
-   coverage.
-5. If live testing is authorized later, verify DevBench process identity and
-   `alive` state before approved read-only inspection. No live call is approved
-   by this checklist.
+- UESP doctor, search, and revision-specific page retrieval respond from the
+  local index. Official acquisition URL, license, and completeness remain
+  unverified.
+- Apocrypha's ignored local index reports 60,873 messages matching its
+  declared count. Search was aggregate-only for this audit; community content
+  remains private and untrusted.
+- The separate source checkout has no usable `.git` metadata, so its source
+  commit, branch, original status, and submodule state cannot be recovered.
 
-## Evidence import
+## Python environment
 
-No local legacy research v2 files, Ghidra project index, SKSE probes, UESP
-snapshot, or Apocrypha export were identified as accessible evidence in this
-checkout. Locate and import only authorized material with provenance. Do not
-replace this unknown with a summary inferred from filenames.
+- `environment.yml` defines `skyrim-ae-research` on Python 3.12. Create it with
+  `conda env create -f environment.yml`; `scripts/python_env.py` dispatches
+  agent commands through `conda run` when available.
+- Conda and pytest are absent from the current shell. Available standard
+  library tests and Python probes can run on Python 3.12.3; the complete pytest
+  suite and a clean Conda install were not verified here.
+
+Linux validation does not establish Windows MO2/xEdit behavior, Ghidra or
+CommonLib execution, or in-game AE behavior.

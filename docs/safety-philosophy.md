@@ -22,13 +22,13 @@ and negative results. An empty parse or missing tool is unknown coverage. Do
 not claim that a fixture test establishes Windows xEdit, MO2, DevBench, or
 in-game compatibility.
 
-## Autonomous operation
+## Interactive operation
 
-The supervisor is opt-in, foreground, bounded, and writes only within this
-checkout. Keep live mutation tools out of its configuration. Review run
-metadata, state/frontier diffs, logs, and recovery checkpoint after every
-cycle. Stop on identity mismatch, data corruption, crash loops, or missing
-baseline, then continue with offline work.
+Use an interactive Codex session as the research interface. Persist the
+checkpoint, frontier, and session log before a context boundary; inspect partial
+outputs before resuming. Keep live mutation tools out of unattended runs. Stop
+on identity mismatch, data corruption, crash loops, or a missing baseline, then
+continue with offline work.
 
 These rules are operational guidance, not an OS-level sandbox. Keep Codex
 approval and sandbox settings conservative; never rely on prompts or an

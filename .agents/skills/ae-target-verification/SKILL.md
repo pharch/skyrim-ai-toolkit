@@ -9,9 +9,11 @@ This repository targets Skyrim Anniversary Edition runtime 1.6.318 or newer.
 Research and runtime claims must be tied to the exact verified executable and
 active profile. Do not use this workflow to compare other editions.
 
-1. Run `node tools/ae-preflight.js` on Windows. It reads `SkyrimSE.exe`'s
-   ProductVersion from the executable metadata, verifies the AE runtime range,
-   hashes the executable, and validates the configured active plugin list.
+1. Run `python3 scripts/python_env.py run tools/ae_preflight.py` on Windows. It
+   reads `SkyrimSE.exe`'s ProductVersion from the executable metadata, verifies
+   the AE runtime range, hashes the executable, and validates the configured
+   active plugin list. `--probe-executable` is diagnostic only and does not
+   authorize xEdit or live access.
    `SKYRIM_EDITION=AE` is a required scope declaration, not a substitute for
    executable inspection.
 2. Set `GAME_ROOT` to the verified installation and `PLUGINS_TXT` to the

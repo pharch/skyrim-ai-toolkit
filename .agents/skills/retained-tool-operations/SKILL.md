@@ -1,59 +1,67 @@
 ---
 name: retained-tool-operations
-description: Route and operate the retained Skyrim AE record, archive, save, log, and live-inspection tools safely, with exact input and compatibility checks.
+description: Route Skyrim AE research through Python entrypoints, with exact inputs, platform gates, and read-only behavior.
 ---
 
 # Retained tool operations (Skyrim AE)
 
-Use this skill for research tooling only. Verify `SkyrimSE.exe` as AE runtime
-1.6.318+ with `node tools/ae-preflight.js` before any xEdit or live-game operation.
-The verifier reads the executable's Windows ProductVersion; a manually typed
-version is not accepted. Keep `GAME_ROOT` and `PLUGINS_TXT` local and private.
-The latter must identify the active AE profile; for MO2, use the selected
-profile's virtualized `plugins.txt`, not a guessed global file. Record its hash
-and active plugin count. Empty lists, a missing `Skyrim.esm`, and duplicate
-plugins are hard errors.
+Use Python entrypoints for every agent-facing command. Set up the Conda
+environment with `conda env create -f environment.yml`; then dispatch through
+`python3 scripts/python_env.py run ...`. The dispatcher uses the named Conda
+environment when available and falls back to the current Python interpreter
+when Conda is absent. It never launches Node or a shell wrapper.
 
-## Records and archives
+## Target and record tools
 
-- `bash tools/skyrim-winner.sh winner 0x0003418E` / `chain` / `conflicts Plugin.esp`
-  asks xEdit for the final record state against the full active order. Trust the
-  wrapper's exit code: 0 is complete, 2 is a reported error, 3 means no valid
-  result marker. Never infer absence from a failed or partial load.
-- xEditLib uses `GM_SSE` for AE records and is Windows-only. Use the helper in
-  `tools/xelib/active-plugins.js`; do not load hand-picked plugin subsets. Delphi
-  string arguments are UTF-16LE, `WordBool` is 16-bit, and `InitXEdit` /
-  `CloseXEdit` are void. Registry and native-library setup belong on the
-  operator's Windows machine, not in Linux CI.
-- Inspect an archive with `bash tools/automod-cli.sh archive info|list|validate|diff ... --json`.
-  The wrapper blocks extraction and archive mutation; do not bypass it.
-  Loose files take precedence over archive members; note that limitation in
-  record/source claims.
-- Use Spriggit only to serialize copied plugins for read-only inspection. Keep
-  unknown-field warnings enabled (`-u` / `--ErrorOnUnknown`) and round-trip
-  check any newly investigated field. Do not deserialize or save plugin edits.
+- Run `python3 scripts/python_env.py run tools/ae_preflight.py` before any xEdit
+  or live-game operation. The gate requires `SkyrimSE.exe` ProductVersion
+  1.6.318+, explicit AE scope, and the selected profile's complete active
+  `plugins.txt`. A typed version is not evidence. `--probe-executable` is
+  diagnostic only and does not authorize xEdit/live access.
+- Run `python3 scripts/python_env.py run tools/plugin_reader.py doctor` to test
+  the stdlib TES4 reader. Query one file with `record` or `inventory`. This
+  reader does not establish the active order or determine winning overrides;
+  incomplete inputs cannot support negative findings.
+- `python3 scripts/python_env.py run tools/domain_doctor.py` tests the installed local routes and reports
+  external prerequisites without printing configured paths or private message
+  rows. Run it before selecting an external domain tool.
+- The old xEditLib/xelib Node integration is retired. Native SSEEdit remains a
+  Windows-only external tool; there is no tested Python binding for its winner
+  API in this checkout. Do not use archived scripts or describe the Python
+  reader as xEdit output.
 
-## Saves, scripts, logs, and runtime
+## Logs, saves, and SKSE
 
-- `bash tools/resaver-cli.sh info|dump|find|find-refs|worries|recon|changeform|extradata-scan|changeform-diff|freeze-report|globaldata ...`
-  are analysis operations. ReSaver requires JDK 17+ and the operator-provided
-  `ReSaver.jar` plus `lib/`. The wrapper rejects save-writing, cleanup, and
-  round-trip operations; analyze copies and preserve source hashes.
-- `bash tools/cosave-cli.sh file.skse` is a read-only structural survey of
-  stored plugin data; it does not prove player ActorValues or ActiveEffect state.
-- `python tools/papyrus-triage.py [log]` counts entries, not continuation lines.
-  `python tools/crash-triage.py [file-or-dir]` recognizes CrashLogger `.log` and
-  `.txt` files. Preserve denominator, ignored/unreadable counts, and exact input.
-- Decompilation output, if used from an operator-installed tool, is derived
-  evidence and not original source. Record the exact tool version and preserve
-  the compiled input; this harness does not compile or deploy scripts.
-- DevBench is an optional, user-installed live-game plugin. Run `alive` before
-  state reads, confirm the returned executable identity is the verified AE
-  instance, and use the wrapper's read-only inspection calls. Console,
-  Papyrus invocation, raw tools, save/load, and scenario endpoints are disabled.
+- `python3 scripts/python_env.py run tools/cosave-info.py <copy.skse>` performs a
+  read-only structural survey. It does not decode every mod chunk or prove
+  player ActorValues/effect state. Tests use a synthetic fixture, not a user's
+  save.
+- `python3 scripts/python_env.py run tools/papyrus-triage.py <log>` and
+  `python3 scripts/python_env.py run tools/crash-triage.py <file-or-dir>` report
+  counts and coverage. Keep private log input local; summarize results in the
+  experiment Markdown or evidence database.
+- `scripts/read-save.py` supports only its documented read-only header/string/
+  byte scans. Structured ReSaver analysis is retired until a Python-only
+  reader is reviewed.
+- A live SKSE/DevBench bridge is not tested in this environment. Do not connect
+  until executable identity and full profile order pass preflight. No live
+  mutator is exposed to an unattended run.
 
-For every tool result, retain command, tool version, exit status, edition/build,
-input path/hash, coverage denominator, and raw output. Empty results without
-those checks are unknown, not negative evidence. Linux CI can validate parsers,
-fixtures, and routing logic; it cannot validate the Windows xEdit DLL, MO2
-profile virtualization, DevBench, or an in-game Skyrim runtime.
+## Ghidra, CommonLibSSE, SSEEdit, and archives
+
+- `python3 scripts/python_env.py run tools/domain_doctor.py` reports local tool candidates and actual
+  prerequisites. The current session has a Ghidra candidate but lacks Java,
+  a CommonLibSSE source candidate but lacks CMake, and an SSEEdit candidate
+  without a verified AE target/order. It does not pretend these native tools
+  ran.
+- Use the Python TES4 reader for static record fields. Winning-record queries,
+  Ghidra decompilation, CommonLib builds, and BSA listing/extraction remain
+  blocked until their external runtimes are available and a Python entrypoint
+  has a passing test. Do not invoke the archived shell/Node/Java wrappers.
+- Never write to original game files, plugins, archives, saves, or co-saves.
+  If a later tool writes a derived artifact, keep it in ignored local storage
+  and preserve the source hash and exact command.
+
+For every result, retain the command, tool version, input identity/hash,
+coverage denominator, and epistemic status. Source assertions, inferences,
+diagnostic interventions, and vanilla reproductions remain separate.

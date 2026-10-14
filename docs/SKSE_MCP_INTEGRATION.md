@@ -15,7 +15,7 @@ This repository does not install or enable live MCP servers by default. The acti
 
 ## Process
 If a local Windows research session later decides to integrate SKSE or MCP tooling:
-1. Verify `SKYRIMSE.exe` ProductVersion `1.6.318+` with `node tools/ae-preflight.js`.
+1. Verify `SkyrimSE.exe` ProductVersion `1.6.318+` with `python3 scripts/python_env.py run tools/ae_preflight.py`.
 2. Confirm the exact active `plugins.txt` and selected MO2 profile.
 3. Keep the integration strictly optional and separate from the repository's core offline validation.
 4. Preserve raw logs and hashes; never silently rewrite them.

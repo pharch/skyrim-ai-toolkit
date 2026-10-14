@@ -4,7 +4,7 @@
     "edition": "AE",
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
-    "note": "Repository target policy only; no Windows executable or game runtime was available."
+    "note": "Repository target policy only; no Windows executable or game runtime was available. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Legacy source files are hashed in migration/legacy_markdown_manifest.tsv; source commit is unavailable. Pre-push setup checkpoint: Python AE target, plugin-reader, environment dispatcher, and six-domain doctor exist; retired non-Python launchers, the Node lockfile, and old DevBench shell fixtures are archived; module flags dispatch correctly; configured profile files are not reported as verified active orders. UESP/Apocrypha skills use the dispatcher. Current skill/tool capability docs describe Python routes and domain blockers. Exact next action: remove tracked raw-format local artifacts from the Git index without deleting their working copies, confirm ignore coverage, then rerun the pre-push audit and finalize the reviewer summary."
   },
   "items": [
     {
@@ -29,13 +29,21 @@
           "evidence": []
         }
       ],
-      "methods": ["dated source verification", "complete AE record analysis", "controlled state-transition protocol"],
+      "methods": [
+        "dated source verification",
+        "complete AE record analysis",
+        "controlled state-transition protocol"
+      ],
       "blocked_by": [],
-      "evidence": [],
+      "evidence": [
+        "EV-0108"
+      ],
       "priority": 1.0,
       "information_gain": 0.8,
       "next_action": "Select a named candidate from authorized dated source material, then verify its prerequisite against the winning record in the complete active AE order.",
-      "linked_claims": [],
+      "linked_claims": [
+        "CL-L062"
+      ],
       "successors": [],
       "attempts": []
     },
@@ -61,8 +69,14 @@
           "evidence": []
         }
       ],
-      "methods": ["record/call-path analysis", "rival-path comparison", "clean-save reproduction"],
-      "blocked_by": ["Q-0001"],
+      "methods": [
+        "record/call-path analysis",
+        "rival-path comparison",
+        "clean-save reproduction"
+      ],
+      "blocked_by": [
+        "Q-0001"
+      ],
       "evidence": [],
       "priority": 0.98,
       "information_gain": 0.9,
@@ -93,15 +107,42 @@
           "evidence": []
         }
       ],
-      "methods": ["build-matched native analysis", "record/condition review", "instrumented XP snapshot protocol"],
+      "methods": [
+        "build-matched native analysis",
+        "record/condition review",
+        "instrumented XP snapshot protocol"
+      ],
       "blocked_by": [],
-      "evidence": [],
+      "evidence": [
+        "EV-0036",
+        "EV-0039",
+        "EV-0049",
+        "EV-0050",
+        "EV-0051"
+      ],
       "priority": 1.0,
       "information_gain": 0.9,
       "next_action": "Review retained source/protocol knowledge and define independent hit, damage, armor-rating, skill-XP, and character-XP observables before seeking a matching binary.",
       "linked_claims": [],
-      "successors": [],
-      "attempts": []
+      "successors": [
+        "Q-0004"
+      ],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Reviewed legacy receiver routing, invulnerability, owner-death, pure-spell, and EP22 reports. They bound several paths but do not establish a current-build hit result; no runtime or target verification was performed.",
+          "evidence": [
+            "EV-0036",
+            "EV-0039",
+            "EV-0049",
+            "EV-0050",
+            "EV-0051"
+          ],
+          "action_key": "Q-0003-legacy-armor-audit-review",
+          "new_discriminant": "On a verified matching build, compare physical and pure-spell hit routing while logging player receiver, damage fields, armor AV11/12, blocked AV9, EP22 aggregate, and raw AVSK deltas; ignore projectile-owner death as a receiver-side predictor."
+        }
+      ]
     },
     {
       "id": "Q-0004",
@@ -125,14 +166,28 @@
           "evidence": []
         }
       ],
-      "methods": ["native award-branch analysis", "record/perk condition inspection", "controlled A/B hit protocol"],
-      "blocked_by": ["Q-0003"],
-      "evidence": [],
+      "methods": [
+        "native award-branch analysis",
+        "record/perk condition inspection",
+        "controlled A/B hit protocol"
+      ],
+      "blocked_by": [
+        "Q-0003"
+      ],
+      "evidence": [
+        "EV-0036",
+        "EV-0039",
+        "EV-0049",
+        "EV-0050",
+        "EV-0051"
+      ],
       "priority": 0.99,
       "information_gain": 0.95,
       "next_action": "Use Q-0003 to identify distinct protection and award observables; do not test a bypass until a real hit and functioning armor can be independently verified.",
       "linked_claims": [],
-      "successors": [],
+      "successors": [
+        "Q-0015"
+      ],
       "attempts": []
     },
     {
@@ -157,13 +212,27 @@
           "evidence": []
         }
       ],
-      "methods": ["numeric boundary tests", "build-matched native analysis", "cumulative skill-XP measurement"],
+      "methods": [
+        "numeric boundary tests",
+        "build-matched native analysis",
+        "cumulative skill-XP measurement"
+      ],
       "blocked_by": [],
-      "evidence": [],
+      "evidence": [
+        "EV-0065",
+        "EV-0066",
+        "EV-0084",
+        "EV-0087"
+      ],
       "priority": 0.7,
       "information_gain": 0.7,
       "next_action": "Define input values, raw skill-XP observables, threshold baselines, and controls; treat ULP/rounding explanations as hypotheses until raw representations are recorded.",
-      "linked_claims": [],
+      "linked_claims": [
+        "CL-L025",
+        "CL-L026",
+        "CL-L039",
+        "CL-L042"
+      ],
       "successors": [],
       "attempts": []
     },
@@ -189,13 +258,24 @@
           "evidence": []
         }
       ],
-      "methods": ["ActiveEffect lifetime analysis", "read-only save comparison", "controlled duration/persistence protocol"],
+      "methods": [
+        "ActiveEffect lifetime analysis",
+        "read-only save comparison",
+        "controlled duration/persistence protocol"
+      ],
       "blocked_by": [],
-      "evidence": [],
+      "evidence": [
+        "EV-0058",
+        "EV-0079",
+        "EV-0107"
+      ],
       "priority": 0.7,
       "information_gain": 0.8,
       "next_action": "Define instance identity, duration, magnitude, dispel, save/load, and reapplication observables that distinguish one surviving ActiveEffect from replacement.",
-      "linked_claims": [],
+      "linked_claims": [
+        "CL-L031",
+        "CL-L061"
+      ],
       "successors": [],
       "attempts": []
     },
@@ -221,12 +301,16 @@
           "evidence": []
         }
       ],
-      "methods": ["tracked-file/tool inventory", "offline fixture tests", "Windows prerequisite matrix"],
+      "methods": [
+        "tracked-file/tool inventory",
+        "offline fixture tests",
+        "Windows prerequisite matrix"
+      ],
       "blocked_by": [],
       "evidence": [],
       "priority": 0.93,
       "information_gain": 1.0,
-      "next_action": "Run each available cloud fixture and validate every documented command against its retained wrapper; record Windows-only integrations as unverified, not passed.",
+      "next_action": "After capturing the audit criteria, inventory retained tools and the source checkout, then validate feasible interfaces and record Windows-only prerequisites explicitly.",
       "linked_claims": [],
       "successors": [],
       "attempts": []
@@ -253,15 +337,585 @@
           "evidence": []
         }
       ],
-      "methods": ["authorized source query", "local fixture ingestion", "claim/contradiction ledger"],
+      "methods": [
+        "authorized source query",
+        "local fixture ingestion",
+        "claim/contradiction ledger"
+      ],
       "blocked_by": [],
       "evidence": [],
       "priority": 0.89,
       "information_gain": 0.85,
-      "next_action": "Validate the local source-index adapters using synthetic fixtures only; do not access private archives or claim UESP availability without an actual permitted response.",
+      "next_action": "Inspect authorized local source material from the required source checkout, preserve provenance and contradictions, and keep private Discord material outside public Git.",
       "linked_claims": [],
       "successors": [],
       "attempts": []
+    },
+    {
+      "id": "Q-0009",
+      "objective": "OBJ-1",
+      "kind": "mechanism",
+      "status": "in_progress",
+      "question": "Can DA07’s pamphlet alias start the gated quest before its level-20 helper fills the alias?",
+      "hypotheses": [
+        {
+          "id": "Q-0009-H1",
+          "model": "The pamphlet `SetStage(5)` path is reachable before the helper gate.",
+          "predicted_discriminant": "At level 1 with DA07 stopped, a normal action reaches a filled pamphlet alias, the alias fragment calls SetStage(5), and quest stage changes before DA07Start.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0019"
+          ]
+        },
+        {
+          "id": "Q-0009-H2",
+          "model": "The alias is filled only after the gated intro begins, so the base book is inert for this path.",
+          "predicted_discriminant": "DA07 has no active pamphlet alias before its level-20 helper; the base BOOK can be acquired/read without firing the alias fragment, so no pre-gate stage change occurs.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0019"
+          ]
+        }
+      ],
+      "methods": [
+        "Record/script reference trace and ordinary level-one reachability review.",
+        "complete AE winning-record inspection",
+        "controlled vanilla test only after verified executable and active order"
+      ],
+      "blocked_by": [],
+      "evidence": [
+        "EV-0019"
+      ],
+      "priority": 0.97,
+      "information_gain": 0.86,
+      "next_action": "Trace all pre-gate placements/alias fills for the scripted pamphlet; do not treat the base BOOK record as equivalent to the alias.",
+      "linked_claims": [
+        "CL-L002"
+      ],
+      "successors": [],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Legacy source review completed; no runtime test or target verification was performed.",
+          "evidence": [
+            "EV-0019"
+          ],
+          "action_key": "Q-0009-legacy-import-review"
+        }
+      ]
+    },
+    {
+      "id": "Q-0010",
+      "objective": "OBJ-1",
+      "kind": "mechanism",
+      "status": "in_progress",
+      "question": "Can Haknir’s death stage writer be reached while the level-36 Story Manager gate is still closed?",
+      "hypotheses": [
+        {
+          "id": "Q-0010-H1",
+          "model": "A player-accessible vanilla setup enables the initially disabled Haknir reference before the helper starts.",
+          "predicted_discriminant": "An ordinary level-one sequence enables ACHR 02037FEA while the helper remains stopped; Haknir can then die and OnDying advances the stopped treasure quest to stage 100.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0019"
+          ]
+        },
+        {
+          "id": "Q-0010-H2",
+          "model": "The only actor reference stays disabled until a gated quest setup, so OnDying cannot be reached pre-gate.",
+          "predicted_discriminant": "The sole ACHR remains disabled until the gated helper/alias setup; no ordinary pre-gate death event is possible.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0019"
+          ]
+        }
+      ],
+      "methods": [
+        "Placed-reference enable-parent and quest alias trace; then level-one ordinary-play protocol if the static path survives.",
+        "complete AE winning-record inspection",
+        "controlled vanilla test only after verified executable and active order"
+      ],
+      "blocked_by": [],
+      "evidence": [
+        "EV-0019"
+      ],
+      "priority": 0.96,
+      "information_gain": 0.84,
+      "next_action": "Resolve the sole ACHR enable chain and alias ownership in complete AE order.",
+      "linked_claims": [
+        "CL-L003"
+      ],
+      "successors": [],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Legacy source review completed; no runtime test or target verification was performed.",
+          "evidence": [
+            "EV-0019"
+          ],
+          "action_key": "Q-0010-legacy-import-review"
+        }
+      ]
+    },
+    {
+      "id": "Q-0011",
+      "objective": "OBJ-1",
+      "kind": "baseline",
+      "status": "in_progress",
+      "question": "Does the enabled DA14 trigger at REFR 00000EC8 provide a player-reachable stage-406 path before the level-14 helper starts?",
+      "hypotheses": [
+        {
+          "id": "Q-0011-H1",
+          "model": "The trigger is reachable and calls a DA14 stage writer that starts or advances the stopped quest.",
+          "predicted_discriminant": "REFR 00000EC8 is enabled in a level-one reachable cell and its trigger fires stage 406 with DA14 stopped, producing a real quest-state change.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0019"
+          ]
+        },
+        {
+          "id": "Q-0011-H2",
+          "model": "Its cell, enable parent, or quest-state prerequisite makes it unavailable before DA14Start.",
+          "predicted_discriminant": "The reference is inaccessible, disabled, or guarded by DA14Start/another prerequisite, so stage 406 does not fire before the level-14 route.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0019"
+          ]
+        }
+      ],
+      "methods": [
+        "Resolve containing cell/reference ownership and all Start/SetStage preconditions; then prepare a clean level-one test.",
+        "complete AE winning-record inspection",
+        "controlled vanilla test only after verified executable and active order"
+      ],
+      "blocked_by": [],
+      "evidence": [
+        "EV-0019"
+      ],
+      "priority": 0.93,
+      "information_gain": 0.82,
+      "next_action": "Verify the reference chain and owner quest from the report’s raw record artifact.",
+      "linked_claims": [],
+      "successors": [],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Legacy source review completed; no runtime test or target verification was performed.",
+          "evidence": [
+            "EV-0019"
+          ],
+          "action_key": "Q-0011-legacy-import-review"
+        }
+      ]
+    },
+    {
+      "id": "Q-0012",
+      "objective": "OBJ-1",
+      "kind": "mechanism",
+      "status": "in_progress",
+      "question": "Does the Dawnguard book-alias `SetStage` path have an owner/placement independent of the level-10 VQ00 helper?",
+      "hypotheses": [
+        {
+          "id": "Q-0012-H1",
+          "model": "A pre-existing active alias item can call `SetStage` and start the quest before VQ00.",
+          "predicted_discriminant": "A VQ01 book alias exists before VQ00, and ordinary acquisition/read invokes SetStage on a stopped target quest.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0019"
+          ]
+        },
+        {
+          "id": "Q-0012-H2",
+          "model": "The reported VQ01 alias is created only downstream of VQ00, leaving no pre-gate book event.",
+          "predicted_discriminant": "The VQ01 alias is filled only by the level-10 VQ00 helper; base book ownership does not call the alias script.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0019"
+          ]
+        }
+      ],
+      "methods": [
+        "Trace all VQ00/VQ01 book references, alias fills, and owning quest start conditions.",
+        "complete AE winning-record inspection",
+        "controlled vanilla test only after verified executable and active order"
+      ],
+      "blocked_by": [],
+      "evidence": [
+        "EV-0019"
+      ],
+      "priority": 0.91,
+      "information_gain": 0.79,
+      "next_action": "First resolve the book reference and alias owner in the complete active order.",
+      "linked_claims": [],
+      "successors": [],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Legacy source review completed; no runtime test or target verification was performed.",
+          "evidence": [
+            "EV-0019"
+          ],
+          "action_key": "Q-0012-legacy-import-review"
+        }
+      ]
+    },
+    {
+      "id": "Q-0013",
+      "objective": "OBJ-1",
+      "kind": "mechanism",
+      "status": "in_progress",
+      "question": "Which exact Story Manager and alias transition evaluates the selected level-one quest gate, and can an ordinary event reach a distinct start writer?",
+      "hypotheses": [
+        {
+          "id": "Q-0013-H1",
+          "model": "At least one player-accessible writer starts the quest before its level condition.",
+          "predicted_discriminant": "At level 1, a named ordinary event starts or advances the quest through a writer that does not pass through the identified GetLevel condition; record the event and state transition.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0019"
+          ]
+        },
+        {
+          "id": "Q-0013-H2",
+          "model": "All reachable writers converge on the same gated helper or a later quest state.",
+          "predicted_discriminant": "Every ordinary player-accessible writer found converges on the gated helper; quest running state/stage changes only after the level condition passes.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0019"
+          ]
+        }
+      ],
+      "methods": [
+        "For one named candidate, compare all Start/SetStage writers with the SMQN child and alias fills.",
+        "complete AE winning-record inspection",
+        "controlled vanilla test only after verified executable and active order"
+      ],
+      "blocked_by": [],
+      "evidence": [
+        "EV-0019",
+        "EV-0108"
+      ],
+      "priority": 0.95,
+      "information_gain": 0.88,
+      "next_action": "Use a complete winning-record graph; console stage/level forcing is diagnostic only.",
+      "linked_claims": [
+        "CL-L001",
+        "CL-L062"
+      ],
+      "successors": [],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Legacy source review completed; no runtime test or target verification was performed.",
+          "evidence": [
+            "EV-0019"
+          ],
+          "action_key": "Q-0013-legacy-import-review"
+        }
+      ]
+    },
+    {
+      "id": "Q-0014",
+      "objective": "OBJ-2",
+      "kind": "mechanism",
+      "status": "open",
+      "question": "Does an ordinary blocked hit on worn positive-DNAM armor omit AV11/12 while keeping the hit and armor protection useful?",
+      "hypotheses": [
+        {
+          "id": "Q-0014-H1",
+          "model": "The blocked receiver branch skips Heavy/Light XP and the worn armor still contributes to damage reduction.",
+          "predicted_discriminant": "Under the same attack and worn positive-DNAM armor, the blocked hit is valid, AV11/12 calls are absent, armor reduction is measurable, and any AV9 delta remains within the recorded Block budget.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0020"
+          ]
+        },
+        {
+          "id": "Q-0014-H2",
+          "model": "The branch removes the relevant hit/protection or the candidate’s Block cost defeats the level budget.",
+          "predicted_discriminant": "The hit/protection changes materially or the Block delta crosses its threshold; skipped armor calls alone do not meet the objective.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0020"
+          ]
+        }
+      ],
+      "methods": [
+        "Matched unblocked/blocked hit; record hit flags, AV9/11/12 calls, damage, armor rating, and raw skill budgets.",
+        "complete AE winning-record inspection",
+        "controlled vanilla test only after verified executable and active order"
+      ],
+      "blocked_by": [],
+      "evidence": [
+        "EV-0020"
+      ],
+      "priority": 0.99,
+      "information_gain": 0.93,
+      "next_action": "Do not run before executable and profile identity are verified and the observer is proven read-only.",
+      "linked_claims": [
+        "CL-L006"
+      ],
+      "successors": [],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Legacy source review completed; no runtime test or target verification was performed.",
+          "evidence": [
+            "EV-0020"
+          ],
+          "action_key": "Q-0014-legacy-import-review"
+        }
+      ]
+    },
+    {
+      "id": "Q-0015",
+      "objective": "OBJ-2",
+      "kind": "mechanism",
+      "status": "in_progress",
+      "question": "Can a vanilla-reachable negative AV39 state make a blocked hit’s Block points non-positive while armor remains useful?",
+      "hypotheses": [
+        {
+          "id": "Q-0015-H1",
+          "model": "Negative Damage Resist causes `physicalDamage - totalDamage <= 0`; the shared guard then rejects AV9 while blocked routing skips AV11/12.",
+          "predicted_discriminant": "With negative AV39 and a valid blocked hit, recorded `physicalDamage - totalDamage` is <= 0; the wrapper rejects AV9 and AV11/12 remain absent while armor still reduces damage versus no-armor control.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0021",
+            "EV-0020",
+            "EV-0036"
+          ]
+        },
+        {
+          "id": "Q-0015-H2",
+          "model": "Damage construction clamps/reorders the fields, or the only AV39 route also removes effective protection or is unreachable.",
+          "predicted_discriminant": "The argument is positive or is clamped/recomputed, AV9 advances, or the candidate fails the positive armor-protection control.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0021",
+            "EV-0020"
+          ]
+        }
+      ],
+      "methods": [
+        "Capture AV39, total/physical hit fields, all selected UseSkill amounts, protection control, and raw AVSK values.",
+        "complete AE winning-record inspection",
+        "controlled vanilla test only after verified executable and active order"
+      ],
+      "blocked_by": [],
+      "evidence": [
+        "EV-0021",
+        "EV-0020",
+        "EV-0036",
+        "EV-0037"
+      ],
+      "priority": 0.99,
+      "information_gain": 0.97,
+      "next_action": "First prove an ordinary AV39 writer and exact target effect; then use separate controls for hit/no-hit and block.",
+      "linked_claims": [
+        "CL-L007"
+      ],
+      "successors": [],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Legacy receiver/sink and scripted-writer source review completed; two script writers fail player reachability or cleanup requirements. WICast remains a separate unverified record candidate; no runtime test or target verification was performed.",
+          "evidence": [
+            "EV-0021",
+            "EV-0020",
+            "EV-0036",
+            "EV-0037"
+          ],
+          "action_key": "Q-0015-legacy-import-review"
+        }
+      ]
+    },
+    {
+      "id": "Q-0016",
+      "objective": "OBJ-2",
+      "kind": "mechanism",
+      "status": "open",
+      "question": "Can WICast select a Marked-for-Death spell on the player in an eligible cell at the required starting level?",
+      "hypotheses": [
+        {
+          "id": "Q-0016-H1",
+          "model": "An official event selects one listed voice form and targets the player under a nonnegative location counter.",
+          "predicted_discriminant": "In an ordinarily reachable eligible location, the event selects one listed Marked-for-Death spell, its source targets the player, the location counter passes, and player AV39 changes with no forced state.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0022",
+            "EV-0035"
+          ]
+        },
+        {
+          "id": "Q-0016-H2",
+          "model": "The candidate location/quest gate, counter, actor eligibility, or target rule prevents the cast.",
+          "predicted_discriminant": "No event starts, the counter blocks it, a different actor/spell/target is selected, or player AV39 remains unchanged.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0022",
+            "EV-0035"
+          ]
+        }
+      ],
+      "methods": [
+        "Observe event start, selected spell, source/target refs, current-location keyword data, and AV39 delta.",
+        "complete AE winning-record inspection",
+        "controlled vanilla test only after verified executable and active order"
+      ],
+      "blocked_by": [],
+      "evidence": [
+        "EV-0022",
+        "EV-0035"
+      ],
+      "priority": 0.94,
+      "information_gain": 0.92,
+      "next_action": "The source report’s Sovngarde node is only a lead; establish ordinary location access before a user test.",
+      "linked_claims": [
+        "CL-L004",
+        "CL-L005"
+      ],
+      "successors": [],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Legacy source review completed; no runtime test or target verification was performed.",
+          "evidence": [
+            "EV-0022",
+            "EV-0035"
+          ],
+          "action_key": "Q-0016-legacy-import-review"
+        }
+      ]
+    },
+    {
+      "id": "Q-0017",
+      "objective": "OBJ-2",
+      "kind": "baseline",
+      "status": "open",
+      "question": "For blocked hits, which raw HitData field determines armor XP eligibility and which field determines Block points?",
+      "hypotheses": [
+        {
+          "id": "Q-0017-H1",
+          "model": "The two amounts use distinct fields, so a visible zero in one does not predict the other.",
+          "predicted_discriminant": "Raw records show armor eligibility and Block points derive from distinct fields; the matched run reproduces the distinct arguments.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0023",
+            "EV-0020"
+          ]
+        },
+        {
+          "id": "Q-0017-H2",
+          "model": "Both awards share a normalized field or a constructor clamp that makes the apparent distinction irrelevant.",
+          "predicted_discriminant": "Both awards use the same normalized amount or the field difference is eliminated before either UseSkill call.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0023",
+            "EV-0020"
+          ]
+        }
+      ],
+      "methods": [
+        "Record raw total/physical damage, flags, exact UseSkill arguments, and pre/post skill progress in a paired control.",
+        "complete AE winning-record inspection",
+        "controlled vanilla test only after verified executable and active order"
+      ],
+      "blocked_by": [],
+      "evidence": [
+        "EV-0023",
+        "EV-0020"
+      ],
+      "priority": 0.95,
+      "information_gain": 0.89,
+      "next_action": "Use only the build-matched native path and a verified live observer; no decimal tooltip inference.",
+      "linked_claims": [
+        "CL-L006",
+        "CL-L007"
+      ],
+      "successors": [],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Legacy source review completed; no runtime test or target verification was performed.",
+          "evidence": [
+            "EV-0023",
+            "EV-0020"
+          ],
+          "action_key": "Q-0017-legacy-import-review"
+        }
+      ]
+    },
+    {
+      "id": "Q-0018",
+      "objective": "OBJ-2",
+      "kind": "mechanism",
+      "status": "open",
+      "question": "Does the candidate preserve armor’s effective protection across a verified incoming hit while suppressing the target armor-skill award?",
+      "hypotheses": [
+        {
+          "id": "Q-0018-H1",
+          "model": "The hit passes through armor mitigation and the award branch is independently skipped.",
+          "predicted_discriminant": "A valid incoming hit occurs, positive armor rating is present and measured mitigation persists, while raw Heavy/Light progress and selected armor UseSkill calls remain unchanged in the candidate; the control awards XP.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0024",
+            "EV-0020"
+          ]
+        },
+        {
+          "id": "Q-0018-H2",
+          "model": "The candidate avoids or changes the incoming hit/protection computation, so it does not meet OBJ-2.",
+          "predicted_discriminant": "The candidate prevents a real hit, removes/reduces armor mitigation, or still increments raw Heavy/Light progress.",
+          "status": "proposed",
+          "evidence": [
+            "EV-0024",
+            "EV-0020"
+          ]
+        }
+      ],
+      "methods": [
+        "Measure same attack, armor DNAM/AV, damage, hit validity, and AV11/12 progress in control/candidate.",
+        "complete AE winning-record inspection",
+        "controlled vanilla test only after verified executable and active order"
+      ],
+      "blocked_by": [],
+      "evidence": [
+        "EV-0024",
+        "EV-0020"
+      ],
+      "priority": 0.99,
+      "information_gain": 0.95,
+      "next_action": "Separate a genuine zero XP delta from unchanged displayed level; verify raw progress.",
+      "linked_claims": [
+        "CL-L006"
+      ],
+      "successors": [],
+      "attempts": [
+        {
+          "date": "2026-10-14",
+          "lane": "mechanism_inference",
+          "result": "Legacy source review completed; no runtime test or target verification was performed.",
+          "evidence": [
+            "EV-0024",
+            "EV-0020"
+          ],
+          "action_key": "Q-0018-legacy-import-review"
+        }
+      ]
     }
-  ]
+  ],
+  "session_next_action": "Archive retired Node/shell/Java launchers and remove Node runtime manifests; finish active docs and skill references; run the pre-push ignore/heavy-artifact audit, domain doctor, Python test suites, validators, and update all remaining checklist statuses and reviewer summary.",
+  "session_checkpoint": {
+    "date": "2026-10-14",
+    "next_action": "At the next research session, run python3 scripts/python_env.py run tools/ae_preflight.py against the selected Windows AE executable and complete active MO2 plugins.txt. If target verification is unavailable, continue offline Q-0001. The user reviews, commits, and pushes this checkout."
+  }
 }

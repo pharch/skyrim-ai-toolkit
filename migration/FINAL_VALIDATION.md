@@ -1,3 +1,5 @@
+> Historical validation report from a different checkout/toolchain. Its PASS results are not current evidence; see `LOCAL_SETUP_REPORT.md` and `LOCAL_SETUP_CHECKLIST.md`.
+
 # Final validation report
 
 ## Environment

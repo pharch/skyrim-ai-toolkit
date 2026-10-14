@@ -1,3 +1,5 @@
+> Historical log from 2026-10-13 and a different starting commit/toolchain. It is not the current session record; see `LOCAL_SETUP_PROGRESS.md` and `LOCAL_SETUP_CHECKLIST.md`.
+
 # Finalization log
 
 All timestamps are UTC. This log records repository work and validation only;

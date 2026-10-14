@@ -33,7 +33,8 @@ LEGEND = {
 }
 
 def survey(path):
-    data = open(path, "rb").read()
+    with open(path, "rb") as stream:
+        data = stream.read()
     n = len(data)
     if data[:4] != b"SKSE":
         return {"ok": False, "error": f"not an SKSE cosave (magic={data[:4]!r})", "size": n}

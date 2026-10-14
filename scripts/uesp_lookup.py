@@ -26,10 +26,13 @@ def query(params):
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--online', action='store_true', help='explicitly permit an on-demand request to en.uesp.net')
     sub=ap.add_subparsers(dest='op',required=True)
     s=sub.add_parser('search');s.add_argument('terms');s.add_argument('--limit',type=int,default=8)
     p=sub.add_parser('page');p.add_argument('title')
     args=ap.parse_args()
+    if not args.online:
+        ap.error('network access is opt-in; use python3 -m tools.uesp with the local index, or pass --online explicitly')
     if args.op=='search':
         result=query({'action':'query','list':'search','srsearch':args.terms,'srlimit':max(1,min(20,args.limit)),'srnamespace':0})
         items=[{'title':x.get('title'),'pageid':x.get('pageid'),'timestamp':x.get('timestamp'),'url':'https://en.uesp.net/wiki/'+urllib.parse.quote(x.get('title','').replace(' ','_'),safe=':/')} for x in result.get('query',{}).get('search',[])]

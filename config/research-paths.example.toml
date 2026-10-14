@@ -1,0 +1,43 @@
+# Sanitized inventory template. Copy to ignored .local/research-paths.toml.
+# This registry stores local path discovery metadata; it does not verify the
+# game version, active profile, or tool compatibility.
+schema_version = 1
+
+[source]
+repository = ""
+markdown_count = 0
+markdown_manifest_sha256 = ""
+
+[target]
+edition = "AE"
+product_version_status = "unverified"
+raw_uesp_dump = ""
+
+[configured_paths]
+skyrim_exe = ""
+skyrim_gog_exe = ""
+skyrim_data = ""
+skyrim_gog_data = ""
+skyrim_scripts = ""
+skyrim_gog_scripts = ""
+sseedit_exe = ""
+xedit_scripts = ""
+ghidra_home = ""
+ghidra_headless = ""
+ghidra_projects = ""
+java_home = ""
+commonlibsse_ng = ""
+commonlibsse_gdt = ""
+address_library_dir = ""
+skyrim_re_toolkit = ""
+vcpkg_root = ""
+
+[observed_hashes]
+skyrim_exe_sha256 = ""
+skyrim_gog_exe_sha256 = ""
+sseedit_exe_sha256 = ""
+uesp_dump_sha256 = ""
+
+[private_sources]
+apocrypha_json = ""
+apocrypha_json_sha256 = ""

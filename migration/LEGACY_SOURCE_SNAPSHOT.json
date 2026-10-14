@@ -1,0 +1,40 @@
+{
+  "snapshot_id": "LEGACY-20261014-A",
+  "captured_date": "2026-10-14",
+  "source_identity": "external Skyrim research checkout; local path withheld",
+  "source_git": {
+    "status": "unavailable",
+    "reason": "source .git directory is empty; no HEAD, config, or index"
+  },
+  "markdown_mdx_count": 242,
+  "markdown_mdx_observed_count": 243,
+  "markdown_mdx_excluded_count": 1,
+  "manifest": "migration/legacy_markdown_manifest.tsv",
+  "manifest_sha256": "4819c59e44aaec195b8f9047730e521eb2ab43b0808ff96bc30e0ee54997bd09",
+  "excluded_markdown": "migration/legacy_source_exclusions.tsv",
+  "counts_by_top_level": {
+    "AGENTS.md": 1,
+    "NORTH_STAR.md": 1,
+    "README.md": 1,
+    "ROADMAP.md": 1,
+    "STATE.md": 1,
+    "archive": 1,
+    "data": 4,
+    "domains": 19,
+    "evidence": 2,
+    "experiments": 33,
+    "glitches": 8,
+    "legacy": 104,
+    "mechanisms": 9,
+    "migration": 7,
+    "observer": 4,
+    "out": 23,
+    "probes": 1,
+    "protocols": 10,
+    "references": 1,
+    "research": 6,
+    "scripts": 3,
+    "tools": 2
+  },
+  "coverage_note": "The source tree walk found 243 Markdown/MDX files; the 242 first-party or relevant candidates are in the manifest. One generated third-party vcpkg issue-body file is recorded as an explicit exclusion. This path/hash inventory does not by itself establish content review. Binary, raw archive, Ghidra database, and private export inventories are tracked separately."
+}
