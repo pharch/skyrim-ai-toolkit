@@ -1030,15 +1030,15 @@
       ]
     }
   ],
-  "session_next_action": "Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.",
+  "session_next_action": "Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.",
   "session_checkpoint": {
     "date": "2026-10-14",
-    "phase": "Final local mission verification and handoff",
-    "current_criterion": "All 74 criteria classified; final checkpoint audit, evidence validation, and local commit",
-    "last_successful_test": "139 unittest tests EV-0145; research, transaction, overlay and compileall validators EV-0146; staged diff, pre-push and added-line path checks passed.",
-    "current_tool_or_target": "Final Markdown inventory and staged change set; no active native session",
-    "actual_blocker_if_any": "External dependencies: selected MO2 profile, WSL process bridge, Windows/remote CI, disposable save/ReSaver, UESP source provenance, and separate Codex context.",
-    "next_exact_action": "Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.",
+    "phase": "Mission closeout and external handoff",
+    "current_criterion": "All local criteria complete; ten external blockers are explicitly classified",
+    "last_successful_test": "139 unittest tests EV-0145; final research/transaction/overlay/compileall validations passed; Markdown EV-0150 and staged privacy/diff checks passed.",
+    "current_tool_or_target": "Await selected MO2 profile plugins.txt or other documented external inputs; no active native session",
+    "actual_blocker_if_any": "Selected MO2 profile, WSL process bridge, Windows/remote CI, disposable save/ReSaver, UESP snapshot provenance, and separate Codex context.",
+    "next_exact_action": "Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.",
     "working_tree_and_commit": "branch glitch-hunting-setup; starting HEAD e13ae4b253a6f5fd66f0f8abc3e49e6f9b29a6cc; preserve the pre-existing deleted migration/RESEARCH_READINESS_MISSION.md and untracked user mission file."
   },
   "last_session_checkpoint": {

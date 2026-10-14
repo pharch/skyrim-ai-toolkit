@@ -16,4 +16,4 @@
 
 The local Linux Python tests and validators establish repository/tool behavior only. They do not establish Windows MO2 profile behavior, xEdit winners, successful Observer DLL load, a live SKSE handshake, ReSaver parsing of a real save, or in-game AE mechanics.
 
-- Final synchronized closeout recorded 64 PASS, 10 externally blocked criteria, and no pending rows; the Markdown inventory write/check passed after final checkpoint synchronization (EV-0150; prior passes EV-0147/EV-0149), and the staged privacy audit passed (EV-0148).
+- Final synchronized closeout recorded 64 PASS, 10 externally blocked criteria, and no pending rows; the Markdown inventory write/check passed after final checkpoint synchronization (EV-0151; prior passes EV-0147/EV-0149/EV-0150), and the staged privacy audit passed (EV-0148).

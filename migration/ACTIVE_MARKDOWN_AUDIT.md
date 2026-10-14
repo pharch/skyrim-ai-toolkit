@@ -100,10 +100,10 @@ Inventory: 155 Markdown files; 70 active; 85 archival.
 | `migration/LEGACY_FINALIZATION_CHECKLIST_82.md` | ARCHIVAL | `2e52848aa7a44cacea0b5d48a2a2196e1cae8fd447924e27898c49034c52856f` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/LEGACY_SOURCE_INDEX.md` | ARCHIVAL | `d9742def671d710d6f95fe42cb5fdc9a7044adc246f9b4e4dd48a9e551a5de04` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/LOCAL_READINESS_BLOCKERS.md` | ACTIVE | `ae61e9eb1a18533d458bc5dc1fbf834f156740932518af47a75f4793757f8a93` | Current readiness/audit record; reviewed for policy and links. |
-| `migration/LOCAL_READINESS_CHANGES.md` | ACTIVE | `49b263d634976f9b7694164e6ed05c2a333559ac5679477d54aca385e9295f4a` | Current readiness/audit record; reviewed for policy and links. |
-| `migration/LOCAL_READINESS_CHECKLIST.md` | ACTIVE | `e482a5658f4c5dbeeefe02d0952574204fcbfb046d42ab3a01e001219aa12928` | Current readiness/audit record; reviewed for policy and links. |
-| `migration/LOCAL_READINESS_REPORT.md` | ACTIVE | `32b024c7aaea901395daf00fc33d52eb1e805fb5f3153f360531b58087da45a5` | Current readiness/audit record; reviewed for policy and links. |
-| `migration/LOCAL_READINESS_RESUME.md` | ACTIVE | `dda8ce0aa9b6d12f0431fbea7518d5e25dad7c916f7e1d36528ea47c50243fd7` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/LOCAL_READINESS_CHANGES.md` | ACTIVE | `fdab0c357206b608e11b6f014d953eb4b0c48642245786c539ecbce94ec3fe90` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/LOCAL_READINESS_CHECKLIST.md` | ACTIVE | `87fff9cb28ebfa9925e74e5135b6d0644488d7f9e718f1d694731b616700d53d` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/LOCAL_READINESS_REPORT.md` | ACTIVE | `d21fe78368a731b71f4d93fc9c8a979b8494e44705db13751aa0252dfab4b7dd` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/LOCAL_READINESS_RESUME.md` | ACTIVE | `e74793c8f2c69e43dd8ea5de53605906f7c5141f4e6201838d153689b97235c5` | Current readiness/audit record; reviewed for policy and links. |
 | `migration/LOCAL_RESEARCH_READINESS_MISSION.md` | ACTIVE | `ee2768836341293fd0e8acc85be855cfe6bfe4dbeed10fa780047543769638c3` | Current readiness/audit record; reviewed for policy and links. |
 | `migration/LOCAL_SETUP_BASELINE.md` | ARCHIVAL | `793363481b7226e329e96c2171a763240d71fc6ac3faca6191cc9db6ace9c8f7` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/LOCAL_SETUP_CHECKLIST.md` | ARCHIVAL | `51586aa3e2faab74996acfb109ff0d245c8d34ea6004845778782212cee61c86` | Prior migration artifact; retained for provenance, not active instructions. |
@@ -154,7 +154,7 @@ Inventory: 155 Markdown files; 70 active; 85 archival.
 | `research/KNOWLEDGE_GRAPH.md` | ACTIVE | `a39de24c3558036c9e3c9556624f3a66bf33ba7dccce0737a8c2acba60e13dc1` | Current research guidance or evidence record; reviewed for policy and links. |
 | `research/MECHANISMS.md` | ACTIVE | `94fb6bc1552b27d138e3fbcd2e07822cd118ef1ae42f73a707580a9ff529879e` | Current research guidance or evidence record; reviewed for policy and links. |
 | `research/schema/markdown-entities.md` | ACTIVE | `c81cfc8411ba763c175af9238b35615bc4fba3f27fee6e53b956df9626cd65e2` | Current research guidance or evidence record; reviewed for policy and links. |
-| `research/SESSION_LOG.md` | ACTIVE | `0eaeb61fb69b9ef39c0eecb647937ff02624838d00d87d661a7c38e20931feed` | Current research guidance or evidence record; reviewed for policy and links. |
+| `research/SESSION_LOG.md` | ACTIVE | `0a85be47022777813003993b611c9f5893c2a89ebfd912352fb6f345518bf425` | Current research guidance or evidence record; reviewed for policy and links. |
 | `ROADMAP.md` | ACTIVE | `302a57c243b3ba571bd0e7d66c5b1c2041db2063f7bbddd5e5bf4949b125eede` | Current repository-level instruction or status document. |
 | `session-brief/LOCAL_CODEX_FINAL_AUDIT_PROMPT.md` | ARCHIVAL | `4f981b824b334eb7848c5dd51adec8959910b917ae82f4f1f81659b5f48b7322` | Retained historical or workflow source; not a primary instruction path. |
 | `session-brief/LOCAL_REPO_IMPORT_ADDENDUM.md` | ARCHIVAL | `cfb1c5a743e86f0bb6050b3cfe6edd23902423c5694b931cc0cd2ea9559dd10f` | Retained historical or workflow source; not a primary instruction path. |
@@ -162,5 +162,5 @@ Inventory: 155 Markdown files; 70 active; 85 archival.
 | `session-brief/uesp-grounding/SKILL.md` | ARCHIVAL | `f6d001d03394888bda3ab4df881610b22c6f3e2ca3e1b6c489d98ec84f81b5cf` | Retained historical or workflow source; not a primary instruction path. |
 | `session-brief/UESP_OFFLINE_GUIDE.md` | ARCHIVAL | `6da5ac04a18d6e138eb0fa021092bd847ff6de5d60c74726dde817faad38b2f3` | Retained historical or workflow source; not a primary instruction path. |
 | `session_prompt.md` | ACTIVE | `caadbdab8aa6add3ae5077c506c659f383cdd433de2cca918ae498e58fa22e7e` | Current repository-level instruction or status document. |
-| `STATE.md` | ACTIVE | `5093f5fe48c7d8bc82769b467ab5b3d32b378f8a4fc17f2ec2b21c38240cfcf0` | Current repository-level instruction or status document. |
+| `STATE.md` | ACTIVE | `30ee195512579cb13a5268d3de6e0175356e3d38e9fd82decb5305d5b584ecc0` | Current repository-level instruction or status document. |
 | `tools/README.md` | ACTIVE | `b1ee783929ee50855d3797b6b7a73f99e1b33f13476185fab8dd596287de1d52` | Current research guidance or evidence record; reviewed for policy and links. |

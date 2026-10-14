@@ -24,7 +24,7 @@ Audited branch: `glitch-hunting-setup`; starting HEAD: `e13ae4b253a6f5fd66f0f8ab
 
 ## Exact next action
 
-Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.
+Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.
 
 ## Local readiness mission checkpoint — 2026-10-14
 
@@ -811,19 +811,19 @@ Next action: Revise stale readiness text, gate wording, final test references an
 ## Final report and commit checkpoint — 2026-10-14T17:34:24Z
 
 Last completed: preliminary Markdown inventory write and check both passed; stale test and criterion wording has been identified for correction.
-Next action: Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.
+Next action: Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.
 
 
 ## Final readiness reconciliation checkpoint — 2026-10-14T17:36:06Z
 
 Last completed: preliminary Markdown inventory write/check passed for 155 files, 70 active and 85 archival; the final checklist/report/resume now reconcile to 64 PASS and 10 external blockers.
-Next action: Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.
+Next action: Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.
 
 
 ## Staged-status guard correction — 2026-10-14T17:37:45Z
 
 Last completed: final Markdown audit, evidence validation, staged diff check, pre-push audit, and zero-match added-line path scan passed; the closeout script guard misclassified normal staged status entries and stopped before commit.
-Next action: Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.
+Next action: Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.
 
 
 ## Git identity checkpoint — 2026-10-14T17:38:32Z
@@ -835,4 +835,10 @@ Next action: Inspect recent author metadata; if it is a single consistent reposi
 ## Final commit identity checkpoint — 2026-10-14T17:39:13Z
 
 Last completed: the last eight repository commits share one author identity; the checkout had no local Git author configured. The identity will be set only in this repository.
-Next action: Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.
+Next action: Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.
+
+
+## Mission complete — external prerequisite handoff — 2026-10-14T17:40:46Z
+
+Last completed: all locally actionable readiness checks passed, the 74-row ledger is 64 PASS and 10 BLOCKED_EXTERNAL with no pending or fixable failures, and the reviewed repository changes are committed locally.
+Next action: Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.

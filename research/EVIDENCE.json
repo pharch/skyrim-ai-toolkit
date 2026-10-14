@@ -2614,6 +2614,24 @@
       ],
       "coverage": "Final Markdown inventory after all final report, checklist, state and resume edits; 155 Markdown files, 70 active and 85 archival.",
       "result": "Both final inventory write and hash check exited 0."
+    },
+    {
+      "id": "EV-0151",
+      "kind": "tool",
+      "source": "Final Markdown inventory write/check after mission completion and external handoff synchronization",
+      "artifact": "private-local:.local/readiness/final-verification/markdown-policy-audit-complete.stdout.raw",
+      "sha256": "897bb36396bf159153307303d0d259693adc24c4e5f9e19f426f0ed1d9869aaa",
+      "captured_utc": "2026-10-14T17:40:46Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/markdown_policy_audit.py --write",
+        "python3 scripts/markdown_policy_audit.py --check"
+      ],
+      "coverage": "Final Markdown inventory after exact next action was synchronized across STATE, frontier, RECOVERY, session log and resume; 155 Markdown files, 70 active and 85 archival.",
+      "result": "Final inventory write and hash check both exited 0; final 74-row tally is 64 PASS and 10 BLOCKED_EXTERNAL."
     }
   ]
 }

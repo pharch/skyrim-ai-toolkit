@@ -24,7 +24,7 @@ The CommonLib library build does not establish an Observer DLL build. The Observ
 
 ## Acceptance tally
 
-Final reconciliation: **64 PASS / 0 FAIL_FIXABLE / 10 BLOCKED_EXTERNAL / 0 NOT_APPLICABLE / 0 PENDING, out of 74**. All rows are classified. C07/C08 are externally blocked after the saved-project query could not launch through WSL interop; session 40253 terminated at its analysis limit (EV-0139), and the third query attempt is EV-0141. The final Markdown inventory write/checks are EV-0147, EV-0149, and EV-0150; EV-0150 follows the final Git identity/checkpoint synchronization.
+Final reconciliation: **64 PASS / 0 FAIL_FIXABLE / 10 BLOCKED_EXTERNAL / 0 NOT_APPLICABLE / 0 PENDING, out of 74**. All rows are classified. C07/C08 are externally blocked after the saved-project query could not launch through WSL interop; session 40253 terminated at its analysis limit (EV-0139), and the third query attempt is EV-0141. The final Markdown inventory write/checks are EV-0147, EV-0149, EV-0150, and EV-0151; EV-0151 follows the completed mission-state handoff synchronization.
 
 Criterion-by-criterion commands, outputs, evidence IDs, changes, and limitations are in [`LOCAL_READINESS_CHECKLIST.md`](LOCAL_READINESS_CHECKLIST.md). External blockers and exact follow-up commands are in [`LOCAL_READINESS_BLOCKERS.md`](LOCAL_READINESS_BLOCKERS.md).
 
@@ -51,7 +51,7 @@ Synthesis claim CL-SYN-001 records that the available evidence supports no share
 
 ## Validation and privacy
 
-Final local validations: 139 unittest tests passed (EV-0145); research/evidence, transaction ledger, overlay, and compileall validators all returned exit 0 (EV-0146). The Ghidra adapter suite passed 9/9 tests after adding exact EV-0139 project attestation (EV-0140). The final Markdown inventory write/check passed after the last state checkpoint (EV-0150; earlier passes EV-0147/EV-0149); the staged pre-push/privacy audit passed (EV-0148), followed by a final rerun against the evidence-registered staged tree. Linux tests do not establish Windows MO2, xEdit, native-process bridge, live SKSE, ReSaver, or in-game AE behavior.
+Final local validations: 139 unittest tests passed (EV-0145); research/evidence, transaction ledger, overlay, and compileall validators all returned exit 0 (EV-0146). The Ghidra adapter suite passed 9/9 tests after adding exact EV-0139 project attestation (EV-0140). The final Markdown inventory write/check passed after mission closeout state synchronization (EV-0151; earlier passes EV-0147/EV-0149/EV-0150); the staged pre-push/privacy audit passed (EV-0148), followed by a final rerun against the evidence-registered staged tree. Linux tests do not establish Windows MO2, xEdit, native-process bridge, live SKSE, ReSaver, or in-game AE behavior.
 
 ## User-only actions, in priority order
 

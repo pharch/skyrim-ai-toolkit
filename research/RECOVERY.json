@@ -4,9 +4,9 @@
   "transaction_id": null,
   "frontier_id": null,
   "started_utc": null,
-  "checkpoint_utc": "2026-10-14T17:39:13Z",
+  "checkpoint_utc": "2026-10-14T17:40:46Z",
   "artifacts": [],
-  "next_action": "Use the consistent recent repository author locally, rerun the final Markdown inventory and evidence validators after this checkpoint, stage and privacy-check the reviewed changes with both mission states excluded, then commit without pushing.",
+  "next_action": "Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.",
   "next_frontier_id": "Q-0003",
   "last_transaction_id": "TX-0004"
 }
