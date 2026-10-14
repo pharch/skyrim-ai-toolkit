@@ -4,27 +4,27 @@ Updated: 2026-10-14
 
 ## Setup status
 
-The 74-criterion local research readiness mission has been verified: 64 PASS, 10 BLOCKED_EXTERNAL, 0 FAIL_FIXABLE, 0 NOT_APPLICABLE, 0 PENDING. B10 passed the final Markdown inventory audit; C07/C08 remain externally blocked after native queries failed before Ghidra.
+The 74-criterion local research readiness mission has 67 PASS, 7 BLOCKED_EXTERNAL, 0 FAIL_FIXABLE, 0 NOT_APPLICABLE, 0 PENDING. C07/C08 passed on a real hash-attested Ghidra query (EV-0152); F08 passed on independent fresh-context recovery (EV-0153); the AE Observer DLL build/export check passed (EV-0154/EV-0155). Final Markdown/privacy checks are being rerun after this reconciliation.
 
 Audited branch: `glitch-hunting-setup`; starting HEAD: `e13ae4b253a6f5fd66f0f8abc3e49e6f9b29a6cc`. The pre-existing deletion of `migration/RESEARCH_READINESS_MISSION.md` and user-supplied untracked `migration/LOCAL_RESEARCH_READINESS_MISSION.md` are preserved.
 
 ## Verified capabilities
 
 - Steam AE `SkyrimSE.exe` ProductVersion 1.6.1170.0, SHA256 `c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9` (EV-0109). The selected MO2 profile is not identified; preflight finds zero active plugins and all five required masters missing (EV-0110).
-- File-level DA14 QUST records were read from Skyrim.esm and Update.esm; no winner or condition semantics inferred (EV-0111/0112). Ghidra 12.0.4/Java 21.0.10 imported the verified image; attempt2 saved 92,219 functions after its 1,200-second timeout (EV-0113/0114). The separate 7,200-second run also timed out after 7,260.809 seconds and saved an incomplete project (EV-0139). Three query launches failed before Ghidra with WSL interop errors (EV-0131/0138/0141); the EV-0139-bound query fallback passes nine attestation tests (EV-0140).
-- CommonLibSSE-NG compiled for AE and produced a 200,524,092-byte library (EV-0130); the combined Observer DLL failed. SKSE/Address Library metadata matches the runtime, but no live handshake is verified (EV-0128).
+- File-level DA14 QUST records were read from Skyrim.esm and Update.esm; no winner or condition semantics inferred (EV-0111/0112). Ghidra 12.0.4/Java 21.0.10 imported the verified image; the attempt2 and longanalysis projects remain incomplete after timeouts (EV-0113/0114/0139). A later hash-attested query succeeded with 93,587 functions, a function lookup, a call edge, 24 disassembly instructions and decompilation (EV-0152). The sample function near image entry is not gameplay-identified.
+- CommonLibSSE-NG compiled for AE (EV-0130); an Observer Release DLL built from an ignored local source copy and its x64 PE/SKSE exports were verified (EV-0154/EV-0155). SKSE/Address Library metadata matches the runtime (EV-0128), but no live handshake is verified.
 - A real DA14 PEX was extracted from the Steam base BSA and parsed through EOF; UESP and Apocrypha local retrievals work with their documented provenance and privacy limits.
 - Four evidence-linked transactions exercise a blocked path/reselection, armor XP hypotheses, an AV39 record screen, and Enchanting breadth. A fresh-process recovery/resume test is included in the local suite.
 
 ## Gate snapshot
 
 - `STATIC_RESEARCH_READY`: READY for bounded static work with sourced records, UESP/community leads, historical research, and transaction integrity. Profile-dependent quest-gate/winning-record conclusions remain blocked.
-- `NATIVE_RESEARCH_READY`: NOT READY pending a successful Ghidra xref/disassembly query, load-order-aware winner analysis, and permitted structured save/script context.
-- `INSTRUMENTED_AUTONOMOUS_RESEARCH_READY`: NOT READY; no Observer DLL or live handshake, no disposable-save workflow, and no independent Codex-context recovery.
+- `NATIVE_RESEARCH_READY`: NOT READY; the Ghidra query and native build pass, but real load-order-aware winner analysis and permitted real save/ReSaver context remain unavailable.
+- `INSTRUMENTED_AUTONOMOUS_RESEARCH_READY`: NOT READY; the Observer DLL builds, but no live load/handshake or disposable profile/save workflow was validated. Independent Codex-context recovery passes (EV-0153).
 
 ## Exact next action
 
-Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.
+Set PLUGINS_TXT in ignored config/local.env to the selected MO2 profile's explicit plugins.txt and run `python3 scripts/python_env.py run tools/ae_preflight.py`; only after it passes should xEdit winner resolution run. The Ghidra query is available; Q-0003's next work is to identify the actual build-matched hit/skill-use routines rather than infer from EV-0152's generic sample function.
 
 ## Local readiness mission checkpoint — 2026-10-14
 
@@ -842,3 +842,110 @@ Next action: Resume Q-0003 after the selected MO2 profile's explicit plugins.txt
 
 Last completed: all locally actionable readiness checks passed, the 74-row ledger is 64 PASS and 10 BLOCKED_EXTERNAL with no pending or fixable failures, and the reviewed repository changes are committed locally.
 Next action: Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.
+
+
+## Current completion audit — 2026-10-14T17:42:10Z
+
+Last completed: the prior audit committed its 64 PASS / 10 BLOCKED_EXTERNAL classification and left the two user mission-file states preserved.
+Next action: Re-read the complete mission and verify current repository/evidence state, then attempt any newly actionable external prerequisites before deciding completion.
+
+
+## Tool and profile recheck — 2026-10-14T17:44:54Z
+
+Last completed: current tests and validators pass; AE preflight and Windows process launch fail because WSL interop cannot retrieve ProductVersion or create a process socket; PLUGINS_TXT is unset.
+Next action: Inspect Codex CLI capabilities and local MO2/tool-path configuration for newly actionable safe operations; do not guess a selected profile or send repository documents externally.
+
+
+## Independent recovery recheck — 2026-10-14T17:46:21Z
+
+Last completed: the current local Codex CLI is authenticated; prior independent-context testing was blocked after a broader payload review. A sanitized, non-sensitive handoff can now be tested without repository documents.
+Next action: Run a new isolated Codex context in ephemeral read-only mode against only a sanitized on-disk recovery summary, then evaluate whether it reconstructs the exact next action.
+
+
+## Codex runtime retry — 2026-10-14T17:46:44Z
+
+Last completed: the read-only ephemeral Codex command received only a sanitized handoff path but exited before creating a thread because its local state database could not be opened read-only.
+Next action: Retry the independently authenticated Codex CLI with the required local state access, using only the sanitized on-disk recovery summary; then record success or the exact remaining block.
+
+
+## Independent recovery and native recheck — 2026-10-14T17:47:58Z
+
+Last completed: an authenticated independent ephemeral Codex context read only the sanitized recovery JSON and returned the exact user-dependent MO2 preflight action (current F08 evidence is in ignored local capture).
+Next action: Check current MO2 profile files and retry the read-only AE preflight/Windows process bridge; if interop works, rerun the attested Ghidra query and Observer build.
+
+
+## Native probe observation checkpoint — 2026-10-14T17:49:15Z
+
+Last completed: the combined read-only MO2/native probe command yielded without returning its captured output; its process state and local raw files are being inspected before any retry.
+Next action: Inspect the prior MO2/native probe process and its raw captures; poll it if still live, then continue from the captured outcome without duplicating a running operation.
+
+
+## Bounded MO2 profile search — 2026-10-14T17:49:48Z
+
+Last completed: the prior broad probe left no running process or capture, so its output was discarded.
+Next action: Search mounted user/modding roots read-only for MO2 instance configuration and active-profile metadata; classify the load-order gate only from a discovered selected profile.
+
+
+## Escalated Windows bridge check — 2026-10-14T17:52:13Z
+
+Last completed: no MO2 instance/profile selection was found in the searched accessible roots; the search had unrelated permission-denied subdirectories, so no global absence claim is made. The independent Codex recovery result is captured locally and is being registered.
+Next action: Retry Windows process launch and AE preflight with the authorized read-only escalation; if the bridge works, query the attested Ghidra project and rerun the Observer build.
+
+
+## Ghidra query recovered — 2026-10-14T17:53:08Z
+
+Last completed: escalated Windows interop passed; read-only Ghidra returned function lookup, an xref/call edge, bounded disassembly and decompilation against the attested AE project. AE preflight still fails closed on an empty active plugin list.
+Next action: Inspect the ignored CommonLib build script and successful Ghidra capture; retry the Observer build with corrected Windows command-line quoting if its writes remain confined to .local.
+
+
+## Observer build launch correction — 2026-10-14T17:53:31Z
+
+Last completed: Ghidra operation is proven on the attested AE project; the Observer build script is confined to the ignored CommonLib CMake tree and has no spaces in its path. The first retry failed while quoting the script path.
+Next action: Run the ignored CommonLib Observer build script through cmd.exe using the converted unquoted path, capture the build result, and inspect only ignored build artifacts.
+
+
+## Observer source repair investigation — 2026-10-14T17:54:23Z
+
+Last completed: the corrected Windows command reached MSBuild but the Observer target failed on the original source include `<jthread>`; no original source was changed.
+Next action: Inspect the generated Observer project, CMake source directory, and any ignored source repair; identify a safe local source copy/override before changing anything.
+
+
+## Local Observer repair preparation — 2026-10-14T17:54:42Z
+
+Last completed: confirmed CMake had pointed directly to the original read-only Observer tree and found no existing ignored source copy; the failing header uses a nonstandard `<jthread>` include.
+Next action: Extract the existing CMake cache/toolchain settings, then create and build a local Observer source copy with only the invalid jthread include repaired.
+
+
+## Observer build live-process checkpoint — 2026-10-14T18:00:35Z
+
+Last completed: the copied-source CMake configure and vcpkg dependency install completed successfully; the Observer target process remains live with no final result yet.
+Next action: Inspect the live Observer configure/build process for progress and continue polling session 59690 while it remains active; do not launch a duplicate.
+
+
+## Observer build process check — 2026-10-14T18:03:51Z
+
+Last completed: build session 59690 is still live after five minutes; CMake configuration succeeded and the target build has not returned its captured result.
+Next action: Check the Windows process table for the existing MSBuild/CMake/CL child, then continue polling session 59690 if it is active; do not launch another build.
+
+
+## Observer build progress snapshot — 2026-10-14T18:08:55Z
+
+Last completed: the native Observer build remains live after several minutes; the build process is being checked for active compilers and generated outputs.
+Next action: Inspect Windows build processes and generated object/DLL timestamps; continue polling session 59690 if the compiler is progressing.
+
+
+## Observer generated translation-unit diagnosis — 2026-10-14T18:09:58Z
+
+Last completed: the local-copy build completed CMake and CommonLib, then failed in the generated plugin translation unit with missing `std::invalid_argument`, `std::size_t`, and `std::strong_ordering` declarations; the `<jthread>` header issue is fixed only in the ignored source copy.
+Next action: Inspect the generated Observer translation unit, CommonLib REL/Version.h includes, and any prior ignored repair; choose a narrow local-only standard-header fix and retry the target.
+
+
+## Local generated-header fix — 2026-10-14T18:10:56Z
+
+Last completed: the generated metadata translation unit includes CommonLib REL/Version.h without its required standard headers; the required declarations were identified.
+Next action: Add standard headers to the copied Observer target via target_precompile_headers, reconfigure the ignored build, rerun the Observer target, and inspect the produced DLL or compiler diagnostics.
+
+## Observer PCH retry result — 2026-10-14T18:12:00Z
+
+Last completed: the pinned CommonLib API exposes ActorState through `Actor::AsActorState()` for AE; the method exists on ActorState, not PlayerCharacter, because AE uses relocated multiple-inheritance subobjects. No external source was changed.
+Next action: Set `PLUGINS_TXT` in ignored `config/local.env` to the selected MO2 profile's explicit `plugins.txt`, then run `python3 scripts/python_env.py run tools/ae_preflight.py`. Only after a complete active order and required masters pass, run the real xEdit winner query; keep the runtime, disposable-save, UESP-provenance, and Windows/CI blockers external until their inputs are supplied.

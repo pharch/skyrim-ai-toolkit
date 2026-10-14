@@ -1002,7 +1002,7 @@
         "historical source report; tool/version/input identity not independently revalidated"
       ],
       "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
-      "result": "Reports Bone Meal + Hagraven Feathers + Ogre\u2019s Teeth as a Fortify Conjuration payload candidate with modeled craft XP 89.2167511 against a zero-progress level-20 threshold 615.970670...; recipe/acquisition were not tested."
+      "result": "Reports Bone Meal + Hagraven Feathers + Ogre’s Teeth as a Fortify Conjuration payload candidate with modeled craft XP 89.2167511 against a zero-progress level-20 threshold 615.970670...; recipe/acquisition were not tested."
     },
     {
       "id": "EV-0060",
@@ -1104,7 +1104,7 @@
         "historical source report; tool/version/input identity not independently revalidated"
       ],
       "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
-      "result": "Reports signed WBDT.usesSkill outside 6\u201323 skipping the skill call. Two type-3 records were identified, with no placed references or player-accessible writer found; no craft was run."
+      "result": "Reports signed WBDT.usesSkill outside 6–23 skipping the skill call. Two type-3 records were identified, with no placed references or player-accessible writer found; no craft was run."
     },
     {
       "id": "EV-0066",
@@ -1869,7 +1869,7 @@
         "tools/ae_preflight.py; Python 3.12.3"
       ],
       "coverage": "Raw bounded operation output in ignored .local/readiness/ae-preflight.stderr.raw; exact input identity and scope stated in source/result. No gameplay state or winning-record conclusion is inferred.",
-      "result": "Full preflight stopped at active-plugin validation with \u201cactive plugin list contains no active plugins.\u201d Selected MO2 profile remains unidentified; no xEdit/game call occurred."
+      "result": "Full preflight stopped at active-plugin validation with “active plugin list contains no active plugins.” Selected MO2 profile remains unidentified; no xEdit/game call occurred."
     },
     {
       "id": "EV-0111",
@@ -2632,6 +2632,253 @@
       ],
       "coverage": "Final Markdown inventory after exact next action was synchronized across STATE, frontier, RECOVERY, session log and resume; 155 Markdown files, 70 active and 85 archival.",
       "result": "Final inventory write and hash check both exited 0; final 74-row tally is 64 PASS and 10 BLOCKED_EXTERNAL."
+    },
+    {
+      "id": "EV-0152",
+      "kind": "tool",
+      "source": "Native Ghidra read-only targeted query on the ProductVersion- and hash-attested Steam AE longanalysis project",
+      "artifact": "private-local:.local/readiness/current-completion-audit/ghidra-query-escalated-final.raw",
+      "sha256": "1a7c2e5f9cef3011686af1de0f0b27c2daeb6398e942905c78351ff302ff3faa",
+      "captured_utc": "2026-10-14T17:52:39.130658Z",
+      "edition": "AE",
+      "runtime": "Steam AE 1.6.1170.0; Ghidra 12.0.4; Java 21.0.10; system Python 3.12.3 fallback",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --project-dir .local/readiness/ghidra/project_AE_SkyrimSE_1_6_1170_longanalysis --project-name AE_SkyrimSE_1_6_1170_longanalysis --timeout 300",
+        "tools/ghidra_scripts/ReadOnlyTargetedQuery.java",
+        "Ghidra analyzeHeadless.bat"
+      ],
+      "coverage": "Opened the existing project attested to EV-0109/EV-0113/EV-0139. Program SkyrimSE.exe, x86:LE:64:default; function count 93,587; resolved FUN_1400010d0 at 1400010d0; exported 24 disassembly instructions, call edge 140001164 -> 14000110c (FUN_14000110c), and decompilation of FUN_140001160. The sample address is near image entry and has no gameplay-semantic identification.",
+      "result": "PASS for the bounded native query capability: Ghidra exited 0 and exported function lookup, xref/call edge, disassembly and decompilation on the exact AE executable project. The project was previously auto-analysis-timeout/incomplete; the sample output is not a binary-wide negative or a claim about a gameplay routine."
+    },
+    {
+      "id": "EV-0153",
+      "kind": "tool",
+      "source": "Independent fresh Codex CLI context recovery from sanitized on-disk research state",
+      "artifact": "private-local:.local/readiness/current-completion-audit/codex-recovery-escalated.stdout.raw",
+      "sha256": "9113178b007f9fabf88f06134a5fde05660a3fbd8d25a49d1e68c659fdecb4be",
+      "captured_utc": "2026-10-14T17:47:12.425390Z",
+      "edition": "unknown",
+      "runtime": "Codex CLI 0.162.0-alpha.17.2; ephemeral read-only context",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "codex exec --ephemeral --sandbox read-only --skip-git-repo-check -C /tmp --json <sanitized-state-only-prompt>"
+      ],
+      "coverage": "A separate ephemeral Codex context read only /tmp/skyrim-ae-readiness-recovery.json containing five sanitized recovery fields. It returned the exact next action to set PLUGINS_TXT to the selected MO2 profile's explicit plugins.txt and run the AE preflight. No repository documents or private source text were sent; no repository files were changed.",
+      "result": "PASS for F08: the fresh independent context resumed from persisted state without a recap and identified the correct user-dependent next action. The initial unapproved payload attempt was not used; this successful run received only the sanitized JSON state."
+    },
+    {
+      "id": "EV-0154",
+      "kind": "tool",
+      "source": "MSVC Release build of the ignored read-only Observer source copy configured against AE CommonLibSSE-NG",
+      "artifact": "private-local:.local/readiness/current-completion-audit/observer-copy-build-pch5.stdout.raw",
+      "sha256": "4e51dd43576a37a9cf4c306da41f3c54691cd5018d9b8bf23d7f1d413f7b5a45",
+      "captured_utc": "2026-10-14T18:19:42.730431Z",
+      "edition": "AE",
+      "runtime": "Steam AE 1.6.1170.0 target; CommonLibSSE-NG; Visual Studio 2022/MSBuild 17.13.19; CMake and vcpkg",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "CMake --build .local/readiness/commonlib-observer-repaired-20261014 --config Release --target SkyrimStateObserver -- /m",
+        "MSBuild 17.13.19"
+      ],
+      "coverage": "Fresh CMake regeneration selected ENABLE_SKYRIM_AE=ON with SE and VR off; all CommonLib and Observer translation units built from an ignored local copy. Local-only fixes used the CommonLib AE ActorState/ActorValueOwner accessors, corrected <jthread> include in the copy, and CommonLib's PCH plus string-view literal import. The exact DLL is checked separately in EV-0155.",
+      "result": "PASS: MSBuild emitted SkyrimStateObserver.dll and the wrapper recorded BUILD_EXIT=0. Source/build outputs remained under ignored .local; the original external source, game installation, plugins, archives and saves were not modified. This build does not prove a runtime load or handshake."
+    },
+    {
+      "id": "EV-0155",
+      "kind": "tool",
+      "source": "PE architecture, export-table and hash verification of the Observer DLL produced in EV-0154",
+      "artifact": "private-local:.local/readiness/current-completion-audit/observer-pe-verify.stdout.raw",
+      "sha256": "37052e342a6887332fd8cf7deddaff701493140fafad11225886e6735fb3b7ce",
+      "captured_utc": "2026-10-14T18:22:04.257019Z",
+      "edition": "AE",
+      "runtime": "Windows PE32+ x86-64 DLL; inspected with GNU file and objdump",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "file .local/readiness/commonlib-observer-repaired-20261014/stage/SKSE/Plugins/Release/SkyrimStateObserver.dll",
+        "objdump -f",
+        "objdump -p",
+        "SHA256"
+      ],
+      "coverage": "The staged 584,192-byte SkyrimStateObserver.dll is PE32+ x86-64 for Windows and exports SKSEPlugin_Load, SKSEPlugin_Query and SKSEPlugin_Version. DLL SHA256 is 8ef8a660c8fe2878ee12b445740b70c99b995280bcc58776dba9820f7183e50b. Full PE inspection capture is preserved at the artifact path.",
+      "result": "PASS: output is a valid x86-64 Windows DLL with the three SKSE plugin exports. This verifies the built artifact's shape and identity, not successful loading by Skyrim."
+    },
+    {
+      "id": "EV-0156",
+      "kind": "tool",
+      "source": "Final full stdlib unittest discovery after native-tool recovery and readiness report reconciliation",
+      "artifact": "private-local:.local/readiness/final-verification/unittest.stdout.raw",
+      "sha256": "9759cf448eb72e9c85e5f500ced2aee5fd4975006f375cb12a5a76e8b9adc804",
+      "captured_utc": "2026-10-14T18:32:48Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3; Conda unavailable, dispatcher used system Python fallback",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v"
+      ],
+      "coverage": "Complete tests/ discovery, including target verification, research safety, transaction recovery/resume subprocesses, and Ghidra query attestation regressions.",
+      "result": "PASS: 139 tests ran in 18.192 seconds; unittest reported OK and process exit 0. The dispatcher explicitly reported Conda unavailable, so the named skyrim-ae-research environment is not verified."
+    },
+    {
+      "id": "EV-0157",
+      "kind": "tool",
+      "source": "Final local research, transaction, overlay and Python compileall validation batch",
+      "artifact": "private-local:.local/readiness/final-verification/validator-batch-summary.stdout.raw",
+      "sha256": "8bbfdbf5472cadb52caf4de4421656d6e5b7a77257012ad76a42e2cf9dee0f0c",
+      "captured_utc": "2026-10-14T18:32:48Z",
+      "edition": "AE",
+      "runtime": "Python 3.12.3; Conda unavailable, dispatcher used system Python fallback",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "python3 scripts/python_env.py run scripts/validate_research.py",
+        "python3 scripts/python_env.py run scripts/research_transactions.py validate",
+        "python3 scripts/python_env.py run scripts/validate_overlay.py",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests"
+      ],
+      "coverage": "research: f6f1fa9511073b8a6b1c3f9df29bc6e73bdb4eda3dd4c9c5a0d1e10dbbff15e0; transactions: 1f315e557a88358a1b2a427fc2ae768757068058cb27501bdb0e329c6d81b4b3; overlay: c0bfbb07c14044ba8906751aded6de487f868f8dc01d77e69045fb97c5794370; compileall: 68872bd9264e8d0ef31d3d126b466d08e76381b8fa1b4e8fc1b8b5f9c472b053",
+      "result": "All four validator commands exited 0: RESEARCH DATA PASS; transaction ledger ok=true with 4 transactions and 17 events; CODEX AE RESEARCH HARNESS PASS; compileall completed without errors. Individual complete outputs and hashes are included in the aggregate artifact."
+    },
+    {
+      "id": "EV-0158",
+      "kind": "tool",
+      "source": "Final Markdown inventory generation and hash check after readiness content edits",
+      "artifact": "private-local:.local/readiness/final-verification/markdown-audit-summary.stdout.raw",
+      "sha256": "579eaae47e5576eccd6dcb05ad53a6cdcd0bda762e73e0fd80e86ce1ed0ea318",
+      "captured_utc": "2026-10-14T18:32:48Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3; Conda unavailable, dispatcher used system Python fallback",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --write",
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --check"
+      ],
+      "coverage": "Markdown inventory covers 155 files: 70 active and 85 archival. Separate write/check stdout artifacts and hashes are included in the aggregate artifact.",
+      "result": "Both markdown_policy_audit.py --write and --check exited 0; inventory hash validation passed."
+    },
+    {
+      "id": "EV-0159",
+      "kind": "tool",
+      "source": "Final readiness checklist status, evidence reference, gate decision and whitespace audit",
+      "artifact": "private-local:.local/readiness/final-verification/status-reference-audit.stdout.raw",
+      "sha256": "619e6f578a9ace3de31019f5ed992e0ff1498e25c9ffa60a12ebad20a045c83e",
+      "captured_utc": "2026-10-14T18:32:48Z",
+      "edition": "AE",
+      "runtime": "Python 3.12.3; system interpreter for the read-only audit",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "One-shot checklist/evidence/gate consistency audit",
+        "git diff --check"
+      ],
+      "coverage": "Verified 74 unique expected checklist IDs A01–F12, status count 67 PASS/7 BLOCKED_EXTERNAL, all checklist EV references resolve, tally matches the report, and all three gate headings and decisions are present. `git diff --check` output and hash are recorded separately.",
+      "result": "PASS: checklist, evidence references, tally, three gate decisions and diff whitespace audit all exit cleanly."
+    },
+    {
+      "id": "EV-0160",
+      "kind": "tool",
+      "source": "Post-registration complete test and validator rerun after correcting the new evidence ledger schema fields",
+      "artifact": "private-local:.local/readiness/final-verification/validator-batch-schema-corrected.stdout.raw",
+      "sha256": "7769a6d19869a19c36b21c65328c3807421a98b3906340fac34e3d62a9d33510",
+      "captured_utc": "2026-10-14T18:36:36Z",
+      "edition": "AE",
+      "runtime": "Python 3.12.3; Conda unavailable, dispatcher used system Python fallback",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "python3 scripts/python_env.py run scripts/validate_research.py",
+        "python3 scripts/python_env.py run scripts/research_transactions.py validate",
+        "python3 scripts/python_env.py run scripts/validate_overlay.py",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests"
+      ],
+      "coverage": "Full 139-test unittest discovery plus research/evidence validation, transaction validation, overlay validation and compileall after EV-0156–EV-0159 were normalized to the accepted evidence schema. Individual output hashes and full logs are included in this aggregate capture.",
+      "result": "PASS: all five commands exited 0. The schema-corrected evidence ledger validates; all 139 tests pass; transaction validator reports four transactions and 17 events."
+    },
+    {
+      "id": "EV-0161",
+      "kind": "tool",
+      "source": "Final Markdown policy inventory write and check after recovery tracker synchronization",
+      "artifact": "private-local:.local/readiness/final-verification-terminal/markdown-audit-final.stdout.raw",
+      "sha256": "e4e2921126a4b9c8346107597c4d2bc199813d9b551fa96788c1628c568a91ee",
+      "captured_utc": "2026-10-14T19:00:28Z",
+      "edition": "unknown",
+      "runtime": "Python 3.12.3; Conda unavailable, dispatcher used system Python fallback",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --write",
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --check"
+      ],
+      "coverage": "Final inventory reported 155 Markdown files, 70 active and 85 archival after recovery tracker synchronization. Separate write/check captures and hashes are included.",
+      "result": "PASS: final Markdown inventory write and check both exited 0."
+    },
+    {
+      "id": "EV-0162",
+      "kind": "tool",
+      "source": "Final staged diff, pre-push artifact and exact added-line host-path audit",
+      "artifact": "private-local:.local/readiness/final-verification-terminal/staged-privacy-final.stdout.raw",
+      "sha256": "414ffc9ef0f6fa85073d863f53c771dd5ccd8d9a91bb75ee0ff2e7d92131422c",
+      "captured_utc": "2026-10-14T19:11:53Z",
+      "edition": "AE",
+      "runtime": "Python 3.12.3 system fallback; local Git staged-tree checks",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "git diff --cached --check",
+        "python3 scripts/python_env.py run scripts/pre_push_audit.py",
+        "custom staged added-line exact/generic home-path scan"
+      ],
+      "coverage": "Terminal pre-push found zero tracked raw/heavy artifacts and zero unignored untracked raw artifacts. The staged added-line scan covered 696 lines with zero exact local-path and zero generic home-path matches. Component outputs and hashes are included.",
+      "result": "PASS: terminal cached diff check, pre-push audit and added-line path scan all exited 0."
+    },
+    {
+      "id": "EV-0163",
+      "kind": "tool",
+      "source": "Final readiness checklist, evidence-reference, gate-decision and exact-checkpoint audit",
+      "artifact": "private-local:.local/readiness/final-verification-terminal/status-and-recovery-audit-final.stdout.raw",
+      "sha256": "3b25d73c59108e579f14e54935693ff3bd227521fc7e087695b9b27755ea03a2",
+      "captured_utc": "2026-10-14T19:10:55Z",
+      "edition": "AE",
+      "runtime": "Python 3.12.3; system interpreter for the read-only audit",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run scripts/validate_research.py",
+        "python3 scripts/python_env.py run scripts/research_state.py validate",
+        "One-shot 74-row checklist/evidence/gate/checkpoint consistency audit"
+      ],
+      "coverage": "Final audit compares the exact 74 checkbox IDs from the user mission with 74 unique checklist rows; 67 PASS/7 BLOCKED_EXTERNAL and exact blocker IDs match. All references resolve; report tally and three gate decisions match; four durable action copies are identical; the idle recovery checkpoint matches TX-0004 and the Q-0003 frontier; exact 15 staged paths are correct; both mission-file states remain preserved; current EV-0160/0161/0162/0164 artifacts are hash-verified.",
+      "result": "PASS: research/evidence, recovery-state, transaction and overlay validators pass; final checklist, references, tally, gates, checkpoint copies, staged paths and mission-file preservation checks pass."
+    },
+    {
+      "id": "EV-0164",
+      "kind": "tool",
+      "source": "Final full test and research/tool validator rerun after recovery tracker synchronization",
+      "artifact": "private-local:.local/readiness/final-verification-terminal/test-validator-batch-final.stdout.raw",
+      "sha256": "3f53d498f05c31862166ac8e1f5594961e08e32f06edcea00b844d790e317d7b",
+      "captured_utc": "2026-10-14T19:10:55Z",
+      "edition": "AE",
+      "runtime": "Python 3.12.3; Conda unavailable, dispatcher used system Python fallback",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "python3 scripts/python_env.py run scripts/validate_research.py",
+        "python3 scripts/python_env.py run scripts/research_state.py validate",
+        "python3 scripts/python_env.py run scripts/research_transactions.py validate",
+        "python3 scripts/python_env.py run scripts/validate_overlay.py",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests"
+      ],
+      "coverage": "Full 139-test unittest discovery plus evidence/research, recovery-state, transaction, overlay and compileall validators after the idle recovery checkpoint repair and final tracker synchronization. Individual output hashes are included in the aggregate artifact.",
+      "result": "PASS: all six commands exited 0; unittest reported 139 tests OK, transaction ledger reported four transactions and 17 events, and all repository validators passed."
     }
   ]
 }

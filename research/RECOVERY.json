@@ -4,9 +4,9 @@
   "transaction_id": null,
   "frontier_id": null,
   "started_utc": null,
-  "checkpoint_utc": "2026-10-14T17:40:46Z",
+  "checkpoint_utc": "2026-10-14T19:09:48Z",
   "artifacts": [],
-  "next_action": "Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.",
+  "next_action": "Set `PLUGINS_TXT` in ignored `config/local.env` to the selected MO2 profile's explicit `plugins.txt`, then run `python3 scripts/python_env.py run tools/ae_preflight.py`. Only after a complete active order and required masters pass, run the real xEdit winner query; keep the runtime, disposable-save, UESP-provenance, and Windows/CI blockers external until their inputs are supplied.",
   "next_frontier_id": "Q-0003",
   "last_transaction_id": "TX-0004"
 }

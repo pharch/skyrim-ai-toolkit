@@ -5,7 +5,7 @@
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
     "note": "Repository target policy is AE runtime 1.6.318+. Steam SkyrimSE.exe ProductVersion 1.6.1170.0 is verified (EV-0109), but no live game session or complete active MO2 order is verified. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Legacy source files are hashed in migration/legacy_markdown_manifest.tsv; source commit is unavailable. Active Python routes and native tool limits are documented in the capability matrix. Four evidence-linked transactions exercise blocker reselection, rival armor hypotheses, an AV39 record screen, and breadth synthesis; process-isolated recovery is tested.",
-    "next_action": "The evidence validator passed after EV-0145/EV-0146, and the 74-row tally is 63 PASS, 10 BLOCKED_EXTERNAL, 1 PENDING. Review the final checklist/report/resume text for stale wording, then run the Markdown inventory write/check."
+    "next_action": "Set `PLUGINS_TXT` in ignored `config/local.env` to the selected MO2 profile's explicit `plugins.txt`, then run `python3 scripts/python_env.py run tools/ae_preflight.py`. Only after a complete active order and required masters pass, run the real xEdit winner query; keep the runtime, disposable-save, UESP-provenance, and Windows/CI blockers external until their inputs are supplied."
   },
   "items": [
     {
@@ -151,7 +151,7 @@
       ],
       "priority": 1.0,
       "information_gain": 0.9,
-      "next_action": "After WSL Windows process interop is restored, run the hash-attested read-only query against the saved longanalysis project. If the bridge remains blocked, select the next independent research question and keep the call-edge hypothesis open.",
+      "next_action": "Use the now-working EV-0139-attested Ghidra project to search for a build-matched incoming-hit and skill-use routine; tie a specific call edge/guard sequence to armor AV11/12 only after corroboration, then preserve a precise vanilla user-test protocol if runtime evidence is still required.",
       "linked_claims": [],
       "successors": [
         "Q-0004"
@@ -193,6 +193,15 @@
           ],
           "new_discriminant": "A completed current 1.6.1170 analysis must expose a real call edge from incoming-hit code to skill-use code or falsify that candidate; then compare raw hit and independent XP/protection deltas.",
           "recorded_utc": "2026-10-14T15:21:01+00:00"
+        },
+        {
+          "action_key": "current-build-ghidra-query-recovery",
+          "outcome": "EV-0152 proves the native hash-attested query now runs and exports a generic function lookup, one call edge, disassembly, and decompilation. The queried function is near image entry and is not identified as an armor/hit routine; this operation does not distinguish Q3-H1 from Q3-H2 or support an armor XP mechanism claim.",
+          "evidence": [
+            "EV-0152"
+          ],
+          "new_discriminant": "Search the build-matched AE project for the actual incoming-hit and skill-use routines and connect a semantically verified call edge/guards to armor AV11/12; retain a separate raw hit/XP runtime test for confirmation.",
+          "recorded_utc": "2026-10-14T17:52:39Z"
         }
       ]
     },
@@ -247,7 +256,7 @@
       "objective": "OBJ-3",
       "kind": "numeric",
       "status": "in_progress",
-      "question": "How does enchanting credit and round skill XP, and can a useful enchantment be crafted below the relevant 15\u219216 or 20\u219221 XP threshold?",
+      "question": "How does enchanting credit and round skill XP, and can a useful enchantment be crafted below the relevant 15→16 or 20→21 XP threshold?",
       "hypotheses": [
         {
           "id": "Q5-H1",
@@ -434,7 +443,7 @@
       "objective": "OBJ-1",
       "kind": "mechanism",
       "status": "in_progress",
-      "question": "Can DA07\u2019s pamphlet alias start the gated quest before its level-20 helper fills the alias?",
+      "question": "Can DA07’s pamphlet alias start the gated quest before its level-20 helper fills the alias?",
       "hypotheses": [
         {
           "id": "Q-0009-H1",
@@ -488,7 +497,7 @@
       "objective": "OBJ-1",
       "kind": "mechanism",
       "status": "in_progress",
-      "question": "Can Haknir\u2019s death stage writer be reached while the level-36 Story Manager gate is still closed?",
+      "question": "Can Haknir’s death stage writer be reached while the level-36 Story Manager gate is still closed?",
       "hypotheses": [
         {
           "id": "Q-0010-H1",
@@ -574,7 +583,7 @@
       ],
       "priority": 0.93,
       "information_gain": 0.82,
-      "next_action": "Verify the reference chain and owner quest from the report\u2019s raw record artifact.",
+      "next_action": "Verify the reference chain and owner quest from the report’s raw record artifact.",
       "linked_claims": [],
       "successors": [],
       "attempts": [
@@ -715,7 +724,7 @@
         },
         {
           "id": "Q-0014-H2",
-          "model": "The branch removes the relevant hit/protection or the candidate\u2019s Block cost defeats the level budget.",
+          "model": "The branch removes the relevant hit/protection or the candidate’s Block cost defeats the level budget.",
           "predicted_discriminant": "The hit/protection changes materially or the Block delta crosses its threshold; skipped armor calls alone do not meet the objective.",
           "status": "proposed",
           "evidence": [
@@ -756,7 +765,7 @@
       "objective": "OBJ-2",
       "kind": "mechanism",
       "status": "in_progress",
-      "question": "Can a vanilla-reachable negative AV39 state make a blocked hit\u2019s Block points non-positive while armor remains useful?",
+      "question": "Can a vanilla-reachable negative AV39 state make a blocked hit’s Block points non-positive while armor remains useful?",
       "hypotheses": [
         {
           "id": "Q-0015-H1",
@@ -893,7 +902,7 @@
       ],
       "priority": 0.94,
       "information_gain": 0.92,
-      "next_action": "The source report\u2019s Sovngarde node is only a lead; establish ordinary location access before a user test.",
+      "next_action": "The source report’s Sovngarde node is only a lead; establish ordinary location access before a user test.",
       "linked_claims": [
         "CL-L004",
         "CL-L005"
@@ -976,7 +985,7 @@
       "objective": "OBJ-2",
       "kind": "mechanism",
       "status": "open",
-      "question": "Does the candidate preserve armor\u2019s effective protection across a verified incoming hit while suppressing the target armor-skill award?",
+      "question": "Does the candidate preserve armor’s effective protection across a verified incoming hit while suppressing the target armor-skill award?",
       "hypotheses": [
         {
           "id": "Q-0018-H1",
@@ -1030,20 +1039,20 @@
       ]
     }
   ],
-  "session_next_action": "Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.",
+  "session_next_action": "Remove the hard-coded A09 scan-line count; EV-0162 preserves the exact count. Refresh EV-0161–EV-0163 and Markdown inventory, restage the 15 paths, rerun research/pre-push/path/reference checks, verify mission-file states, then commit locally without pushing.",
   "session_checkpoint": {
     "date": "2026-10-14",
-    "phase": "Mission closeout and external handoff",
-    "current_criterion": "All local criteria complete; ten external blockers are explicitly classified",
-    "last_successful_test": "139 unittest tests EV-0145; final research/transaction/overlay/compileall validations passed; Markdown EV-0150 and staged privacy/diff checks passed.",
-    "current_tool_or_target": "Await selected MO2 profile plugins.txt or other documented external inputs; no active native session",
-    "actual_blocker_if_any": "Selected MO2 profile, WSL process bridge, Windows/remote CI, disposable save/ReSaver, UESP snapshot provenance, and separate Codex context.",
-    "next_exact_action": "Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.",
+    "phase": "Local readiness complete; awaiting selected MO2 profile",
+    "current_criterion": "All locally actionable checks are complete; A04/C01/C03 remain blocked on the explicitly selected complete AE profile order",
+    "last_successful_test": "Terminal research/overlay, diff, pre-push, path and 74-row/checkpoint audits all passed; 685 added lines scanned with zero host paths.",
+    "current_tool_or_target": "Readiness checklist, report, blockers, tool-path record and resume note",
+    "actual_blocker_if_any": "A04/C01/C03 selected MO2 order; C12 live AE+SKSE handshake; C13 copied disposable save; D09 UESP provenance; F10 Windows/CI.",
+    "next_exact_action": "Remove the hard-coded A09 scan-line count; EV-0162 preserves the exact count. Refresh EV-0161–EV-0163 and Markdown inventory, restage the 15 paths, rerun research/pre-push/path/reference checks, verify mission-file states, then commit locally without pushing.",
     "working_tree_and_commit": "branch glitch-hunting-setup; starting HEAD e13ae4b253a6f5fd66f0f8abc3e49e6f9b29a6cc; preserve the pre-existing deleted migration/RESEARCH_READINESS_MISSION.md and untracked user mission file."
   },
   "last_session_checkpoint": {
-    "recorded_utc": "2026-10-14T17:26:49Z",
-    "next_action": "Stage and review only changes made for this readiness audit, excluding both user-supplied mission-file states; run pre-push/privacy/diff checks, finalize results and statuses, run the final Markdown inventory --write/--check, then commit only the reviewed audit changes; do not push.",
-    "active_process": "none; Ghidra session 40253 terminated with analysis timeout EV-0139"
+    "recorded_utc": "2026-10-14T18:53:35Z",
+    "next_action": "Remove the hard-coded A09 scan-line count; EV-0162 preserves the exact count. Refresh EV-0161–EV-0163 and Markdown inventory, restage the 15 paths, rerun research/pre-push/path/reference checks, verify mission-file states, then commit locally without pushing.",
+    "active_process": "none; all local research-readiness gates evaluated; no game process launched"
   }
 }

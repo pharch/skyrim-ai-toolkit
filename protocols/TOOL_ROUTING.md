@@ -39,11 +39,14 @@ authorizes xEdit or game access.
 - xEdit/SSEEdit: selected profile is not identified, so full preflight fails
   and xEdit remains unlaunched. The Python winner helper has only a synthetic
   two-record fixture; do not report a real winner from file parsing.
-- Ghidra: the verified executable imports in Ghidra 12.0.4. First analysis
-  stopped at its 1,200-second per-file limit; a longer fresh analysis is
-  running. Do not reuse GOG 1.6.1179 offsets for Steam 1.6.1170.
-- CommonLibSSE-NG: no build is verified until a compatible CMake toolchain
-  succeeds in an ignored workspace copy.
+- Ghidra: native query on the EV-0139-attested Steam AE project passed (EV-0152),
+  exporting 93,587 functions, an address lookup, one call edge, 24 disassembly
+  instructions, and decompilation. The project remains incompletely analyzed;
+  the sample routine has no gameplay identification. Do not reuse GOG 1.6.1179
+  offsets for Steam 1.6.1170.
+- CommonLibSSE-NG: AE CommonLib and the Observer Release DLL build passed in an
+  ignored local copy (EV-0130, EV-0154, EV-0155). This proves build capability,
+  not a live SKSE load or handshake.
 - Live SKSE/DevBench requires a verified target and already running game
   with a read-only probe. Do not launch a game or mutator automatically.
 - Keep archive and save work read-only; raw captures remain in ignored .local/.

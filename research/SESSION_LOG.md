@@ -1046,3 +1046,222 @@ Exact next action: At the next research session, run python3 scripts/python_env.
 - All locally actionable criteria are complete. Final tally: 64 PASS, 10 BLOCKED_EXTERNAL, 0 FAIL_FIXABLE, 0 NOT_APPLICABLE, 0 PENDING.
 - Local readiness changes are committed on glitch-hunting-setup; preserve both user-supplied mission-file states.
 - Exact next action: Resume Q-0003 after the selected MO2 profile's explicit plugins.txt is available: set PLUGINS_TXT in ignored config/local.env and run python3 scripts/python_env.py run tools/ae_preflight.py; if that input remains unavailable, restore WSL interop and run the EV-0139-attested Ghidra query.
+
+
+## Current completion audit — 2026-10-14T17:42:10Z
+
+- Reopening the completion claim against the current checkout and exact mission criteria; prior external blockers will be checked again for new local evidence or changed prerequisites.
+- Exact next action: Re-read the complete mission and verify current repository/evidence state, then attempt any newly actionable external prerequisites before deciding completion.
+
+
+## Tool and profile recheck — 2026-10-14T17:44:54Z
+
+- Current tests/validators pass; WSL process interop and AE preflight are presently failing; no PLUGINS_TXT is configured.
+- Exact next action: Inspect Codex CLI capabilities and local MO2/tool-path configuration for newly actionable safe operations; do not guess a selected profile or send repository documents externally.
+
+
+## Independent recovery recheck — 2026-10-14T17:46:21Z
+
+- The local Codex CLI is authenticated. To avoid resubmitting repository documents, the independent context will receive only a sanitized on-disk recovery summary in an ephemeral read-only `/tmp` workspace.
+- Exact next action: Run a new isolated Codex context in ephemeral read-only mode against only a sanitized on-disk recovery summary, then evaluate whether it reconstructs the exact next action.
+
+
+## Codex runtime retry — 2026-10-14T17:46:44Z
+
+- The first isolated `codex exec --ephemeral --sandbox read-only` could not initialize its required local state database in this read-only sandbox; only a sanitized recovery JSON was offered.
+- Exact next action: Retry the independently authenticated Codex CLI with the required local state access, using only the sanitized on-disk recovery summary; then record success or the exact remaining block.
+
+
+## Independent recovery and native recheck — 2026-10-14T17:47:58Z
+
+- A fresh authenticated Codex context recovered the exact next action from a sanitized `/tmp` JSON only; no repo docs were supplied.
+- Exact next action: Check current MO2 profile files and retry the read-only AE preflight/Windows process bridge; if interop works, rerun the attested Ghidra query and Observer build.
+
+
+## Native probe observation checkpoint — 2026-10-14T17:49:15Z
+
+- The combined read-only probe returned no output from the wrapper after yielding; inspect live processes and raw captures before retrying.
+- Exact next action: Inspect the prior MO2/native probe process and its raw captures; poll it if still live, then continue from the captured outcome without duplicating a running operation.
+
+
+## Bounded MO2 profile search — 2026-10-14T17:49:48Z
+
+- The previous broad attempt yielded no process or raw capture; this search uses a bounded list of mounted user and modding roots and prints no absolute candidate paths.
+- Exact next action: Search mounted user/modding roots read-only for MO2 instance configuration and active-profile metadata; classify the load-order gate only from a discovered selected profile.
+
+
+## Escalated Windows bridge check — 2026-10-14T17:52:13Z
+
+- Bounded MO2 search found no candidate MO2 INI or plugin lists in accessible roots, with unrelated permission-denied directories; exact active-profile selection remains unknown.
+- Exact next action: Retry Windows process launch and AE preflight with the authorized read-only escalation; if the bridge works, query the attested Ghidra project and rerun the Observer build.
+
+
+## Ghidra query recovered — 2026-10-14T17:53:08Z
+
+- Escalated `cmd.exe /c ver` passed; the bounded read-only Ghidra query found a function and xref edge and exported disassembly/decompilation. AE preflight still fails closed on no active plugins.
+- Exact next action: Inspect the ignored CommonLib build script and successful Ghidra capture; retry the Observer build with corrected Windows command-line quoting if its writes remain confined to .local.
+
+
+## Observer build launch correction — 2026-10-14T17:53:31Z
+
+- Reviewed `.local/readiness/tests/build-commonlib.cmd`; it runs CMake only inside the ignored Observer build tree. The previous attempt did not reach CMake because the command path was over-quoted.
+- Exact next action: Run the ignored CommonLib Observer build script through cmd.exe using the converted unquoted path, capture the build result, and inspect only ignored build artifacts.
+
+
+## Observer source repair investigation — 2026-10-14T17:54:23Z
+
+- The build reached MSBuild and failed on `#include <jthread>` in the original read-only Skyrim repo. No source was modified.
+- Exact next action: Inspect the generated Observer project, CMake source directory, and any ignored source repair; identify a safe local source copy/override before changing anything.
+
+
+## Local Observer repair preparation — 2026-10-14T17:54:42Z
+
+- Generated CMake project points at the original read-only observer; no ignored copy exists. The compiler error is `#include <jthread>`.
+- Exact next action: Extract the existing CMake cache/toolchain settings, then create and build a local Observer source copy with only the invalid jthread include repaired.
+
+
+## Observer build live-process checkpoint — 2026-10-14T18:00:35Z
+
+- Copied-source CMake configure and vcpkg dependency installation completed; Observer build session 59690 is still live.
+- Exact next action: Inspect the live Observer configure/build process for progress and continue polling session 59690 while it remains active; do not launch a duplicate.
+
+
+## Observer build process check — 2026-10-14T18:03:51Z
+
+- Build session 59690 remains live after five minutes; use tasklist to inspect the Windows CMake/MSBuild/compiler child before further waiting.
+- Exact next action: Check the Windows process table for the existing MSBuild/CMake/CL child, then continue polling session 59690 if it is active; do not launch another build.
+
+
+## Observer build progress snapshot — 2026-10-14T18:08:55Z
+
+- MSBuild session 59690 is live. Inspect Windows build processes and ignored object/DLL files to verify progress.
+- Exact next action: Inspect Windows build processes and generated object/DLL timestamps; continue polling session 59690 if the compiler is progressing.
+
+
+## Observer generated translation-unit diagnosis — 2026-10-14T18:09:58Z
+
+- The copied Observer target built CommonLib successfully but the generated plugin translation unit lacked standard declarations used by REL/Version.h. The source fix is local only.
+- Exact next action: Inspect the generated Observer translation unit, CommonLib REL/Version.h includes, and any prior ignored repair; choose a narrow local-only standard-header fix and retry the target.
+
+
+## Local generated-header fix — 2026-10-14T18:10:56Z
+
+- CommonLib REL/Version.h depends on standard declarations absent from the generated metadata TU. Add a PCH only to the ignored copied Observer target; do not edit external CommonLib or original Skyrim files.
+- Exact next action: Add standard headers to the copied Observer target via target_precompile_headers, reconfigure the ignored build, rerun the Observer target, and inspect the produced DLL or compiler diagnostics.
+
+## Observer PCH retry result — 2026-10-14T18:12:00Z
+
+- PCH retry failed while compiling the generated Observer translation unit; more than 100 diagnostics appear in CommonLib REL/Module.h, so no Observer DLL exists. Raw output is `.local/readiness/current-completion-audit/observer-copy-build-pch.stdout.raw`.
+- Exact next action: Inspect the earliest compiler diagnostics and copied build's language-standard/include configuration; try one evidence-led local correction, then capture the result.
+
+## Observer CommonLib API mismatch — 2026-10-14T18:12:47Z
+
+- The first substantive error after PCH was `RE::PlayerCharacter::GetLifeState` missing at Observer.cpp:496. Cascading CommonLib diagnostics were not the primary failure. Raw build output: `.local/readiness/current-completion-audit/observer-copy-build-pch.stdout.raw`.
+- Exact next action: Inspect the pinned CommonLib PlayerCharacter declarations and observer read path, then make an API-correct, read-only observer change and rebuild the ignored copy.
+
+## ActorState API correction — 2026-10-14T18:13:40Z
+
+- Pinned CommonLib `Actor.h` declares `AsActorState()` and `ActorState.h` declares `GetLifeState()`; AE does not expose the ActorState subobject as a direct base on PlayerCharacter. Evidence paths are `the external CommonLib source tree/type-importer/vendor/CommonLibSSE-NG/include/RE/A/Actor.h` and `.../ActorState.h`.
+- Exact next action: Change the life-state read only in `.local/readiness/observer-source-repaired-20261014/src/Observer.cpp` to `player->AsActorState()->GetLifeState()`, rebuild, and capture the outcome.
+
+## Observer API-corrected rebuild — 2026-10-14T18:14:00Z
+
+- Local source copy now reads the life-state through the AE `AsActorState()` accessor. MSVC build is running as session 60120; output capture target is `.local/readiness/current-completion-audit/observer-copy-build-pch2.stdout.raw`.
+- Exact next action: Poll session 60120 and preserve the complete build result; do not start another build until it exits.
+
+## Observer build launcher quoting failure — 2026-10-14T18:15:16Z
+
+- The PowerShell call operator rejected the MSVC CMake executable in a piped command (`CantActivateDocumentInPipeline`); no compiler build started and no DLL was produced. The build session has exited.
+- Exact next action: Invoke the same incremental CMake build through `cmd.exe` with quoted paths and durable output capture; verify the actual exit code and staged DLL state.
+
+## Observer build wrapper produced empty output — 2026-10-14T18:15:55Z
+
+- The direct PowerShell attempt returned exit 0 but produced an empty raw file and no DLL. Treat it as a launcher result, not a successful build. Output file hash is SHA256 `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
+- Exact next action: Create and execute a one-shot `.cmd` wrapper for CMake, capture the full output and an explicit exit marker, and verify whether MSBuild runs.
+
+## Observer build wrapper started — 2026-10-14T18:16:20Z
+
+- One-shot `.cmd` wrapper now calls the full quoted CMake executable and build path; active process session 78299 writes output to `.local/readiness/current-completion-audit/observer-copy-build-pch3.stdout.raw`.
+- Exact next action: Poll session 78299 and inspect its complete raw log plus staged DLL/hash.
+
+## Observer API-corrected build diagnostics — 2026-10-14T18:16:46Z
+
+- The `.cmd` wrapper ran MSBuild (exit 1), built CommonLib, then found remaining Observer actor-value methods are accessed on the wrong AE subobject (`PlayerCharacter` has `AsActorValueOwner()`); the generated plugin metadata TU also reports missing standard declarations in CommonLib headers. Raw output: `.local/readiness/current-completion-audit/observer-copy-build-pch3.stdout.raw`.
+- Exact next action: Correct the actor-value accessor in the local Observer copy and inspect generated TU header dependencies before one more build.
+
+## CommonLib Observer API and PCH diagnosis — 2026-10-14T18:17:13Z
+
+- `ActorValueOwner.h` declares `GetActorValue` and `GetBaseActorValue`; AE's `Actor` exposes `AsActorValueOwner()`. CommonLib's `SKSE/Impl/PCH.h` carries its actual standard-header set and SKSE declarations; the six-header PCH did not satisfy `REL/Version.h`/`REL/Module.h` dependencies. These headers are in `the external CommonLib source tree/type-importer/vendor/CommonLibSSE-NG/include/`.
+- Exact next action: In the ignored Observer copy, route all actor-value reads through `AsActorValueOwner()` and use `<SKSE/Impl/PCH.h>` as the PCH; rebuild and preserve the result.
+
+## Observer API and PCH corrections — 2026-10-14T18:17:30Z
+
+- Local source copy now reads ActorState and ActorValueOwner through CommonLib's AE accessors. Its target PCH now imports CommonLib's own `SKSE/Impl/PCH.h`, which supplies the standard header set and namespace setup used by the pinned headers.
+- Exact next action: Run a pch4 `.cmd` build wrapper into a new raw log; inspect the explicit exit marker and staged DLL/hash.
+
+## Observer pch4 build active — 2026-10-14T18:17:49Z
+
+- Build session 40043 is active; output path is `.local/readiness/current-completion-audit/observer-copy-build-pch4.stdout.raw`.
+- Exact next action: Poll session 40043, then inspect its raw output and staged DLL/hash.
+
+## Observer PCH dependency build result — 2026-10-14T18:18:38Z
+
+- CommonLib's PCH resolved its standard/header errors; the corrected observer API also passed. The remaining generated metadata TU failure is only missing global visibility of the `sv` string-view literal. Build exit was 1; no DLL. Raw hash: `9b65e8f5be033579e87da6308ec8d62a4245fd41f0c2822af4e3bb9257c7075b`.
+- Exact next action: Add a local PCH wrapper importing `std::literals::string_view_literals::operator""sv`, rebuild, and capture the complete result.
+
+## Observer string-view PCH wrapper — 2026-10-14T18:18:51Z
+
+- Added `src/ObserverPCH.h` in the ignored source copy; it imports CommonLib's SKSE PCH and brings its generated TU's `sv` literal into global scope. CMake now uses that local wrapper.
+- Exact next action: Run pch5 build, capture `BUILD_EXIT` and full raw output, then verify the staged DLL.
+
+## Observer pch5 build active — 2026-10-14T18:19:08Z
+
+- Build session 33487 is active; output target is `.local/readiness/current-completion-audit/observer-copy-build-pch5.stdout.raw`.
+- Exact next action: Poll session 33487 and inspect the captured build result.
+
+## Observer AE native build succeeded — 2026-10-14T18:19:50Z
+
+- CommonLibSSE and every Observer translation unit compiled in Release with `ENABLE_SKYRIM_AE=ON`. MSBuild reported `BUILD_EXIT=0`; generated DLL is `.local/readiness/commonlib-observer-repaired-20261014/stage/SKSE/Plugins/Release/SkyrimStateObserver.dll` (584,192 bytes). Full log `.local/readiness/current-completion-audit/observer-copy-build-pch5.stdout.raw`, SHA256 `4e51dd43576a37a9cf4c306da41f3c54691cd5018d9b8bf23d7f1d413f7b5a45`.
+- This establishes an AE-targeted native build. It does not establish runtime load, event handshake, or a vanilla experiment.
+- Exact next action: Inspect PE architecture/exports and hash, then record build plus Ghidra and Codex recovery evidence in the readiness checklist and evidence ledger; recalculate gates.
+
+## Ghidra, Codex recovery, and SKSE build evidence registered — 2026-10-14T18:24:30Z
+
+- EV-0152 records a successful hash-attested Ghidra query (93,587 functions, lookup, one call edge, 24 disassembly instructions, and decompilation). It proves the native query path, not a gameplay mechanism; the sample function is near image entry and the project remains incompletely analyzed.
+- EV-0153 records a fresh ephemeral read-only Codex context correctly resuming from a sanitized on-disk state subset. No repo docs or private source were sent.
+- EV-0154/EV-0155 record the successful AE CommonLib/Observer Release build and PE32+ x64 DLL with SKSE load/query/version exports. No runtime load or handshake occurred.
+- C07/C08/F08 move to PASS; the checklist now tallies 67 PASS and 7 BLOCKED_EXTERNAL. C12 remains externally blocked despite the built DLL. Remaining blockers are A04/C01/C03/C12/C13/D09/F10.
+- Exact next action: Reconcile reports, blocker list, tool-path verification, resume note, and stale frontier/transaction pointers; evaluate all three gates and run final validators.
+
+## Final verification started — 2026-10-14T18:31:00Z
+
+- Final readiness evidence EV-0152–EV-0155 is registered and the checklist stands at 67 PASS / 7 BLOCKED_EXTERNAL. The three gates have been separately evaluated; none of the remaining external blockers has become actionable from this environment.
+- Final verification passed: 139 unittest tests, research/evidence validation, transaction validation (4 transactions/17 events), overlay validation, compileall, Markdown inventory write/check (155 files), diff check, and a custom checklist/evidence/gate audit (74 unique IDs; 67 PASS/7 BLOCKED_EXTERNAL; no dangling checklist evidence IDs; all three gate decisions present).
+- Exact next action: Register fresh EV entries for the final unittest, research/transaction/overlay/compileall batch, Markdown inventory check, and 74-row status/evidence audit; update the report/checklist, then rerun validators and Markdown checks, stage only reviewed files, run staged privacy audit, and commit locally without pushing.
+
+## Final verification evidence registered — 2026-10-14T18:32:48Z
+
+- EV-0156–EV-0159 record 139 passing tests, four validators, final Markdown inventory write/check, and the 74-row status/evidence/gate audit. Conda remains unavailable; these checks ran on system Python 3.12.3.
+- The checklist contains 74 unique expected IDs with 67 PASS and 7 BLOCKED_EXTERNAL; every cited checklist EV ID resolves. STATIC_RESEARCH_READY is READY, scoped; NATIVE_RESEARCH_READY and INSTRUMENTED_AUTONOMOUS_RESEARCH_READY remain NOT READY for their recorded external blockers.
+- The first post-registration full-suite run exposed evidence schema errors in EV-0156–EV-0159 (two invalid kinds and two invalid edition labels); transaction validation and compileall still passed. Research/evidence and overlay validators correctly failed closed on the ledger issues.
+- Corrected EV-0156/EV-0159 kind to `tool` and EV-0157/EV-0159 edition to `AE`, matching `research/schema/evidence.schema.json` and the validator enums.
+- The schema-corrected rerun passed: all 139 tests, research/evidence validation, transaction validation (4 transactions/17 events), overlay validation, and compileall; outputs are recorded in EV-0160.
+- Final Markdown inventory write/check passed for 155 files and is recorded in EV-0161; the recovery checkpoint was then synchronized, so one last inventory check will cover that edit.
+- The staged pre-push audit passed with zero tracked raw/heavy files and zero unignored untracked raw artifacts. The exact-local-path scan found two added-line matches, so the privacy criterion remains under repair until both are replaced and the scan is rerun.
+- The repaired staged audit now passes: cached diff check exits 0; pre-push reports 273 tracked files, zero tracked raw/heavy artifacts, zero unignored untracked raw artifacts; added-line scan covers 622 lines with zero exact or generic home-path matches.
+- EV-0162 was appended successfully, but the scripted checklist text replacement stopped because the A09/F12 source strings differed from the expected text. No checklist changes were made by that script.
+- A09/F12 now cite EV-0162 and the repaired raw outputs; the checklist records zero exact and generic home-path matches across 622 staged added lines.
+- EV-0163 records the successful final status/reference/gate/checkpoint audit; all six durable next-action copies matched exactly, all three artifact hashes resolved, and no active process remained.
+- EV-0164 records the final post-closeout suite: 139 unittest tests and the research/evidence, transaction, overlay, and compileall validators all passed after EV-0163. Conda remains unavailable; the run used system Python 3.12.3.
+- Terminal research/evidence and overlay validation, cached diff check, pre-push audit, 685-line added-path scan, and 74-row/reference/gate/checkpoint/mission-state audit all passed. EV-0162 and EV-0163 now point to terminal captures.
+- Exact next action: Refresh the Markdown inventory after this checkpoint update, stage EVIDENCE and tracker files, rerun final research/diff/pre-push/path checks, verify both mission-file states, then commit locally without pushing.
+
+## Local readiness closeout — 2026-10-14T19:09:48Z
+
+- Completed all locally actionable mission checks. The checklist has 74 unique IDs: 67 PASS and 7 BLOCKED_EXTERNAL. STATIC_RESEARCH_READY is READY, scoped; NATIVE_RESEARCH_READY and INSTRUMENTED_AUTONOMOUS_RESEARCH_READY are NOT READY for their documented external dependencies.
+- EV-0161–EV-0164 record terminal Markdown, staged privacy, checklist/checkpoint, and post-closeout test/validator results. Ghidra query, AE CommonLib/Observer build and exports, and independent Codex recovery remain recorded in EV-0152–EV-0155.
+- The latest staged path scan covered 693 added lines with zero exact or generic home-path matches (raw SHA-256 `f59c2fa62bf9c11b097110649084fffc37784436d026b477b83357f69bab9122`). Research/evidence, recovery-state, transaction, overlay, cached diff, pre-push, and 74-row/reference/gate/checkpoint/mission-state audits all passed; raw captures are under ignored `.local/readiness/final-verification-terminal/`.
+- The checklist's A09 wording points to EV-0162 for the exact scan count, avoiding a count that becomes stale when Markdown inventory changes.
+- The lifecycle review found the recovery checkpoint still said `in_progress` and referenced TX-0005 even though the validated transaction ledger has four terminal entries. It is now normalized to `idle` with null active transaction/frontier fields and last transaction TX-0004.
+- The repaired recovery state passed `research_state.py validate`; the final rerun passed all 139 unit tests, research/evidence validation, 4-transaction/17-event validation, overlay validation, compileall, Markdown inventory check, privacy scan, diff check and pre-push audit.
+- Exact next action: Set `PLUGINS_TXT` in ignored `config/local.env` to the selected MO2 profile's explicit `plugins.txt`, then run `python3 scripts/python_env.py run tools/ae_preflight.py`. Only after a complete active order and required masters pass, run the real xEdit winner query; keep the runtime, disposable-save, UESP-provenance, and Windows/CI blockers external until their inputs are supplied.

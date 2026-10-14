@@ -55,13 +55,17 @@ adapter; do not add agent-facing Node, shell, or Java launchers.
   project. Use the same Python command without `--analyze` to query an existing
   project read-only. Inspect logs for analyzer timeouts and script errors; a
   process exit code of zero alone is insufficient.
-- The installed route is Ghidra 12.0.4 with Java 21. The initial 1,200-second
-  analysis imported the verified Steam 1.6.1170 executable but timed out during
-  Disassemble Entry Points. A longer analysis is running; no native hook or
-  address result is established yet.
-- CommonLibSSE source exists, but no compatible build has passed because CMake
-  is not available in the checked environment. xEdit winner queries remain
-  gated on the selected complete active profile.
+- The installed route is Ghidra 12.0.4 with Java 21. The hash-attested
+  read-only query on the saved Steam 1.6.1170 project passed (EV-0152), exporting
+  a function lookup, call edge, disassembly and decompilation. The sample routine
+  near image entry is not identified as gameplay code; the broader project is
+  incomplete after analysis timeout, so do not transfer its sample address into
+  a mechanic claim.
+- CommonLibSSE-NG compiled for AE, and an Observer Release DLL built from an
+  ignored local source copy with API/PCH corrections (EV-0130, EV-0154). The
+  PE32+ x64 artifact exports SKSEPlugin_Load, SKSEPlugin_Query and
+  SKSEPlugin_Version (EV-0155). No live game load or handshake was tested.
+  xEdit winner queries remain gated on the selected complete active profile.
 - Keep archive/Papyrus extraction and save analysis read-only. State input
   coverage and preserve raw artifacts under ignored .local/; do not invoke
   retired wrappers or infer a runtime stage call from PEX strings alone.
