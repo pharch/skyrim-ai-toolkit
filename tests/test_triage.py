@@ -186,7 +186,7 @@ def case_test_crash_counts_a_log_with_no_exception_line_rather_than_dropping_it(
 
 
 def case_test_crash_finds_dot_log_files_not_only_dot_txt(crash_dir):
-    """CrashLoggerSSE writes `.LOG`, not `.txt` -- KNOWLEDGEBASE.md says so.
+    """CrashLoggerSSE writes `.LOG`, not `.txt`; this fixture preserves that extension check.
 
     A `crash-*.txt` glob does not fail on a modern install, it reports a
     confident, complete-looking total made only of old logs. Measured on the

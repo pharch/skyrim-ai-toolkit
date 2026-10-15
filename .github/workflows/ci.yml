@@ -2,7 +2,7 @@ name: Research harness CI
 
 on:
   push:
-    branches: [main, master, glitch-hunting-setup]
+    branches: [main, master, research]
   pull_request:
   workflow_dispatch:
 
@@ -31,7 +31,7 @@ jobs:
       - name: Durable evidence and frontier validation
         run: python scripts/python_env.py run scripts/validate_research.py
       - name: Repository readiness gate
-        run: python scripts/python_env.py run scripts/validate_overlay.py
+        run: python scripts/python_env.py run scripts/validate_repository.py
       - name: Active Markdown, references, and legacy-language audit
         run: python scripts/python_env.py run scripts/markdown_policy_audit.py --check
 

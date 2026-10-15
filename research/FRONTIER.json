@@ -1,12 +1,12 @@
 {
-  "session_next_action": "At the next research session, run the documented Python bootstrap/strict check and research-state validation, read docs/RESEARCH_START_PROMPT.md, then begin TX-0005/Q-0001; setup closeout is complete and no bounty research has started here.",
+  "session_next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source.",
   "schema_version": 3,
   "target": {
     "edition": "AE",
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
-    "note": "Repository target policy is AE runtime 1.6.318+. Steam SkyrimSE.exe ProductVersion 1.6.1170.0 is verified (EV-0109), but no live game session or complete active MO2 order is verified. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Legacy source files are hashed in migration/legacy_markdown_manifest.tsv; source commit is unavailable. Active Python routes and native tool limits are documented in the capability matrix. Four evidence-linked transactions exercise blocker reselection, rival armor hypotheses, an AV39 record screen, and breadth synthesis; process-isolated recovery is tested.",
-    "next_action": "At the next research session, run the documented Python bootstrap/strict check and research-state validation, read docs/RESEARCH_START_PROMPT.md, then begin TX-0005/Q-0001; setup closeout is complete and no bounty research has started here."
+    "note": "AE runtime policy is 1.6.318+. Steam SkyrimSE.exe ProductVersion 1.6.1170.0 is verified (EV-0109), but no live game session or complete target-specific plugin order is verified. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Imported source hashes and evidence aliases are in research/LEGACY_SOURCE_PROVENANCE.tsv; source commit is unavailable. Current tool scopes are in docs/LOCAL_RUNTIME_CONTRACT.md. Four evidence-linked transactions exercise blocker reselection, rival armor hypotheses, an AV39 record screen, and breadth synthesis; process-isolated recovery is tested.",
+    "next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source."
   },
   "items": [
     {
@@ -1041,14 +1041,14 @@
     }
   ],
   "session_checkpoint": {
-    "timestamp_utc": "2026-10-15T13:35:00Z",
-    "task": "complete recovered native xEdit integration and final harness readiness; no bounty research",
-    "next_action": "At the next research session, run the documented Python bootstrap/strict check and research-state validation, read docs/RESEARCH_START_PROMPT.md, then begin TX-0005/Q-0001; setup closeout is complete and no bounty research has started here."
+    "timestamp_utc": "2026-10-15T17:25:00Z",
+    "task": "research continuation checkpoint; no transaction started in this cleanup session",
+    "next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source."
   },
   "last_session_checkpoint": {
-    "recorded_utc": "2026-10-15T05:39:44Z",
-    "next_action": "At the next research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `docs/HARNESS_READINESS.md`, then start P0 OBJ-1/Q-0001 using `docs/RESEARCH_START_PROMPT.md`.",
-    "active_process": "Historical: SSEView 4.1.5f PID 3948 responded during EV-0185/0189; current process liveness was not rechecked. Skyrim was not launched; Observer DLL remains staged only under ignored .local."
+    "recorded_utc": "2026-10-15T17:25:00Z",
+    "next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source.",
+    "active_process": "No live Skyrim process or SKSE connection is asserted; native xEdit requires the documented interactive route."
   },
-  "next_action": "At the next research session, run the documented Python bootstrap/strict check and research-state validation, read docs/RESEARCH_START_PROMPT.md, then begin TX-0005/Q-0001; setup closeout is complete and no bounty research has started here."
+  "next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source."
 }

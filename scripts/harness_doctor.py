@@ -200,9 +200,8 @@ def _base_checks(
     local_interpreter = interpreter
     for label, args in (
         ("research_state_validation", ["scripts/research_state.py", "validate"]),
-        ("setup_state_check", ["scripts/setup_research.py", "check"]),
         ("research_validation", ["scripts/validate_research.py"]),
-        ("overlay_validation", ["scripts/validate_overlay.py"]),
+        ("repository_validation", ["scripts/validate_repository.py"]),
         ("local_paths_doctor", ["scripts/local_paths.py", "doctor"]),
         ("domain_doctor", ["tools/domain_doctor.py"]),
         ("markdown_policy", ["scripts/markdown_policy_audit.py", "--check"]),

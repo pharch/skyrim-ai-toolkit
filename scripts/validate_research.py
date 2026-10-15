@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import csv
 import hashlib
 import json
 import re
@@ -184,8 +185,39 @@ def _validate_markdown_entities(root: Path, evidence_ids: set[str]) -> list[str]
     experiment_dirs = sorted((root / "experiments").glob("EXP-*"))
     if not experiment_dirs:
         errors.append("experiments/: no experiment records found")
+    legacy_rows: dict[str, list[dict[str, str]]] = {}
+    provenance = root / "research" / "LEGACY_SOURCE_PROVENANCE.tsv"
+    if provenance.is_file():
+        try:
+            with provenance.open(encoding="utf-8", newline="") as stream:
+                for row in csv.DictReader(stream, delimiter="\t"):
+                    retained = row.get("retained_reference", "")
+                    if retained.startswith("experiments/EXP-"):
+                        directory_name = Path(retained).parts[1]
+                        legacy_rows.setdefault(directory_name, []).append(row)
+        except (OSError, csv.Error) as exc:
+            errors.append(f"legacy experiment provenance is unreadable: {type(exc).__name__}")
     for directory in experiment_dirs:
         label = directory.name
+        if label in legacy_rows:
+            rows = legacy_rows[label]
+            indexed = {row.get("retained_reference", ""): row for row in rows}
+            for path in sorted(directory.glob("*.md")):
+                relative = path.relative_to(root).as_posix()
+                row = indexed.get(relative)
+                if row is None:
+                    errors.append(f"{label}: historical file lacks a provenance row: {path.name}")
+                    continue
+                expected_hash = row.get("retained_sha256", "")
+                actual_hash = hashlib.sha256(path.read_bytes()).hexdigest()
+                if not expected_hash or expected_hash != actual_hash:
+                    errors.append(f"{label}: retained historical file hash mismatch: {path.name}")
+            refs = {row.get("evidence_id", "") for row in rows} - {"", "—"}
+            if not refs:
+                errors.append(f"{label}: historical experiment provenance has no evidence ID")
+            for evidence_id in refs:
+                errors.extend(_validate_references(label, f"[{evidence_id}]", evidence_ids))
+            continue
         paths = [directory / name for name in ("README.md", "hypothesis.md", "protocol.md", "expected-discriminants.md", "results.md")]
         missing = [path.name for path in paths if not path.is_file()]
         if missing:

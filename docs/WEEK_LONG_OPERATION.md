@@ -1,61 +1,27 @@
-# Interactive research continuation and recovery
+# Continuing research across sessions
 
-Start research in an interactive Codex session from the trusted repository
-root. Durable repository state supports context changes and later restarts; it
-does not promise uninterrupted execution or bypass platform session limits.
-Do not schedule automatic fresh Codex threads or kill a useful analysis at a
-fixed interval.
+Research proceeds in interactive Codex sessions and durable repository records. Do not schedule unattended fresh threads or imply uninterrupted execution. The frontier is a continuing program: complete, block or narrow one question, reselect the next independent tractable question, and periodically synthesize the causal model.
 
-## Before a research session
+## Session start
 
-1. Read `AGENTS.md`, `NORTH_STAR.md`, `STATE.md`, `ROADMAP.md`,
-   `research/FRONTIER.json`, and `protocols/TOOL_ROUTING.md`.
-2. Bootstrap or repair with `python3 scripts/bootstrap_python.py`; run
-   `python3 scripts/setup_research.py init` to create local config only if
-   absent; then run `python3 scripts/python_env.py check --strict` and
-   `python3 scripts/python_env.py run scripts/setup_research.py check` and
-   inspect the exact current checkpoint and working-tree changes. On Windows
-   PowerShell, use `py -3.12` to start these commands.
-3. Select one ready frontier item. Record its rival models, predicted
-   discriminants, tool/source, and exact next action before collecting data.
-4. Keep the work offline unless the Windows AE preflight and the relevant
-   read-only tool prerequisites pass. Live-game work requires a separate,
-   supervised protocol and a disposable save.
+1. Follow the required-context list and active bounty in `AGENTS.md`.
+2. Bootstrap/reuse Python 3.12, run `python_env.py check --strict`, then `research_state.py validate`. If Python preflight fails, run bootstrap repair and repeat the check.
+3. Run the doctor mode relevant to the selected source. Static research may proceed without a profile-specific MO2 list or live SKSE connection.
+4. Resume the transaction named in `research/RECOVERY.json`, or select the highest-information-gain ready frontier item. State rival models, predicted discriminants, source/tool and exact next action before data collection.
 
-## Checkpoint before a boundary
+## Checkpoint and recovery
 
-Before a context change or ending a session, update `STATE.md`,
-`research/FRONTIER.json`, and `research/SESSION_LOG.md` with:
+Before a context or CLI boundary, update `STATE.md`, `research/FRONTIER.json`, and `research/SESSION_LOG.md` with completed work, evidence/artifact hashes, scope and the exact next action. Keep raw data below ignored `.local/`; put concise evidence IDs and negative results in the research ledgers.
 
-- what was actually inspected and the source/build identity;
-- raw evidence locations and hashes, plus the claim or hypothesis status;
-- the exact next command or observation, with its prerequisites;
-- blockers and an independent offline continuation route.
+Validate before resuming. If `research/RECOVERY.json` has status `running`, use:
 
-For a potentially interrupted investigation, keep its transaction resumable and
-use `python3 scripts/python_env.py run scripts/research_state.py validate`
-before resuming. If
-`research/RECOVERY.json` says `running`, mark it interrupted with
-`python3 scripts/python_env.py run scripts/research_state.py recover --root .`, inspect partial outputs
-and the durable-state diff, and resume only from the recorded `next_action`.
-Interruption is not evidence of completion.
+```sh
+python3 scripts/python_env.py run scripts/research_state.py recover --root .
+python3 scripts/python_env.py run scripts/research_state.py validate
+```
 
-If the strict check fails, rerun the bootstrap and repair the environment
-before declaring a Python blocker. After strict validation passes, run the
-consolidated doctor through `python3 scripts/python_env.py run
-scripts/harness_doctor.py all`. Stop setup work after the local static and
-research-state gates pass; continue the selected frontier item. On Windows,
-start the dispatcher with `py -3.12`.
+Inspect partial outputs and the durable-state diff; resume only from the recovered `next_action`. Interruption is not evidence of completion. On Windows, start the dispatcher with `py -3.12`.
 
-## Periodic synthesis
+## Synthesis and reselection
 
-After several meaningful investigations, inspect shared functions, ActorValues,
-effects, event gates, inventory state, numeric operations, and serialization
-edges in `research/KNOWLEDGE_GRAPH.md`. Add a successor only when its question
-has a discriminating observation and an actionable source/tool route. Preserve
-negative results and contradictions; do not close a question from missing or
-incomplete output.
-
-These procedures support durable work in an interactive session. They do not
-establish a current Windows runtime or provide unattended access to live-game
-mutators.
+After several substantive investigations, a surprising result or a major contradiction, compare recent findings across quests, combat XP, ActiveEffects, crafting and serialization. Add graph links only for a supported relationship. Generate successor questions with distinct predicted outcomes and an actionable source route. Preserve negative results, scope and unresolved alternatives. When a lane is blocked, queue the precise external test and continue independent static work.

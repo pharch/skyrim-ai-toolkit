@@ -6,7 +6,7 @@ checkpoints. Do not reuse non-AE evidence without an AE-specific verification.
 
 ## A. Objective 1 — Level-gated world / quest triggers (P0, main focus)
 
-1. Compile a version- and DLC-aware inventory of level-gated quests and encounters using records + UESP + legacy logs.
+1. Compile a version- and DLC-aware inventory of level-gated quests and encounters using AE records, UESP revisions, and imported historical reports with explicit provenance.
 2. Classify gates: dialogue condition, story-manager event condition, native/event callback, leveled spawn list, alias fill, trigger box, Papyrus check, delayed timer, encounter-zone state, save-state cache.
 3. Find the authoritative enforcement path per representative gate. Identify whether there is a player-level read, an intermediate snapshot, or an alternate entry point.
 4. Derive a *vanilla-accessible* manipulation/ordering/composition that bypasses a gate without `setstage`/mod edits as final solution.

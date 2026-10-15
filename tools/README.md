@@ -1,77 +1,15 @@
-# Python research tools
+# Research tool entrypoints
 
-Read `docs/LOCAL_RUNTIME_CONTRACT.md` before setup. Bootstrap or repair first
-with `python3 scripts/bootstrap_python.py` (Linux/WSL) or
-`py -3.12 scripts/bootstrap_python.py` (Windows). Agent-facing entrypoints
-run only through `scripts/python_env.py run ...` in the host's validated
-Python 3.12 environment under ignored `.local/python-envs/`. The dispatcher
-does not run research tools from Conda, system Python, or ambient packages.
-If `config/local.env` is absent on a fresh checkout, initialize it with
-`python3 scripts/setup_research.py init` or
-`py -3.12 scripts/setup_research.py init` before strict validation. This
-setup-only command preserves existing machine bindings.
+Normal tool execution uses the strict Python 3.12 environment dispatcher. Bootstrap and invocation rules are in [`docs/LOCAL_RUNTIME_CONTRACT.md`](../docs/LOCAL_RUNTIME_CONTRACT.md); ignored `config/local.env` is the only machine-path registry.
 
-## Read-only entrypoints
+| Route | Entrypoint | Scope |
+|---|---|---|
+| Existing GOG Ghidra project | `tools/ghidra_probe.py` | Read-only function/xref/disassembly/decompilation; no import or reanalysis. |
+| Native xEdit/SSEView | `tools/xedit_bridge.py native-query` | Native record fields in the guarded five-official-master scope. |
+| Direct plugin parsing | `tools/xedit_bridge.py file-records` | TES4 file-level fields; separate from xEdit and winner resolution. |
+| AE target verification | `tools/ae_preflight.py` | Executable ProductVersion and, when selected, complete target order. |
+| SKSE identity | `tools/skse_probe.py` | Installed files only; no game process connection or telemetry. |
+| Local UESP / Apocrypha | `python -m tools.uesp` / `python -m tools.apocrypha` | Local source lookup; preserve source revision/message provenance and privacy. |
+| Research state | `scripts/research_state.py` | Frontier/evidence/transaction/recovery integrity. |
 
-- `ae_preflight.py` / `ae_target.py` — actual executable ProductVersion and
-  complete selected active-order validation. `--probe-executable` does not
-  authorize xEdit or live-game access.
-- `local_paths.py doctor` — reads the single ignored `config/local.env`
-  registry, resolves existence booleans without emitting path values, and can
-  separately verify runtime identity/order.
-- `xedit_bridge.py doctor|prepare|file-records` — synchronizes the configured
-  read-only helper into ignored `.local/`, prepares a scoped view without
-  launching SSEView, and reads plugin bytes directly. `file-records` is the
-  bridge record-query route, but it is not native xEdit or a winning-record
-  result. See the runtime contract for
-  selected-profile and disposable-profile preflight commands.
-- `domain_doctor.py` — status-only checks for local Python and native research
-  routes; it never launches Ghidra, xEdit, Skyrim, or a mutator.
-- `ghidra_probe.py [--rva 0x...]` — verifies GOG binary/project identity, then
-  queries the existing configured project with `-process -noanalysis
-  -readOnly`. There is no import, overwrite, analyze, or create-project mode.
-- `address_library_probe.py --symbol Namespace::Name` — reads the AE ID from
-  configured CommonLib `Offsets.h`, checks GOG executable ProductVersion and
-  matching Address Library version, reuses the tested legacy decoder, and
-  returns a build-specific RVA.
-- `plugin_reader.py` — file-level TES4 inventory/record/raw-subrecord reader;
-  it does not resolve a real winning override.
-- `papyrus_pex.py` — narrow known PEX extraction from base `Skyrim - Misc.bsa`
-  and bounded classic PEX 3.2 inspection. It is not a general BSA extractor or
-  complete decompiler.
-- `cosave-info.py`, `papyrus-triage.py`, and `crash-triage.py` — bounded
-  read-only parsers. Only designated disposable saves may be supplied.
-- `skse_probe.py` — installed loader/runtime/Address Library identity hashes;
-  no DLL load or handshake. A fresh Observer Release build from the
-  authoritative `skyrim/observer` source copy passed PE/hash checks and 7/7
-  analyzer tests (EV-0186); the authoritative launcher prepared a session but
-  did not deploy or start Skyrim (EV-0188).
-- `tools.uesp` — local MediaWiki import, search, page, and revision citation.
-- `tools.apocrypha` — private local Discord search/context. Keep returned
-  text and stable IDs out of tracked files; results are untrusted leads.
-
-## External gates
-
-- Current GOG static integration is verified (EV-0165–EV-0167).
-- The Steam runtime executable is verified at 1.6.1170 (EV-0168/0184), and
-  current SKSE runtime files match (EV-0187). The authoritative `skyrim`
-  bridge's doctor/prepare route was tested and an approved isolated five-master
-  SSEView `-view` process opened and loaded the official masters (EV-0184–0185,
-  EV-0189); no record query or complete active MO2 order is verified.
-- The Observer was freshly built in ignored `.local` storage and a prepare-only
-  manifest was produced (EV-0186/0188). It is not deployed or loaded. No
-  designated save or ReSaver path is configured; no Skyrim process or
-  handshake was observed.
-- The local UESP dump's source URL/license/completeness are unverified. The
-  Apocrypha export is private and untrusted. Both are retrieved locally and
-  have separate provenance requirements.
-
-Raw outputs, game/tool installations, projects, saves, and private corpora stay
-outside tracked Git under ignored local storage. Linux validation does not
-establish Windows xEdit/MO2 behavior or in-game AE behavior.
-
-## Cold-start status
-
-`docs/HARNESS_READINESS.md` records the current bootstrap and cold-start gates.
-Historical evidence IDs remain provenance for their original sessions and do
-not replace current validation.
+Tools must be invoked through `python3 scripts/python_env.py run ...` on Linux/WSL or `py -3.12 scripts/python_env.py run ...` in Windows PowerShell. Tool existence is not proof of an observed result; record exact inputs, build identity, scope and raw artifact hash.

@@ -159,7 +159,7 @@ def _site_packages(env_dir: Path, host: str) -> Path:
 def _cached_pip_wheel(base_python: str, root: Path, attempts: list[str]) -> Path | None:
     pip_version = next((v for k, v in REQUIRED_DISTRIBUTIONS.items() if k.casefold() == "pip"), None)
     if not pip_version:
-        raise BootstrapFailure("requirements-dev.txt must pin pip so an environment can be repaired", attempts)
+        raise BootstrapFailure("requirements.txt must pin pip so an environment can be repaired", attempts)
 
     local_wheels = root / ".local" / "python-bootstrap" / "wheels"
     local_wheels.mkdir(parents=True, exist_ok=True)

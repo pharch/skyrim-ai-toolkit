@@ -1,8 +1,3 @@
 # Repository instructions
 
-This is an offline-first Skyrim AE glitch-research workspace, not a mod
-authoring repository. Follow `AGENTS.md` and read its required state documents
-before investigating. Verify `SkyrimSE.exe` runtime 1.6.318+ and the complete
-active AE load order before xEdit/live work. Never infer evidence from an empty
-or partial result. Preserve raw evidence, label diagnostic interventions, and
-do not claim Windows/game integration from Linux tests.
+This is a permanent offline-first Skyrim AE glitch-research workspace. Follow [`AGENTS.md`](../AGENTS.md), use the tested tool routes in [`docs/LOCAL_RUNTIME_CONTRACT.md`](../docs/LOCAL_RUNTIME_CONTRACT.md), and treat [`bounties/BOUNTY-0001-LEVEL1-P0.md`](../bounties/BOUNTY-0001-LEVEL1-P0.md) as the active research target. A failed Python preflight starts autonomous bootstrap repair; after relevant checks pass, continue research. Preserve evidence boundaries and never write to original game files or baseline saves.

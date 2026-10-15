@@ -3,7 +3,7 @@ import tempfile
 import unittest
 
 from scripts.markdown_policy_audit import markdown_files
-from scripts.validate_overlay import _validate_markdown_links
+from scripts.validate_repository import _validate_markdown_links
 
 
 class MarkdownPolicyAuditTests(unittest.TestCase):

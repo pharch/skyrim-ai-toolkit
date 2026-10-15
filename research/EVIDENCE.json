@@ -882,7 +882,7 @@
       "tools": [
         "legacy experiment report; underlying runtime/tool identity was not independently verified"
       ],
-      "coverage": "One hashed legacy experiment results file. Its source folder is preserved under migration/legacy_experiments with a data-only notice; raw game saves/exports are not included.",
+      "coverage": "One hashed historical experiment result. Its full source dossier is retained under experiments/EXP-0001-enchanting-preview-escape; source hashes are indexed in research/LEGACY_SOURCE_PROVENANCE.tsv. Raw game saves/exports are not included.",
       "result": "Legacy result states a static ownership/alternate-caller audit closed the ordinary enchanting-preview publication theory; no runtime test was claimed. The underlying detailed source reports are not independently revalidated here."
     },
     {
@@ -899,7 +899,7 @@
       "tools": [
         "legacy experiment report; underlying runtime/tool identity was not independently verified"
       ],
-      "coverage": "One hashed legacy experiment results file. Its source folder is preserved under migration/legacy_experiments with a data-only notice; raw game saves/exports are not included.",
+      "coverage": "One hashed historical experiment result. Its full source dossier is retained under experiments/EXP-0002-mixed-poison-payload; source hashes are indexed in research/LEGACY_SOURCE_PROVENANCE.tsv. Raw game saves/exports are not included.",
       "result": "Legacy result contains a user report that a poison-classified mixed item amplified a beneficial secondary effect under negative Poison Resistance and proposes a recipe candidate. Exact recipe, save, raw values, skill budget, and delivery capture are missing; treat as user-reported lead only."
     },
     {
@@ -916,7 +916,7 @@
       "tools": [
         "legacy experiment report; underlying runtime/tool identity was not independently verified"
       ],
-      "coverage": "One hashed legacy experiment results file. Its source folder is preserved under migration/legacy_experiments with a data-only notice; raw game saves/exports are not included.",
+      "coverage": "One hashed historical experiment result. Its full source dossier is retained under experiments/EXP-0003-deadload-functional-payload; source hashes are indexed in research/LEGACY_SOURCE_PROVENANCE.tsv. Raw game saves/exports are not included.",
       "result": "Legacy result reports no runtime result and a static continuation that set aside one Karstaag counter-spell route and promoted Bend Will as a future functional-payload test. Neither conclusion was revalidated in this setup."
     },
     {
@@ -933,7 +933,7 @@
       "tools": [
         "legacy experiment report; underlying runtime/tool identity was not independently verified"
       ],
-      "coverage": "One hashed legacy experiment results file. Its source folder is preserved under migration/legacy_experiments with a data-only notice; raw game saves/exports are not included.",
+      "coverage": "One hashed historical experiment result. Its full source dossier is retained under experiments/EXP-0007-hazard-caster-family; source hashes are indexed in research/LEGACY_SOURCE_PROVENANCE.tsv. Raw game saves/exports are not included.",
       "result": "Legacy static result reports actor-cause copying for ordinary player hazards and a no-caster path for fixed environmental payloads, with no alternate caller that removes cause while retaining the player-selected Blizzard payload. Runtime validation remains unperformed."
     },
     {
@@ -950,7 +950,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports 50 PoisonResist MGEFs, 319 reverse-reference rows, and 148 candidate mixed recipes. A historical Steam probe is said to support hostile-first classification only; recipe identity, resistance amplification, delivery, and XP were not established."
     },
     {
@@ -967,7 +967,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Corrects the cleanup account: Recover subtracts the negated effective magnitude; +0x94 is written with the observed slot change afterward. Float32 residue examples are calculations, not gameplay observations; cited robe access is not level-one."
     },
     {
@@ -984,7 +984,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports native Finish and Recover cleanup before Papyrus OnEffectFinish; no official alchemy writer for +Inf or the 0x4100 finish bypass was identified. Raw executable and records were not revalidated."
     },
     {
@@ -1001,7 +1001,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports Bone Meal + Hagraven Feathers + Ogre’s Teeth as a Fortify Conjuration payload candidate with modeled craft XP 89.2167511 against a zero-progress level-20 threshold 615.970670...; recipe/acquisition were not tested."
     },
     {
@@ -1018,7 +1018,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports Peak matching by non-null Keyword plus ActorValue and a distinct-key CC AV148 robe effect; no alternate school AV137/147/149/150/151 writer was found in the audited scope. No AV148 runtime stacking test."
     },
     {
@@ -1035,7 +1035,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports 731 scripted MGEFs and 282 ALCH links; the only direct player perk writer identified was the fixed Blades reward. Compiled/dynamic writer cases and current load order were not rechecked."
     },
     {
@@ -1052,7 +1052,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports ExtraPoison on inventory entries and no target rewrite in the inspected HitData path; a fixed Poison Rune was identified as an NPC-free control candidate, not a crafted-poison self-delivery route."
     },
     {
@@ -1069,7 +1069,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Inspected RemoveItem/AddObjectToContainer paths appear to carry ExtraDataList, but stack identity preservation and a deterministic level-one follower/equip/attack chain were not established."
     },
     {
@@ -1086,7 +1086,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports robe entries at levels 32/40 and a fixed level-21 boss; the outfit resolver uses the selected base level. No level-one AV148 robe route was found in the audited path."
     },
     {
@@ -1103,7 +1103,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports signed WBDT.usesSkill outside 6–23 skipping the skill call. Two type-3 records were identified, with no placed references or player-accessible writer found; no craft was run."
     },
     {
@@ -1120,7 +1120,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports 195 enchanted COBJ outputs across fixed tempering/quest, staff, and Aetherial Forge records; no arbitrary runtime enchant selection was identified."
     },
     {
@@ -1137,7 +1137,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports condition IDs 438/439 mapping to PlayerCreatePotion/PlayerEnchantObject routines that inspect/register dynamic data but do not themselves make an inventory transaction."
     },
     {
@@ -1154,7 +1154,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports 269 INFO paths and a cached-success/late-XP model; a user success-without-XP observation is explicitly unlogged. The proposed +10 residue plus expiring +50 source prediction is untested."
     },
     {
@@ -1171,7 +1171,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports distinct Persuade/Bribe/Intimidate ordering and an Intimidate XP suppression candidate while DGIntimidateQuest is running. The retained-brawl sequence is static and untested."
     },
     {
@@ -1188,7 +1188,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Historical loaded-save baseline reports Speech 15 and Enchanting 20 at zero progress and a stationary idle window. No player action or XP transaction was tested."
     },
     {
@@ -1205,7 +1205,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Historical probe report says ten dynamic alchemy items matched GetCostliestEffectItem and GetAVEffect; equal-cost selected effects followed first-effect order. Not independently reproduced."
     },
     {
@@ -1222,7 +1222,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports ScrollItem declining skill-use while ordinary SpellItem may provide it; cited low multipliers are small-XP examples, not a generic XP suppression route."
     },
     {
@@ -1239,7 +1239,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports two exact zero multipliers had magic_skill=-1 and no valid-skill negative/sub-one multiplier in 1,573 winning MGEFs. Current plugin order was not revalidated."
     },
     {
@@ -1256,7 +1256,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports kEnchanting requires an armor source and matching inventory entry; scanned finite alchemy/spell sources did not reach the writer. No runtime timer bypass was observed."
     },
     {
@@ -1273,7 +1273,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports an official queued RemoveSpell inverse for two Dragonborn items. Both useful casts have Destruction sinks; acquisition and a functional deadload residue remain unresolved."
     },
     {
@@ -1290,7 +1290,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports that favorites EquipSpell assigns a hand slot but does not cast or create an ActiveEffect. The source also reports frozen game time in deadload; no raw runtime artifact is attached."
     },
     {
@@ -1307,7 +1307,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports MGR21 start/finish scripts adding/removing two perks and leaves a save/revert mismatch as a hypothesis. No callback replay or retained-perk result was tested."
     },
     {
@@ -1324,7 +1324,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports frozen game time during deadload, which closes expiry-during-deadload as described; native cleanup is queued. Functional non-equipment persistence is not established."
     },
     {
@@ -1341,7 +1341,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports race switching does not clear the inspected alchemy effects or bypass timer/Recover cleanup. This is a scoped static rule-out, not a persistence test."
     },
     {
@@ -1358,7 +1358,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Defines observer lens fields and blind spots; explicitly warns missing lenses/trace gaps downgrade results. It does not establish that the native bridge was built or loaded."
     },
     {
@@ -1375,7 +1375,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Provides control-first validation recipes and minimum evidence fields; event-sink output without native observation is only a lead. Recipes require current target and prerequisite checks."
     },
     {
@@ -1392,7 +1392,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports a fixed Blades quest/reward state writer without an inverse; it is not an arbitrary school AV or crafted payload writer."
     },
     {
@@ -1409,7 +1409,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports zero literal school PowerModifier names in the scanned packaged scripts; dynamic name construction was not excluded."
     },
     {
@@ -1426,7 +1426,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports the ordinary enchant callback prepares output/input state before fixed positive AV23 skill use, with no identified yield/save boundary; not a low-XP crafting result."
     },
     {
@@ -1443,7 +1443,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports a 0.05 entry-point-22 modifier gated on staff-workbench furniture and a stale occupiedFurniture hypothesis whose clear/replace path remains unproven as player-accessible."
     },
     {
@@ -1460,7 +1460,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run in this migration. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for source disposition and mapping.",
+      "coverage": "One hashed legacy Markdown report. The source report states its scope; referenced raw plugin exports/logs are not bundled or re-run during the historical import. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for source provenance.",
       "result": "Reports no valid-skill sub-one/non-finite MGEF multiplier in its scanned plugin set; missing full manifest prevents a current-order negative claim."
     },
     {
@@ -1477,7 +1477,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in migration/KNOWLEDGE_IMPORT_AUDIT.md; referenced raw game/tool artifacts were not bundled or re-run in this migration.",
+      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in research/LEGACY_IMPORT.md; referenced raw game/tool artifacts were not bundled or re-run during the historical import.",
       "result": "Reports that the ordinary Enchanting skill cap checks base ActorValue rather than effective ActorValue; shifting effective Enchanting does not bypass the reported base-skill ceiling."
     },
     {
@@ -1494,7 +1494,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in migration/KNOWLEDGE_IMPORT_AUDIT.md; referenced raw game/tool artifacts were not bundled or re-run in this migration.",
+      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in research/LEGACY_IMPORT.md; referenced raw game/tool artifacts were not bundled or re-run during the historical import.",
       "result": "Reports that a Power cast inserts a spell node into the native cast-power list before callbacks, that the list is serialized, and that the type-2 cast check rejects the same spell; losing Papyrus RemoveSpell may leave membership/icon without proving a usable extra cast."
     },
     {
@@ -1511,7 +1511,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in migration/KNOWLEDGE_IMPORT_AUDIT.md; referenced raw game/tool artifacts were not bundled or re-run in this migration.",
+      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in research/LEGACY_IMPORT.md; referenced raw game/tool artifacts were not bundled or re-run during the historical import.",
       "result": "Reports that the disenchant menu resolves the first ExtraDataList and passes it to RemoveItem while row filter flags differ from the enabled byte; ordinary equipment reconciliation remains, so retained ActiveEffect residue was not established."
     },
     {
@@ -1528,7 +1528,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in migration/KNOWLEDGE_IMPORT_AUDIT.md; referenced raw game/tool artifacts were not bundled or re-run in this migration.",
+      "coverage": "One hashed legacy Markdown report. Source details and remaining limit are recorded in research/LEGACY_IMPORT.md; referenced raw game/tool artifacts were not bundled or re-run during the historical import.",
       "result": "Labels EC-0001 poison amplification and follower/frenzy delivery confirmed while leaving exact recipe validation and delivery optimization as remaining work; preserve this as a source status assertion contradicted by the linked evidence limits, not as a reproduced exploit."
     },
     {
@@ -1545,7 +1545,7 @@
       "tools": [
         "historical source document; no underlying test artifact identified"
       ],
-      "coverage": "One hashed legacy Markdown source. Its status wording is preserved as a source claim only; see migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for mapping.",
+      "coverage": "One hashed legacy Markdown source. Its status wording is preserved as a source claim only; see research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for mapping.",
       "result": "Calls follower delivery of a crafted poison an established cumbersome control. The README supplies no recipe, save, telemetry, or source artifact proving that delivery; treat the wording as a historical status claim."
     },
     {
@@ -1562,7 +1562,7 @@
       "tools": [
         "historical source document; no underlying test artifact identified"
       ],
-      "coverage": "One hashed legacy Markdown source. Its status wording is preserved as a source claim only; see migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json for mapping.",
+      "coverage": "One hashed legacy Markdown source. Its status wording is preserved as a source claim only; see research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv for mapping.",
       "result": "Labels the Speech no-XP result a confirmed exploit despite the associated report describing an unlogged user observation without save, form, timing, or raw XP delta."
     },
     {
@@ -1579,7 +1579,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports 79 plugins and 2,108 MGEFs scanned; none of 1,167 empty-KWDA records targets AV137/147/148/149/150/151. The Creation Club AV148 robe MGEF has nonempty KWDA and null associatedForm."
     },
     {
@@ -1596,7 +1596,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports that poison classification selects Poison Resistance from the item flag and derives class from the first raw matched effect before scaling; the Jarrin GetAVEffect disagreement is only predicted under extreme scaling and does not provide a useful qualifying payload."
     },
     {
@@ -1613,7 +1613,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports 101 alchemy-referenced MGEFs and no target-school MGEF with No Duration in the scanned set. Bittercup uses a fixed AV26 Actor.ModAV(+20/-20) writer without a finish inverse; this is not a school PowerModifier effect."
     },
     {
@@ -1630,7 +1630,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports no ordinary vanilla writer for the cited non-finite potion timer or expiration bypass; diagnostic +Inf could persist in the traced timer path, while NaN and -Inf finish. No reachable player writer was identified."
     },
     {
@@ -1647,7 +1647,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports no ENIT bit 0x8 among 407 ALCH and 115 INGR records and no expiry-path read of that bit in the inspected path; API naming alone does not prove a timer bypass."
     },
     {
@@ -1664,7 +1664,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports Thistle01 Resist Poison magnitude 3 with authored duration 0 and FX Persist; the native expiration path reaches finish at elapsed zero and Recover cleanup reverses it."
     },
     {
@@ -1681,7 +1681,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports deferred Dispel sets a pending bit that Update clears/retries when CanFinish fails; no official ALCH/INGR caller was found, and ordinary expiry remains responsible for cleanup."
     },
     {
@@ -1698,7 +1698,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Separates direct spell membership, hand-slot assignment, and ActiveEffects; reports Apocrypha reward SetPower synchronously removes the prior power bundle and adds the new one, with no queued cleanup gap identified."
     },
     {
@@ -1715,7 +1715,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports HitData keeps aggressor and target separately and reflection damage accounting is not a target rewrite. Blizzard hazard damage may award Destruction XP; empty-area casting is only a prevention candidate."
     },
     {
@@ -1732,7 +1732,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports poison-gas traps use fixed explosion forms and do not read/copy weapon ExtraPoison or a crafted AlchemyItem; proposes a read-only lens for hit source, explosion/MGEFs, resistance, effect identity, and finish."
     },
     {
@@ -1749,7 +1749,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports Dawnguard reflection scripts cast fixed charge spells and no inspected script copies weapon ExtraPoison into the reflected spell."
     },
     {
@@ -1766,7 +1766,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports school MGR21 scroll effects use script archetypes and fixed perks rather than school PowerModifier AVs; the Magicka scroll has a separate AV156 null-key effect."
     },
     {
@@ -1783,7 +1783,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. The source-specific scope and outstanding runtime limits are retained; no current-target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Describes perceived equipment/perk retention around a deadload sequence and explicitly leaves the engine mechanism unknown; retain as a user report, not a reproduction."
     },
     {
@@ -1800,7 +1800,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. Record counts, conditions, and native paths are historical and scoped; no current AE target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. Record counts, conditions, and native paths are historical and scoped; no current AE target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports that player-cast hazard creation copies the ordinary player ActorCause into the Hazard owner handle before ticking; no official setter for a missing cause, owner, internal spell multiplier, or caster was found. Environmental non-actor hazards are controls and do not transfer an arbitrary player payload."
     },
     {
@@ -1817,7 +1817,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. Record counts, conditions, and native paths are historical and scoped; no current AE target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. Record counts, conditions, and native paths are historical and scoped; no current AE target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports no public vanilla stale poison-classification writer past Actor::DrinkPotion and normal serialization reconstruction. BirdEgg03 plus BYOHHawkEgg01 is a bounded long-duration Waterbreathing candidate under negative Poison Resistance; Fortify Destruction has magnitude rather than duration semantics, and the Jarrin candidate retains fatal Damage Health."
     },
     {
@@ -1834,7 +1834,7 @@
       "tools": [
         "historical source report; tool/version/input identity not independently revalidated"
       ],
-      "coverage": "One hashed source report. Record counts, conditions, and native paths are historical and scoped; no current AE target or gameplay result is inferred. See migration/KNOWLEDGE_IMPORT_AUDIT.md and migration/legacy_evidence_ids.json.",
+      "coverage": "One hashed source report. Record counts, conditions, and native paths are historical and scoped; no current AE target or gameplay result is inferred. See research/LEGACY_IMPORT.md and research/LEGACY_SOURCE_PROVENANCE.tsv.",
       "result": "Reports a corrected CTDA comparison decoder and 109 expanded GetLevel conditions (51 QUST, 42 INFO, 1 PACK, 15 SMQN), including DA14 >=14, DA07 >=20, DA06 GLOB threshold 9, and Ebony Warrior >=80. Actor::GetLevel is an integer reader; no generic stale-level writer was identified."
     },
     {
@@ -2499,7 +2499,7 @@
         "staged exact local-path scan",
         "git status --short and cached name list"
       ],
-      "coverage": "The staged audit included 60 files and excluded the pre-existing deletion of migration/RESEARCH_READINESS_MISSION.md and the untracked user-supplied migration/LOCAL_RESEARCH_READINESS_MISSION.md. The path scan checked added staged lines and found zero exact workspace/home path matches. Raw captures remain under ignored .local.",
+      "coverage": "Historical repository path/privacy audit metadata: the prior staged scan covered 60 files and excluded two user-provided setup inputs. It is not research evidence; raw captures remain in ignored .local storage.",
       "result": "PASS: 273 tracked files, zero tracked raw artifacts, zero tracked files at least 5 MiB, zero unignored untracked raw artifacts, all 11 ignore probes passed. Nine ignored local heavy files total 3,349.3 MiB. Cached diff check passed."
     },
     {
@@ -3185,143 +3185,6 @@
       "result": "PASS for the final post-registration test and handoff validation. Conda/pytest/lz4 and hosted CI remain unavailable; no Windows or live-game result is claimed."
     },
     {
-      "id": "EV-0180",
-      "kind": "tool",
-      "source": "Final xEdit capability correction, 52-row checklist and three-gate consistency audit",
-      "artifact": "private-local:.local/alignment/final-verification/final-correction-audit.meta.json",
-      "sha256": "d6c6ba4ae1e71b243162a593e0d1d09b9b8101abcc686eff2bcabdccbe9aff0e",
-      "captured_utc": "2026-10-14T20:57:30Z",
-      "edition": "AE",
-      "runtime": "Linux system Python 3.12.3 fallback; Conda unavailable; no game/xEdit process",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "Python checklist/gate consistency audit",
-        "EV-0120 executable metadata",
-        "EV-0172 local domain doctor output"
-      ],
-      "coverage": "Rechecked all 52 unique criteria: 49 PASS, 3 BLOCKED_EXTERNAL (C02/C04/E03), zero pending or unknown references. All three gate verdicts agree across report, matrix, STATE.md and RECOVERY.json. Verified EV-0120 and EV-0172 artifact hashes; SSEEdit 4.1.5.0 exists and is ProductVersion-verified, while selected profile/full plugins.txt/order are absent and xedit_call=false. Final xEdit wording is aligned in six active documents; the earlier 74-criterion STATE snapshot is explicitly historical. No gameplay research, game launch or xEdit launch occurred.",
-      "result": "PASS for final xEdit status correction, criterion/gate consistency and source provenance audit."
-    },
-    {
-      "id": "EV-0181",
-      "kind": "tool",
-      "source": "Current runtime/xEdit identity recheck and domain-doctor ProductVersion semantics correction",
-      "artifact": "private-local:.local/alignment/final-verification/current-runtime-xedit-audit/runtime-xedit-recheck.meta.json",
-      "sha256": "a13b1b0e4762d1e945d69f0f15a62e8fc3b42ffc459d9b30016189975f045202",
-      "captured_utc": "2026-10-14T21:19:07Z",
-      "edition": "AE",
-      "runtime": "Linux WSL system Python 3.12.3 fallback; Conda unavailable; current target ProductVersion reread unavailable",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 scripts/python_env.py run scripts/local_paths.py doctor --verify-target",
-        "python3 scripts/python_env.py run tools/domain_doctor.py",
-        "python3 scripts/python_env.py run tools/ae_preflight.py --probe-executable",
-        "python3 scripts/python_env.py run tools/ae_preflight.py",
-        "Read-only PowerShell bridge diagnostic",
-        "python3 scripts/python_env.py run -m unittest discover -s tests -p test_domain_doctor.py -v"
-      ],
-      "coverage": "The configured GOG binary hash still matches EV-0165 (ProductVersion 1.6.1179.0); the separately configured Steam binary still matches EV-0168 (1.6.1170.0); configured SSEEdit still matches EV-0120 (4.1.5.0). The fresh target ProductVersion query cannot launch WSL PowerShell (UtilBindVsockAnyPort). No selected MO2 profile or explicit full plugins.txt is configured; xedit_call=false. Corrected the domain doctor to report the Skyrim runtime only under SSEEdit.runtime_target; 3 focused regression tests pass. EV-0180's prior SSEEdit ProductVersion conclusion based on EV-0172 was a field-semantics misinterpretation. No xEdit/game launch occurred.",
-      "result": "PASS for the reporting correction, focused regression tests, and exact current binary-hash continuity against prior version-attested evidence. Native xEdit readiness remains PARTIAL; current ProductVersion cannot be reread and the complete active order is absent."
-    },
-    {
-      "id": "EV-0182",
-      "kind": "tool",
-      "source": "Post-fix final local acceptance, readiness-gate, preservation, privacy, and handoff audit",
-      "artifact": "private-local:.local/alignment/final-verification/ev0182-post-fix/final-closeout-audit.meta.json",
-      "sha256": "41c5aa248dbfc08fe4c5157bed00b8d5068fb033d26c7a63e7e99f8f9a167043",
-      "captured_utc": "2026-10-14T21:25:34Z",
-      "edition": "AE",
-      "runtime": "Linux system Python 3.12.3 fallback; Conda unavailable; no game/xEdit process",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
-        "python3 scripts/python_env.py run -m compileall -q scripts tools tests",
-        "Research, state, transaction, overlay, setup, Markdown, pre-push, and diff validators",
-        "quick_validate.py on all 13 active skills",
-        "Python 52-row, evidence-reference, private-alias/hash, gate, prompt, privacy, Ghidra, and worktree audit"
-      ],
-      "coverage": "Post-fix suite: 151/151 unittest tests pass; compileall and all 11 captured repository validator/check commands exit 0; all 13 active skill metadata checks pass. Audited 52 unique acceptance rows (49 PASS, 3 BLOCKED_EXTERNAL, zero pending/fixable), 22 referenced private evidence artifacts with all 22 hashes matching through the documented legacy/local aliases, three readiness gates consistent across report/matrix/STATE/recovery, synchronized continuation checkpoints, exact first-session command and prompt logic, unchanged mission file, zero active-path privacy matches, and existing GOG binary/project identity and database preservation. EV-0175 documents separate-process research recovery; the start prompt explicitly models Q-0001 H1/H2 and requires continued hypothesis selection. Current Windows/xEdit and live-game behavior is not established.",
-      "result": "PASS for all locally actionable final-alignment tests and audit checks. STATIC_RESEARCH_READY=READY; NATIVE_RESEARCH_READY=PARTIAL; INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED. No open-ended gameplay research, game launch, or xEdit launch occurred."
-    },
-    {
-      "id": "EV-0183",
-      "kind": "tool",
-      "source": "Locally staged SKSE Observer build artifact and current offline analyzer verification",
-      "artifact": "private-local:.local/alignment/observer-build-validation-20261015.meta.json",
-      "sha256": "b28bb953cd6809781a0943d475a0dd68e9afd139d8600e37b4f76bc80ef5324f",
-      "captured_utc": "2026-10-15T04:43:48Z",
-      "edition": "AE",
-      "runtime": "Observer CMake configuration enables Skyrim AE; no current executable ProductVersion or live runtime was verified in this session.",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "Existing Visual Studio 2022/MSVC 14.43.34808 and CMake 3.30.5 build output",
-        "Python dispatcher with system-Python fallback",
-        "Observer analyzer unittest fixtures"
-      ],
-      "coverage": "The existing Release staged DLL is PE32+ x86-64, 584192 bytes, SHA-256 recorded in the private metadata. The retained offline analyzer suite ran all 7 tests with 7 passes. The successful build log records the repaired source-tree build exit 0. No DLL load, handshake, deployment, game launch, current ProductVersion, or active profile verification.",
-      "result": "PASS for local build-artifact identity and offline analyzer fixtures only; SKSE runtime experiment readiness is not established."
-    },
-    {
-      "id": "EV-0184",
-      "kind": "tool",
-      "source": "Authoritative skyrim repository xEdit bridge config import, isolated session preparation, and scoped preflight",
-      "artifact": "private-local:.local/alignment/xedit-bridge-session-validation-20261015.meta.json",
-      "sha256": "ad79c9a0e136a60837acfa96a1a2035dbb7a35b2ff809f48993e943337a3be06",
-      "captured_utc": "2026-10-15T04:52:25Z",
-      "edition": "AE",
-      "runtime": "Steam 1.6.1170; read from SkyrimSE.exe ProductVersion during scoped preflight",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "Authoritative skyrim scripts/skyrim_tool.py doctor and prepare-xedit via current Python dispatcher",
-        "python3 scripts/python_env.py run tools/ae_preflight.py with PLUGINS_TXT scoped to generated bridge session",
-        "SSEEdit 4.1.5.0 executable hash continuity from EV-0120"
-      ],
-      "coverage": "Seven source bridge doctor paths passed; exact SSEEDIT_EXE/SKYRIM_DATA/XEDIT_SCRIPTS bindings copied into ignored config; isolated session contains all five official masters. Prepared launch uses -view and no -autoload. Scoped preflight passed runtime identity and the 5-plugin list. At capture time, the actual MO2/game profile, modded winners, negative search coverage, and native SSEView launch were not established; later approved launch/load are recorded in EV-0185/EV-0189.",
-      "result": "PASS for copied authoritative bridge configuration, isolated vanilla session preparation, and scoped target/order verification; later SSEView launch/load evidence is registered separately."
-    },
-    {
-      "id": "EV-0185",
-      "kind": "tool",
-      "source": "Approved launch and live process verification of the authoritative isolated SSEView bridge session",
-      "artifact": "private-local:.local/alignment/sseview-live-process-20261015.meta.json",
-      "sha256": "2ef1896581b3151f1e4503ff2539b2f5e0af416a50c3c220c834bc892be7b1ca",
-      "captured_utc": "2026-10-15T04:52:46Z",
-      "edition": "AE",
-      "runtime": "Windows SSEEdit 4.1.5f process; Steam AE 1.6.1170 target/order separately verified in EV-0184",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "Authoritative skyrim xEdit bridge generated -view/no-autoload session",
-        "PowerShell process query"
-      ],
-      "coverage": "PID 3948, title SSEView 4.1.5f, Responding=true. Opened session contains only five official masters. No record selection/export, active MO2 profile, winner result, plugin modification, or Skyrim launch.",
-      "result": "PASS for approved SSEView launch/process availability only; complete-profile record research remains blocked."
-    },
-    {
-      "id": "EV-0186",
-      "kind": "tool",
-      "source": "Fresh Release SKSE Observer build from an isolated authoritative skyrim source copy and offline analyzer verification",
-      "artifact": "private-local:.local/alignment/observer-authoritative-rebuild-20261015.meta.json",
-      "sha256": "17a71aacb18d5ce2577358eb4dd93351767a88fa34d7586e62aa5266bcbca22b",
-      "captured_utc": "2026-10-15T05:10:15Z",
-      "edition": "AE",
-      "runtime": "Steam 1.6.1170 target; binary was not loaded in-game",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "Existing Visual Studio 2022 BuildTools/MSVC 14.43.34808",
-        "Existing CMake 3.30.5 and CommonLibSSE-NG/vcpkg dependencies",
-        "Python dispatcher and Observer analyzer unittest fixtures"
-      ],
-      "coverage": "Copied 22 authoritative observer files; 19 match exactly and 3 local compatibility edits are confined to CMakeLists/Observer.h/Observer.cpp; PCH addition is local build configuration. Fresh Observer.obj/PCH and DLL timestamps postdate source copy; CMake build exit 0. DLL is 584192 bytes PE32+ x86-64, SHA-256 108a4b9a73c97b0517a5cf23f11c02778b9ec3a8f88ac7aadc4fe129a7f7b084. Analyzer tests passed 7/7. DLL remains staged under ignored .local, not deployed or loaded.",
-      "result": "PASS for source-attested local build and offline fixtures; live SKSE capability remains NOT_VERIFIED."
-    },
-    {
       "id": "EV-0187",
       "kind": "tool",
       "source": "Current installed SKSE loader/runtime/Address Library metadata probe for Steam AE 1.6.1170",
@@ -3338,332 +3201,6 @@
       ],
       "coverage": "Loader skse64_loader.exe and runtime DLL report ProductVersion 0,2,2,6; runtime-named Address Library is present; hashes recorded in private metadata. Probe is metadata-only and did not attempt a live handshake.",
       "result": "PASS for installed file identity only; it does not establish DLL load or runtime observer readiness."
-    },
-    {
-      "id": "EV-0188",
-      "kind": "tool",
-      "source": "Authoritative SKSE Observer launcher prepare-only manifest using the fresh staged DLL",
-      "artifact": "private-local:.local/alignment/skse-observer-prepare-20261015.meta.json",
-      "sha256": "ceeba1b571c7e21715d38275fd49fa94726830098058cf2f94766b60a75a28ac",
-      "captured_utc": "2026-10-15T05:10:15Z",
-      "edition": "AE",
-      "runtime": "Steam 1.6.1170.0 ProductVersion/hash verified by launcher and scoped preflight",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "Authoritative skyrim/observer/tools/launch-observer.ps1 copied to ignored sandbox",
-        "PowerShell Start-Process with explicit StagedPlugin and no -Launch switch"
-      ],
-      "coverage": "Launcher exited 0 and created a session manifest under ignored .local. Manifest records the exact staged DLL hash and runtime identity; launch_requested=false, deployed_plugin=null, plugin_list=null. Skyrim/SKSE were not started and no game files changed.",
-      "result": "PASS for no-launch session preparation; safe test profile/deployment path and handshake remain unavailable."
-    },
-    {
-      "id": "EV-0189",
-      "kind": "tool",
-      "source": "SSEView isolated five-master module confirmation and completed background load with record-tree accessibility check",
-      "artifact": "private-local:.local/alignment/sseview-five-master-load-20261015.meta.json",
-      "sha256": "2ca5e41e12285fe69f92afafb6bdd9192a689ed3bb8633372c1f558d7a77d902",
-      "captured_utc": "2026-10-15T05:19:12Z",
-      "edition": "AE",
-      "runtime": "SSEEdit/SSEView 4.1.5f; isolated list scoped to Steam AE 1.6.1170.0 preflight in EV-0184",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "Authoritative xEdit bridge launch.ps1 with -view/no-autoload",
-        "Authoritative xedit-status.ps1 exact-PID UIA status/guarded Module Selection confirmation"
-      ],
-      "coverage": "Exact five active masters and load order confirmed from generated files; guarded Module Selection OK action exited 0; UI status reported Background Loader: finished. The UIA tree exposes no record selection controls; session.log and fields.tsv were not created, so no record query/export ran. No plugin/Game file changed.",
-      "result": "PASS for isolated SSEView load capability. Full-profile record query remains blocked and is not claimed."
-    },
-    {
-      "id": "EV-0190",
-      "kind": "tool",
-      "source": "Final local alignment closeout: 52-criterion, readiness-gate, evidence-integrity, privacy, and portable-validation audit",
-      "artifact": "private-local:.local/alignment/final-closeout-20261015/final-closeout-audit.meta.json",
-      "sha256": "9960ac0afb76500050cdbe15d9225ff75692090765a1be2cea6ff9284445fa86",
-      "captured_utc": "2026-10-15T05:34:24Z",
-      "edition": "AE",
-      "runtime": "Linux system Python 3.12.3 fallback; Conda unavailable; no live game runtime launched.",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
-        "python3 scripts/python_env.py run -m compileall -q scripts tools tests",
-        "python3 scripts/python_env.py run scripts/local_paths.py doctor",
-        "python3 scripts/python_env.py run tools/domain_doctor.py",
-        "python3 scripts/python_env.py run scripts/validate_research.py",
-        "python3 scripts/python_env.py run scripts/research_state.py validate",
-        "python3 scripts/python_env.py run scripts/validate_overlay.py",
-        "python3 scripts/python_env.py run scripts/pre_push_audit.py",
-        "git diff --check",
-        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --write",
-        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --check"
-      ],
-      "coverage": "All 52 unique criteria audited (50 PASS, 2 BLOCKED_EXTERNAL, zero fixable or pending); all three gates match across current report, matrix, STATE, and recovery; 23 direct private evidence artifact hashes match; mission file and source repository are unchanged; no tracked local artifacts or active absolute source paths. The 151-test suite and repository validators pass both before and after EV-0190 registration; the post-registration outputs are hashed in the audit metadata. SSEView completed the isolated five-master load but no record query; Observer was built/tested/prepared only, not deployed or loaded.",
-      "result": "PASS for final local alignment and all locally actionable checks. C02 and C04 remain external. STATIC_RESEARCH_READY=READY; NATIVE_RESEARCH_READY=PARTIAL; INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED."
-    },
-    {
-      "id": "EV-0191",
-      "kind": "tool",
-      "source": "User-requested replay of the authoritative skyrim xEdit bridge config/helpers plus final post-edit local validation",
-      "artifact": "private-local:.local/alignment/final-xedit-replay-20261015/authoritative-xedit-config-replay.meta.json",
-      "sha256": "b33f9180f50490e109df088dfe3562da1bd42d9773566750e9b0edb921daeb25",
-      "captured_utc": "2026-10-15T06:00:02Z",
-      "edition": "AE",
-      "runtime": "Steam SkyrimSE.exe ProductVersion 1.6.1170.0 and hash verified by scoped preflight; Linux system Python 3.12.3 fallback; no live game loaded.",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "Authoritative skyrim xEdit helper files copied byte-identically to ignored .local sandbox",
-        "python3 scripts/python_env.py run .local/xedit-authoritative-copy/scripts/skyrim_tool.py doctor",
-        "python3 scripts/python_env.py run .local/xedit-authoritative-copy/scripts/skyrim_tool.py prepare-xedit",
-        "python3 scripts/python_env.py run tools/ae_preflight.py with PLUGINS_TXT scoped to generated official five-master list",
-        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
-        "python3 scripts/python_env.py run -m compileall -q scripts tools tests",
-        "python3 scripts/python_env.py run scripts/local_paths.py doctor",
-        "python3 scripts/python_env.py run tools/domain_doctor.py",
-        "research/state/overlay/Markdown/pre-push validators; 13 active skill quick_validate.py runs",
-        "git diff --check"
-      ],
-      "coverage": "Eight helper/template files match the authoritative source byte-for-byte. All five xEdit-relevant config values match after adding INCLUDE_CREATION_CLUB=0 to ignored config. Bridge doctor and isolated prepare exit 0; scoped preflight verifies Steam 1.6.1170.0 and exactly five official masters. The local doctors exit 0 but WSL sandbox ProductVersion access remains unavailable; no selected MO2 profile or explicit full plugins.txt is configured. The complete post-edit suite ran 151 tests, all 13 active skills validated, and every captured validator/audit command exited 0. A final direct audit verifies all 52 criterion rows, three gate verdicts, prompt H1/H2 discriminants and 35 preserved raw-artifact hashes. Existing SSEView PID 3948 was not launched again; no record export occurred. EV-0186/EV-0188 Observer build/preparation remains staged and not deployed.",
-      "result": "PASS for exact bridge/config replay and all locally actionable post-edit validation. Native record research remains PARTIAL because the active profile and record query are absent; live Observer readiness remains NOT_VERIFIED."
-    },
-    {
-      "id": "EV-0192",
-      "kind": "tool",
-      "source": "Independent cold-start xEdit bridge doctor and authoritative source CLI audit",
-      "artifact": "private-local:.local/alignment/xedit-bridge/20261015T073525.149220Z/stdout.raw",
-      "sha256": "c560a29930524f21e35530bac92b8f451a5e473b1a5d91b488ba66957ccf659d",
-      "captured_utc": "2026-10-15T08:18:44.962000Z",
-      "edition": "unknown",
-      "runtime": "Offline Linux/WSL system Python 3.12.3; no game executable ProductVersion reverified",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 tools/xedit_bridge.py doctor",
-        "python3 tools/xedit_bridge.py --help",
-        "python3 <LEGACY_SKYRIM_REPO>/scripts/skyrim_tool.py --help",
-        "python3 <LEGACY_SKYRIM_REPO>/scripts/skyrim_tool.py records --help"
-      ],
-      "coverage": "The configured helper route returned exit 0 and reported the official master/SSEEdit/Data bindings. The authoritative source CLI was independently inspected: its documented commands are doctor, prepare-xedit, records, and inventory; the source hash and help artifact are in cold_start_manifest.json. Helper staging stays under ignored .local; native SSEView was not launched. The strict repository dispatcher was unavailable.",
-      "result": "PASS for local bridge configuration and helper staging only; this does not demonstrate a native xEdit record query."
-    },
-    {
-      "id": "EV-0193",
-      "kind": "tool",
-      "source": "Independent cold-start QUST retrieval through the authoritative helper records command and tracked bridge alias",
-      "artifact": "private-local:.local/alignment/cold-start-final-20261015/authoritative-helper-help/records-query.stdout.raw",
-      "sha256": "b7524b1706e111bd0efa5d7af4957a07d88581aef006c94945118238f735f26b",
-      "captured_utc": "2026-10-15T08:19:10.365570Z",
-      "edition": "unknown",
-      "runtime": "Offline plugin-file parsing; no game runtime verified",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 <LEGACY_SKYRIM_REPO>/scripts/skyrim_tool.py records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf",
-        "python3 tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf"
-      ],
-      "coverage": "The authoritative helper records command and tracked wrapper alias each returned the same single QUST CreatureDialogueWerewolf record from Skyrim.esm, local form 000E46 (file form 00000E46), with EDID/FULL/DNAM/CTDA/NEXT/ANAM subrecords. The authoritative source dispatches records to read_plugin: this is a genuine read-only bridge record retrieval through direct TES4 parsing, not native SSEEdit selection/export and not a winning-override query.",
-      "result": "PASS for the documented bridge record query through its direct TES4 reader; native xEdit record-tree/export and winner resolution remain separate and unavailable."
-    },
-    {
-      "id": "EV-0194",
-      "kind": "tool",
-      "source": "Independent cold-start preparation of a scoped view-only five-master SSEView session",
-      "artifact": "private-local:.local/alignment/xedit-bridge/20261015T073538.212908Z/stdout.raw",
-      "sha256": "81856b9cad5503b295ef1b8107e08c3938d34840f741345593514883788a643d",
-      "captured_utc": "2026-10-15T07:35:38.568034Z",
-      "edition": "unknown",
-      "runtime": "Offline setup; no native game or xEdit process launched",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 tools/xedit_bridge.py prepare"
-      ],
-      "coverage": "Exit 0 prepared a view-only session for Skyrim.esm, Update.esm, Dawnguard.esm, HearthFires.esm, and Dragonborn.esm. The session was not launched and is not the selected MO2 profile/order.",
-      "result": "PASS for session preparation only; native record selection/export remains unavailable."
-    },
-    {
-      "id": "EV-0195",
-      "kind": "tool",
-      "source": "Fresh WSL cold-start attempts to read the configured GOG executable identity before Ghidra and Address Library analysis",
-      "artifact": "private-local:.local/alignment/cold-start-final-20261015/cold_start_manifest.json",
-      "sha256": "a4a9d456fd17aa786eadfac5bd4aab614e86545b1cea2692eae55a640cd4b5a3",
-      "captured_utc": "2026-10-15T07:36:06.383705Z",
-      "edition": "AE",
-      "runtime": "GOG analysis runtime is configured, but current ProductVersion could not be read through the WSL Windows-process bridge",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 tools/ghidra_probe.py --rva 0x14C020 --timeout 600 (direct diagnostic)",
-        "python3 tools/address_library_probe.py --symbol MagicItem::CalculateCost (direct diagnostic)",
-        "python3 tools/ae_preflight.py --scoped-five-master <prepared-session>/plugins.txt (direct diagnostic)"
-      ],
-      "coverage": "Fresh probes stopped before Ghidra or Address Library lookup because PowerShell could not return SkyrimSE.exe ProductVersion. Captured diagnostics and hashes are in cold_start_manifest.json; no reanalysis or project write occurred. Prior EV-0165–EV-0167 are historical and are not treated as fresh reproduction.",
-      "result": "BLOCKED_EXTERNAL: this WSL host cannot reach the configured Windows executable metadata bridge, so the existing GOG project query was not reproduced."
-    },
-    {
-      "id": "EV-0196",
-      "kind": "tool",
-      "source": "Fresh SKSE identity and Observer capability classification, separated from build/stage status",
-      "artifact": "private-local:.local/alignment/cold-start-final-20261015/cold_start_manifest.json",
-      "sha256": "a4a9d456fd17aa786eadfac5bd4aab614e86545b1cea2692eae55a640cd4b5a3",
-      "captured_utc": "2026-10-15T08:19:52.997952Z",
-      "edition": "AE",
-      "runtime": "Steam live runtime ProductVersion could not be reverified in this WSL capture",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 tools/skse_probe.py (direct diagnostic)",
-        "python3 scripts/harness_doctor.py all",
-        "read-only staged Observer file hash and source-document inspection"
-      ],
-      "coverage": "The staged Observer DLL exists at 584192 bytes with SHA-256 108a4b9a73c97b0517a5cf23f11c02778b9ec3a8f88ac7aadc4fe129a7f7b084. Read-only source docs specify bounded fixed-size event capture, requested snapshots/flush/abort, and offline analysis; they explicitly say native skill-use, ActiveEffect lifetime, craft transactions, hit routing, inventory ExtraData, perks/spells, and Story Manager are not hooked. The DLL is not deployed; no compatible game process, handshake, event, or snapshot was observed.",
-      "result": "PASS for accurately classifying the documented source capability and staged file; BLOCKED_EXTERNAL for any live connection or observation."
-    },
-    {
-      "id": "EV-0197",
-      "kind": "tool",
-      "source": "Fresh Python 3.12 environment reproducibility and dependency import check without installing packages",
-      "artifact": "private-local:.local/alignment/cold-start-final-20261015/python_environment_repro.json",
-      "sha256": "503e9bcc56350ffd8ccbc2eb66ab6087fef5702b1eaa6dca3ff644cbfd88ec7c",
-      "captured_utc": "2026-10-15T08:10:02.471235Z",
-      "edition": "unknown",
-      "runtime": "Linux/WSL system Python 3.12.3 only; no repository .venv or Conda",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 -m venv <ignored clean-venv probe>",
-        "python3 -m ensurepip --version",
-        "python3 -m pip --version",
-        "python3 scripts/python_env.py check --strict",
-        "python3 scripts/python_env.py run scripts/read-save.py --help",
-        "python3 scripts/read-save.py --help"
-      ],
-      "coverage": "A clean Python 3.12 venv bootstrap failed because ensurepip is unavailable; the host diagnostic explicitly suggests python3.12-venv. The ensurepip and pip modules, uv/pip3/pip/conda/py launchers are absent. Strict check reports FAIL_VENV_MISSING; direct save-reader help fails because lz4 is absent. No package installation was attempted.",
-      "result": "BLOCKED_EXTERNAL: this host cannot reproduce the pinned Python environment; the documented venv setup needs a Python 3.12 distribution with venv/ensurepip and pip, then pinned requirements installation."
-    },
-    {
-      "id": "EV-0198",
-      "kind": "tool",
-      "source": "Final consolidated cold-start harness doctor after closeout documentation and acceptance artifacts",
-      "artifact": "private-local:.local/alignment/harness-doctor/20261015T082659.406448Z/harness_doctor.json",
-      "sha256": "06ae6e835a855de0bb9b9b91c106bde3ffa5d3839a992108504645bd719a8ab7",
-      "captured_utc": "2026-10-15T08:26:59.406448Z",
-      "edition": "unknown",
-      "runtime": "Offline Linux/WSL system Python 3.12.3; no game runtime launched",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 scripts/harness_doctor.py all",
-        "python3 scripts/markdown_policy_audit.py --check",
-        "python3 -m unittest discover -s tests -v"
-      ],
-      "coverage": "The final doctor wrote a 19-check report: 12 PASS, 7 BLOCKED_EXTERNAL, zero FAIL; overall BLOCKED with exit 2. The system-Python test suite ran 176 tests with 3 dependency-gated skips. Its read-only domain smoke queries retrieved UESP Skyrim:Karstaag revision 3629292 and three Apocrypha summary-only search results without private fields. It did not dispatch Ghidra/xEdit/SKSE research commands because the strict venv is missing; no native application or game process launched.",
-      "result": "PASS for the consolidated local diagnostic run with explicit external gates; overall harness research dispatch remains BLOCKED_EXTERNAL."
-    },
-    {
-      "id": "EV-0199",
-      "kind": "tool",
-      "source": "Read-only verification of the explicit GOG Ghidra project path in the private local binding",
-      "artifact": "private-local:.local/ghidra/binding-verification.json",
-      "sha256": "370ac2090592b166fdb2050d12cf414a26b21571c66b2bd404627d85f0882f2d",
-      "captured_utc": "2026-10-15T08:48:25+00:00",
-      "edition": "AE",
-      "runtime": "Linux/WSL system Python 3.12.3; no Ghidra process launched",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 scripts/harness_doctor.py all",
-        "python3 -m unittest discover -s tests",
-        "python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600"
-      ],
-      "coverage": "The ignored config/local.env now binds the user-designated existing GOG .rep directory via GHIDRA_PROJECT_REP_PATH. The .rep directory and adjacent .gpr were verified without opening or writing the project. The probe reads config/local.env via scripts.local_config.read_local_config and validates both existing files. The documented query invocation stopped at FAIL_VENV_MISSING before the probe launched. Full suite: 177 tests, 3 dependency-gated skips.",
-      "result": "PASS for exact private binding and existing project-file checks; Ghidra analysis remains BLOCKED_EXTERNAL and was not claimed."
-    },
-    {
-      "id": "EV-0200",
-      "kind": "tool",
-      "source": "Final consolidated harness doctor after explicit Ghidra project binding and Markdown inventory refresh",
-      "artifact": "private-local:.local/alignment/harness-doctor/20261015T084558.620330Z/harness_doctor.json",
-      "sha256": "c254e2a03a52edf5fc83c8cf525429d62ccc20e13bcdcaab8e543fd83910c6d5",
-      "captured_utc": "2026-10-15T08:45:58.620330Z",
-      "edition": "unknown",
-      "runtime": "Offline Linux/WSL system Python 3.12.3; no game runtime launched",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 scripts/harness_doctor.py all",
-        "python3 scripts/markdown_policy_audit.py --check",
-        "python3 -m unittest discover -s tests"
-      ],
-      "coverage": "The 19-check report contains 12 PASS, 7 BLOCKED_EXTERNAL, and zero FAIL; overall verdict BLOCKED with exit 2. Config schema/ignore validation, research validators, local path doctor, domain doctor, Markdown audit, pre-push audit, compile check, and unit tests pass. The suite ran 177 tests with 3 dependency-gated skips. Python dispatch is blocked because the repository .venv is absent; native Ghidra/xEdit and SKSE identity/observation were not run.",
-      "result": "BLOCKED_EXTERNAL for research dispatch on this host; no bounty investigation or game launch occurred."
-    },
-    {
-      "id": "EV-0201",
-      "kind": "tool",
-      "source": "Fresh-session post-correction strict dispatcher and consolidated harness doctor",
-      "artifact": "private-local:.local/alignment/harness-doctor/20261015T092050.055549Z/harness_doctor.json",
-      "sha256": "39be37f8dc2229091c15826c26c52660f1cde5596bd812c1a8467487a83d9cce",
-      "captured_utc": "2026-10-15T09:20:50.055549+00:00",
-      "edition": "unknown",
-      "runtime": "Linux/WSL Python 3.12.3; no Skyrim or native application launched",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 scripts/python_env.py check --strict",
-        "python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600",
-        "python3 scripts/harness_doctor.py all",
-        "python3 scripts/research_state.py validate",
-        "python3 scripts/markdown_policy_audit.py --check"
-      ],
-      "coverage": "The strict check returns FAIL_VENV_MISSING after the incomplete WSL venv was removed; the documented Ghidra dispatcher returns 127 without starting the probe. The 19-check doctor reports 12 PASS, 7 BLOCKED_EXTERNAL, zero FAIL; unit tests pass 177 with 3 skips. Local config/path, research-state, setup/research/overlay validators, path/domain doctors, Markdown, pre-push, compile and unit-test checks pass. GOG, xEdit and SKSE identity probes are not dispatched by the strict gate; no function/xref/decompilation was reproduced. Native xEdit is blocked by the unverified MO2 profile/full plugins.txt. Live SKSE remains unverified: no deployed DLL, game process, loaded plugin, handshake or snapshot.",
-      "result": "BLOCKED for research dispatch from this session. The exact GOG project binding remains verified by EV-0199; no bounty investigation or game launch occurred."
-    },
-    {
-      "id": "EV-0202",
-      "kind": "tool",
-      "source": "Cold-start setup reproduction: strict Python environment, configured GOG project binding, documented Ghidra/xEdit routes, research-state validation, and consolidated doctor",
-      "artifact": "private-local:.local/alignment/research-start-cold-start-20261015/capture_manifest.json",
-      "sha256": "138d0fe5a9e559ee9e97dcfcf85b3aa2af3addae95b4db11adac7307d71a9e7f",
-      "captured_utc": "2026-10-15T09:57:12Z",
-      "edition": "AE",
-      "runtime": "Ubuntu 24.04 / WSL2, CPython 3.12.3; no Skyrim or native application launched",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 -m venv .venv",
-        "python3 scripts/python_env.py check --strict",
-        "python3 scripts/python_env.py run tools/address_library_probe.py --symbol MagicItem::CalculateCost",
-        "python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600",
-        "python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf",
-        "python3 scripts/python_env.py run scripts/research_state.py validate",
-        "python3 scripts/harness_doctor.py all",
-        "Windows py.exe and PowerShell interop checks"
-      ],
-      "coverage": "The WSL Python 3.12 venv bootstrap failed because ensurepip/pip are unavailable; sudo cannot install python3.12-venv without a password. The incomplete venv created in this turn was removed and the strict check returned FAIL_VENV_MISSING. Documented Address Library, Ghidra, xEdit record-parser, and standalone research-state dispatches failed closed with exit 127. The configured user-designated GOG project path maps to an existing .rep and adjacent .gpr, but no Ghidra process/query ran. Consolidated doctor report recorded 12 PASS and 7 BLOCKED_EXTERNAL, zero FAIL, overall BLOCKED/exit 2; its structural research-state check passed. MO2 profile/list were unbound, SKSE live capability was not tested, and no bounty research began. Raw stdout/stderr and hashes are in the ignored capture directory. A post-edit consolidated doctor rerun after updating the readiness documentation is also indexed in the capture manifest and reports the same 12 PASS / 7 BLOCKED_EXTERNAL / zero FAIL verdict.",
-      "result": "Setup remains blocked on this WSL host. GOG project binding is verified, but no new Ghidra or xEdit record query was reproduced. Static research must not start until strict Python and GOG query gates pass; MO2 and live SKSE remain separate unverified gates."
-    },
-    {
-      "id": "EV-0203",
-      "kind": "tool",
-      "source": "Persistent Python 3.12 bootstrap acceptance: absent environment creation, healthy reuse, missing dependency repair, strict dispatch, and research-state validation",
-      "artifact": "private-local:.local/alignment/python-bootstrap-final/acceptance-summary.json",
-      "sha256": "7c8583105f87037e1de9477d54cdda0d4ab2d7a0d83c545012a18ce0d4868962",
-      "captured_utc": "2026-10-15T11:36:56Z",
-      "edition": "unknown",
-      "runtime": "Ubuntu 24.04 / WSL2, CPython 3.12.3; no Skyrim or native application launched",
-      "modified_state": true,
-      "lane": "offline",
-      "tools": [
-        "python3 scripts/bootstrap_python.py --env-dir .local/bootstrap-validation/final/created/wsl",
-        "python3 scripts/python_env.py check --strict",
-        "python3 scripts/python_env.py run scripts/research_state.py validate",
-        "disposable venv python -m pip uninstall -y pytest"
-      ],
-      "coverage": "A fresh path returned action=created with all seven exact requirements pins. The second call returned action=reused. After pytest==8.0.0 was removed from this disposable environment, bootstrap returned action=repaired; the strict check and dispatched research-state validation passed. The active .local/python-envs/wsl was not recreated. A separate default-network attempt diagnosed restricted DNS, preserved its incomplete environment, and the retry repaired it with package access enabled.",
-      "result": "PASS: bootstrap created, reused, and repaired persistent-format WSL environments; strict dependency and research-state checks passed."
     },
     {
       "id": "EV-0204",

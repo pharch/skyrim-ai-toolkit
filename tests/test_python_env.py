@@ -23,7 +23,6 @@ class PythonEnvironmentTests(unittest.TestCase):
             "lz4": "4.3.3", "PyYAML": "6.0.1", "pip": "24.0", "pytest": "8.0.0",
             "iniconfig": "2.3.1", "packaging": "26.3", "pluggy": "1.7.0",
         })
-        self.assertEqual(python_env.pinned_distributions(python_env.ROOT / "requirements-dev.txt"), pins)
 
     def test_test_environment_override_must_remain_inside_ignored_local(self):
         local_test_env = python_env.ROOT / ".local" / "test-env"

@@ -6,7 +6,7 @@ import re
 import unittest
 
 from conftest import REPO
-from scripts.validate_overlay import _validate_markdown_links, _validate_python_tool_surface
+from scripts.validate_repository import _validate_markdown_links, _validate_python_tool_surface
 
 
 class RepositoryInvariantTests(unittest.TestCase):
