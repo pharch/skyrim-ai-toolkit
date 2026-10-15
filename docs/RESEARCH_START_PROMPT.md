@@ -1,12 +1,21 @@
 # First deep autonomous research session
 
-The final local alignment pass and its October 15 capability follow-up are
-complete. Start this prompt in a new interactive Codex session at the
-repository root after reviewing `docs/HARNESS_READINESS.md`.
+This is a prepared first-research prompt, not an instruction to bypass failed
+setup gates. Use it in a new interactive Codex session at the repository root
+only after the strict Python 3.12 `.venv`, existing GOG Ghidra query, and
+research-state validation pass. Check `docs/HARNESS_READINESS.md` first.
 
 ## Exact first command
 
-```text
+Windows PowerShell:
+
+```powershell
+& .\.venv\Scripts\python.exe scripts/python_env.py run scripts/research_state.py validate
+```
+
+Linux/WSL:
+
+```sh
 python3 scripts/python_env.py run scripts/research_state.py validate
 ```
 
@@ -17,8 +26,11 @@ If it fails, repair the recovery state from `STATE.md`,
 ## Initial Codex prompt
 
 ```text
-Begin the first deep Skyrim AE glitch-research session. The alignment report
-and the current STATE.md / FRONTIER.json define the verified local capabilities.
+Begin the first deep Skyrim AE glitch-research session only if
+`docs/HARNESS_READINESS.md` records passing strict Python 3.12, GOG
+function/xref/decompilation, and research-state gates. If any of those gates
+does not pass, stop before bounty analysis and report the exact blocker. The
+current STATE.md / FRONTIER.json define the verified local capabilities.
 Read AGENTS.md, NORTH_STAR.md, STATE.md, ROADMAP.md, research/FRONTIER.json,
 research/EVIDENCE_MODEL.md, protocols/TOOL_ROUTING.md, and
 docs/HARNESS_READINESS.md. Load only the skills and source documents

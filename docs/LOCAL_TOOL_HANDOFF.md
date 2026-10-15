@@ -15,7 +15,10 @@ operations already performed. It does not add another execution protocol:
 kept in the ignored `config/LOCAL_TOOL_HANDOFF.private.md`; raw output and
 large/private inputs remain under ignored `.local/`.
 
-## Verified state
+## Historical verified state at capture time
+
+The results in this section describe the earlier capture only. They do not
+establish current tool availability or research readiness.
 
 The current alignment report records 50 of 52 criteria as `PASS` and two as
 `BLOCKED_EXTERNAL`. The gates are `STATIC_RESEARCH_READY=READY`,
@@ -23,7 +26,7 @@ The current alignment report records 50 of 52 criteria as `PASS` and two as
 `INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED`. No open-ended glitch
 research was started.
 
-The current handoff probes are preserved under
+The historical handoff probes are preserved under
 `.local/alignment/operational-handoff-20261015/`. Their captured exits were:
 
 | Command | Result | Evidence location |
@@ -190,3 +193,37 @@ The previous Conda/system-Python fallback text in older handoff material is
 historical; the current dispatcher contract is strict. The current worktree
 retains the user-provided untracked closeout mission and bounty packet. No
 bounty research was started.
+
+## Later strict cold-start attempt — 2026-10-15
+
+This later attempt supersedes earlier Python and current-tool availability
+claims above. It used the strict runtime contract and did not start bounty
+research.
+
+- The actual shell was Ubuntu 24.04 under WSL2 with CPython 3.12.3.
+  `python3 -m venv .venv` failed because `ensurepip` is unavailable.
+  `python3.12-venv` is not installed; apt lists it as available, but installing
+  it requires a sudo password. No pip, uv, or Conda route is installed.
+  Windows `py.exe` and PowerShell both failed to start with
+  `UtilBindVsockAnyPort:307`.
+- The partial Linux `.venv` created by the documented attempt was removed.
+  The final strict check reports `FAIL_VENV_MISSING`; no pinned dependencies
+  were installed and the strict dispatcher correctly refused child commands.
+- The exact `GHIDRA_PROJECT_REP_PATH` binding maps to the user-designated GOG
+  project; its `.rep` directory and adjacent `.gpr` exist. The Ghidra
+  adapter uses this canonical setting and its existing-project command is
+  read-only. The current Address Library and Ghidra commands did not launch,
+  so this attempt produced no function, xref, or decompilation result.
+- The documented xEdit `file-records` command likewise did not launch in this
+  attempt. EV-0193 is prior-session evidence of a direct TES4 file-parser
+  result, not a native SSEEdit result and not a fresh reproduction here.
+- The consolidated doctor did run. Its research-state validator passed; the
+  Python environment, GOG query, xEdit helper/file query, native export and
+  SKSE identity/live gates were blocked. Current capture files are under
+  `.local/alignment/research-start-cold-start-20261015/`; the final readiness
+  table states current gates and EV-0202 indexes a post-edit report plus the
+  strict cold-start capture.
+- `MO2_PROFILE_DIR` and `PLUGINS_TXT` remain unset, so the selected profile
+  and full order are NOT_VERIFIED. Live SKSE connection/observation is also
+  NOT_VERIFIED. Neither live SKSE nor native SSEEdit export is a prerequisite
+  for static research.

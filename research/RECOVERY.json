@@ -4,7 +4,7 @@
   "transaction_id": null,
   "frontier_id": null,
   "started_utc": null,
-  "checkpoint_utc": "2026-10-15T06:03:55Z",
+  "checkpoint_utc": "2026-10-15T10:04:30Z",
   "artifacts": [
     "EV-0184",
     "EV-0185",
@@ -22,12 +22,19 @@
     "EV-0197",
     "EV-0198"
   ],
-  "next_action": "On the intended Windows host, create the Python 3.12 repository .venv and install requirements-dev.txt; pass check --strict, reproduce the verified GOG Address Library and read-only Ghidra query, then run the exact research-start validator. Do not begin bounty research before those gates pass.",
+  "next_action": "On a host with Python 3.12 ensurepip and working Windows tool interop (or after installing python3.12-venv with administrator rights), follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install requirements-dev.txt; verify strict Python, the GOG query, and research-state before starting Q-0001.",
   "next_frontier_id": "Q-0001",
   "last_transaction_id": "TX-0004",
   "readiness_gates": {
     "STATIC_RESEARCH_READY": "BLOCKED_ENVIRONMENT",
     "NATIVE_RESEARCH_READY": "PARTIAL",
-    "INSTRUMENTED_AUTONOMOUS_RESEARCH_READY": "NOT_VERIFIED"
+    "INSTRUMENTED_AUTONOMOUS_RESEARCH_READY": "NOT_VERIFIED",
+    "PYTHON_312_VENV": "BLOCKED_ENVIRONMENT",
+    "GOG_GHIDRA_QUERY": "BLOCKED_ENVIRONMENT",
+    "RESEARCH_STATE_VALIDATION": "PASS_VIA_CONSOLIDATED_DOCTOR",
+    "XEDIT_FILE_RECORD_RETRIEVAL": "BLOCKED_CURRENT_REPRODUCTION",
+    "MO2_SELECTED_PROFILE_FULL_ORDER": "NOT_VERIFIED",
+    "NATIVE_SSEEDIT_EXPORT": "NOT_REQUIRED_FOR_STATIC_RESEARCH",
+    "SKSE_LIVE_OBSERVATION": "NOT_VERIFIED_NOT_REQUIRED_FOR_STATIC_RESEARCH"
   }
 }

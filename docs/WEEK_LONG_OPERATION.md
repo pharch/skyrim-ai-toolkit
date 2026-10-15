@@ -10,7 +10,7 @@ fixed interval.
 
 1. Read `AGENTS.md`, `NORTH_STAR.md`, `STATE.md`, `ROADMAP.md`,
    `research/FRONTIER.json`, and `protocols/TOOL_ROUTING.md`.
-2. Run `python scripts/setup_research.py check` and inspect the exact current
+2. Run `python3 scripts/python_env.py run scripts/setup_research.py check` and inspect the exact current
    checkpoint and working-tree changes.
 3. Select one ready frontier item. Record its rival models, predicted
    discriminants, tool/source, and exact next action before collecting data.
@@ -29,11 +29,18 @@ Before a context change or ending a session, update `STATE.md`,
 - blockers and an independent offline continuation route.
 
 For a potentially interrupted investigation, keep its transaction resumable and
-use `python scripts/research_state.py validate` before resuming. If
+use `python3 scripts/python_env.py run scripts/research_state.py validate`
+before resuming. If
 `research/RECOVERY.json` says `running`, mark it interrupted with
-`python scripts/research_state.py recover --root .`, inspect partial outputs
+`python3 scripts/python_env.py run scripts/research_state.py recover --root .`, inspect partial outputs
 and the durable-state diff, and resume only from the recorded `next_action`.
 Interruption is not evidence of completion.
+
+The consolidated bootstrap diagnostic is the one exception: the runtime
+contract permits `python3 scripts/harness_doctor.py all` to start with system
+Python so it can report a missing or invalid repository `.venv`. Research
+entrypoints and validators use the strict dispatcher after the pinned Python
+3.12 environment passes.
 
 ## Periodic synthesis
 

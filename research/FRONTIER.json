@@ -1,12 +1,12 @@
 {
-  "session_next_action": "On the intended Windows host, create the Python 3.12 repository .venv and install requirements-dev.txt; pass check --strict, reproduce the verified GOG Address Library and read-only Ghidra query, then run the exact research-start validator. Do not begin bounty research before those gates pass.",
+  "session_next_action": "On a host with Python 3.12 ensurepip and working Windows tool interop (or after installing python3.12-venv with administrator rights), follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install requirements-dev.txt; verify strict Python, the GOG query, and research-state before starting Q-0001.",
   "schema_version": 3,
   "target": {
     "edition": "AE",
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
     "note": "Repository target policy is AE runtime 1.6.318+. Steam SkyrimSE.exe ProductVersion 1.6.1170.0 is verified (EV-0109), but no live game session or complete active MO2 order is verified. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Legacy source files are hashed in migration/legacy_markdown_manifest.tsv; source commit is unavailable. Active Python routes and native tool limits are documented in the capability matrix. Four evidence-linked transactions exercise blocker reselection, rival armor hypotheses, an AV39 record screen, and breadth synthesis; process-isolated recovery is tested.",
-    "next_action": "On the intended Windows host, create the Python 3.12 repository .venv and install requirements-dev.txt; pass check --strict, reproduce the verified GOG Address Library and read-only Ghidra query, then run the exact research-start validator. Do not begin bounty research before those gates pass."
+    "next_action": "On a host with Python 3.12 ensurepip and working Windows tool interop (or after installing python3.12-venv with administrator rights), follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install requirements-dev.txt; verify strict Python, the GOG query, and research-state before starting Q-0001."
   },
   "items": [
     {

@@ -2076,3 +2076,94 @@ Exact next action: Run a final consolidated doctor after EV-0201 and corrected r
 Final consolidated doctor rerun: EV-0201 now points to .local/alignment/harness-doctor/20261015T092050.055549Z/harness_doctor.json (SHA-256 39be37f8dc2229091c15826c26c52660f1cde5596bd812c1a8467487a83d9cce); verdict BLOCKED, exit 2, 19 checks. Unit test summary: Ran 177 tests in 22.367s; OK (skipped=3). Exact next action: rerun research-state and Markdown checks after this evidence pointer refresh, then wait for the intended Windows Python 3.12 environment before any research.
 
 Final verification complete. EV-0201 points to the final consolidated report at `.local/alignment/harness-doctor/20261015T092050.055549Z/harness_doctor.json` (SHA-256 `39be37f8dc2229091c15826c26c52660f1cde5596bd812c1a8467487a83d9cce`). The doctor is BLOCKED/exit 2 with 12 PASS and 7 BLOCKED_EXTERNAL; research-state and Markdown checks pass. No fresh Ghidra query, current xEdit query, selected MO2 profile, or live SKSE observation was claimed. No bounty investigation or game launch occurred. Exact next action: On the intended Windows host, create the Python 3.12 repository .venv and install requirements-dev.txt; pass check --strict, reproduce the verified GOG Address Library and read-only Ghidra query, then run the exact research-start validator. Do not begin bounty research before those gates pass.
+
+New continuation: user authorized resolving remaining research-start blockers. Exact next action: Verify current host/Windows interop and contract setup prerequisites; establish the strict Python 3.12 environment if supported, then reproduce GOG Ghidra and xEdit read-only routes, reconcile recovery with the initial frontier, and run final readiness validators.
+
+
+## Runtime setup continuation — 2026-10-15
+
+- Actual host verified as Ubuntu 24.04 under WSL2 with CPython 3.12.3. The documented `python3 -m venv .venv` command failed because `ensurepip` is unavailable. Installing `python3.12-venv` requires an unavailable sudo password. Windows `py.exe` and PowerShell each fail at process startup with `UtilBindVsockAnyPort:307`.
+- Configured GOG project path was mapped from `GHIDRA_PROJECT_REP_PATH` to its WSL mount; both the `.rep` directory and adjacent `.gpr` exist. This is path evidence only; no Ghidra process/query has run in this turn.
+- Recovery remains idle and points to the initial frontier item Q-0001; no bounty work was started.
+- Exact next action: Check for a preinstalled or cached Python 3.12 bootstrap that satisfies the runtime contract; attempt the documented strict GOG/xEdit/research-state routes and consolidated doctor, then update readiness docs with the verified gates.
+
+
+## Readiness reconciliation checkpoint — 2026-10-15
+
+- Strict Python 3.12 dispatcher check now reports `FAIL_DEPENDENCIES` for missing `lz4==4.3.3` and `PyYAML==6.0.1` inside the partial `.venv`; the earlier `FAIL_VENV_MISSING` text is stale for this worktree state.
+- The documented GOG Address Library, Ghidra query, xEdit file-records query, and research-state validator invocations each fail closed with exit 127 before their child command. No Ghidra query or xEdit record retrieval was made in this turn.
+- The consolidated doctor was started from system Python as explicitly permitted by the runtime contract; its result is being collected.
+- Exact next action: Collect the current consolidated doctor result; correct stale direct-Python/handoff wording and readiness summaries, then re-run research-state validation and doctor for final evidence.
+
+
+## Current report collection checkpoint — 2026-10-15
+
+- The current doctor produced a report under `.local/alignment/harness-doctor/20261015T095112.295227Z/`; the report and its check totals are being read before the readiness documents are corrected.
+- The WSL `.venv` is present but incomplete (`FAIL_DEPENDENCIES`); Python pins are unavailable in the venv. GOG `.rep` and `.gpr` exist at the configured path after WSL path mapping, but query has not run.
+- Recovery is idle and retains the initial selection Q-0001; no research transaction has started.
+- Exact next action: Read the fresh doctor JSON and artifact checks, then rewrite the start guide/readiness/handoff text so it matches the current strict Python, GOG, xEdit, MO2, and SKSE evidence without starting Q-0001.
+
+
+## Evidence and docs checkpoint — 2026-10-15
+
+- Current consolidated doctor report: `.local/alignment/harness-doctor/20261015T095112.295227Z/harness_doctor.json`; research-state and all repository structural checks passed; Python environment, GOG query, xEdit helper/file retrieval, native export, and SKSE external gates are blocked.
+- The frontmost existing Q-0001 remains the initial frontier selection. Recovery has no active transaction, is idle, and keeps `next_frontier_id` at Q-0001.
+- Exact next action: Capture this session’s strict-command failures and doctor report as durable ignored evidence, then update the recovery/start/readiness documentation and rerun the validators.
+
+
+## Capture and cleanup checkpoint — 2026-10-15
+
+- Current doctor JSON is `.local/alignment/harness-doctor/20261015T095112.295227Z/harness_doctor.json` (SHA-256 `ed6819dfdfbe9a86aa48c1c8d93da1957906f4e3940cc7d1d0bed5a1e1dea310`): 12 PASS, 7 BLOCKED_EXTERNAL, zero FAIL, verdict BLOCKED/exit 2. Its research-state validator check passes.
+- The first `python3 -m venv .venv` attempt created only an incomplete environment; it lacks pip and both pinned distributions. It will be removed after raw captures so it cannot be mistaken for the intended Windows environment.
+- Exact next action: Capture exact cold-start outputs and hashes, remove only the incomplete WSL-created .venv, then revise stale direct-Python examples, historical handoff labels, and readiness/recovery state.
+
+
+## Documentation reconciliation checkpoint — 2026-10-15
+
+- Updated `docs/WEEK_LONG_OPERATION.md` active Python examples to use the strict repository dispatcher. Labeled the old operation snapshot as historical and added the fresh strict cold-start outcome.
+- Rewrote `docs/HARNESS_READINESS.md` and `NEXT_SESSION_HANDOFF.md` to separate strict Python, GOG, xEdit, MO2, native SSEEdit, and live SKSE gates. Updated the prepared start prompt to enforce setup gates before Q-0001.
+- Exact next action: Review the readiness, handoff, start-prompt, and week-long edits for consistency; then align STATE/FRONTIER/RECOVERY and register the current evidence before final validators.
+
+
+## Current gate reconciliation — 2026-10-15
+
+- EV-0202 records the exact current host bootstrap/dispatch outcomes and current doctor summary. Artifact SHA-256: `0d8948422864bd4a01b41c9c6867afb075fd9d3939199b6e20bf452947553337`.
+- The latest recovery state is idle, with no transaction, and `next_frontier_id=Q-0001`, matching the initial P0 OBJ-1 frontier and prepared research prompt. Setup blockers are recorded individually; MO2 and live SKSE are not prerequisites for static research.
+- Exact next action: On a host with Python 3.12 ensurepip, follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install requirements-dev.txt; run check --strict, the documented GOG Address Library/Ghidra query, the xEdit file-records route, research-state validation, and the consolidated doctor. Do not start Q-0001 until Python, GOG, and research-state gates pass.
+
+
+## Final validation checkpoint — 2026-10-15
+
+- Setup/readiness docs now distinguish strict Python, GOG query, xEdit file retrieval, selected MO2 order, native SSEEdit export, and SKSE connection gates. The initial frontier remains Q-0001/OBJ-1 and recovery remains idle.
+- EV-0202 indexes the current WSL bootstrap/dispatch outputs and first current doctor report.
+- Exact next action: Run the final post-edit Markdown audit, strict dispatch checks, research-state validation through the doctor, and consolidated harness doctor; then record the final report and exact remaining setup blocker.
+
+
+## Final report indexing checkpoint — 2026-10-15
+
+- EV-0202 now indexes the post-edit consolidated doctor report and the current raw setup probes. Its capture-manifest SHA-256 is `138d0fe5a9e559ee9e97dcfcf85b3aa2af3addae95b4db11adac7307d71a9e7f`.
+- The doctor reports 12 PASS, 7 BLOCKED_EXTERNAL, zero FAIL, verdict BLOCKED/exit 2. The internal research-state validator passes. The strict Python gate remains `FAIL_VENV_MISSING`, so GOG and xEdit commands remain undispatched.
+- Exact next action: Refresh EV-0202 with the post-edit doctor report, remove its stale timestamp from readiness prose, then run final Markdown, strict-dispatch, and consolidated-doctor checks.
+
+
+## Final closeout result — 2026-10-15
+
+- Final strict Python 3.12 check: `FAIL_VENV_MISSING`; the documented state-validator dispatcher also fails closed with exit 127. The consolidated doctor independently ran structural research-state validation successfully.
+- Final consolidated doctor: `.local/alignment/harness-doctor/20261015T095939.010284Z/harness_doctor.json`, SHA-256 `3b703ff56c7cfbd372bebe47462011cce7b84454a07be83d8f89a4c19f370755`; verdict BLOCKED, exit 2, checks {'BLOCKED_EXTERNAL': 7, 'PASS': 12}. Markdown policy and Python compile/unit-test checks pass. GOG and xEdit children were not dispatched because the strict venv is missing.
+- Recovery is idle, has no active transaction, and selects Q-0001 next. MO2 selected profile/full order and live SKSE observation remain NOT_VERIFIED. Neither native SSEEdit export nor live SKSE is required for static research.
+- Exact next action: On a host with Python 3.12 ensurepip and the configured Windows tool interop, follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install requirements-dev.txt; run the strict check, GOG query, xEdit file-records query, research-state validation, and doctor. Start Q-0001 only after Python, GOG, and state pass.
+
+
+## Post-edit audit checkpoint — 2026-10-15
+
+- The final readiness documentation and recovery metadata are aligned. The Markdown check identified that the generated active-markdown inventory needs one refresh after these edits.
+- The strict Python status remains `FAIL_VENV_MISSING`; GOG/xEdit dispatchers fail closed. Research-state structure passed in the consolidated doctor. Q-0001 remains queued and idle.
+- Exact next action: Run markdown_policy_audit.py --write, then its --check and the consolidated doctor; confirm the final gate results while keeping Q-0001 idle until the host Python/GOG gates pass.
+
+
+## Setup closeout checkpoint — 2026-10-15
+
+- Post-edit consolidated doctor at `.local/alignment/harness-doctor/20261015T100242.839811Z/harness_doctor.json` reports BLOCKED/exit 2 with 12 PASS and 7 BLOCKED_EXTERNAL, zero FAIL; its research-state validation passes. Strict Python remains `FAIL_VENV_MISSING`, so GOG/xEdit dispatchers did not launch.
+- The report has been rerun once more after the generated Markdown inventory refresh; the latest output remains under ignored `.local/alignment/harness-doctor/`. No bounty investigation started.
+- Recovery is idle, with no transaction, and `next_frontier_id=Q-0001`.
+- Exact next action: On a host with Python 3.12 ensurepip and working Windows tool interop (or after installing python3.12-venv with administrator rights), follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install requirements-dev.txt; verify strict Python, the GOG query, and research-state before starting Q-0001.
