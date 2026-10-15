@@ -2038,3 +2038,41 @@ Next action: On a host with Python 3.12 plus venv/ensurepip and pip, follow docs
 
 Closeout update: explicit GOG project path is bound and privately verified; `tools/ghidra_probe.py` reads the ignored local config and validates the existing `.rep` plus adjacent `.gpr`. EV-0199 and EV-0200 record the binding and final doctor. Full tests: 177 passed with 3 skips. Markdown audit, research-state validation, and diff check pass. No Ghidra query, game launch, or bounty research occurred. Readiness remains blocked by missing repository `.venv` and unavailable native gates.
 Next action: On a host with Python 3.12 plus venv/ensurepip and pip, follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install the pinned requirements; run the strict check and consolidated doctor, then reproduce the read-only GOG Ghidra query and Windows-native xEdit gates. Do not begin bounty research until the strict research environment is ready.
+
+Next action: Compare AGENTS.md and active Ghidra/xEdit/SKSE skill routes with docs/LOCAL_RUNTIME_CONTRACT.md; then validate the current research host environment and attempt the documented existing-project GOG query without opening or modifying the project.
+
+Next action: Align AGENTS.md Python 3.12 repository-.venv instructions with docs/LOCAL_RUNTIME_CONTRACT.md, verify active Ghidra/xEdit/SKSE skill routes and local GOG project binding, then bootstrap and strictly validate the repository environment before the read-only Ghidra query.
+
+Observed: WSL Python 3.12.3 is installed without ensurepip/venv; Windows Python and PowerShell launchers are present. Exact next action: Use the documented Windows Python 3.12 launcher from this WSL session to create and validate the repository .venv; install pinned requirements, then run the strict dispatcher and read-only GOG Ghidra query. If the Windows bridge is not usable, preserve the verified failure and report the host limitation.
+
+Observed: the Windows `py.exe` launcher is present but Windows process interop failed with WSL `UtilBindVsockAnyPort`, so the intended Windows runtime cannot be started from this session. Exact next action: Install the documented Ubuntu Python 3.12 venv prerequisite for the WSL interpreter, recreate the repository .venv, install requirements-dev.txt, run the strict check and Ghidra adapter, and preserve the Windows-interop boundary if the GOG executable cannot be queried here.
+
+Observed: creating the venv requires a host package prerequisite; the direct apt install could not acquire the dpkg lock as this unprivileged user. Exact next action: Check whether the host permits the documented python3.12-venv package installation; meanwhile finish auditing local Ghidra binding, active skill routes, SKSE/MO2 limits, and readiness documentation before final validation.
+
+Exact next action: Verify the exact configured GOG .rep/.gpr binding and compare AGENTS.md with the runtime contract; audit current readiness wording and active skill routes, then update only stale setup/readiness instructions.
+
+Verified: ignored `config/local.env` contains the exact user-specified GOG `.rep` path; the `.rep` directory and adjacent `.gpr` exist. Exact next action: Clarify AGENTS.md canonical local-config keys and implemented tool commands; update the stale historical handoff/readiness wording, then run research-state validation and the consolidated doctor.
+
+Exact next action: Ensure the Ghidra/xEdit/SKSE skills point to config/local.env and only implemented dispatcher commands, then run research-state validation and the consolidated doctor and align current readiness with their fresh results.
+
+Exact next action: Run the strict environment check and documented fresh GOG Ghidra command through the dispatcher; then align readiness and stale handoff notes to the observed statuses before validation.
+
+Observed: the strict check now sees a Python 3.12.3 repository interpreter but both pinned runtime imports are missing; the dispatcher returns 127 without starting the Ghidra child. Exact next action: Check whether the base host offers an authorized pip route; if not, discard only the incomplete WSL .venv created during this turn, document the strict-dispatch/Ghidra blocker, and run the final validators and doctor.
+
+Observed: base Python and the partial repository venv both lack pip; the strict environment had both required pinned imports missing. The Ghidra dispatcher returned 127 before starting the probe. Exact next action: Refresh the current readiness and handoff with the strict gate, WSL bridge, GOG binding, MO2, and SKSE observations; regenerate the Markdown audit, then run research-state validation and the consolidated doctor.
+
+Exact next action: Regenerate and check the Markdown inventory after the instruction/readiness edits, then run research-state validation and the consolidated doctor; update current evidence and final handoff from those results.
+
+Validation so far: research-state validation and Markdown inventory check pass. Exact next action: Remove remaining wording that implies a system-Python research fallback; classify old direct xEdit invocations as historical diagnostics and show only the strict dispatcher as the active command, then rerun Markdown and repository validators plus the doctor.
+
+Observed: Markdown inventory/check, research-state validation, and diff check pass after route/readiness edits. Exact next action: Run python3 scripts/harness_doctor.py all, inspect every gate and private report, then register the fresh setup evidence and finalize current readiness and handoff without beginning bounty research.
+
+Final consistency/doctor result: EV-0201, report SHA-256 f4d4e249c812e48b0f14876a81476c1e7e9728a059c489163e109540b8d7eb9c, 19 checks (12 PASS, 7 BLOCKED_EXTERNAL, zero FAIL), overall BLOCKED/exit 2. `research_state.py validate` and Markdown policy pass; unit tests passed 177 with 3 skips. Strict Python dispatch remains blocked by missing WSL venv/pins; the Ghidra query was refused before launch. MO2 profile and live SKSE observation remain NOT_VERIFIED. No bounty work or game launch occurred. Exact next action: On the intended Windows host, create the repository Python 3.12 .venv, install requirements-dev.txt, pass check --strict, reproduce the configured read-only GOG function/xref/decompilation query, and rerun the research-state validator before starting bounty research.
+
+Exact next action: Run final Markdown, research-state, strict-environment, skill-route, and diff checks after EV-0201 registration; retain the external setup blocker and the exact next host action.
+
+Exact next action: Run a final consolidated doctor after EV-0201 and corrected readiness have passed Markdown/state checks; refresh its private report pointer in EV-0201, then rerun research-state and Markdown checks.
+
+Final consolidated doctor rerun: EV-0201 now points to .local/alignment/harness-doctor/20261015T092050.055549Z/harness_doctor.json (SHA-256 39be37f8dc2229091c15826c26c52660f1cde5596bd812c1a8467487a83d9cce); verdict BLOCKED, exit 2, 19 checks. Unit test summary: Ran 177 tests in 22.367s; OK (skipped=3). Exact next action: rerun research-state and Markdown checks after this evidence pointer refresh, then wait for the intended Windows Python 3.12 environment before any research.
+
+Final verification complete. EV-0201 points to the final consolidated report at `.local/alignment/harness-doctor/20261015T092050.055549Z/harness_doctor.json` (SHA-256 `39be37f8dc2229091c15826c26c52660f1cde5596bd812c1a8467487a83d9cce`). The doctor is BLOCKED/exit 2 with 12 PASS and 7 BLOCKED_EXTERNAL; research-state and Markdown checks pass. No fresh Ghidra query, current xEdit query, selected MO2 profile, or live SKSE observation was claimed. No bounty investigation or game launch occurred. Exact next action: On the intended Windows host, create the Python 3.12 repository .venv and install requirements-dev.txt; pass check --strict, reproduce the verified GOG Address Library and read-only Ghidra query, then run the exact research-start validator. Do not begin bounty research before those gates pass.

@@ -24,11 +24,14 @@ for bootstrap status when the venv is missing.
   the stdlib TES4 reader. Query one explicit file with `record` or `inventory`;
   `--include-subrecords` captures raw CTDA, ALST, ALID, and VMAD values. The
   parser does not semantically decode every field or establish a winner.
-- The tracked `tools/xedit_bridge.py` is the canonical route. Run
-  `python3 scripts/python_env.py run tools/xedit_bridge.py doctor`, then
-  `prepare` for a scoped five-master session. `file-records --signature QUST
-  --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf` reads plugin
-  bytes directly; it is not native xEdit and cannot resolve winners.
+- The tracked `tools/xedit_bridge.py` is the canonical route. It reads
+  `SSEEDIT_EXE`, `SKYRIM_DATA`, `XEDIT_SCRIPTS`, and `SKYRIM_EXE_PATH` from the
+  canonical ignored `config/local.env`. Run
+  `python3 scripts/python_env.py run tools/xedit_bridge.py doctor`,
+  `python3 scripts/python_env.py run tools/xedit_bridge.py prepare`, or
+  `python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf`.
+  `file-records` reads plugin bytes directly; it is not native xEdit and cannot
+  resolve winners.
   `tools/ae_preflight.py` requires the selected profile directory and its
   complete explicit `plugins.txt`; `--scoped-five-master` is only the
   generated view list, and `--test-profile` uses a separate disposable lane.
@@ -39,7 +42,9 @@ for bootstrap status when the venv is missing.
 
 ## Existing GOG Ghidra project
 
-- Run `python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]`
+- Bind the existing GOG `.rep` directory as `GHIDRA_PROJECT_REP_PATH` in
+  ignored `config/local.env`. Run
+  `python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]`
   to open the configured existing GOG project. The adapter runs
   `-process SkyrimSE.exe -noanalysis -readOnly`; it has no import, overwrite,
   full-analysis, or project-creation option. Missing or mismatched bindings
@@ -64,7 +69,9 @@ for bootstrap status when the venv is missing.
   `tools/crash-triage.py <file-or-dir>` are read-only parsers. Use only a
   designated disposable save copy. Synthetic tests do not prove a real ReSaver
   parse or live state.
-- `skse_probe.py` verifies installed file identity only. The read-only
+- Run `python3 scripts/python_env.py run tools/skse_probe.py` for the
+  identity-only check. It reads `SKSE_LOADER` and Observer bindings from
+  ignored `config/local.env`; it does not connect to Skyrim. The read-only
   Observer was rebuilt from an isolated copy of authoritative `skyrim/observer`
   with local CommonLib/compiler compatibility edits; its Release DLL and 7/7
   offline analyzer fixtures are recorded in EV-0186. EV-0188 is prepare-only:

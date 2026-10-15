@@ -22,7 +22,7 @@
     "EV-0197",
     "EV-0198"
   ],
-  "next_action": "On a host with Python 3.12 plus venv/ensurepip and pip, follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install the pinned requirements; run the strict check and consolidated doctor, then reproduce the read-only GOG Ghidra query and Windows-native xEdit gates. Do not begin bounty research until the strict research environment is ready.",
+  "next_action": "On the intended Windows host, create the Python 3.12 repository .venv and install requirements-dev.txt; pass check --strict, reproduce the verified GOG Address Library and read-only Ghidra query, then run the exact research-start validator. Do not begin bounty research before those gates pass.",
   "next_frontier_id": "Q-0001",
   "last_transaction_id": "TX-0004",
   "readiness_gates": {

@@ -6,9 +6,9 @@ Cold-start configuration and closeout verification are complete for the availabl
 
 ## Readiness gates
 
-- `STATIC_RESEARCH_READY`: BLOCKED_ENVIRONMENT — Python 3.12.3 is present, but this WSL installation lacks `ensurepip`/pip and cannot create `.venv`; the host diagnostic names `python3.12-venv`. The strict dispatcher fails closed.
-- `NATIVE_RESEARCH_READY`: PARTIAL — the authoritative bridge `records` query returned one QUST through direct TES4 parsing; no native SSEView record-tree export or selected MO2 winner query ran. The explicit GHIDRA_PROJECT_REP_PATH binding matches the existing GOG project and adjacent .gpr. Its private path verification is in .local/ghidra/binding-verification.json. The documented query stopped at FAIL_VENV_MISSING before probe launch; earlier native diagnostics stopped at Windows ProductVersion interop.
-- `INSTRUMENTED_AUTONOMOUS_RESEARCH_READY`: NOT_VERIFIED — Observer is staged only. No deployment, game process, plugin load, handshake, event, or snapshot was observed.
+- `STATIC_RESEARCH_READY`: BLOCKED_ENVIRONMENT — strict check reports `FAIL_VENV_MISSING`; WSL lacks ensurepip/pip and Windows process interop is unavailable.
+- `NATIVE_RESEARCH_READY`: PARTIAL — EV-0201 blocks current Ghidra/xEdit dispatch before tool launch. The exact GOG `.rep`/`.gpr` binding is verified (EV-0199); no fresh function query or selected MO2 profile was verified.
+- `INSTRUMENTED_AUTONOMOUS_RESEARCH_READY`: NOT_VERIFIED — Observer is staged only; no deployment, game process, plugin load, handshake, event, or snapshot was observed.
 
 ## Final evidence
 
@@ -24,5 +24,6 @@ Cold-start configuration and closeout verification are complete for the availabl
 
 The ignored `config/local.env` now stores one explicit `GHIDRA_PROJECT_REP_PATH` for the user-specified existing GOG project. Its `.rep` directory and adjacent `.gpr` were verified; the Ghidra probe and local/domain doctors now consume this direct path. No Ghidra project access occurred. The documented Ghidra invocation stopped at `FAIL_VENV_MISSING` before probe launch. The full unittest suite passed: 177 tests, 3 dependency-gated skips. Strict Python check reports valid config and missing repository `.venv`. The first consolidated doctor rerun exposed a stale Markdown inventory; after refreshing it, the final doctor reports config/path/domain/Markdown checks PASS, Python environment BLOCKED_EXTERNAL (`FAIL_VENV_MISSING`), native probes BLOCKED_EXTERNAL, and no FAIL checks; verdict BLOCKED, exit 2.
 
-## Exact next action
-On a host with Python 3.12 plus venv/ensurepip and pip, follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install the pinned requirements; run the strict check and consolidated doctor, then reproduce the read-only GOG Ghidra query and Windows-native xEdit gates. Do not begin bounty research until the strict research environment is ready.
+## Exact next action: On the intended Windows host, create the Python 3.12 repository .venv and install requirements-dev.txt; pass check --strict, reproduce the verified GOG Address Library and read-only Ghidra query, then run the exact research-start validator. Do not begin bounty research before those gates pass.
+Align AGENTS.md Python 3.12 repository-.venv instructions with docs/LOCAL_RUNTIME_CONTRACT.md, verify active Ghidra/xEdit/SKSE skill routes and local GOG project binding, then bootstrap and strictly validate the repository environment before the read-only Ghidra query.
+- EV-0201: fresh strict-dispatch and consolidated-doctor results; 12 PASS, 7 BLOCKED_EXTERNAL, zero FAIL, exit 2.

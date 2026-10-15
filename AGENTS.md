@@ -41,27 +41,71 @@ only the source documents relevant to the selected question.
 - Linux validation does not establish Windows xEdit/MO2/DevBench behavior or
   in-game AE behavior. State that boundary explicitly.
 
-## Python environment
+## Python 3.12 environment
 
-- The primary environment is the repository-local Python 3.12 `.venv`, with
-  runtime pins from `requirements.txt` and test tooling from
-  `requirements-dev.txt`. `environment.yml` is optional legacy alignment
-  metadata and is not an active fallback.
-- Bootstrap and verify it using `docs/LOCAL_RUNTIME_CONTRACT.md`. On Windows,
-  start the dispatcher with `& .\.venv\Scripts\python.exe scripts/python_env.py`;
-  on Linux/WSL use `python3 scripts/python_env.py`. Run agent tools only as
-  `... python_env.py run <script-or-module>`. Missing/wrong `.venv`, Python
-  version, pinned imports, or config makes dispatch fail closed; system Python
-  is never an automatic research fallback.
-- Active research tools are Python entrypoints. Do not add Node, shell, Java,
-  or other-language launchers to agent skills. A domain requiring an external
-  native app remains blocked until its Python entrypoint and behavior are
-  tested.
+Create one repository-local environment. On Windows PowerShell:
+
+    py -3.12 -m venv .venv
+    & .\.venv\Scripts\python.exe -m pip install --requirement requirements-dev.txt
+    Copy-Item config/local.env.example config/local.env
+    # Fill the private bindings described below, then:
+    & .\.venv\Scripts\python.exe scripts/python_env.py check --strict
+    & .\.venv\Scripts\python.exe scripts/python_env.py run scripts/research_state.py validate
+    & .\.venv\Scripts\python.exe scripts/harness_doctor.py all
+
+On Linux/WSL:
+
+    python3 -m venv .venv
+    .venv/bin/python -m pip install --requirement requirements-dev.txt
+    cp config/local.env.example config/local.env
+    # Fill config/local.env, then:
+    python3 scripts/python_env.py check --strict
+    python3 scripts/python_env.py run scripts/research_state.py validate
+    python3 scripts/harness_doctor.py all
+
+If venv creation reports that ensurepip or venv is unavailable, the host's
+Python 3.12 venv package is missing. Install that Python prerequisite through
+the host's normal package channel, recreate .venv, and repeat the bootstrap.
+Do not substitute system Python, Conda, or an ambient environment for research
+commands.
+
+requirements.txt pins active runtime third-party imports to lz4==4.3.3 and
+PyYAML==6.0.1; other active tools use the standard library. lz4 is required by
+scripts/read-save.py, including its --help import path. requirements-dev.txt
+includes those runtime pins and pytest==8.0.0 for the CI test runner. The dev
+split is deliberate; install requirements-dev.txt for a complete clean setup.
+environment.yml is optional Conda alignment metadata, not the active route.
+scripts/python_env.py always targets this checkout's .venv, requires Python
+3.12 and both pinned imports, and fails closed. check --strict reports setup
+status; run returns 127 without starting a child when the venv is missing or
+invalid. It never falls back.
+
+scripts/harness_doctor.py all is the bootstrap diagnostic entrypoint. It may
+be started with system Python because it must report a missing .venv; this does
+not make the system interpreter ready for research. Run research tools only
+through scripts/python_env.py run after the repository venv passes.
+
+scripts/research_state.py validate checks durable transaction, frontier,
+evidence, claim, and recovery structure. It does not verify executable
+ProductVersion, load-order completeness against MO2, xEdit/Ghidra access, save
+parsing, or live-game behavior.
+
+Active research tools are Python entrypoints. Do not add Node, shell, Java,
+or other-language launchers to agent skills. A domain requiring an external
+native app remains blocked until its Python entrypoint and behavior are
+tested.
 
 ## Tool invocation
 
-- xEdit helper binding, scoped preparation, and file-only record parsing use
-  `tools/xedit_bridge.py`; `file-records` is not an xEdit query. See
+- `config/local.env` is the only machine-specific configuration registry;
+  domain skills must use it and the commands in
+  `docs/LOCAL_RUNTIME_CONTRACT.md`. For xEdit, bind `SKYRIM_EXE_PATH`,
+  `SKYRIM_DATA`, `SSEEDIT_EXE`, and `XEDIT_SCRIPTS` there. Invoke the implemented
+  routes with
+  `python3 scripts/python_env.py run tools/xedit_bridge.py doctor`,
+  `python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf`,
+  and `python3 scripts/python_env.py run tools/xedit_bridge.py prepare`.
+  `file-records` is a TES4 file parser, not a native xEdit query. See
   `protocols/TOOL_ROUTING.md` for the native record-export boundary and the
   required selected-profile preflight.
 - Existing GOG Ghidra analysis must pass ProductVersion and Address Library
@@ -71,10 +115,12 @@ only the source documents relevant to the selected question.
   `python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]`.
   The probe uses `-process -noanalysis -readOnly` and never imports or creates
   a project. Do not reuse its RVA against Steam.
-- `tools/skse_probe.py` checks installed files only. A staged Observer DLL is
-  not a loaded DLL, handshake, connection, or game-state observation. Use a
-  separately designated disposable profile/save and keep live mutations out
-  of unattended runs.
+- For SKSE, keep `SKSE_LOADER` and Observer paths in `config/local.env`; invoke
+  the implemented identity-only probe as
+  `python3 scripts/python_env.py run tools/skse_probe.py`. It does not connect
+  to Skyrim or DevBench. A staged Observer DLL is not a loaded DLL, handshake,
+  connection, or game-state observation. Use a separately designated
+  disposable profile/save and keep live mutations out of unattended runs.
 
 ## Research loop
 

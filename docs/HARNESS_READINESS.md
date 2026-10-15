@@ -1,20 +1,20 @@
 # Harness readiness — independent cold-start verification
 
-**Verdict: BLOCKED_EXTERNAL for research dispatch on this host.** The checkout's local validators and system-Python unit tests pass, but the documented research dispatcher requires a Python 3.12 `.venv` that this WSL installation cannot create because `ensurepip` and `pip` are missing. Native Ghidra/xEdit access and live SKSE observation were not reproduced. No bounty investigation was started.
+**Verdict: BLOCKED for research dispatch from this session.** This WSL host has Python 3.12.3 but lacks `ensurepip` and pip. A venv bootstrap attempt left an incomplete Linux `.venv`; strict validation found both pinned imports missing, and that incomplete venv was removed so it cannot conflict with the intended Windows environment. Windows `py.exe` is present but execution from WSL fails with `UtilBindVsockAnyPort`; passwordless package installation is unavailable. The strict dispatcher therefore refuses research commands. No bounty investigation was started.
 
 ## Readiness gates
 
 | Gate | Status | Evidence-backed result |
 |---|---|---|
-| Static Python research | BLOCKED_ENVIRONMENT | Python 3.12.3 exists, but clean venv creation fails at missing `ensurepip`; the host diagnostic names `python3.12-venv`. No `pip`, `pip3`, `uv`, Conda, or Windows `py` bootstrap is installed. Strict dispatcher reports `FAIL_VENV_MISSING`; save-reader help fails because `lz4` is unavailable. EV-0197. |
-| GOG Ghidra and Address Library | BLOCKED_EXTERNAL | EV-0199 verifies that ignored `config/local.env` binds the exact user-designated existing GOG `.rep` directory and that its adjacent `.gpr` exists; `tools/ghidra_probe.py` reads this file and refuses to create a project. The documented invocation was blocked by `FAIL_VENV_MISSING` before the probe launched. Earlier fresh ProductVersion diagnostics stopped at WSL Windows-process interop (EV-0195); no Ghidra query was performed. |
-| xEdit helper binding | PASS, helper only | The documented bridge doctor and scoped preparation ran. `--help` exposes `doctor`, `prepare`, and `file-records`; it explicitly says the latter two do not perform a native xEdit export. EV-0192, EV-0194. |
-| Authoritative bridge QUST query | PASS, direct TES4 reader | The documented source `records` command and tracked `file-records` alias each returned `Skyrim.esm` QUST `CreatureDialogueWerewolf`, local form `000E46`. This is a genuine bridge record retrieval through the direct file parser, not native SSEEdit selection/export and not a winning-override query. EV-0193. |
+| Static Python research | BLOCKED_ENVIRONMENT | WSL Python 3.12.3 cannot create a usable venv because `ensurepip` is absent; system and venv pip are unavailable. The strict check reports `FAIL_VENV_MISSING` after cleanup. Windows `py.exe` exists, but WSL execution fails with `UtilBindVsockAnyPort`. No Conda/system fallback was used. See current raw captures under `.local/alignment/final-consistency-20261015/`; earlier bootstrap evidence is EV-0197. |
+| GOG Ghidra and Address Library | BLOCKED_EXTERNAL | The ignored `config/local.env` binding exactly matches the user-designated GOG `.rep` path, and the `.rep` directory plus adjacent `.gpr` exist. The adapter reads `GHIDRA_PROJECT_REP_PATH` and its source enforces `-process -noanalysis -readOnly`, with no import or reanalysis path. The fresh documented invocation returned 127 at the strict dispatcher before the probe started; no function, xref, or decompilation was reproduced in this session. EV-0167 is historical integration evidence only; EV-0199 records the binding verification. |
+| xEdit helper binding | HISTORICAL_PASS / BLOCKED_CURRENT | EV-0192 and EV-0194 preserve prior helper/prepare results. This fresh session could not dispatch the helper because the strict `.venv` is unavailable; the current doctor reports it blocked. |
+| Authoritative bridge QUST query | HISTORICAL_PASS / NOT_REPRODUCED_CURRENT | EV-0193 preserves the prior result: the documented source `records` command and tracked `file-records` alias returned `Skyrim.esm` QUST `CreatureDialogueWerewolf`, local form `000E46`, through the direct TES4 reader. This fresh session could not dispatch it because the strict `.venv` is unavailable. It is not native SSEEdit selection/export or a winning-override query. |
 | Native xEdit record query/export | BLOCKED_EXTERNAL | No native record-query/export command is exposed. The existing selection exporter requires a visible record selection and Apply Script; the available UI automation has no safe record-tree selection control. WSL Windows process interop also fails, and no selected MO2 profile/full `plugins.txt` is configured. Smallest safe path: a Windows-hosted visible SSEView session with an explicitly scoped list, a human-visible record selection, then the documented selection-based exporter. No query/export was claimed. |
-| Full MO2 winner mode | BLOCKED_EXTERNAL | No selected profile directory and its explicit complete `plugins.txt` are bound. A five-master list is a separate diagnostic scope and cannot stand in for the active profile. |
-| SKSE installed identity | BLOCKED_EXTERNAL | The fresh identity probe stopped before runtime comparison at the ProductVersion bridge. EV-0196. |
+| Selected MO2 profile and full winner mode | NOT_VERIFIED | No selected profile directory or its explicit complete `plugins.txt` is bound. A five-master list is a separate diagnostic scope and cannot stand in for the active profile. |
+| SKSE installed identity | NOT_VERIFIED | The strict dispatcher could not launch the identity probe in this session. Earlier fresh diagnostics stopped before runtime comparison at the WSL ProductVersion bridge (EV-0196). |
 | SKSE connection/observation | NOT_VERIFIED | Observer is staged only (584,192 bytes; SHA-256 `108a4b9a73c97b0517a5cf23f11c02778b9ec3a8f88ac7aadc4fe129a7f7b084`). No deployed DLL, running game process, plugin load, handshake, event, snapshot, or DevBench connection was observed. EV-0196. |
-| Local tests and validators | PASS_LOCAL, not research-ready | The latest report is EV-0200: 19 checks, 12 PASS, 7 BLOCKED_EXTERNAL, zero FAIL; overall exit 2 / BLOCKED. The system-Python suite passed 177 tests with 3 dependency-gated skips. Earlier domain smoke checks returned UESP revision 3629292 and three private summary-only Apocrypha search results (EV-0198). This does not verify the missing `.venv`, Windows CI, native applications, Apocrypha context retrieval, or in-game behavior. Latest raw JSON and command captures are under ignored `.local/alignment/harness-doctor/20261015T084558.620330Z/. |
+| Local tests and validators | PASS_LOCAL, not research-ready | EV-0201 is the fresh consolidated report: 19 checks, 12 PASS, 7 BLOCKED_EXTERNAL, zero FAIL; overall exit 2 / BLOCKED. Unit tests passed 177 with 3 skips. Research-state and Markdown validators pass. Raw report: `.local/alignment/harness-doctor/20261015T092050.055549Z/harness_doctor.json`. These results do not verify the missing `.venv`, Windows CI, native applications, Apocrypha context retrieval, or in-game behavior. |
 
 ## Offline source index smoke tests
 
@@ -28,12 +28,15 @@ The same README explicitly says the current core does not hook native skill-use,
 
 ## Reproduced commands
 
-The three xEdit commands below were run with system Python only as diagnostic reproductions because the strict dispatcher refuses child execution without `.venv`:
+The following are historical setup diagnostics from the previous setup pass.
+Their direct system-Python invocations are not active routes and do not
+authorize bypassing the strict dispatcher. New runs must use the implemented
+commands in `docs/LOCAL_RUNTIME_CONTRACT.md`:
 
-- `python3 tools/xedit_bridge.py doctor` — exit 0; helper configuration/staging only. EV-0192.
-- `python3 <LEGACY_SKYRIM_REPO>/scripts/skyrim_tool.py records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf` — exit 0, one QUST record; the configured source path stays private. The tracked `tools/xedit_bridge.py file-records ...` alias returned the same result. EV-0193.
-- `python3 tools/xedit_bridge.py prepare` — exit 0; scoped five-master session prepared, not launched. EV-0194.
-- `python3 tools/xedit_bridge.py --help` — captured output lists no native record-query/export operation.
+- `python3 scripts/python_env.py run tools/xedit_bridge.py doctor` — helper configuration/staging only. Historical evidence EV-0192 records the direct diagnostic invocation and output.
+- `python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf` — direct TES4 reader returned one QUST record; EV-0193 preserves the historical bridge result. It is not a native xEdit query.
+- `python3 scripts/python_env.py run tools/xedit_bridge.py prepare` — scoped five-master session preparation only; EV-0194 preserves the historical result.
+- `python3 scripts/python_env.py run tools/xedit_bridge.py --help` — the wrapper exposes no native record-query/export operation.
 - Fresh Ghidra, Address Library, SKSE identity, and scoped AE preflight attempts — earlier ProductVersion/Windows-process interop stopped native access (EV-0195–EV-0196). After the explicit project path binding was added, the documented Ghidra dispatcher stopped before probe launch because `.venv` was missing (EV-0199–EV-0200). No Ghidra project was opened.
 - Fresh clean-venv, ensurepip, pip, strict dispatcher, and save-reader checks — no packages installed. EV-0197.
 
@@ -41,7 +44,7 @@ The authoritative helper source/help/query hashes and detailed redacted metadata
 
 ## Exact next session
 
-On Windows, create the repository environment with Python 3.12, install `requirements-dev.txt`, and run the strict check and doctor exactly as listed in `docs/LOCAL_RUNTIME_CONTRACT.md`. This WSL host cannot complete that bootstrap until its Python distribution includes `venv`/`ensurepip` and pip. Do not run research entrypoints through system Python.
+On the intended Windows host, create the repository environment with Python 3.12, install `requirements-dev.txt`, and run the strict check and doctor exactly as listed in `docs/LOCAL_RUNTIME_CONTRACT.md`. This WSL session cannot execute Windows processes or install the missing `python3.12-venv` package without administrator credentials. Do not run research entrypoints through system Python.
 
 After the Python gate passes, first run `python3 scripts/python_env.py run scripts/research_state.py validate`, then follow `NEXT_SESSION_HANDOFF.md` and `docs/RESEARCH_START_PROMPT.md`. The user-provided task input is `bounties/BOUNTY-0001-LEVEL1-P0.md`; it has not been investigated in this setup session.
 

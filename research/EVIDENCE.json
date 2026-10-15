@@ -3599,6 +3599,27 @@
       ],
       "coverage": "The 19-check report contains 12 PASS, 7 BLOCKED_EXTERNAL, and zero FAIL; overall verdict BLOCKED with exit 2. Config schema/ignore validation, research validators, local path doctor, domain doctor, Markdown audit, pre-push audit, compile check, and unit tests pass. The suite ran 177 tests with 3 dependency-gated skips. Python dispatch is blocked because the repository .venv is absent; native Ghidra/xEdit and SKSE identity/observation were not run.",
       "result": "BLOCKED_EXTERNAL for research dispatch on this host; no bounty investigation or game launch occurred."
+    },
+    {
+      "id": "EV-0201",
+      "kind": "tool",
+      "source": "Fresh-session post-correction strict dispatcher and consolidated harness doctor",
+      "artifact": "private-local:.local/alignment/harness-doctor/20261015T092050.055549Z/harness_doctor.json",
+      "sha256": "39be37f8dc2229091c15826c26c52660f1cde5596bd812c1a8467487a83d9cce",
+      "captured_utc": "2026-10-15T09:20:50.055549+00:00",
+      "edition": "unknown",
+      "runtime": "Linux/WSL Python 3.12.3; no Skyrim or native application launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py check --strict",
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600",
+        "python3 scripts/harness_doctor.py all",
+        "python3 scripts/research_state.py validate",
+        "python3 scripts/markdown_policy_audit.py --check"
+      ],
+      "coverage": "The strict check returns FAIL_VENV_MISSING after the incomplete WSL venv was removed; the documented Ghidra dispatcher returns 127 without starting the probe. The 19-check doctor reports 12 PASS, 7 BLOCKED_EXTERNAL, zero FAIL; unit tests pass 177 with 3 skips. Local config/path, research-state, setup/research/overlay validators, path/domain doctors, Markdown, pre-push, compile and unit-test checks pass. GOG, xEdit and SKSE identity probes are not dispatched by the strict gate; no function/xref/decompilation was reproduced. Native xEdit is blocked by the unverified MO2 profile/full plugins.txt. Live SKSE remains unverified: no deployed DLL, game process, loaded plugin, handshake or snapshot.",
+      "result": "BLOCKED for research dispatch from this session. The exact GOG project binding remains verified by EV-0199; no bounty investigation or game launch occurred."
     }
   ]
 }

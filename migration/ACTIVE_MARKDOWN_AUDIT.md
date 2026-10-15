@@ -13,9 +13,9 @@ Inventory: 170 Markdown files; 81 active; 89 archival.
 | `.agents/skills/apocrypha-grounding/SKILL.md` | ACTIVE | `e375bce858d76755e7bd922529f51fd42dfed5026ce602f3c9fd283ab6c457ba` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/archive-source-discovery/SKILL.md` | ACTIVE | `275aec0303f9884afe673d9174ab012ca922cd6fdc3178047dc1d8513f9bfccd` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/esp-record-research/SKILL.md` | ACTIVE | `78f961063c694657b5edb80e85cac8fc23233fa8bdd07839720be67c4c0fa004` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/ghidra-project-research/SKILL.md` | ACTIVE | `30eab93bdc36d3228e54141c507881c8f927f12e794dbbf802526cfc9a794e91` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/retained-tool-operations/SKILL.md` | ACTIVE | `b06cdb6f39581bb0d7e1d758b7b145ce78e483553950a77ae65b04340147f119` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/save-state-forensics/SKILL.md` | ACTIVE | `d8baede1a3ffed33aa96dc272f12b8c98b4d059934f0552bea1a7b0ad8b4f32d` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/ghidra-project-research/SKILL.md` | ACTIVE | `81996b4588d65116137c1d3b13c1ec39909ef240042611ca86ca0e13cba60d01` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/retained-tool-operations/SKILL.md` | ACTIVE | `1be5af2aaef61c801f8dbc4c9e8ec3d028e32afd69699d364b6e41dc3859b7ad` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/save-state-forensics/SKILL.md` | ACTIVE | `e07572ee703e9e6ecde20d0cfcf4f4d51e2f46d4d8cebdc47360a51eeee4e982` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/skyrim-armor-xp-research/SKILL.md` | ACTIVE | `23e7f2ef2d74b5b19342372cbeb431bfc4c7f6e1977b82a1bbcc710a7e317dc5` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/skyrim-cross-domain-synthesis/SKILL.md` | ACTIVE | `c932c36bc5d86f4a9ee7e56a09f4a1b2d2f718d2ccc2eb6489b2a7b5c18182f2` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/skyrim-discriminating-experiments/SKILL.md` | ACTIVE | `9658a4ca6acbbabb1027ef2669b847f6a532349fa64295a06997240b467c403a` | Current research guidance or evidence record; reviewed for policy and links. |
@@ -23,15 +23,15 @@ Inventory: 170 Markdown files; 81 active; 89 archival.
 | `.agents/skills/skyrim-source-verification/SKILL.md` | ACTIVE | `09f12a5f6bcbbcfc7a5906db02c03f9bda935e7b9aae6df788a99dd22a6b6dd5` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/uesp-grounding/SKILL.md` | ACTIVE | `3f68b471b9c4725d12eca559d4529bb591c2882559b63d36d36f4cb701744a78` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.github/copilot-instructions.md` | ARCHIVAL | `f30319c6ec5e68a383eba1751dfe6484bf0e0759935d34298cb69d6365839387` | Retained historical or workflow source; not a primary instruction path. |
-| `AGENTS.md` | ACTIVE | `132fb9a64195153004a0fac5d3463917779b585469978e1e64d08887bfe175dc` | Current repository-level instruction or status document. |
+| `AGENTS.md` | ACTIVE | `094e5ebbbac3af5463123d9e45e004eeb55013719b0601375bd8f6711b67664e` | Current repository-level instruction or status document. |
 | `bounties/BOUNTY-0001-LEVEL1-P0.md` | ACTIVE | `73df8f0c3b5c800cdc0fd0141fb35227f5e9312d70660297fd0762f7136be6db` | User-provided review packet; context only, not current-session evidence or research instructions. |
 | `CHANGELOG.md` | ARCHIVAL | `cf4535fddd1ccc490b2b4af1be27fed14e46a5ceb3eb5bc99c1b0bddd01640bd` | Retained source; explicitly non-authoritative under AGENTS.md. |
 | `docs/CODEX_START_PROMPT.md` | ACTIVE | `3ccf522bcb57971b1a966936286df6093db5e8fd1d948389dfba408e24f15bed` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/getting-started.md` | ACTIVE | `39fa214af0d7aad561d075f5d73c5f19c024c3d0981288802d4ca7651508e8e7` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/HARNESS_READINESS.md` | ACTIVE | `12c0645f57a1a0e817a8ea0275ecce6fd900e23927d4b8272c69c5a379d3dbd7` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/HARNESS_READINESS.md` | ACTIVE | `4e18d88fa59a252fbd0e485f0c956c5cb1d9be2036c0cd55f552136bccc44c17` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/LOCAL_RUNTIME_CONTRACT.md` | ACTIVE | `3cc53dd5504cd815fbbd73bc07c9f3bbacb1d4347f9922b0069c8932fa0d0cb7` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/LOCAL_TOOL_BINDINGS.md` | ACTIVE | `65f8b8ec2d7e444f16768a572c95027794a7cd127945f69af11f35155f94cc67` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/LOCAL_TOOL_HANDOFF.md` | ACTIVE | `d0dea45399bb7bebb8cea0b4d637ea539f30fa1b88f11cb030e328727497e58c` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/LOCAL_TOOL_HANDOFF.md` | ACTIVE | `a71473dc2013c14a58f50385b763ff44cee626c82b88944c61fe14270c993750` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/MIGRATION_RETIREMENT_PLAN.md` | ACTIVE | `06652e59dfa1d2db33793a2b8cb808133ee51d710fd87f12a2fd85f7097c15bd` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/README.md` | ACTIVE | `38fae874e09fd46636bc07ee8dc3681c7f5478868f4f1df3f52a64b0ebf6ca1a` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/RESEARCH_START_PROMPT.md` | ACTIVE | `8ed8913e3a4d81b7d10f450a9484f7919cdbe51fdaedda5f00c6f875ccffd942` | Current research guidance or evidence record; reviewed for policy and links. |
@@ -141,7 +141,7 @@ Inventory: 170 Markdown files; 81 active; 89 archival.
 | `migration/TOOL_COMPATIBILITY_MATRIX.md` | ARCHIVAL | `c072efdee9ac4f4435d72fb4dbf20bc0acb4794f2f57bb100f46f668c627afc1` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/TOOL_PATH_VERIFICATION.md` | ACTIVE | `d9639e216f01c0e0a88c7c56605bd4d705b66dab532f07fc0f729bf17921c3c0` | Current readiness/audit record; reviewed for policy and links. |
 | `migration/UNRESOLVED.md` | ARCHIVAL | `81a7a0c19a59bc172b10ca1626ba61e51a31cb500eca686073c5fe83b2363936` | Prior migration artifact; retained for provenance, not active instructions. |
-| `NEXT_SESSION_HANDOFF.md` | ACTIVE | `536918590985adc134d4fb2f85504376e64dba2ed9a91b64e50f963af2132ddb` | Current repository-level instruction or status document. |
+| `NEXT_SESSION_HANDOFF.md` | ACTIVE | `10946994b8d81b5f9005be0d34bdcfa9a6b4f9455f1fd5b3ffc52ad78a57fde5` | Current repository-level instruction or status document. |
 | `NORTH_STAR.md` | ACTIVE | `ff7d2f516ca1791dbe335b7e0a35a9aaec02829227c04f39d89fd3e331364088` | Current repository-level instruction or status document. |
 | `protocols/apocrypha.md` | ACTIVE | `307cf2dddde68c7675679f012f11a9bd4cd289af9eec95850fac2cc0c9861a82` | Current research guidance or evidence record; reviewed for policy and links. |
 | `protocols/LIVE_GAME.md` | ACTIVE | `a4536c8e11e14556b56bf1c497fa77d687059088d7ed91f89c65bb9e6ed75519` | Current research guidance or evidence record; reviewed for policy and links. |

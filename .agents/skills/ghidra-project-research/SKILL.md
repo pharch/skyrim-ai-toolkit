@@ -7,9 +7,7 @@ description: Query the existing GOG Skyrim AE Ghidra project for build-attested 
 
 > Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
 
-Use this skill for static Skyrim AE code questions. `config/local.env` binds
-three separate identities: the GOG `analysis_binary`, its existing
-`analysis_project`, and the runtime target used for record or live checks.
+Use this skill for static Skyrim AE code questions. The canonical local registry is ignored `config/local.env`. `GHIDRA_PROJECT_REP_PATH` must name the existing GOG `.rep` directory; the adapter verifies its adjacent `.gpr` and queries the project in place. The file binds three separate identities: the GOG `analysis_binary`, its existing `analysis_project`, and the runtime target used for record or live checks.
 Never select Ghidra from `SKYRIM_EXE_PATH`; it may identify Steam or another
 runtime build.
 
