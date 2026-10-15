@@ -139,8 +139,9 @@ def validate_frontier(frontier: dict[str, Any], evidence_ids: set[str]) -> list[
                 for evidence_id in decision.get("evidence", []):
                     if evidence_id not in evidence_ids:
                         errors.append(f"{item_id}: decision cites unknown evidence {evidence_id}")
-                if not decision.get("successors"):
-                    errors.append(f"{item_id}: terminal decision must generate or link successor questions")
+                successors = decision.get("successors")
+                if not isinstance(successors, list):
+                    errors.append(f"{item_id}: terminal decision successors must be an array")
 
     for item_id, item in by_id.items():
         for field, label in (("blocked_by", "dependency"), ("successors", "successor")):
@@ -213,9 +214,11 @@ def transition_item(
     if new_status in TERMINAL:
         if not decision:
             raise ValueError(f"{new_status} requires a decision record")
-        required = ("summary", "cross_domain_assessment", "successors")
+        required = ("summary", "cross_domain_assessment")
         if any(not decision.get(field) for field in required):
-            raise ValueError(f"{new_status} requires summary, cross_domain_assessment and successors")
+            raise ValueError(f"{new_status} requires summary and cross_domain_assessment")
+        if not isinstance(decision.get("successors"), list):
+            raise ValueError(f"{new_status} requires a successor array, which may be empty")
         if not evidence_ids:
             raise ValueError(f"{new_status} requires at least one evidence ID")
         successor_ids = {entry.get("id") for entry in items}
@@ -309,7 +312,9 @@ def validate_repository(root: Path = ROOT) -> list[str]:
     errors.extend(validate_frontier(frontier, evidence_ids))
     from scripts.research_transactions import validate_transaction_ledger
 
-    errors.extend(validate_transaction_ledger(transactions, recovery, evidence_ids))
+    errors.extend(validate_transaction_ledger(
+        transactions, recovery, evidence_ids, frontier=frontier, root=root,
+    ))
     if recovery.get("schema_version") != 2:
         errors.append("recovery schema_version must be 2")
     if recovery.get("status") not in {"idle", "running", "interrupted", "resumable"}:
@@ -333,7 +338,7 @@ def main(argv: list[str] | None = None) -> int:
     recover.add_argument("--root", type=Path, default=ROOT)
     begin = subcommands.add_parser("begin", help="begin a validated frontier transaction")
     begin.add_argument("--root", type=Path, default=ROOT)
-    begin.add_argument("--transaction-id", required=True)
+    begin.add_argument("--transaction-id", help="optional stable ID; Codex generates a unique ID when omitted")
     begin.add_argument("--frontier-id", required=True)
     begin.add_argument("--next-action", required=True)
     update = subcommands.add_parser("update", help="append a transaction observation and checkpoint")
@@ -352,6 +357,12 @@ def main(argv: list[str] | None = None) -> int:
     complete.add_argument("--cross-domain-assessment", required=True)
     complete.add_argument("--evidence", action="append", default=[])
     complete.add_argument("--artifact", action="append", default=[])
+    complete.add_argument("--frontier-status", choices=("completed", "falsified"), default="completed")
+    complete.add_argument("--successor", dest="successor_ids", action="append", default=[])
+    complete.add_argument("--claim", dest="claim_ids", action="append", default=[])
+    complete.add_argument("--mechanism", dest="mechanism_ids", action="append", default=[])
+    complete.add_argument("--graph-action", required=True,
+                          help="record the graph update or why no new causal edge is justified")
     block = subcommands.add_parser("block", help="block one line and automatically select an independent item")
     block.add_argument("--root", type=Path, default=ROOT)
     block.add_argument("--transaction-id", required=True)
@@ -361,7 +372,7 @@ def main(argv: list[str] | None = None) -> int:
     block.add_argument("--artifact", action="append", default=[])
     resume = subcommands.add_parser("resume", help="resume an interrupted transaction in a new process")
     resume.add_argument("--root", type=Path, default=ROOT)
-    resume.add_argument("--transaction-id", required=True)
+    resume.add_argument("--transaction-id", help="defaults to the active recovery transaction")
     args = parser.parse_args(argv)
     if args.command == "validate":
         errors = validate_repository(args.root)
@@ -384,7 +395,10 @@ def main(argv: list[str] | None = None) -> int:
             recovery = recover_transaction(args.root)
             print(f"{recovery['status']}: {recovery.get('resume_action', 'checkpoint unchanged')}")
         elif args.command == "begin":
-            transaction = begin_transaction(args.root, args.transaction_id, args.frontier_id, args.next_action)
+            transaction = begin_transaction(
+                args.root, args.frontier_id, args.next_action,
+                transaction_id=args.transaction_id,
+            )
             print(f"running: {transaction['id']} on {transaction['frontier_id']}")
         elif args.command == "update":
             transaction = update_transaction(
@@ -399,15 +413,28 @@ def main(argv: list[str] | None = None) -> int:
                 args.root, args.transaction_id, summary=args.summary,
                 cross_domain_assessment=args.cross_domain_assessment,
                 evidence_ids=args.evidence, artifacts=args.artifact,
+                frontier_status=args.frontier_status,
+                successor_ids=args.successor_ids,
+                synthesis_claim_ids=args.claim_ids,
+                synthesis_mechanism_ids=args.mechanism_ids,
+                knowledge_graph_action=args.graph_action,
             )
-            print(f"completed: {args.transaction_id}; next frontier {result['next_item']['id']}: {result['next_item']['next_action']}")
+            next_item = result["next_item"]
+            if next_item is None:
+                print(f"completed: {result['transaction']['id']}; no ready frontier item remains")
+            else:
+                print(f"completed: {result['transaction']['id']}; next frontier {next_item['id']}: {next_item['next_action']}")
         elif args.command == "block":
             result = block_transaction(
                 args.root, args.transaction_id, blocker=args.blocker,
                 blocker_status=args.blocker_status, evidence_ids=args.evidence,
                 artifacts=args.artifact,
             )
-            print(f"{args.blocker_status}: {args.transaction_id}; independently selected {result['next_item']['id']}: {result['next_item']['next_action']}")
+            next_item = result["next_item"]
+            if next_item is None:
+                print(f"{args.blocker_status}: {args.transaction_id}; no other frontier item is ready")
+            else:
+                print(f"{args.blocker_status}: {args.transaction_id}; independently selected {next_item['id']}: {next_item['next_action']}")
         elif args.command == "resume":
             transaction = resume_transaction(args.root, args.transaction_id)
             print(f"running: resumed {transaction['id']}; next action: {transaction['next_action']}")

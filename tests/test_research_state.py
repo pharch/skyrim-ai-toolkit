@@ -22,17 +22,18 @@ class ResearchStateRecoveryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "actionable next_action"):
             recover_checkpoint({"status": "running", "next_action": "  "})
 
-    def test_terminal_decision_requires_successors(self):
+    def test_terminal_decision_allows_no_successor_when_none_is_justified(self):
         frontier = {"items": [
             {"id": "Q-0001", "status": "in_progress", "successors": []},
             {"id": "Q-0002", "status": "open", "successors": []},
         ]}
-        with self.assertRaisesRegex(ValueError, "successors"):
-            transition_item(
-                frontier, "Q-0001", "completed", evidence_ids=["EV-0001"],
-                decision={"summary": "done", "cross_domain_assessment": "checked", "successors": []},
-                available_evidence={"EV-0001"},
-            )
+        transition_item(
+            frontier, "Q-0001", "completed", evidence_ids=["EV-0001"],
+            decision={"summary": "done", "cross_domain_assessment": "checked", "successors": []},
+            available_evidence={"EV-0001"},
+        )
+        self.assertEqual(frontier["items"][0]["status"], "completed")
+        self.assertEqual(frontier["items"][0]["decision"]["successors"], [])
 
     def test_terminal_decision_links_a_successor_question(self):
         frontier = {"items": [

@@ -1,16 +1,25 @@
 # Start the first deep research session
 
-Use [`bounties/BOUNTY-0001-LEVEL1-P0.md`](../bounties/BOUNTY-0001-LEVEL1-P0.md) as the active target. The bounty selects the question and proof criteria; `AGENTS.md`, the skills and `protocols/TOOL_ROUTING.md` define the research method. Do not reset the existing frontier or claim that a lead is confirmed.
+Paste this single prompt into an interactive Codex session opened at the
+repository root:
 
-Before beginning, read `AGENTS.md`, `NORTH_STAR.md`, `STATE.md`, `ROADMAP.md`, `research/FRONTIER.json`, `research/RECOVERY.json`, the bounty, and only sources relevant to the chosen question. Bootstrap or reuse Python and run the strict check and `research_state.py validate` as documented in `LOCAL_RUNTIME_CONTRACT.md`. Validate the tool mode needed for the chosen source. After those checks pass, proceed with research; do not turn the session into ongoing setup work.
+> Begin or resume evidence-backed Skyrim AE glitch research using
+> `bounties/BOUNTY-0001-LEVEL1-P0.md` as the active target. Follow `AGENTS.md`
+> and read the required context, current frontier and recovery checkpoint.
+> Autonomously bootstrap or repair Python if its strict preflight fails, then
+> validate research state and the relevant source/tool route. Once those checks
+> pass, stop setup work and investigate. Resume any running or interrupted
+> transaction from durable recovery state; otherwise select the highest-value
+> ready frontier question and generate its transaction ID internally. State
+> competing hypotheses and predicted discriminants before testing them,
+> preserve source-linked evidence, update the causal model, and periodically
+> synthesize across research domains. After each local completion, falsification
+> or blocker, select and pursue the next useful independent question. Do not
+> ask me to choose a frontier item or transaction ID, do not claim that one
+> resolved hypothesis solves the bounty, and do not stop at a progress summary.
 
-Recovery is idle after `TX-0004`; `Q-0001` / `OBJ-1` is the next frontier item. From the repository root, start its transaction after reviewing its competing models and current evidence:
-
-```sh
-python3 scripts/python_env.py run scripts/research_state.py begin \
-  --transaction-id TX-0005 \
-  --frontier-id Q-0001 \
-  --next-action "Identify candidate vanilla quest/event level gates and state H1/H2 discriminants before source inspection."
-```
-
-On Windows PowerShell, use `py -3.12` instead of `python3`. Then investigate the chosen gate against the active bounty's proof criteria. If a record or runtime capability is unavailable, preserve the exact limit, queue a test protocol where useful, and continue with an independent tractable frontier item. Keep the level-one quest and armor-XP objectives at P0.
+This is an agent instruction, not a shell procedure. Codex owns environment
+repair, tool invocation, recovery, transaction bookkeeping, evidence capture,
+reselection and continuation. Static research may proceed when live SKSE or a
+profile-specific load order is unavailable, provided conclusions respect their
+evidence limits.

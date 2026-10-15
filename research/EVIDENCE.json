@@ -3315,6 +3315,47 @@
       ],
       "coverage": "The consolidated `all` report has 22 checks: 20 PASS, 1 NOT_CONFIGURED (optional profile-specific override resolution), 1 NOT_VERIFIED (live SKSE/Observer observation), zero FAIL, exit 0, verdict READY. Strict Python 3.12, ignored local configuration, research-state and repository validators, Markdown audit, bundled unit tests, GOG Address Library and read-only existing-project query, xEdit helper, direct TES4 parse, prepared official five-master session, verified native xEdit receipt, and installed SKSE identity pass. No full MO2 profile order or live SKSE connection is asserted. Raw captures and report are private under ignored `.local`.",
       "result": "PASS for static research readiness with profile-specific override resolution and live SKSE explicitly separate and unverified."
+    },
+    {
+      "id": "EV-0210",
+      "kind": "tool",
+      "source": "Fresh read-only WSL query of the configured existing GOG Ghidra project using its WSL-native cache",
+      "artifact": "private-local:.local/ghidra/gog-query-20261015T184220Z.meta.json",
+      "sha256": "f113a21548e5f4fe54f5e276519510bd275d852a18ccee380680512046a411b0",
+      "captured_utc": "2026-10-15T18:43:08Z",
+      "edition": "AE",
+      "runtime": "WSL2 Ubuntu 24.04 / CPython 3.12.3 / paired Linux Ghidra 12.0.4; no game launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600"
+      ],
+      "coverage": "The configured GOG SkyrimSE.exe ProductVersion is 1.6.1179.0 with SHA-256 9b0fc7880c4b12d436bfb59bcae64868f176dbc04010adbd9bc2ecb64bc8ed3f. The query used GHIDRA_PROJECT_REP_PATH and an adapter-managed WSL-native cache configured in ignored config/local.env; its source metadata fingerprint matched the configured project snapshot. The program identity check passed. At RVA 0x14C020 Ghidra returned FUN_14014c020, a 24-instruction disassembly, incoming xref 140230365 -> 14014c020, and decompilation output for FUN_140230080. Invocation used -process -noanalysis -readOnly; no project creation, import, overwrite, reanalysis, or source-project write was attempted.",
+      "result": "PASS for a fresh static query of the configured existing GOG project; it establishes no gameplay mechanic."
+    },
+    {
+      "id": "EV-0211",
+      "kind": "tool",
+      "source": "Final all-mode harness doctor after autonomous transaction lifecycle fixes and WSL Ghidra cache correction",
+      "artifact": "private-local:.local/alignment/harness-doctor/20261015T184620.345532Z/harness_doctor.json",
+      "sha256": "96dbf5b75b9e6daa41246a738be8f0b29f637c807f60582ccd118b5f88ae3229",
+      "captured_utc": "2026-10-15T18:46:20Z",
+      "edition": "AE",
+      "runtime": "Ubuntu 24.04 / WSL2 / CPython 3.12.3; no Skyrim game process or native application launch requested by the doctor",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py check --strict",
+        "python3 scripts/python_env.py run -m pytest tests -q",
+        "python3 scripts/python_env.py run scripts/research_state.py validate",
+        "python3 scripts/python_env.py run scripts/research_transactions.py --root . validate",
+        "python3 scripts/python_env.py run scripts/validate_repository.py",
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --check",
+        "python3 scripts/python_env.py run scripts/pre_push_audit.py",
+        "python3 scripts/python_env.py run scripts/harness_doctor.py all"
+      ],
+      "coverage": "The consolidated doctor returned READY with 21 checks: 19 PASS, one NOT_CONFIGURED profile-specific override gate, and one NOT_VERIFIED live SKSE/Observer gate. Python 3.12 strict dispatch, configuration schema, research state, repository, Markdown, hygiene, compileall, 204 tests, GOG Address Library and read-only existing-project query, direct TES4 parser, xEdit helper and five-master preparation, stored native QUST export receipt, and installed SKSE identity passed. Live SKSE connection and selected MO2 profile remain unverified. The doctor did not launch Skyrim or a native app, and this session did not begin bounty research.",
+      "result": "PASS for static-research readiness; the two separate runtime/profile gates remain explicitly unverified."
     }
   ]
 }

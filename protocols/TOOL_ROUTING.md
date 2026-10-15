@@ -1,8 +1,11 @@
 # Skyrim AE research tool routing
 
-Read docs/LOCAL_RUNTIME_CONTRACT.md first. Bootstrap or repair the current
-host environment before research. On Windows use `py -3.12`; on Linux/WSL use
-`python3`. Then route every research command through the strict dispatcher:
+The user starts or resumes work with the natural-language prompt in
+`docs/RESEARCH_START_PROMPT.md`. Read `AGENTS.md` and
+`docs/LOCAL_RUNTIME_CONTRACT.md`; the command lines below are internal Codex
+operations. Bootstrap or repair the current host environment before research.
+On Windows use `py -3.12`; on Linux/WSL use `python3`. Then route every
+research command through the strict dispatcher:
 
     python3 scripts/bootstrap_python.py
     python3 scripts/setup_research.py init  # preserves an existing local config
@@ -105,10 +108,14 @@ MO2 manages that target, configure and preflight its explicit profile list.
 
 The existing GOG analysis executable/project is separate from the live Steam
 runtime. The remembered 0x14C020 example is specific to GOG AE 1.6.1179.0.
-The cold-start GOG address and Ghidra probes stopped before launch because this
-WSL host could not read ProductVersion through its Windows PowerShell bridge.
-See docs/HARNESS_READINESS.md for current evidence; historical EV-0165–EV-0167
-do not count as a current-session reproduction.
+Fresh WSL GOG query evidence is recorded in
+[`docs/HARNESS_READINESS.md`](../docs/HARNESS_READINESS.md). When the configured
+project is on `/mnt`, the adapter copies that existing project to the
+WSL-native path in `GHIDRA_PROJECT_CACHE_WSL`; this is necessary because the
+WSL-mounted checkout cannot provide Ghidra's project lock. The query remains
+`-process -noanalysis -readOnly`, uses the configured source project, and never
+imports or reanalyzes a binary. EV-0165–EV-0167 remain historical unless a
+current query artifact independently supports a claim.
 
 ## SKSE / Observer boundary
 

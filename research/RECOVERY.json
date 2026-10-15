@@ -4,9 +4,9 @@
   "transaction_id": null,
   "frontier_id": null,
   "started_utc": null,
-  "checkpoint_utc": "2026-10-15T17:25:00Z",
+  "checkpoint_utc": "2026-10-15T18:46:20Z",
   "artifacts": [],
-  "next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source.",
+  "next_action": "Read the active bounty and current Q-0001 evidence, validate Python and research state, then inspect recovery: recover/resume any active checkpoint, or, when recovery is idle, state H1/H2 discriminants and begin the highest-priority ready item with a generated ID.",
   "next_frontier_id": "Q-0001",
   "last_transaction_id": "TX-0004",
   "readiness_gates": {
@@ -22,6 +22,6 @@
     "SKSE_INSTALLED_IDENTITY": "PASS_FILES_MATCH_STEAM_AE_1_6_1170",
     "SKSE_LIVE_OBSERVATION": "NOT_VERIFIED_NOT_REQUIRED_FOR_STATIC_RESEARCH",
     "XEDIT_NATIVE_OFFICIAL_FIVE_MASTER_QUERY": "PASS_149_FIELDS_STAGE_100_SHUT_DOWN_STAGE_1",
-    "CONSOLIDATED_HARNESS_DOCTOR": "PASS_20_OF_22_CHECKS_WITH_2_OPTIONAL_UNVERIFIED_GATES"
+    "CONSOLIDATED_HARNESS_DOCTOR": "READY_19_OF_21_CHECKS_WITH_PROFILE_AND_LIVE_SKSE_SEPARATE"
   }
 }

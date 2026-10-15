@@ -2,6 +2,13 @@
 
 This is the single source of truth for Python, private local bindings and exact tool invocations. `config/local.env` is ignored and is the only machine-specific registry; `config/local.env.example` is its portable schema. Keep absolute paths, private indexes, raw captures, game files, saves, binaries and Ghidra project data out of tracked files.
 
+These commands describe internal Codex operations. The user-facing research
+interface is the single natural-language prompt in
+[`RESEARCH_START_PROMPT.md`](RESEARCH_START_PROMPT.md); do not ask the user to
+run `research_state.py` or `research_transactions.py`, choose a transaction ID,
+or manually resume the frontier. If a check fails, repair or recover it here
+and continue once the required source route is ready.
+
 ## Python 3.12
 
 `requirements.txt` is the one complete, pinned dependency specification. Persistent host-specific environments live under ignored `.local/python-envs/`: `windows`, `wsl`, or `linux`. Native Windows is preferred for game-connected work; WSL/Linux uses its own environment.
@@ -43,6 +50,7 @@ The bootstrap's `--env-dir` and dispatcher override `SKYRIM_PYTHON_ENV_DIR` are 
 | `MO2_PROFILE_DIR`, `PLUGINS_TXT` | Optional; required only for a profile-managed target order | Exact selected MO2 profile and its full `plugins.txt`; never infer either. |
 | `SKYRIM_TEST_PROFILE_DIR`, `SKYRIM_TEST_PLUGINS_TXT`, `RESEARCH_TEST_SAVE` | Optional live-test prerequisites | Explicit disposable profile, complete list and disposable save; never use a baseline. |
 | `GHIDRA_PROJECT_REP_PATH` | Required for GOG Ghidra | Existing GOG project `.rep` directory with adjacent `.gpr`; the adapter queries it read-only. |
+| `GHIDRA_PROJECT_CACHE_WSL` | Required only when WSL cannot write/lock the configured project mount | Absolute WSL-native cache path outside `/mnt` and the checkout. It holds a metadata-verified copy of the configured existing project; it never replaces or reanalyzes the source project. |
 | `GHIDRA_PROJECT_PROGRAM` | Required for Ghidra | Existing program name, currently `SkyrimSE.exe`. |
 | `GHIDRA_HEADLESS_EXE`, `GHIDRA_ANALYSIS_EXE_GOG` | Required for Ghidra verification | Ghidra headless launcher and the exact GOG AE analysis executable. |
 | `JAVA_HOME` | Required native Ghidra prerequisite | Existing JDK. WSL may use the paired `GHIDRA_JAVA_HOME_WSL`. |
@@ -79,7 +87,7 @@ python3 scripts/python_env.py run tools/address_library_probe.py --symbol 'Magic
 python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600
 ```
 
-The first command verifies GOG AE `SkyrimSE.exe` identity and matching Address Library. The second uses `GHIDRA_PROJECT_REP_PATH` and the existing project with `-process -noanalysis -readOnly`; it never creates, imports or reanalyzes a project. The verified GOG 1.6.1179.0 RVA is not a Steam 1.6.1170.0 address. WSL uses the configured paired Linux launcher and caches only existing project files under ignored `.local/` when the source mount is read-only.
+The first command verifies GOG AE `SkyrimSE.exe` identity and matching Address Library. The second uses `GHIDRA_PROJECT_REP_PATH` and the existing project with `-process -noanalysis -readOnly`; it never creates, imports or reanalyzes a project. The verified GOG 1.6.1179.0 RVA is not a Steam 1.6.1170.0 address. When the source is on a read-only Windows mount, WSL uses the configured paired Linux launcher and copies the existing project into `GHIDRA_PROJECT_CACHE_WSL`, which must be on the WSL-native filesystem so Ghidra can acquire its project lock. Raw query output remains below ignored `.local/`.
 
 ## SKSE, sources, and readiness
 

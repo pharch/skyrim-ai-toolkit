@@ -148,6 +148,11 @@ def _capture_hash(path: Path) -> str | None:
     return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
 
 
+def _is_wsl_windows_mount(path: Path) -> bool:
+    """Detect DrvFS/9P paths even when an elevated process reports them writable."""
+    return os.name != "nt" and bool(re.match(r"^/mnt/[a-z](?:/|$)", path.resolve().as_posix(), re.IGNORECASE))
+
+
 def _project_source_manifest(project_dir: Path, project_name: str) -> dict[str, object]:
     """Describe an existing project snapshot without changing its source tree."""
     rep = project_dir / f"{project_name}.rep"
@@ -167,10 +172,12 @@ def _project_source_manifest(project_dir: Path, project_name: str) -> dict[str, 
     return {"source_rep_path": str(rep.resolve()), "files": files}
 
 
-def _wsl_project_workspace(binding: dict[str, object], *, root: Path) -> tuple[dict[str, object], str]:
-    """Use the configured source directly, or cache a faithful copy on read-only WSL mounts."""
+def _wsl_project_workspace(
+    binding: dict[str, object], *, root: Path, config: dict[str, str],
+) -> tuple[dict[str, object], str]:
+    """Cache a faithful copy for Windows-mounted or read-only WSL project sources."""
     source_dir = Path(binding["project_dir"])
-    if os.access(source_dir, os.W_OK):
+    if os.access(source_dir, os.W_OK) and not _is_wsl_windows_mount(source_dir):
         return binding, "configured_existing_project"
 
     source_name = str(binding["project_name"])
@@ -179,10 +186,26 @@ def _wsl_project_workspace(binding: dict[str, object], *, root: Path) -> tuple[d
     manifest_payload = json.dumps(source_manifest, sort_keys=True, separators=(",", ":"))
     source_fingerprint = hashlib.sha256(manifest_payload.encode("utf-8")).hexdigest()
 
-    cache_root = (root / ".local" / "ghidra" / "project-cache").resolve()
-    ignored_root = (root / ".local").resolve()
-    if ignored_root not in cache_root.parents:
-        raise GhidraProbeError("WSL Ghidra project cache must remain below ignored .local/")
+    cache_value = config.get("GHIDRA_PROJECT_CACHE_WSL", "").strip()
+    if cache_value:
+        cache_root = Path(cache_value).expanduser()
+        if not cache_root.is_absolute():
+            raise GhidraProbeError("GHIDRA_PROJECT_CACHE_WSL must be an absolute WSL-native path")
+        cache_root = cache_root.resolve()
+        if Path("/mnt") == cache_root or Path("/mnt") in cache_root.parents:
+            raise GhidraProbeError("GHIDRA_PROJECT_CACHE_WSL must be on the WSL-native filesystem, outside /mnt")
+        repository = root.resolve()
+        if cache_root == repository or repository in cache_root.parents:
+            raise GhidraProbeError("GHIDRA_PROJECT_CACHE_WSL must be outside the repository checkout")
+    else:
+        # A cache under a /mnt-mounted checkout inherits DrvFS/9P locking
+        # limitations. Require an explicit, machine-local WSL path there.
+        if root.resolve() == Path("/mnt") or Path("/mnt") in root.resolve().parents:
+            raise GhidraProbeError(
+                "GHIDRA_PROJECT_CACHE_WSL must name an absolute WSL-native path in ignored config/local.env "
+                "when the checkout is under /mnt"
+            )
+        cache_root = (root / ".local" / "ghidra" / "project-cache").resolve()
     cache_rep = cache_root / source_rep.name
     cache_gpr = cache_root / f"{source_name}.gpr"
     cache_manifest_path = cache_root / "source-manifest.json"
@@ -223,7 +246,7 @@ def _wsl_project_workspace(binding: dict[str, object], *, root: Path) -> tuple[d
 
     workspace = dict(binding)
     workspace["project_dir"] = cache_root
-    return workspace, "ignored_wsl_copy_of_configured_existing_project"
+    return workspace, "wsl_native_copy_of_configured_existing_project"
 
 
 def run_query(*, root: Path = ROOT, config: dict[str, str] | None = None, timeout: int = 300,
@@ -240,7 +263,7 @@ def run_query(*, root: Path = ROOT, config: dict[str, str] | None = None, timeou
     workspace = binding
     project_workspace = "configured_existing_project"
     if os.name != "nt":
-        workspace, project_workspace = _wsl_project_workspace(binding, root=root)
+        workspace, project_workspace = _wsl_project_workspace(binding, root=root, config=config)
     script = root / "tools" / "ghidra_scripts" / "ReadOnlyTargetedQuery.java"
     if not script.is_file():
         raise GhidraProbeError("checked-in read-only Ghidra query script is missing")
@@ -362,6 +385,15 @@ def run_query(*, root: Path = ROOT, config: dict[str, str] | None = None, timeou
         "script_no_error": not script_error,
     }
     script_log_hash = _capture_hash(script_log)
+    workspace_rep = project_dir / f"{project_name}.rep"
+    try:
+        workspace_rep_path = workspace_rep.resolve().relative_to(root.resolve()).as_posix()
+    except ValueError:
+        workspace_rep_path = (
+            "config/local.env:GHIDRA_PROJECT_REP_PATH"
+            if project_workspace == "configured_existing_project"
+            else f"config/local.env:GHIDRA_PROJECT_CACHE_WSL/{project_name}.rep"
+        )
     meta: dict[str, object] = {
         "captured_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "operation": "existing_gog_project_read_only_query",
@@ -371,8 +403,7 @@ def run_query(*, root: Path = ROOT, config: dict[str, str] | None = None, timeou
         "analysis_binary_sha256": binding["sha256"],
         "project_alias": "config/local.env:GHIDRA_PROJECT_REP_PATH",
         "project_workspace": project_workspace,
-        "project_workspace_rep_path": str((project_dir / f"{project_name}.rep").relative_to(root))
-        if project_workspace != "configured_existing_project" else "config/local.env:GHIDRA_PROJECT_REP_PATH",
+        "project_workspace_rep_path": workspace_rep_path,
         "program": program_name,
         "requested_rva": f"0x{rva:X}" if rva is not None else None,
         "program_executable_path_matches_gog_binary": path_matches,

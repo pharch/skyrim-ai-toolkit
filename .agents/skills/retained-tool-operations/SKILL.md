@@ -57,6 +57,12 @@ packages for research.
   `-process SkyrimSE.exe -noanalysis -readOnly`; it has no import, overwrite,
   full-analysis, or project-creation option. Missing or mismatched bindings
   fail closed.
+- If WSL reads the configured project from a Windows mount, bind
+  `GHIDRA_PROJECT_CACHE_WSL` to an absolute WSL-native path outside `/mnt` and
+  this checkout. The adapter reuses a metadata-verified copy of the configured
+  project there so Ghidra can acquire its project lock. It never falls back to
+  querying an unwriteable or Windows-mounted source in place. Query outputs
+  remain under ignored `.local/`.
 - For named CommonLib relocations, run
   `python3 scripts/python_env.py run tools/address_library_probe.py --symbol
   Namespace::Name`. It checks the GOG ProductVersion, CommonLib AE ID, matching

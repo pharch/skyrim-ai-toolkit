@@ -1,12 +1,12 @@
 {
-  "session_next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source.",
+  "session_next_action": "Read the active bounty and current Q-0001 evidence, validate Python and research state, then inspect recovery: recover/resume any active checkpoint, or, when recovery is idle, state H1/H2 discriminants and begin the highest-priority ready item with a generated ID.",
   "schema_version": 3,
   "target": {
     "edition": "AE",
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
     "note": "AE runtime policy is 1.6.318+. Steam SkyrimSE.exe ProductVersion 1.6.1170.0 is verified (EV-0109), but no live game session or complete target-specific plugin order is verified. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Imported source hashes and evidence aliases are in research/LEGACY_SOURCE_PROVENANCE.tsv; source commit is unavailable. Current tool scopes are in docs/LOCAL_RUNTIME_CONTRACT.md. Four evidence-linked transactions exercise blocker reselection, rival armor hypotheses, an AV39 record screen, and breadth synthesis; process-isolated recovery is tested.",
-    "next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source."
+    "next_action": "Read the active bounty and current Q-0001 evidence, validate Python and research state, then inspect recovery: recover/resume any active checkpoint, or, when recovery is idle, state H1/H2 discriminants and begin the highest-priority ready item with a generated ID."
   },
   "items": [
     {
@@ -47,7 +47,7 @@
       ],
       "priority": 1.0,
       "information_gain": 0.8,
-      "next_action": "In the first research session, after strict Python and research-state checks, state and discriminate H1/H2 for a candidate vanilla quest/event initiation gate; use native xEdit only for official-master fields and require the actual complete target order for profile-specific winner or negative claims.",
+      "next_action": "If selected as the highest-priority ready question, state and discriminate H1/H2 for a candidate vanilla quest/event initiation gate; use native xEdit only for official-master fields and require the actual complete target order for profile-specific winner or negative claims.",
       "linked_claims": [
         "CL-L062",
         "CL-L063",
@@ -1041,14 +1041,14 @@
     }
   ],
   "session_checkpoint": {
-    "timestamp_utc": "2026-10-15T17:25:00Z",
-    "task": "research continuation checkpoint; no transaction started in this cleanup session",
-    "next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source."
+    "timestamp_utc": "2026-10-15T18:46:20Z",
+    "task": "final agent-lifecycle setup polish; no bounty transaction started",
+    "next_action": "Read the active bounty and current Q-0001 evidence, validate Python and research state, then inspect recovery: recover/resume any active checkpoint, or, when recovery is idle, state H1/H2 discriminants and begin the highest-priority ready item with a generated ID."
   },
   "last_session_checkpoint": {
-    "recorded_utc": "2026-10-15T17:25:00Z",
-    "next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source.",
+    "recorded_utc": "2026-10-15T18:46:20Z",
+    "next_action": "Read the active bounty and current Q-0001 evidence, validate Python and research state, then inspect recovery: recover/resume any active checkpoint, or, when recovery is idle, state H1/H2 discriminants and begin the highest-priority ready item with a generated ID.",
     "active_process": "No live Skyrim process or SKSE connection is asserted; native xEdit requires the documented interactive route."
   },
-  "next_action": "Read the active bounty and current Q-0001 evidence, state rival H1/H2 predictions, validate Python/research state, then begin TX-0005 and inspect the cheapest reliable source."
+  "next_action": "Read the active bounty and current Q-0001 evidence, validate Python and research state, then inspect recovery: recover/resume any active checkpoint, or, when recovery is idle, state H1/H2 discriminants and begin the highest-priority ready item with a generated ID."
 }

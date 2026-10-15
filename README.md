@@ -4,18 +4,14 @@ This repository supports ongoing, evidence-backed research into Skyrim Anniversa
 
 ## Start here
 
-Read `AGENTS.md`, the current checkpoint in `STATE.md`, and the selected frontier item. The canonical runtime contract documents the host-specific bootstrap, ignored local configuration, tested tool commands and their limits: [`docs/LOCAL_RUNTIME_CONTRACT.md`](docs/LOCAL_RUNTIME_CONTRACT.md). Bootstrap or reuse Python 3.12, validate the relevant tools, then continue the frontier. A missing environment is repaired by bootstrap; once validation passes, research remains the active task.
-
-Typical Linux/WSL start:
-
-```sh
-python3 scripts/bootstrap_python.py
-python3 scripts/python_env.py check --strict
-python3 scripts/python_env.py run scripts/research_state.py validate
-python3 scripts/python_env.py run scripts/harness_doctor.py static
-```
-
-In Windows PowerShell, start each command with `py -3.12` instead of `python3`. Native Windows is preferred for game-connected operations; WSL has an independent persistent environment.
+Open the checkout in an interactive Codex session and paste the single
+[`research-start prompt`](docs/RESEARCH_START_PROMPT.md). Codex reads the
+checkpoint and active bounty, bootstraps or repairs the persistent Python 3.12
+environment when needed, validates the relevant source route, resumes work and
+continues the frontier. Users do not need to run Python research commands,
+select frontier IDs or manage transaction IDs. The canonical runtime contract
+documents internal tool invocations and host limits:
+[`docs/LOCAL_RUNTIME_CONTRACT.md`](docs/LOCAL_RUNTIME_CONTRACT.md).
 
 ## Research memory
 

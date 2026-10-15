@@ -60,6 +60,7 @@ def doctor(root: Path = ROOT, *, verify_target: bool = False) -> dict[str, objec
     path_keys = (
         "GAME_ROOT", "SKYRIM_EXE_PATH", "SKYRIM_DATA", "SSEEDIT_EXE",
         "LEGACY_SKYRIM_REPO", "GHIDRA_HEADLESS_EXE", "GHIDRA_PROJECT_REP_PATH",
+        "GHIDRA_PROJECT_CACHE_WSL",
         "GHIDRA_ANALYSIS_EXE_GOG", "JAVA_HOME", "COMMONLIBSSE_ROOT",
         "ADDRESS_LIBRARY_DIR", "MO2_PROFILE_DIR", "PLUGINS_TXT",
         "SKYRIM_TEST_PROFILE_DIR", "SKYRIM_TEST_PLUGINS_TXT", "RESEARCH_TEST_SAVE",
@@ -113,6 +114,7 @@ def doctor(root: Path = ROOT, *, verify_target: bool = False) -> dict[str, objec
         "legacy_research_repo_exists": _exists(config, "LEGACY_SKYRIM_REPO", root, directory=True),
         "ghidra_headless_exists": _exists(config, "GHIDRA_HEADLESS_EXE", root, directory=False),
         "existing_ghidra_project_files_present": project_files,
+        "ghidra_wsl_project_cache_exists": _exists(config, "GHIDRA_PROJECT_CACHE_WSL", root, directory=True),
         "gog_analysis_executable_exists": _exists(config, "GHIDRA_ANALYSIS_EXE_GOG", root, directory=False),
         "java_home_executable_exists": bool(java_bin and java_bin.is_file()),
         "commonlibsse_source_exists": _exists(config, "COMMONLIBSSE_ROOT", root, directory=True),

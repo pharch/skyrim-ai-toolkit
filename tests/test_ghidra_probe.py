@@ -10,6 +10,7 @@ from unittest.mock import patch
 
 from tools.ghidra_probe import (
     GhidraProbeError,
+    _is_wsl_windows_mount,
     _normalize_windows_path,
     _windows_path,
     _wsl_project_workspace,
@@ -84,10 +85,10 @@ class GhidraProbeTests(unittest.TestCase):
         source_rep = project / "skyrim-gog.rep"
         (source_rep / "program.bin").write_bytes(b"existing analyzed program bytes")
         with patch("tools.ghidra_probe.os.access", return_value=False):
-            first, mode = _wsl_project_workspace(binding, root=root)
-            second, second_mode = _wsl_project_workspace(binding, root=root)
+            first, mode = _wsl_project_workspace(binding, root=root, config=config)
+            second, second_mode = _wsl_project_workspace(binding, root=root, config=config)
         cached_rep = root / ".local" / "ghidra" / "project-cache" / "skyrim-gog.rep"
-        self.assertEqual(mode, "ignored_wsl_copy_of_configured_existing_project")
+        self.assertEqual(mode, "wsl_native_copy_of_configured_existing_project")
         self.assertEqual(second_mode, mode)
         self.assertEqual(first["project_dir"], cached_rep.parent)
         self.assertEqual(second["project_dir"], cached_rep.parent)
@@ -95,6 +96,48 @@ class GhidraProbeTests(unittest.TestCase):
         self.assertEqual((source_rep / "program.bin").read_bytes(), b"existing analyzed program bytes")
         manifest = json.loads((cached_rep.parent / "source-manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["source_rep_path"], str(source_rep.resolve()))
+
+    def test_wsl_cache_uses_configured_native_path_and_rejects_mnt(self):
+        temporary, root, _legacy, project, _headless, _exe, config = self._fixture()
+        self.addCleanup(temporary.cleanup)
+        source_rep = project / "skyrim-gog.rep"
+        (source_rep / "program.bin").write_bytes(b"existing analyzed program bytes")
+        cache_root = Path(temporary.name) / "wsl-native-cache" / "skyrim-gog"
+        config["GHIDRA_PROJECT_CACHE_WSL"] = str(cache_root)
+        with patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"):
+            binding = resolve_binding(config, root=root)
+        with patch("tools.ghidra_probe.os.access", return_value=False):
+            workspace, _ = _wsl_project_workspace(binding, root=root, config=config)
+        self.assertEqual(workspace["project_dir"], cache_root.resolve())
+        self.assertTrue((cache_root / "skyrim-gog.rep" / "program.bin").is_file())
+        self.assertTrue((source_rep / "program.bin").is_file())
+
+        config["GHIDRA_PROJECT_CACHE_WSL"] = "/mnt/c/not-a-native-cache"
+        with patch("tools.ghidra_probe.os.access", return_value=False):
+            with self.assertRaisesRegex(GhidraProbeError, "outside /mnt"):
+                _wsl_project_workspace(binding, root=root, config=config)
+
+    def test_writable_mount_still_uses_native_copy(self):
+        temporary, root, _legacy, project, _headless, _exe, config = self._fixture()
+        self.addCleanup(temporary.cleanup)
+        source_rep = project / "skyrim-gog.rep"
+        (source_rep / "program.bin").write_bytes(b"existing analyzed program bytes")
+        cache_root = Path(temporary.name) / "wsl-native-cache" / "skyrim-gog"
+        config["GHIDRA_PROJECT_CACHE_WSL"] = str(cache_root)
+        with patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"):
+            binding = resolve_binding(config, root=root)
+        with (
+            patch("tools.ghidra_probe.os.access", return_value=True),
+            patch("tools.ghidra_probe._is_wsl_windows_mount", return_value=True),
+        ):
+            workspace, mode = _wsl_project_workspace(binding, root=root, config=config)
+        self.assertEqual(mode, "wsl_native_copy_of_configured_existing_project")
+        self.assertEqual(workspace["project_dir"], cache_root.resolve())
+        self.assertTrue((cache_root / "skyrim-gog.rep" / "program.bin").is_file())
+
+    def test_wsl_windows_mount_detection(self):
+        self.assertTrue(_is_wsl_windows_mount(Path("/mnt/c/Users/test/project")))
+        self.assertFalse(_is_wsl_windows_mount(Path("/home/test/project")))
 
     def test_missing_project_config_fails_without_creating_a_project(self):
         temporary, root, _legacy, project, _headless, _exe, config = self._fixture()

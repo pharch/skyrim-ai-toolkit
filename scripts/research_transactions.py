@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import json
 import re
 from pathlib import Path
@@ -29,6 +30,14 @@ TRANSACTION_STATUSES = {
     "running", "interrupted", "completed", "blocked_tool", "blocked_environment",
 }
 OPERATIONS = {"begin", "update", "complete", "block", "recover", "resume"}
+FRONTIER_TERMINAL = {"completed", "falsified"}
+NO_READY_ACTION = (
+    "No independent frontier item is ready; review blocked dependencies and "
+    "frontier priorities before selecting further work."
+)
+CLAIM_ID = re.compile(r"\bCL-[A-Z0-9]+(?:-[A-Z0-9]+)*\b")
+MECHANISM_ID = re.compile(r"\bM-\d{4,}\b")
+EVIDENCE_REF = re.compile(r"\bEV-\d{4,}\b")
 
 
 def _path(root: Path, relative: str) -> Path:
@@ -129,7 +138,17 @@ def _append_event(
     operation: str,
     **details: Any,
 ) -> dict[str, Any]:
-    event_id = f"TE-{len(ledger['events']) + 1:06d}"
+    used = {
+        int(match.group(1))
+        for row in ledger["events"]
+        if isinstance(row, dict)
+        if isinstance(match := re.fullmatch(r"TE-(\d{6,})", str(row.get("id", ""))), re.Match)
+    }
+    event_number = max(used, default=0) + 1
+    event_id = f"TE-{event_number:06d}"
+    while event_id in used:
+        event_number += 1
+        event_id = f"TE-{event_number:06d}"
     event = {
         "id": event_id,
         "transaction_id": transaction["id"],
@@ -160,15 +179,16 @@ def _active_transaction(recovery: dict[str, Any], ledger: dict[str, Any], transa
     return transaction
 
 
-def select_next_item(frontier: dict[str, Any], *, exclude_ids: set[str] | None = None) -> dict[str, Any]:
+def select_next_item(
+    frontier: dict[str, Any], *, exclude_ids: set[str] | None = None,
+) -> dict[str, Any] | None:
     excluded = exclude_ids or set()
-    candidate = next((item for item in ready_items(frontier) if item.get("id") not in excluded), None)
-    if candidate is None:
-        raise ValueError("no independent ready frontier item is available")
-    return candidate
+    return next((item for item in ready_items(frontier) if item.get("id") not in excluded), None)
 
 
-def _close_recovery(recovery: dict[str, Any], transaction: dict[str, Any], next_item: dict[str, Any]) -> None:
+def _close_recovery(
+    recovery: dict[str, Any], transaction: dict[str, Any], next_item: dict[str, Any] | None,
+) -> None:
     recovery.update({
         "status": "idle",
         "transaction_id": None,
@@ -176,17 +196,35 @@ def _close_recovery(recovery: dict[str, Any], transaction: dict[str, Any], next_
         "started_utc": None,
         "checkpoint_utc": utc_now(),
         "artifacts": [],
-        "next_action": next_item["next_action"],
-        "next_frontier_id": next_item["id"],
+        "next_action": next_item["next_action"] if next_item else NO_READY_ACTION,
+        "next_frontier_id": next_item["id"] if next_item else None,
         "last_transaction_id": transaction["id"],
     })
 
 
-def begin_transaction(root: Path, transaction_id: str, frontier_id: str, next_action: str) -> dict[str, Any]:
-    if not TRANSACTION_ID.fullmatch(transaction_id):
-        raise ValueError("transaction ID must match TX-[A-Z0-9-]{4,}")
+def _allocate_transaction_id(ledger: dict[str, Any]) -> str:
+    day = datetime.now(timezone.utc).strftime("%Y%m%d")
+    existing = {str(row.get("id")) for row in ledger.get("transactions", []) if isinstance(row, dict)}
+    serial = 1
+    while True:
+        candidate = f"TX-{day}-{serial:04d}"
+        if candidate not in existing:
+            return candidate
+        serial += 1
+
+
+def begin_transaction(
+    root: Path,
+    frontier_id: str,
+    next_action: str,
+    *,
+    transaction_id: str | None = None,
+) -> dict[str, Any]:
     action = _portable_text(next_action, "next_action")
     frontier, _, recovery, ledger, _ = _load(root)
+    transaction_id = transaction_id or _allocate_transaction_id(ledger)
+    if not TRANSACTION_ID.fullmatch(transaction_id):
+        raise ValueError("transaction ID must match TX-[A-Z0-9-]{4,}")
     if recovery.get("status") in ACTIVE_RECOVERY:
         raise ValueError("an active or interrupted transaction must be resumed or closed first")
     if any(row.get("id") == transaction_id for row in ledger["transactions"]):
@@ -283,9 +321,17 @@ def complete_transaction(
     cross_domain_assessment: str,
     evidence_ids: list[str] | None = None,
     artifacts: list[str] | None = None,
+    frontier_status: str = "completed",
+    successor_ids: list[str] | None = None,
+    synthesis_claim_ids: list[str] | None = None,
+    synthesis_mechanism_ids: list[str] | None = None,
+    knowledge_graph_action: str,
 ) -> dict[str, Any]:
     result = _portable_text(summary, "summary")
     synthesis = _portable_text(cross_domain_assessment, "cross_domain_assessment")
+    graph_action = _portable_text(knowledge_graph_action, "knowledge_graph_action")
+    if frontier_status not in FRONTIER_TERMINAL:
+        raise ValueError("frontier_status must be completed or falsified")
     frontier, _, recovery, ledger, known_evidence = _load(root)
     transaction = _active_transaction(recovery, ledger, transaction_id)
     if not any(event.get("transaction_id") == transaction_id and event.get("operation") == "update" for event in ledger["events"]):
@@ -294,27 +340,94 @@ def complete_transaction(
     if not selected_evidence and not transaction.get("evidence"):
         raise ValueError("complete requires evidence")
     selected_artifacts = _validate_artifacts(root, artifacts)
-    transaction["evidence"] = list(dict.fromkeys([*transaction["evidence"], *selected_evidence]))
+    selected_evidence = list(dict.fromkeys([*transaction["evidence"], *selected_evidence]))
+    selected_claims = _validate_synthesis_links(
+        root,
+        selected_evidence,
+        synthesis_claim_ids or [],
+        synthesis_mechanism_ids or [],
+    )
+    selected_mechanisms = list(dict.fromkeys(synthesis_mechanism_ids or []))
+    selected_successors = list(dict.fromkeys(successor_ids or []))
+    transaction["evidence"] = selected_evidence
     transaction["artifacts"] = list(dict.fromkeys([*transaction["artifacts"], *selected_artifacts]))
     transaction["status"] = "completed"
     transaction["summary"] = result
     transaction["cross_domain_assessment"] = synthesis
-    transaction["completed_utc"] = utc_now()
     current_id = transaction["frontier_id"]
     item = _find_frontier_item(frontier, current_id)
+    decision = {
+        "summary": result,
+        "cross_domain_assessment": synthesis,
+        "successors": selected_successors,
+    }
+    transition_item(
+        frontier, current_id, frontier_status,
+        evidence_ids=selected_evidence,
+        decision=decision,
+        available_evidence=known_evidence,
+    )
+    item["linked_claims"] = list(dict.fromkeys([*item.get("linked_claims", []), *selected_claims]))
     item["evidence"] = list(dict.fromkeys([*item.get("evidence", []), *selected_evidence]))
+    completed_utc = item["decision"]["closed_utc"]
+    transaction["closure_scope"] = "frontier_resolved"
+    transaction["frontier_resolution"] = {"status": frontier_status, "closed_utc": completed_utc}
+    transaction["synthesis_claim_ids"] = selected_claims
+    transaction["synthesis_mechanism_ids"] = selected_mechanisms
+    transaction["knowledge_graph_action"] = graph_action
+    transaction["completed_utc"] = completed_utc
     next_item = select_next_item(frontier, exclude_ids={current_id})
-    transaction["next_frontier_id"] = next_item["id"]
+    transaction["next_frontier_id"] = next_item["id"] if next_item else None
     _append_event(
         ledger, transaction, "complete", summary=result,
-        cross_domain_assessment=synthesis, evidence=selected_evidence,
-        artifacts=selected_artifacts, next_frontier_id=next_item["id"],
+        cross_domain_assessment=synthesis, frontier_status=frontier_status,
+        successor_frontier_ids=selected_successors, evidence=selected_evidence,
+        artifacts=selected_artifacts, next_frontier_id=next_item["id"] if next_item else None,
+        synthesis_claim_ids=selected_claims,
+        synthesis_mechanism_ids=selected_mechanisms,
+        knowledge_graph_action=graph_action,
     )
     _close_recovery(recovery, transaction, next_item)
-    frontier["session_next_action"] = next_item["next_action"]
+    frontier["session_next_action"] = next_item["next_action"] if next_item else NO_READY_ACTION
     _save(root, frontier, recovery, ledger)
-    _append_session(root, transaction_id, "complete", f"{result}; selected {next_item['id']} next")
+    next_note = f"selected {next_item['id']} next" if next_item else "no independent frontier item is ready"
+    _append_session(root, transaction_id, "complete", f"{result}; {next_note}")
     return {"transaction": transaction, "next_item": next_item}
+
+
+def _validate_synthesis_links(
+    root: Path,
+    evidence_ids: list[str],
+    claim_ids: list[str],
+    mechanism_ids: list[str],
+) -> list[str]:
+    claims = list(dict.fromkeys(claim_ids))
+    mechanisms = list(dict.fromkeys(mechanism_ids))
+    invalid_claims = [value for value in claims if not CLAIM_ID.fullmatch(value)]
+    invalid_mechanisms = [value for value in mechanisms if not MECHANISM_ID.fullmatch(value)]
+    if invalid_claims:
+        raise ValueError("invalid synthesis claim IDs: " + ", ".join(invalid_claims))
+    if invalid_mechanisms:
+        raise ValueError("invalid synthesis mechanism IDs: " + ", ".join(invalid_mechanisms))
+
+    claims_text = (root / "research/CLAIMS.md").read_text(encoding="utf-8")
+    mechanisms_text = (root / "research/MECHANISMS.md").read_text(encoding="utf-8")
+    graph_text = (root / "research/KNOWLEDGE_GRAPH.md").read_text(encoding="utf-8")
+    for claim_id in claims:
+        if claim_id not in CLAIM_ID.findall(claims_text):
+            raise ValueError(f"synthesis claim is missing from research/CLAIMS.md: {claim_id}")
+        if claim_id not in CLAIM_ID.findall(graph_text):
+            raise ValueError(f"synthesis claim is not linked in research/KNOWLEDGE_GRAPH.md: {claim_id}")
+        rows = [line for line in claims_text.splitlines() if claim_id in line]
+        linked_evidence = {ref for line in rows for ref in EVIDENCE_REF.findall(line)}
+        if evidence_ids and not linked_evidence.intersection(evidence_ids):
+            raise ValueError(f"synthesis claim {claim_id} does not cite this transaction's evidence")
+    for mechanism_id in mechanisms:
+        if mechanism_id not in MECHANISM_ID.findall(mechanisms_text):
+            raise ValueError(f"synthesis mechanism is missing from research/MECHANISMS.md: {mechanism_id}")
+        if mechanism_id not in MECHANISM_ID.findall(graph_text):
+            raise ValueError(f"synthesis mechanism is not linked in research/KNOWLEDGE_GRAPH.md: {mechanism_id}")
+    return claims
 
 
 def block_transaction(
@@ -343,17 +456,21 @@ def block_transaction(
     transaction["status"] = blocker_status
     transaction["blocker"] = reason
     transaction["blocked_utc"] = utc_now()
+    transaction["closure_scope"] = "blocked_checkpoint"
+    transaction["frontier_resolution"] = {"status": blocker_status, "blocked_utc": transaction["blocked_utc"]}
     next_item = select_next_item(frontier, exclude_ids={current_id})
-    transaction["next_frontier_id"] = next_item["id"]
+    transaction["next_frontier_id"] = next_item["id"] if next_item else None
     _append_event(
         ledger, transaction, "block", blocker=reason, blocker_status=blocker_status,
         evidence=selected_evidence, artifacts=selected_artifacts,
-        reselected_frontier_id=next_item["id"], next_action=next_item["next_action"],
+        reselected_frontier_id=next_item["id"] if next_item else None,
+        next_action=next_item["next_action"] if next_item else NO_READY_ACTION,
     )
     _close_recovery(recovery, transaction, next_item)
-    frontier["session_next_action"] = next_item["next_action"]
+    frontier["session_next_action"] = next_item["next_action"] if next_item else NO_READY_ACTION
     _save(root, frontier, recovery, ledger)
-    _append_session(root, transaction_id, "block", f"{reason}; independently selected {next_item['id']}")
+    next_note = f"independently selected {next_item['id']}" if next_item else "no other frontier item is ready"
+    _append_session(root, transaction_id, "block", f"{reason}; {next_note}")
     return {"transaction": transaction, "next_item": next_item}
 
 
@@ -381,9 +498,11 @@ def recover_transaction(root: Path) -> dict[str, Any]:
     return recovery
 
 
-def resume_transaction(root: Path, transaction_id: str) -> dict[str, Any]:
+def resume_transaction(root: Path, transaction_id: str | None = None) -> dict[str, Any]:
     frontier, _, recovery, ledger, _ = _load(root)
-    if recovery.get("status") != "interrupted" or recovery.get("transaction_id") != transaction_id:
+    active_id = recovery.get("transaction_id")
+    transaction_id = transaction_id or active_id
+    if recovery.get("status") != "interrupted" or not transaction_id or active_id != transaction_id:
         raise ValueError("resume requires the matching interrupted recovery checkpoint")
     transaction = _find_transaction(ledger, transaction_id)
     if transaction.get("status") != "interrupted":
@@ -403,7 +522,12 @@ def resume_transaction(root: Path, transaction_id: str) -> dict[str, Any]:
 
 
 def validate_transaction_ledger(
-    ledger: dict[str, Any], recovery: dict[str, Any], evidence_ids: set[str],
+    ledger: dict[str, Any],
+    recovery: dict[str, Any],
+    evidence_ids: set[str],
+    *,
+    frontier: dict[str, Any] | None = None,
+    root: Path | None = None,
 ) -> list[str]:
     errors: list[str] = []
     if ledger.get("schema_version") != 1:
@@ -480,6 +604,47 @@ def validate_transaction_ledger(
             errors.append(f"{txid}: blocked status requires a block event")
         if not isinstance(ids, list) or set(ids) != {event.get("id") for event in tx_events}:
             errors.append(f"{txid}: event_ids do not match append-only event records")
+        scope = transaction.get("closure_scope")
+        resolution = transaction.get("frontier_resolution")
+        if status == "completed":
+            if scope == "bounded_checkpoint":
+                if not isinstance(resolution, dict) or resolution.get("status") != "unresolved":
+                    errors.append(f"{txid}: bounded checkpoint must explicitly leave its frontier unresolved")
+                elif frontier is not None:
+                    item = next((entry for entry in frontier.get("items", []) if entry.get("id") == transaction.get("frontier_id")), None)
+                    if item is None or item.get("status") not in {"open", "in_progress"}:
+                        errors.append(f"{txid}: unresolved checkpoint is absent from the active frontier")
+            elif scope == "frontier_resolved":
+                resolution_status = resolution.get("status") if isinstance(resolution, dict) else None
+                if resolution_status not in FRONTIER_TERMINAL:
+                    errors.append(f"{txid}: completed investigation lacks a terminal frontier resolution")
+                if not isinstance(transaction.get("knowledge_graph_action"), str) or not transaction["knowledge_graph_action"].strip():
+                    errors.append(f"{txid}: completed investigation lacks a graph update or no-edge rationale")
+                for field in ("synthesis_claim_ids", "synthesis_mechanism_ids"):
+                    if not isinstance(transaction.get(field), list):
+                        errors.append(f"{txid}: completed investigation lacks {field}")
+                if frontier is not None and resolution_status in FRONTIER_TERMINAL:
+                    item = next((entry for entry in frontier.get("items", []) if entry.get("id") == transaction.get("frontier_id")), None)
+                    if item is None or item.get("status") != resolution_status:
+                        errors.append(f"{txid}: resolved investigation re-entered or disagrees with the frontier")
+                    elif item.get("decision", {}).get("evidence") != transaction.get("evidence"):
+                        errors.append(f"{txid}: frontier decision evidence disagrees with transaction evidence")
+                if root is not None and isinstance(transaction.get("knowledge_graph_action"), str):
+                    try:
+                        _validate_synthesis_links(
+                            root, transaction.get("evidence", []),
+                            transaction.get("synthesis_claim_ids", []),
+                            transaction.get("synthesis_mechanism_ids", []),
+                        )
+                    except (OSError, ValueError) as exc:
+                        errors.append(f"{txid}: synthesis references are inconsistent: {exc}")
+            else:
+                errors.append(f"{txid}: completed transaction must resolve its frontier or declare a bounded checkpoint")
+        elif status in BLOCK_STATUSES and scope == "blocked_checkpoint" and frontier is not None:
+            resolution_status = resolution.get("status") if isinstance(resolution, dict) else None
+            item = next((entry for entry in frontier.get("items", []) if entry.get("id") == transaction.get("frontier_id")), None)
+            if resolution_status != status or item is None or item.get("status") != status:
+                errors.append(f"{txid}: blocked checkpoint disagrees with its frontier item")
     active = [row for row in transactions if isinstance(row, dict) and row.get("status") in ACTIVE_RECOVERY]
     recovery_status = recovery.get("status")
     if recovery_status in ACTIVE_RECOVERY:
@@ -489,8 +654,19 @@ def validate_transaction_ledger(
             errors.append("active recovery must reference exactly one active transaction")
         elif recovery.get("frontier_id") != matches[0].get("frontier_id"):
             errors.append("active recovery frontier_id disagrees with transaction")
+        elif frontier is not None:
+            item = next((entry for entry in frontier.get("items", []) if entry.get("id") == recovery.get("frontier_id")), None)
+            if item is None or item.get("status") != "in_progress":
+                errors.append("active recovery must point to an in-progress frontier item")
     elif active:
         errors.append("closed recovery state has an active transaction")
+    elif frontier is not None and recovery_status == "idle":
+        next_id = recovery.get("next_frontier_id")
+        candidates = ready_items(frontier)
+        if next_id is None and candidates:
+            errors.append("idle recovery omits a next frontier while ready items exist")
+        elif next_id is not None and not any(item.get("id") == next_id for item in candidates):
+            errors.append("idle recovery next_frontier_id is not a ready frontier item")
     return errors
 
 
@@ -502,8 +678,8 @@ def main(argv: list[str] | None = None) -> int:
     sub = parser.add_subparsers(dest="operation", required=True)
 
     begin = sub.add_parser("begin", help="begin a frontier investigation")
-    begin.add_argument("transaction_id")
     begin.add_argument("frontier_id")
+    begin.add_argument("--transaction-id", help="optional stable ID; generated uniquely when omitted")
     begin.add_argument("--next-action", required=True)
 
     update = sub.add_parser("update", help="append a research result to a running investigation")
@@ -521,6 +697,11 @@ def main(argv: list[str] | None = None) -> int:
     complete.add_argument("--cross-domain-assessment", required=True)
     complete.add_argument("--evidence", dest="evidence_ids", action="append", default=[])
     complete.add_argument("--artifact", action="append", default=[])
+    complete.add_argument("--frontier-status", choices=sorted(FRONTIER_TERMINAL), default="completed")
+    complete.add_argument("--successor", dest="successor_ids", action="append", default=[])
+    complete.add_argument("--claim", dest="claim_ids", action="append", default=[])
+    complete.add_argument("--mechanism", dest="mechanism_ids", action="append", default=[])
+    complete.add_argument("--graph-action", required=True)
 
     block = sub.add_parser("block", help="close a line blocked by an external dependency")
     block.add_argument("transaction_id")
@@ -531,13 +712,16 @@ def main(argv: list[str] | None = None) -> int:
 
     sub.add_parser("recover", help="mark an unfinished transaction interrupted")
     resume = sub.add_parser("resume", help="resume the matching interrupted transaction")
-    resume.add_argument("transaction_id")
+    resume.add_argument("transaction_id", nargs="?")
     sub.add_parser("validate", help="validate the append-only lifecycle ledger")
     args = parser.parse_args(argv)
     root = args.root.resolve()
     try:
         if args.operation == "begin":
-            result = begin_transaction(root, args.transaction_id, args.frontier_id, args.next_action)
+            result = begin_transaction(
+                root, args.frontier_id, args.next_action,
+                transaction_id=args.transaction_id,
+            )
         elif args.operation == "update":
             result = update_transaction(
                 root, args.transaction_id, action_key=args.action_key, outcome=args.outcome,
@@ -549,6 +733,11 @@ def main(argv: list[str] | None = None) -> int:
                 root, args.transaction_id, summary=args.summary,
                 cross_domain_assessment=args.cross_domain_assessment,
                 evidence_ids=args.evidence_ids, artifacts=args.artifact,
+                frontier_status=args.frontier_status,
+                successor_ids=args.successor_ids,
+                synthesis_claim_ids=args.claim_ids,
+                synthesis_mechanism_ids=args.mechanism_ids,
+                knowledge_graph_action=args.graph_action,
             )
         elif args.operation == "block":
             result = block_transaction(
@@ -562,7 +751,9 @@ def main(argv: list[str] | None = None) -> int:
             result = resume_transaction(root, args.transaction_id)
         else:
             frontier, evidence, recovery, ledger, evidence_ids = _load(root)
-            errors = validate_transaction_ledger(ledger, recovery, evidence_ids)
+            errors = validate_transaction_ledger(
+                ledger, recovery, evidence_ids, frontier=frontier, root=root,
+            )
             result = {"ok": not errors, "errors": errors,
                       "transaction_count": len(ledger["transactions"]),
                       "event_count": len(ledger["events"])}
