@@ -1,3 +1,2 @@
-# Test-only tooling; active research/runtime dependencies are in requirements.txt.
+# Compatibility alias; requirements.txt is the complete pinned environment specification.
 -r requirements.txt
-pytest==8.0.0

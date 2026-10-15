@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 import tomllib
@@ -163,11 +164,13 @@ def _validate_python_tool_surface(root: Path) -> list[str]:
                         continue
                 errors.append(f"non-Python agent tool remains active: {relative}")
     try:
-        environment = yaml.safe_load((root / "environment.yml").read_text(encoding="utf-8"))
-    except (OSError, yaml.YAMLError) as exc:
-        return [f"invalid Conda environment manifest: {exc}"]
-    if not isinstance(environment, dict) or environment.get("name") != "skyrim-ae-research":
-        errors.append("environment.yml must define the skyrim-ae-research Conda environment")
+        from scripts.python_env import pinned_distributions
+
+        requirements = pinned_distributions(root / "requirements.txt")
+    except (OSError, ValueError) as exc:
+        return [f"invalid canonical pinned requirements: {exc}"]
+    if "PyYAML" not in requirements:
+        errors.append("requirements.txt must pin PyYAML for validate_overlay.py")
     workflow = root / ".github/workflows/ci.yml"
     if workflow.is_file():
         text = workflow.read_text(encoding="utf-8")
@@ -183,24 +186,26 @@ def _validate_markdown_links(root: Path) -> list[str]:
         "migration/archived_tools/",
     )
     generated_dirs = {".git", ".local", "node_modules", "build", "dist"}
-    for path in root.rglob("*"):
-        if not path.is_file() or path.suffix.lower() not in {".md", ".mdx"}:
-            continue
-        relative = path.relative_to(root).as_posix()
-        if relative in ARCHIVED_MARKDOWN or relative.startswith(archived_dirs):
-            continue
-        if any(part in generated_dirs for part in path.relative_to(root).parts):
-            continue
-        try:
-            markdown = path.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError) as exc:
-            errors.append(f"{relative}: cannot read Markdown: {exc}")
-            continue
-        markdown = re.sub(r"```.*?```|~~~.*?~~~", "", markdown, flags=re.S)
-        for target in _relative_links(markdown):
-            resolved = _resolve_reference(path, root, target)
-            if not resolved.exists():
-                errors.append(f"{relative}: broken internal link {target}")
+    for directory, child_dirs, filenames in os.walk(root, topdown=True):
+        child_dirs[:] = sorted(name for name in child_dirs if name not in generated_dirs)
+        directory_path = Path(directory)
+        for filename in filenames:
+            path = directory_path / filename
+            if path.suffix.lower() not in {".md", ".mdx"}:
+                continue
+            relative = path.relative_to(root).as_posix()
+            if relative in ARCHIVED_MARKDOWN or relative.startswith(archived_dirs):
+                continue
+            try:
+                markdown = path.read_text(encoding="utf-8")
+            except (OSError, UnicodeDecodeError) as exc:
+                errors.append(f"{relative}: cannot read Markdown: {exc}")
+                continue
+            markdown = re.sub(r"```.*?```|~~~.*?~~~", "", markdown, flags=re.S)
+            for target in _relative_links(markdown):
+                resolved = _resolve_reference(path, root, target)
+                if not resolved.exists():
+                    errors.append(f"{relative}: broken internal link {target}")
     return errors
 
 

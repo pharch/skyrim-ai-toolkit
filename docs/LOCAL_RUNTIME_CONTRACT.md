@@ -8,49 +8,95 @@ project data into tracked files.
 
 ## Python 3.12 environment
 
-Create one repository-local environment. On Windows PowerShell:
+`requirements.txt` is the one complete, pinned dependency specification.
+`requirements-dev.txt` only includes it for compatibility. Persistent
+host-specific environments live below ignored `.local/python-envs/`:
 
-    py -3.12 -m venv .venv
-    & .\.venv\Scripts\python.exe -m pip install --requirement requirements-dev.txt
-    Copy-Item config/local.env.example config/local.env
-    # Fill the private bindings described below, then:
-    & .\.venv\Scripts\python.exe scripts/python_env.py check --strict
-    & .\.venv\Scripts\python.exe scripts/python_env.py run scripts/research_state.py validate
-    & .\.venv\Scripts\python.exe scripts/harness_doctor.py all
+- native Windows: `.local/python-envs/windows`
+- WSL: `.local/python-envs/wsl`
+- other Linux: `.local/python-envs/linux`
 
-On Linux/WSL:
+Use native Windows for game-connected research. A WSL session has its own
+Python environment for offline analysis; it never shares or rewrites the
+Windows environment. Bootstrap reuses a healthy environment, repairs missing
+or changed pinned packages in place, and preserves an unusable environment in
+an ignored quarantine directory before rebuilding it.
 
-    python3 -m venv .venv
-    .venv/bin/python -m pip install --requirement requirements-dev.txt
-    cp config/local.env.example config/local.env
-    # Fill config/local.env, then:
+Bootstrap from the host's installed Python 3.12 launcher. In Windows
+PowerShell:
+
+    py -3.12 scripts/bootstrap_python.py
+
+In Linux or WSL:
+
+    python3 scripts/bootstrap_python.py
+
+The command detects the execution host, locates Python 3.12, creates the
+persistent environment, installs every pin from `requirements.txt`, verifies
+pip/imports/versions, and prints JSON containing the working environment path.
+It can run without a venv. If the host lacks `venv` or `ensurepip`, it attempts
+the host package-manager repair and a user-local verified pip-wheel bootstrap
+before reporting a blocker. A failed strict preflight therefore starts
+bootstrap repair; do not immediately hand off or switch to Conda/system
+packages.
+
+On a fresh checkout, initialize the ignored local configuration before strict
+validation if `config/local.env` is absent. The setup-only command copies the
+blank schema and preserves any existing machine values:
+
+    python3 scripts/setup_research.py init
+    # Windows PowerShell: py -3.12 scripts/setup_research.py init
+
+Bind the paths needed on this host in `config/local.env`. Python bootstrap and
+this config initializer may use the host launcher; research tools always use
+the strict dispatcher.
+
+After bootstrap, use the strict dispatcher for research. The Windows launcher
+is `py -3.12`; Linux/WSL uses `python3`:
+
     python3 scripts/python_env.py check --strict
     python3 scripts/python_env.py run scripts/research_state.py validate
-    python3 scripts/harness_doctor.py all
+    python3 scripts/python_env.py run scripts/harness_doctor.py all
 
-If venv creation reports that ensurepip or venv is unavailable, the host's
-Python 3.12 venv package is missing. Install that Python prerequisite through
-the host's normal package channel, recreate .venv, and repeat the bootstrap.
-Do not substitute system Python, Conda, or an ambient environment for research
-commands.
+PowerShell forms:
 
-requirements.txt pins active runtime third-party imports to lz4==4.3.3 and
-PyYAML==6.0.1; other active tools use the standard library. lz4 is required by
-scripts/read-save.py, including its --help import path. requirements-dev.txt
-includes those runtime pins and pytest==8.0.0 for the CI test runner. The dev
-split is deliberate; install requirements-dev.txt for a complete clean setup.
-environment.yml is optional Conda alignment metadata, not the active route.
-scripts/python_env.py always targets this checkout's .venv, requires Python
-3.12 and both pinned imports, and fails closed. check --strict reports setup
-status; run returns 127 without starting a child when the venv is missing or
-invalid. It never falls back.
+    py -3.12 scripts/python_env.py check --strict
+    py -3.12 scripts/python_env.py run scripts/research_state.py validate
+    py -3.12 scripts/python_env.py run scripts/harness_doctor.py all
 
-scripts/harness_doctor.py all is the bootstrap diagnostic entrypoint. It may
-be started with system Python because it must report a missing .venv; this does
-not make the system interpreter ready for research. Run research tools only
-through scripts/python_env.py run after the repository venv passes.
+The dispatcher starts children only from the validated environment for the
+active host. Its system launcher runs the dispatcher itself and is not a
+research fallback. Do not call research scripts directly or activate another
+environment. `check --strict` verifies Python 3.12, pip, every pinned
+requirement and required import, and the syntax of `config/local.env`. `run`
+returns 127 without starting a child when a strict prerequisite fails.
 
-scripts/research_state.py validate checks durable transaction, frontier,
+To add a dependency that an active research or validation script genuinely
+needs, add an exact `name==version` pin to `requirements.txt`, then rerun
+bootstrap and `check --strict`. Do not install packages by hand into a host
+Python. `requirements.txt` currently declares `lz4==4.3.3` for
+`scripts/read-save.py`, `PyYAML==6.0.1` for `scripts/validate_overlay.py`,
+`pip==24.0` for environment repair, and `pytest==8.0.0` for test tooling with
+its `iniconfig`, `packaging`, and `pluggy` dependencies pinned too.
+
+For an isolated bootstrap acceptance test, `bootstrap_python.py --env-dir`
+accepts only a directory below `.local/`. The dispatcher test override
+`SKYRIM_PYTHON_ENV_DIR` is also restricted below `.local/`; ordinary research
+uses the automatic host path above. Tests must never remove or recreate the
+active environment. To reproduce cold creation, select a fresh nonexistent
+path below `.local/`, run bootstrap twice, and confirm `action=created` then
+`action=reused`. To exercise repair, remove one pinned package only from that
+disposable environment, rerun bootstrap, and confirm `action=repaired` plus a
+passing strict check through `SKYRIM_PYTHON_ENV_DIR`. Never uninstall from
+`.local/python-envs/<host>`.
+
+After bootstrap, strict Python, research-state validation, and locally
+available static checks pass, stop setup work and continue the selected
+frontier item. Missing MO2/game/live-tool bindings remain separate capability
+gates; they do not keep the agent in a setup loop. A Linux/WSL pass does not
+establish Windows xEdit/MO2 or live-game behavior.
+
+`scripts/research_state.py validate` checks durable transaction, frontier,
 evidence, claim, and recovery structure. It does not verify executable
 ProductVersion, load-order completeness against MO2, xEdit/Ghidra access, save
 parsing, or live-game behavior.
@@ -88,6 +134,8 @@ this workstation.
 | GHIDRA_PROJECT_PROGRAM | Existing program name | SkyrimSE.exe | GOG program only. |
 | GHIDRA_ANALYSIS_EXE_GOG | Absolute GOG executable | <GOG install>\SkyrimSE.exe | ProductVersion/hash must match the project and Address Library. Never use Steam here. |
 | JAVA_HOME | Absolute JDK directory | <installed JDK> | Local Ghidra prerequisite. |
+| GHIDRA_JAVA_HOME_WSL | Optional WSL Java home | .local/ghidra-runtime/root/usr/lib/jvm/java-21-openjdk-amd64 | Used only with the paired Linux `analyzeHeadless` launcher; Ghidra requires Java 21+. Native Windows continues to use its installed Java runtime. |
+| GHIDRA_USER_HOME_WSL | WSL Ghidra preference/JDK state | .local/ghidra-runtime/home | Must resolve below ignored `.local/`; keeps LaunchSupport preferences and selected JDK local to this checkout. |
 | COMMONLIBSSE_ROOT | Absolute source directory | <CommonLibSSE-NG checkout> | address_library_probe.py reads include/RE/Offsets.h. |
 | ADDRESS_LIBRARY_DIR | Absolute GOG Address Library directory | <GOG Data>\SKSE\Plugins | Must match the GOG executable build. |
 | VCPKG_ROOT | Absolute source/tool directory | <vcpkg root> | Build metadata; current research probes do not build/install native tools. |
@@ -108,9 +156,9 @@ tool ran.
 
 ## Exact tool routes and limits
 
-Use the strict dispatcher after the venv passes. On Windows invoke it with
-& .\.venv\Scripts\python.exe scripts/python_env.py run ...; on Linux use
-python3 scripts/python_env.py run ....
+Use the strict dispatcher after bootstrap. On Windows invoke it with
+`py -3.12 scripts/python_env.py run ...`; on Linux/WSL use
+`python3 scripts/python_env.py run ...`.
 
 ### xEdit
 
@@ -124,9 +172,9 @@ python3 scripts/python_env.py run ....
 On Windows PowerShell, prepare returns JSON containing a session path. After
 the matching AE preflight passes, invoke its generated view-only launch file:
 
-    $prepared = & .\.venv\Scripts\python.exe scripts/python_env.py run tools/xedit_bridge.py prepare | ConvertFrom-Json
+    $prepared = py -3.12 scripts/python_env.py run tools/xedit_bridge.py prepare | ConvertFrom-Json
     $session = Join-Path $PWD $prepared.session
-    & .\.venv\Scripts\python.exe scripts/python_env.py run tools/ae_preflight.py --scoped-five-master (Join-Path $session 'plugins.txt')
+    py -3.12 scripts/python_env.py run tools/ae_preflight.py --scoped-five-master (Join-Path $session 'plugins.txt')
     & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $session 'launch.ps1')
 
 doctor stages the configured authoritative helper/template files into
@@ -170,7 +218,15 @@ fails, do not open Ghidra or use a remembered RVA.
 GOG `.rep` directory; the adapter derives its parent and project name for the
 headless invocation and checks the matching `.gpr` first. `.local/ghidra/`
 stores private query and binding-verification artifacts, not a second
-configuration registry.
+configuration registry. On WSL, when the Windows Ghidra installation also
+contains its paired Linux `support/analyzeHeadless`, the adapter invokes that
+launcher and uses `GHIDRA_JAVA_HOME_WSL` (or Java 21+ on PATH). If the
+configured project is on a read-only WSL mount, it copies the existing project
+files into ignored `.local/ghidra/project-cache/`; a source manifest pins that
+working copy to `GHIDRA_PROJECT_REP_PATH` and its file metadata. Ghidra's
+preference/JDK state stays under `GHIDRA_USER_HOME_WSL`. The source project is
+not modified, imported, or reanalyzed. Both platform routes retain
+`-process -noanalysis -readOnly`.
 
 ### SKSE / Observer
 

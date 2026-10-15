@@ -5,7 +5,7 @@ description: Verify Skyrim AE gameplay premises against local UESP pages and rev
 
 # UESP grounding
 
-> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+> Startup: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md). Bootstrap with `python3 scripts/bootstrap_python.py` (Linux/WSL) or `py -3.12 scripts/bootstrap_python.py` (Windows), then use the strict dispatcher (`python3` or `py -3.12`, respectively). If a preflight fails, rerun bootstrap and strict validation before declaring an external blocker. A blocked capability cannot support a negative finding.
 
 Use UESP to check documented gameplay facts and identify records or mechanics that need stronger verification. Wiki text is a research lead, not proof of engine behavior.
 

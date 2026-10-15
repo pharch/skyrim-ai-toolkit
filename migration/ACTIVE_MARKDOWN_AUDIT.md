@@ -9,35 +9,35 @@ Inventory: 170 Markdown files; 81 active; 89 archival.
 
 | Path | Class | SHA256 | Disposition |
 |---|---|---|---|
-| `.agents/skills/ae-target-verification/SKILL.md` | ACTIVE | `4d44427c11c3eac3a223fea93ea0b1b7691875057a7f1a98847aadb27ad69bcd` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/apocrypha-grounding/SKILL.md` | ACTIVE | `e375bce858d76755e7bd922529f51fd42dfed5026ce602f3c9fd283ab6c457ba` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/archive-source-discovery/SKILL.md` | ACTIVE | `275aec0303f9884afe673d9174ab012ca922cd6fdc3178047dc1d8513f9bfccd` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/esp-record-research/SKILL.md` | ACTIVE | `78f961063c694657b5edb80e85cac8fc23233fa8bdd07839720be67c4c0fa004` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/ghidra-project-research/SKILL.md` | ACTIVE | `81996b4588d65116137c1d3b13c1ec39909ef240042611ca86ca0e13cba60d01` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/retained-tool-operations/SKILL.md` | ACTIVE | `1be5af2aaef61c801f8dbc4c9e8ec3d028e32afd69699d364b6e41dc3859b7ad` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/save-state-forensics/SKILL.md` | ACTIVE | `e07572ee703e9e6ecde20d0cfcf4f4d51e2f46d4d8cebdc47360a51eeee4e982` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/skyrim-armor-xp-research/SKILL.md` | ACTIVE | `23e7f2ef2d74b5b19342372cbeb431bfc4c7f6e1977b82a1bbcc710a7e317dc5` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/skyrim-cross-domain-synthesis/SKILL.md` | ACTIVE | `c932c36bc5d86f4a9ee7e56a09f4a1b2d2f718d2ccc2eb6489b2a7b5c18182f2` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/skyrim-discriminating-experiments/SKILL.md` | ACTIVE | `9658a4ca6acbbabb1027ef2669b847f6a532349fa64295a06997240b467c403a` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/skyrim-quest-gate-research/SKILL.md` | ACTIVE | `2286d70fa835fba844ae8e1eee12d44dd63aedb2b999303826171e02185a6cc9` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/skyrim-source-verification/SKILL.md` | ACTIVE | `09f12a5f6bcbbcfc7a5906db02c03f9bda935e7b9aae6df788a99dd22a6b6dd5` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/uesp-grounding/SKILL.md` | ACTIVE | `3f68b471b9c4725d12eca559d4529bb591c2882559b63d36d36f4cb701744a78` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/ae-target-verification/SKILL.md` | ACTIVE | `90a678f89174af29b06b8ebebf71c21a5f1a78e654e65dbd85bebbf53af2b735` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/apocrypha-grounding/SKILL.md` | ACTIVE | `ba6eaf3f870fd21c6b0f595e6f3122d0eef1acef470442f9440d8920ac149701` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/archive-source-discovery/SKILL.md` | ACTIVE | `380f62e06e8156741c105ea448d9f50868842a5f66b2b0d5c5d91bb0de957bdf` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/esp-record-research/SKILL.md` | ACTIVE | `82554d54ad9a4f66ea1a0ba2b539606e257121f62bff386aad11bf3d60be84e8` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/ghidra-project-research/SKILL.md` | ACTIVE | `c1af33f22ff5bc9121414657183604d2e62aebf5fe8591e0a22a08a436357476` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/retained-tool-operations/SKILL.md` | ACTIVE | `28f7b1794d517789f1a3f9cac42602da0e4e056ee3dc710ef5c75469d6ebd744` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/save-state-forensics/SKILL.md` | ACTIVE | `6ea340a9f5958888812659d6dcea3bf8c9f2ffc4040e5378386011e9d52a930f` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/skyrim-armor-xp-research/SKILL.md` | ACTIVE | `2aee45ba0722cde00d56369faaa18659e7adf936b3ea2919246434841b4a680d` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/skyrim-cross-domain-synthesis/SKILL.md` | ACTIVE | `84a73abbd040dc3c315aa33767e213cb29cb2bbb19c244c2114f4b3489d9fb03` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/skyrim-discriminating-experiments/SKILL.md` | ACTIVE | `ee1fc5a26a6cae7db0a1c18585116f94515fac03fc745d7d698d7aada80b4f5f` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/skyrim-quest-gate-research/SKILL.md` | ACTIVE | `d7159a694d80648e5e7b073bd8afbd14e224a6e7bbfba84db40a6f85a1998be8` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/skyrim-source-verification/SKILL.md` | ACTIVE | `ee8552a30fae0564fdfb2989fb82dbf0d81464f5c18762521ca57cb0737a6aa8` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/uesp-grounding/SKILL.md` | ACTIVE | `36fbc24df12ba58f0711c7744bc356cabdb327fa987863d75467c5b8b4d9c5e2` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.github/copilot-instructions.md` | ARCHIVAL | `f30319c6ec5e68a383eba1751dfe6484bf0e0759935d34298cb69d6365839387` | Retained historical or workflow source; not a primary instruction path. |
-| `AGENTS.md` | ACTIVE | `094e5ebbbac3af5463123d9e45e004eeb55013719b0601375bd8f6711b67664e` | Current repository-level instruction or status document. |
+| `AGENTS.md` | ACTIVE | `4e50d0efd78c85007065bcddf9b338a7c26982df98e828c2609aef28a7ffac47` | Current repository-level instruction or status document. |
 | `bounties/BOUNTY-0001-LEVEL1-P0.md` | ACTIVE | `73df8f0c3b5c800cdc0fd0141fb35227f5e9312d70660297fd0762f7136be6db` | User-provided review packet; context only, not current-session evidence or research instructions. |
 | `CHANGELOG.md` | ARCHIVAL | `cf4535fddd1ccc490b2b4af1be27fed14e46a5ceb3eb5bc99c1b0bddd01640bd` | Retained source; explicitly non-authoritative under AGENTS.md. |
 | `docs/CODEX_START_PROMPT.md` | ACTIVE | `3ccf522bcb57971b1a966936286df6093db5e8fd1d948389dfba408e24f15bed` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/getting-started.md` | ACTIVE | `39fa214af0d7aad561d075f5d73c5f19c024c3d0981288802d4ca7651508e8e7` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/HARNESS_READINESS.md` | ACTIVE | `5b82a364a13395802e29cd9040681a32c71e3d173da791baefd3f17a31d23606` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/LOCAL_RUNTIME_CONTRACT.md` | ACTIVE | `3cc53dd5504cd815fbbd73bc07c9f3bbacb1d4347f9922b0069c8932fa0d0cb7` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/LOCAL_TOOL_BINDINGS.md` | ACTIVE | `65f8b8ec2d7e444f16768a572c95027794a7cd127945f69af11f35155f94cc67` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/LOCAL_TOOL_HANDOFF.md` | ACTIVE | `b2ae16a6762f1b7c9af81deab98726c71730e75e31e11651cdcc720495458e29` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/getting-started.md` | ACTIVE | `8b0cc2290ccecc1ebacc61a5012bc75b2910359e0e47b42ac247b8d81d012c01` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/HARNESS_READINESS.md` | ACTIVE | `1e43bda24c750e17eabf2e3bb28f205995777f25be3289cc92fb55ac2732269c` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/LOCAL_RUNTIME_CONTRACT.md` | ACTIVE | `3843ffc021da3ccb3a4684b808e57e7e8a8b1e9378165b0e9324d72ed4089f68` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/LOCAL_TOOL_BINDINGS.md` | ACTIVE | `06dcaaa269285d1f391eae007afaa52b4fe4d2c974777a6e86b37f81801ad0cf` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/LOCAL_TOOL_HANDOFF.md` | ACTIVE | `43be159721305ea4ba6878145718d7f57ca4abb59b9de01f85e2ac9fa26088a0` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/MIGRATION_RETIREMENT_PLAN.md` | ACTIVE | `06652e59dfa1d2db33793a2b8cb808133ee51d710fd87f12a2fd85f7097c15bd` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/README.md` | ACTIVE | `38fae874e09fd46636bc07ee8dc3681c7f5478868f4f1df3f52a64b0ebf6ca1a` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/RESEARCH_START_PROMPT.md` | ACTIVE | `1e20174468d745631f1359d94e50e7a6a7fb6a23c8d47c524b4f9e4a57efcfa3` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/RESEARCH_START_PROMPT.md` | ACTIVE | `8e9b9232d9319ff09f87a8680f28ad6f85a08e2f24606e81a1a3f8fd7061b8f1` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/safety-philosophy.md` | ACTIVE | `6a273aee960bd614a5e3172fe8c882d303c41dc1fb4acaaa6fb1d685ea3187c3` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/SKSE_MCP_INTEGRATION.md` | ACTIVE | `7cbcb46a3d6752fb2afad8f0f767ed90598a21f351b8cd127b612b635a958507` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/WEEK_LONG_OPERATION.md` | ACTIVE | `cb23d52f14949f51f6ac7dd82b2e5da2a726e4c7e446ede74bfaad969ed2b9fe` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/WEEK_LONG_OPERATION.md` | ACTIVE | `0d890fb4206df37544b14588057e72ce246c84672b16d7bcb81d93b0532e580d` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/WINDOWS_AE_VERIFICATION.md` | ACTIVE | `390700931a6ad1411c5c3a55b63ecd0ea74db4d092327115154bf6d25945a781` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/xelib-guide.md` | ACTIVE | `afc3e66d923d1a9d03cb1c977c80f211c797fea70c8c9e124f8c94bfa517ad5f` | Current research guidance or evidence record; reviewed for policy and links. |
 | `experiments/EXP-0008-quest-gate-continuity/expected-discriminants.md` | ACTIVE | `8ec8c1cc4afa9fcefd931e27520c3f4062d7ece9a3b0b084106c9d1048a1e40f` | Current research guidance or evidence record; reviewed for policy and links. |
@@ -141,13 +141,13 @@ Inventory: 170 Markdown files; 81 active; 89 archival.
 | `migration/TOOL_COMPATIBILITY_MATRIX.md` | ARCHIVAL | `c072efdee9ac4f4435d72fb4dbf20bc0acb4794f2f57bb100f46f668c627afc1` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/TOOL_PATH_VERIFICATION.md` | ACTIVE | `d9639e216f01c0e0a88c7c56605bd4d705b66dab532f07fc0f729bf17921c3c0` | Current readiness/audit record; reviewed for policy and links. |
 | `migration/UNRESOLVED.md` | ARCHIVAL | `81a7a0c19a59bc172b10ca1626ba61e51a31cb500eca686073c5fe83b2363936` | Prior migration artifact; retained for provenance, not active instructions. |
-| `NEXT_SESSION_HANDOFF.md` | ACTIVE | `983441b88d1a2b443acc2c16ff13ff7c54f7338b9a3ea1d1693e26dbfa17e153` | Current repository-level instruction or status document. |
+| `NEXT_SESSION_HANDOFF.md` | ACTIVE | `3a5bb67adb86513e86b64e5641f1116883cc702b62b6d948e612399a39b79a3a` | Current repository-level instruction or status document. |
 | `NORTH_STAR.md` | ACTIVE | `ff7d2f516ca1791dbe335b7e0a35a9aaec02829227c04f39d89fd3e331364088` | Current repository-level instruction or status document. |
 | `protocols/apocrypha.md` | ACTIVE | `307cf2dddde68c7675679f012f11a9bd4cd289af9eec95850fac2cc0c9861a82` | Current research guidance or evidence record; reviewed for policy and links. |
 | `protocols/LIVE_GAME.md` | ACTIVE | `a4536c8e11e14556b56bf1c497fa77d687059088d7ed91f89c65bb9e6ed75519` | Current research guidance or evidence record; reviewed for policy and links. |
 | `protocols/SOURCES.md` | ACTIVE | `9983864d564ce4d976cd9c2e97d108fb91fc44ff7bee2175529f8a4773fd78b5` | Current research guidance or evidence record; reviewed for policy and links. |
-| `protocols/TOOL_ROUTING.md` | ACTIVE | `4836cbaf25de894ccb55d321b7dd65ac417595db3180fcb826ba9153ee09a214` | Current research guidance or evidence record; reviewed for policy and links. |
-| `README.md` | ACTIVE | `e21bcd7fb26be0555c53c21022167c27e21397f3501efa69697412eeb6ec3adc` | Current repository-level instruction or status document. |
+| `protocols/TOOL_ROUTING.md` | ACTIVE | `e423554efa732d569b2ed5ace871f0d7fa4dca0323788918020fb74f0686a670` | Current research guidance or evidence record; reviewed for policy and links. |
+| `README.md` | ACTIVE | `88e9add5641725b06852b2dcf8caeb35192b6c6671802177d8222704b0959341` | Current repository-level instruction or status document. |
 | `references/upstream/.claude/backups/kb/20261013_074133/CLAUDE.md` | ARCHIVAL | `fa528bb03e1a492b9f1f1f2c8eb965765f6ef8a6018567f6c8aaf2cdf75be112` | Retained source; explicitly non-authoritative under AGENTS.md. |
 | `references/upstream/.claude/backups/kb/20261013_074133/KNOWLEDGEBASE.md` | ARCHIVAL | `3047c0fd0f93b04abf6a7390a54a74bde702f24dbd4c98ec031207e0c9833883` | Retained source; explicitly non-authoritative under AGENTS.md. |
 | `references/upstream/.claude/skills/create-mod/SKILL.md` | ARCHIVAL | `a2bdeecbc57d49e2b3f508290941348abde010772ef70bb2b7711a158094d1f9` | Retained source; explicitly non-authoritative under AGENTS.md. |
@@ -178,4 +178,4 @@ Inventory: 170 Markdown files; 81 active; 89 archival.
 | `session-brief/UESP_OFFLINE_GUIDE.md` | ARCHIVAL | `6da5ac04a18d6e138eb0fa021092bd847ff6de5d60c74726dde817faad38b2f3` | Retained historical or workflow source; not a primary instruction path. |
 | `SESSION_LOG.md` | ACTIVE | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` | Current repository-level instruction or status document. |
 | `session_prompt.md` | ACTIVE | `caadbdab8aa6add3ae5077c506c659f383cdd433de2cca918ae498e58fa22e7e` | Current repository-level instruction or status document. |
-| `tools/README.md` | ACTIVE | `66d7ea6171b8f8e96cb1d16c52da49d28b53872514f1fa50b9c7132b43c90924` | Current research guidance or evidence record; reviewed for policy and links. |
+| `tools/README.md` | ACTIVE | `34c568e3164c21bf83ea4ccea6c569ea375abeca1c66eae9b65142f33d10d93f` | Current research guidance or evidence record; reviewed for policy and links. |

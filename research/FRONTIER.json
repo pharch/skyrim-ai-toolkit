@@ -1,19 +1,19 @@
 {
-  "session_next_action": "On a host with Python 3.12 ensurepip and working Windows tool interop (or after installing python3.12-venv with administrator rights), follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install requirements-dev.txt; verify strict Python, the GOG query, and research-state before starting Q-0001.",
+  "session_next_action": "In the next research session, bootstrap and strictly validate Python, validate research state, then begin TX-0005/Q-0001 using docs/RESEARCH_START_PROMPT.md.",
   "schema_version": 3,
   "target": {
     "edition": "AE",
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
     "note": "Repository target policy is AE runtime 1.6.318+. Steam SkyrimSE.exe ProductVersion 1.6.1170.0 is verified (EV-0109), but no live game session or complete active MO2 order is verified. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Legacy source files are hashed in migration/legacy_markdown_manifest.tsv; source commit is unavailable. Active Python routes and native tool limits are documented in the capability matrix. Four evidence-linked transactions exercise blocker reselection, rival armor hypotheses, an AV39 record screen, and breadth synthesis; process-isolated recovery is tested.",
-    "next_action": "On a host with Python 3.12 ensurepip and working Windows tool interop (or after installing python3.12-venv with administrator rights), follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install requirements-dev.txt; verify strict Python, the GOG query, and research-state before starting Q-0001."
+    "next_action": "Refresh the Markdown inventory, run strict validation, research-state validation, and the consolidated doctor; then record its final static and external gate results."
   },
   "items": [
     {
       "id": "Q-0001",
       "objective": "OBJ-1",
       "kind": "baseline",
-      "status": "blocked_environment",
+      "status": "open",
       "question": "Which candidate vanilla quest/event has a verifiable player-level gate, and at which transition is the gate evaluated?",
       "hypotheses": [
         {
@@ -47,7 +47,7 @@
       ],
       "priority": 1.0,
       "information_gain": 0.8,
-      "next_action": "Obtain the selected MO2 profile plugins.txt; independently continue armor XP path analysis.",
+      "next_action": "Begin the first P0 research transaction by identifying candidate vanilla quest/event gates and stating rival predictions; keep profile-specific winner and negative claims gated on the selected complete MO2 order.",
       "linked_claims": [
         "CL-L062",
         "CL-L063",
@@ -1049,5 +1049,6 @@
     "recorded_utc": "2026-10-15T05:39:44Z",
     "next_action": "At the next research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `docs/HARNESS_READINESS.md`, then start P0 OBJ-1/Q-0001 using `docs/RESEARCH_START_PROMPT.md`.",
     "active_process": "Historical: SSEView 4.1.5f PID 3948 responded during EV-0185/0189; current process liveness was not rechecked. Skyrim was not launched; Observer DLL remains staged only under ignored .local."
-  }
+  },
+  "next_action": "In the next research session, bootstrap and strictly validate Python, validate research state, then begin TX-0005/Q-0001 using docs/RESEARCH_START_PROMPT.md."
 }

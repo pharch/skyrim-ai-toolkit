@@ -17,6 +17,7 @@ sys.path.insert(0, str(ROOT))
 
 from scripts.local_config import read_local_config  # noqa: E402
 from scripts.local_paths import _native_path  # noqa: E402
+from scripts.python_env import environment_dir, environment_status, execution_host  # noqa: E402
 from tools.ae_target import TargetError, assert_ae_target  # noqa: E402
 
 
@@ -60,6 +61,8 @@ def _tool_paths(config: dict[str, str]) -> dict[str, object]:
     java_home = _path(config.get("JAVA_HOME", ""))
     java_bin = next((java_home / "bin" / name for name in ("java.exe", "java")
                      if java_home and (java_home / "bin" / name).is_file()), None)
+    wsl_java_home = _path(config.get("GHIDRA_JAVA_HOME_WSL", ""))
+    wsl_java_bin = wsl_java_home / "bin" / "java" if wsl_java_home else None
     project_present = bool(ghidra_project_rep
                            and ghidra_project_rep.suffix.casefold() == ".rep"
                            and ghidra_project_rep.is_dir()
@@ -81,6 +84,7 @@ def _tool_paths(config: dict[str, str]) -> dict[str, object]:
         "commonlibsse_offsets_header_present": bool(offsets_header and offsets_header.is_file()),
         "sseedit_executable_configured_exists": bool(xedit and xedit.is_file()),
         "java_home_configured_exists": bool(java_bin and java_bin.is_file()),
+        "ghidra_wsl_java_executable_exists": bool(wsl_java_bin and wsl_java_bin.is_file()),
     }
 
 
@@ -174,6 +178,7 @@ def run_doctor(root: Path = ROOT) -> dict[str, object]:
         "analysis_executable_present": paths["gog_analysis_executable_exists"],
         "configured_headless_path_exists": paths["ghidra_headless_configured_exists"],
         "java_home_executable_exists": paths["java_home_configured_exists"],
+        "wsl_java_home_executable_exists": paths["ghidra_wsl_java_executable_exists"],
         "host_java": java,
         "read_only_query_metadata_count": len(ghidra_meta),
         "query_command": "python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]",
@@ -252,11 +257,16 @@ def run_doctor(root: Path = ROOT) -> dict[str, object]:
         "preflight_command": "python3 scripts/python_env.py run tools/ae_preflight.py",
         "live_or_xedit_calls_permitted": False,
     }
+    python_status = environment_status(root)
     reports["python_environment"] = {
-        "name": "skyrim-ae-research",
-        "manifest_present": (root / "environment.yml").is_file(),
-        "conda_available": bool(shutil.which("conda")),
-        "current_python": ".".join(map(str, sys.version_info[:3])),
+        "status": "verified_persistent_venv" if python_status.get("ready") else "needs_bootstrap_or_repair",
+        "execution_host": execution_host(),
+        "environment_path": environment_dir(root).relative_to(root).as_posix(),
+        "python_required": python_status.get("python_required"),
+        "python_version": python_status.get("python_version"),
+        "strict_environment_ready": bool(python_status.get("ready")),
+        "requirements_source": "requirements.txt",
+        "pinned_distribution_count": len(python_status.get("required_distributions", {})),
     }
     return reports
 

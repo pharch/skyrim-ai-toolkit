@@ -1,9 +1,15 @@
 # Python research tools
 
-Read `docs/LOCAL_RUNTIME_CONTRACT.md` before setup. Agent-facing entrypoints
-run only through `scripts/python_env.py run ...` in the repository-local
-Python 3.12 `.venv`; the dispatcher does not fall back to Conda or system
-Python. Use `python3 scripts/harness_doctor.py all` for bootstrap status.
+Read `docs/LOCAL_RUNTIME_CONTRACT.md` before setup. Bootstrap or repair first
+with `python3 scripts/bootstrap_python.py` (Linux/WSL) or
+`py -3.12 scripts/bootstrap_python.py` (Windows). Agent-facing entrypoints
+run only through `scripts/python_env.py run ...` in the host's validated
+Python 3.12 environment under ignored `.local/python-envs/`. The dispatcher
+does not run research tools from Conda, system Python, or ambient packages.
+If `config/local.env` is absent on a fresh checkout, initialize it with
+`python3 scripts/setup_research.py init` or
+`py -3.12 scripts/setup_research.py init` before strict validation. This
+setup-only command preserves existing machine bindings.
 
 ## Read-only entrypoints
 
@@ -66,10 +72,6 @@ establish Windows xEdit/MO2 behavior or in-game AE behavior.
 
 ## Cold-start status
 
-`docs/HARNESS_READINESS.md` records the independently rerun cold-start gates.
-In that session the strict `.venv` was missing; xEdit helper doctor and a
-read-only bridge QUST query through direct TES4 parsing passed, while native
-record export, current GOG Ghidra
-access, and live SKSE observation remained blocked. Historical evidence IDs
-remain provenance for their original sessions and are not current-session
-reproductions.
+`docs/HARNESS_READINESS.md` records the current bootstrap and cold-start gates.
+Historical evidence IDs remain provenance for their original sessions and do
+not replace current validation.

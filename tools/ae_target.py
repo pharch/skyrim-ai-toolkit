@@ -9,6 +9,7 @@ import os
 from pathlib import Path, PureWindowsPath
 import re
 import shutil
+import struct
 import subprocess
 from typing import Callable, Mapping
 
@@ -60,9 +61,14 @@ def _native_path(value: str | Path) -> Path:
 
 
 def read_executable_version(executable: str | Path) -> str:
-    """Read ProductVersion from the PE version resource using Windows' version.dll."""
+    """Read ProductVersion from SkyrimSE.exe's PE version resource."""
     if os.name != "nt":
-        return _read_version_from_wsl(executable)
+        # Read the file's version resource directly first. This keeps target
+        # attestation usable in WSL even when Windows process interop is off.
+        try:
+            return _read_pe_product_version(Path(executable))
+        except TargetError:
+            return _read_version_from_wsl(executable)
     path = str(Path(executable).resolve())
     version_dll = ctypes.WinDLL("version", use_last_error=True)
     get_size = version_dll.GetFileVersionInfoSizeW
@@ -106,6 +112,168 @@ def read_executable_version(executable: str | Path) -> str:
         if result:
             return result
     raise TargetError("ProductVersion string is absent from the Skyrim executable version resource")
+
+
+def _read_pe_product_version(executable: Path) -> str:
+    """Read the named ProductVersion string from a PE resource tree (stdlib only)."""
+    try:
+        data = executable.read_bytes()
+    except OSError as exc:
+        raise TargetError(f"cannot read executable PE data: {executable}") from exc
+
+    def require(offset: int, size: int, label: str) -> None:
+        if offset < 0 or size < 0 or offset + size > len(data):
+            raise TargetError(f"truncated PE {label}")
+
+    def u16(offset: int) -> int:
+        require(offset, 2, "header")
+        return struct.unpack_from("<H", data, offset)[0]
+
+    def u32(offset: int) -> int:
+        require(offset, 4, "header")
+        return struct.unpack_from("<I", data, offset)[0]
+
+    if len(data) < 0x40 or data[:2] != b"MZ":
+        raise TargetError("executable is not a valid PE image")
+    pe = u32(0x3C)
+    require(pe, 24, "COFF header")
+    if data[pe:pe + 4] != b"PE\0\0":
+        raise TargetError("executable has no PE signature")
+    section_count = u16(pe + 6)
+    optional_size = u16(pe + 20)
+    optional = pe + 24
+    require(optional, optional_size, "optional header")
+    magic = u16(optional)
+    if magic == 0x10B:  # PE32
+        directory_base = optional + 96
+    elif magic == 0x20B:  # PE32+
+        directory_base = optional + 112
+    else:
+        raise TargetError("unsupported PE optional-header format")
+    if optional_size < directory_base - optional + (3 * 8):
+        raise TargetError("PE optional header has no resource directory entry")
+    resource_rva, resource_size = struct.unpack_from("<II", data, directory_base + 2 * 8)
+    if not resource_rva or not resource_size:
+        raise TargetError("executable has no PE version resource directory")
+
+    sections: list[tuple[int, int, int, int]] = []
+    section_table = optional + optional_size
+    require(section_table, section_count * 40, "section table")
+    for index in range(section_count):
+        entry = section_table + index * 40
+        virtual_size, virtual_address, raw_size, raw_pointer = struct.unpack_from("<IIII", data, entry + 8)
+        sections.append((virtual_address, max(virtual_size, raw_size), raw_size, raw_pointer))
+
+    def rva_offset(rva: int, size: int = 1) -> int:
+        for virtual_address, span, raw_size, raw_pointer in sections:
+            delta = rva - virtual_address
+            if 0 <= delta < span and delta + size <= raw_size:
+                require(raw_pointer + delta, size, "resource data")
+                return raw_pointer + delta
+        raise TargetError(f"PE resource RVA 0x{rva:X} is not backed by section data")
+
+    resource_file_offset = rva_offset(resource_rva, min(resource_size, 16))
+    require(resource_file_offset, 16, "resource directory")
+    root = resource_file_offset
+
+    def directory_entries(relative: int) -> list[tuple[int, int]]:
+        directory = root + relative
+        require(directory, 16, "resource directory entry")
+        named, ids = struct.unpack_from("<HH", data, directory + 12)
+        count = named + ids
+        require(directory + 16, count * 8, "resource directory entries")
+        return [struct.unpack_from("<II", data, directory + 16 + i * 8) for i in range(count)]
+
+    version_directory: int | None = None
+    for name, target in directory_entries(0):
+        if not name & 0x80000000 and (name & 0xFFFF) == 16:
+            if target & 0x80000000:
+                version_directory = target & 0x7FFFFFFF
+            break
+    if version_directory is None:
+        raise TargetError("executable has no RT_VERSION resource")
+
+    resource_values: list[tuple[int, int]] = []
+
+    def collect_data(relative: int, depth: int = 0) -> None:
+        if depth > 4:
+            raise TargetError("PE version resource tree is unexpectedly deep")
+        for _name, target in directory_entries(relative):
+            child = target & 0x7FFFFFFF
+            if target & 0x80000000:
+                collect_data(child, depth + 1)
+            else:
+                entry = root + child
+                require(entry, 16, "resource data entry")
+                rva, size = struct.unpack_from("<II", data, entry)
+                if size:
+                    resource_values.append((rva, size))
+
+    collect_data(version_directory)
+
+    def parse_block(blob: bytes, start: int, limit: int, depth: int = 0) -> tuple[str, bytes, list[tuple[str, bytes, list]]]:
+        if depth > 16 or start + 6 > limit:
+            raise TargetError("malformed PE version string block")
+        length, value_length, value_type = struct.unpack_from("<HHH", blob, start)
+        block_end = start + length
+        if length < 6 or block_end > limit:
+            raise TargetError("malformed PE version string block length")
+        cursor = start + 6
+        key_end = cursor
+        while key_end + 2 <= block_end and blob[key_end:key_end + 2] != b"\0\0":
+            key_end += 2
+        if key_end + 2 > block_end:
+            raise TargetError("unterminated PE version string block key")
+        try:
+            key = blob[cursor:key_end].decode("utf-16le")
+        except UnicodeDecodeError as exc:
+            raise TargetError("invalid UTF-16 key in PE version resource") from exc
+        cursor = (key_end + 2 + 3) & ~3
+        value_size = value_length * (2 if value_type == 1 else 1)
+        if cursor + value_size > block_end:
+            raise TargetError("PE version block value exceeds its declared length")
+        value = blob[cursor:cursor + value_size]
+        cursor = (cursor + value_size + 3) & ~3
+        children = []
+        while cursor + 6 <= block_end:
+            child_length = struct.unpack_from("<H", blob, cursor)[0]
+            if child_length == 0:
+                break
+            child = parse_block(blob, cursor, block_end, depth + 1)
+            children.append(child)
+            cursor = (cursor + child_length + 3) & ~3
+        return key, value, children
+
+    for version_rva, version_size in resource_values:
+        try:
+            offset = rva_offset(version_rva, version_size)
+            blob = data[offset:offset + version_size]
+            key, fixed, children = parse_block(blob, 0, len(blob))
+            if key != "VS_VERSION_INFO" or len(fixed) < 52 or struct.unpack_from("<I", fixed)[0] != 0xFEEF04BD:
+                continue
+
+            def find_product_version(node: tuple[str, bytes, list]) -> str | None:
+                node_key, value, descendants = node
+                if node_key == "ProductVersion" and value:
+                    try:
+                        text = value.decode("utf-16le").rstrip("\0").strip()
+                    except UnicodeDecodeError:
+                        return None
+                    if text:
+                        return text
+                for descendant in descendants:
+                    found = find_product_version(descendant)
+                    if found:
+                        return found
+                return None
+
+            for child in children:
+                found = find_product_version(child)
+                if found:
+                    return found
+        except TargetError:
+            continue
+    raise TargetError("ProductVersion string is absent from the PE version resource")
 
 
 def _read_version_from_wsl(executable: str | Path) -> str:

@@ -40,10 +40,12 @@ it.
 
 ## Commands
 
-Bootstrap and verify the repository-local Python 3.12 environment as
-documented in docs/LOCAL_RUNTIME_CONTRACT.md. The strict dispatcher does not
-fall back to Conda or system Python.
+Bootstrap and verify the host-specific Python 3.12 environment as documented
+in docs/LOCAL_RUNTIME_CONTRACT.md. Windows PowerShell starts the bootstrap and
+dispatcher with `py -3.12`; Linux/WSL uses `python3`. The strict dispatcher
+never runs research tools from system Python or Conda.
 
+    python3 scripts/bootstrap_python.py
     python3 scripts/python_env.py check --strict
     python3 scripts/python_env.py run scripts/local_paths.py doctor
     python3 scripts/python_env.py run tools/ae_preflight.py
@@ -52,7 +54,7 @@ fall back to Conda or system Python.
     python3 scripts/python_env.py run tools/address_library_probe.py --symbol MagicItem::CalculateCost
     python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600
     python3 scripts/python_env.py run tools/skse_probe.py
-    python3 scripts/harness_doctor.py all
+    python3 scripts/python_env.py run scripts/harness_doctor.py all
 
 Use docs/HARNESS_READINESS.md to distinguish this cold-start's successful
 file-level xEdit helper checks from its blocked native record export, Ghidra

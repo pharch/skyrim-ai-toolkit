@@ -3644,6 +3644,85 @@
       ],
       "coverage": "The WSL Python 3.12 venv bootstrap failed because ensurepip/pip are unavailable; sudo cannot install python3.12-venv without a password. The incomplete venv created in this turn was removed and the strict check returned FAIL_VENV_MISSING. Documented Address Library, Ghidra, xEdit record-parser, and standalone research-state dispatches failed closed with exit 127. The configured user-designated GOG project path maps to an existing .rep and adjacent .gpr, but no Ghidra process/query ran. Consolidated doctor report recorded 12 PASS and 7 BLOCKED_EXTERNAL, zero FAIL, overall BLOCKED/exit 2; its structural research-state check passed. MO2 profile/list were unbound, SKSE live capability was not tested, and no bounty research began. Raw stdout/stderr and hashes are in the ignored capture directory. A post-edit consolidated doctor rerun after updating the readiness documentation is also indexed in the capture manifest and reports the same 12 PASS / 7 BLOCKED_EXTERNAL / zero FAIL verdict.",
       "result": "Setup remains blocked on this WSL host. GOG project binding is verified, but no new Ghidra or xEdit record query was reproduced. Static research must not start until strict Python and GOG query gates pass; MO2 and live SKSE remain separate unverified gates."
+    },
+    {
+      "id": "EV-0203",
+      "kind": "tool",
+      "source": "Persistent Python 3.12 bootstrap acceptance: absent environment creation, healthy reuse, missing dependency repair, strict dispatch, and research-state validation",
+      "artifact": "private-local:.local/alignment/python-bootstrap-final/acceptance-summary.json",
+      "sha256": "7c8583105f87037e1de9477d54cdda0d4ab2d7a0d83c545012a18ce0d4868962",
+      "captured_utc": "2026-10-15T11:36:56Z",
+      "edition": "unknown",
+      "runtime": "Ubuntu 24.04 / WSL2, CPython 3.12.3; no Skyrim or native application launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/bootstrap_python.py --env-dir .local/bootstrap-validation/final/created/wsl",
+        "python3 scripts/python_env.py check --strict",
+        "python3 scripts/python_env.py run scripts/research_state.py validate",
+        "disposable venv python -m pip uninstall -y pytest"
+      ],
+      "coverage": "A fresh path returned action=created with all seven exact requirements pins. The second call returned action=reused. After pytest==8.0.0 was removed from this disposable environment, bootstrap returned action=repaired; the strict check and dispatched research-state validation passed. The active .local/python-envs/wsl was not recreated. A separate default-network attempt diagnosed restricted DNS, preserved its incomplete environment, and the retry repaired it with package access enabled.",
+      "result": "PASS: bootstrap created, reused, and repaired persistent-format WSL environments; strict dependency and research-state checks passed."
+    },
+    {
+      "id": "EV-0204",
+      "kind": "tool",
+      "source": "Fresh Address Library mapping and read-only Ghidra function/xref/disassembly/decompilation query against the configured existing GOG project",
+      "artifact": "private-local:.local/ghidra/gog-query-20261015T111658Z.meta.json",
+      "sha256": "637389f2302797d7a4a6a562aad5537298f00f20f2a82e3a09d834ac5ec92ecd",
+      "captured_utc": "2026-10-15T11:18:37Z",
+      "edition": "AE",
+      "runtime": "GOG SkyrimSE.exe ProductVersion 1.6.1179.0; WSL2 Java 21 paired Linux Ghidra launcher; no game launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/address_library_probe.py --symbol MagicItem::CalculateCost",
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600"
+      ],
+      "coverage": "The configured GOG executable SHA-256 is 9b0fc7880c4b12d436bfb59bcae64868f176dbc04010adbd9bc2ecb64bc8ed3f. The matching Address Library resolves CommonLib AE ID 11321 to RVA 0x14C020. Ghidra reports the program path matches the GOG binary and passes function lookup, requested RVA lookup, incoming call xref, 24-instruction disassembly, decompilation, and script error checks. It used -process -noanalysis -readOnly; no import, project creation, overwrite, or reanalysis was attempted. Because the configured Windows source project is on a read-only WSL mount, a metadata-tracked copy sourced from GHIDRA_PROJECT_REP_PATH under ignored .local was opened. The original source remained on a read-only mount.",
+      "result": "PASS for a current build-attested query of the existing configured GOG project; this is static tool evidence, not a gameplay-mechanic finding."
+    },
+    {
+      "id": "EV-0205",
+      "kind": "tool",
+      "source": "Current strict-dispatcher read-only xEdit bridge record retrieval for a named Skyrim.esm QUST",
+      "artifact": "private-local:.local/alignment/xedit-bridge/20261015T111849.692051Z/stdout.raw",
+      "sha256": "b7524b1706e111bd0efa5d7af4957a07d88581aef006c94945118238f735f26b",
+      "captured_utc": "2026-10-15T11:18:49.692051Z",
+      "edition": "AE",
+      "runtime": "Configured Skyrim AE file set; Linux/WSL Python 3.12.3; no native xEdit or game launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/xedit_bridge.py doctor",
+        "python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf"
+      ],
+      "coverage": "The bridge doctor confirms all seven configured helper inputs exist. The documented file-records command returns one QUST record: CreatureDialogueWerewolf, local form 000E46, with raw subrecord bytes. The query route is the direct read-only TES4 parser; it is not native SSEEdit and does not resolve winning overrides. Selected MO2 profile/full order remains unverified.",
+      "result": "PASS for read-only plugin-file record retrieval; native xEdit export and profile winner behavior remain unverified."
+    },
+    {
+      "id": "EV-0206",
+      "kind": "tool",
+      "source": "Final consolidated harness doctor after persistent Python bootstrap, cold-start repair tests, and local tool verification",
+      "artifact": "private-local:.local/alignment/harness-doctor/20261015T114903.144317Z/harness_doctor.json",
+      "sha256": "ea294ef262870deb7a0fd6c821c9af335aa57548f7a29f76cf11d81bd1c85a28",
+      "captured_utc": "2026-10-15T11:49:03.144317Z",
+      "edition": "AE",
+      "runtime": "Ubuntu 24.04 / WSL2, CPython 3.12.3; no Skyrim or native application launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py check --strict",
+        "python3 scripts/python_env.py run scripts/harness_doctor.py all",
+        "python3 scripts/python_env.py run scripts/research_state.py validate",
+        "python3 scripts/python_env.py run tools/address_library_probe.py --symbol MagicItem::CalculateCost",
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600",
+        "python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf",
+        "python3 scripts/python_env.py run tools/skse_probe.py"
+      ],
+      "coverage": "The consolidated report contains 21 checks: 19 PASS, 2 BLOCKED_EXTERNAL, zero FAIL; overall verdict BLOCKED with exit 2. All local Python/configuration, research-state, overlay, domain-access, Markdown, privacy, compile, and 185 unit-test checks pass. The configured GOG Address Library and existing-project query pass function/RVA, incoming call xref, disassembly, and decompilation checks with no import, project creation, overwrite, or reanalysis. The xEdit helper and prepare route pass, and one QUST record is retrieved by the direct TES4 parser. SKSE installed file identity passes, but live game, plugin-load, handshake, event, snapshot, and DevBench states remain unobserved. Native record export is unverified because the selected MO2 profile and explicit plugins.txt are not configured. No bounty investigation or game launch occurred.",
+      "result": "PASS for static research readiness. Overall doctor remains BLOCKED only on the separate selected-profile/native-export and live-observation gates; neither is required for static research."
     }
   ]
 }

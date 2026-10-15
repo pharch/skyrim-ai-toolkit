@@ -5,7 +5,7 @@ description: Use read-only Skyrim save and co-save analysis to test quest-state,
 
 # Save-state forensics
 
-> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+> Startup: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md). Bootstrap with `python3 scripts/bootstrap_python.py` (Linux/WSL) or `py -3.12 scripts/bootstrap_python.py` (Windows), then use the strict dispatcher (`python3` or `py -3.12`, respectively). If a preflight fails, rerun bootstrap and strict validation before declaring an external blocker. A blocked capability cannot support a negative finding.
 
 1. Confirm the save belongs to the stated edition and test lane; record its path
    privately, file size, modification time, and cryptographic hash. Never edit,
@@ -14,9 +14,9 @@ description: Use read-only Skyrim save and co-save analysis to test quest-state,
    documented header/string/byte scans, and
    `python3 scripts/python_env.py run tools/cosave-info.py <copy.skse>` for a
    structural co-save survey. `read-save.py` requires the pinned `lz4==4.3.3`
-   dependency in the repository `.venv`. If the strict dispatcher reports it
-   missing, treat save parsing as blocked until the runtime contract is satisfied;
-   do not install dependencies ad hoc from this skill.
+   dependency in the persistent host environment. If the strict dispatcher
+   reports it missing, add/confirm its exact pin in `requirements.txt`, rerun
+   `scripts/bootstrap_python.py`, and repeat the strict check.
    These tools do not parse Papyrus variables or
    prove an ActiveEffect remains active. Structured ReSaver analysis is not an
    active Python tool in this checkout; do not invoke retired Java/shell

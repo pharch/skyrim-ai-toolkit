@@ -10,8 +10,12 @@ fixed interval.
 
 1. Read `AGENTS.md`, `NORTH_STAR.md`, `STATE.md`, `ROADMAP.md`,
    `research/FRONTIER.json`, and `protocols/TOOL_ROUTING.md`.
-2. Run `python3 scripts/python_env.py run scripts/setup_research.py check` and inspect the exact current
-   checkpoint and working-tree changes.
+2. Bootstrap or repair with `python3 scripts/bootstrap_python.py`; run
+   `python3 scripts/setup_research.py init` to create local config only if
+   absent; then run `python3 scripts/python_env.py check --strict` and
+   `python3 scripts/python_env.py run scripts/setup_research.py check` and
+   inspect the exact current checkpoint and working-tree changes. On Windows
+   PowerShell, use `py -3.12` to start these commands.
 3. Select one ready frontier item. Record its rival models, predicted
    discriminants, tool/source, and exact next action before collecting data.
 4. Keep the work offline unless the Windows AE preflight and the relevant
@@ -36,11 +40,12 @@ before resuming. If
 and the durable-state diff, and resume only from the recorded `next_action`.
 Interruption is not evidence of completion.
 
-The consolidated bootstrap diagnostic is the one exception: the runtime
-contract permits `python3 scripts/harness_doctor.py all` to start with system
-Python so it can report a missing or invalid repository `.venv`. Research
-entrypoints and validators use the strict dispatcher after the pinned Python
-3.12 environment passes.
+If the strict check fails, rerun the bootstrap and repair the environment
+before declaring a Python blocker. After strict validation passes, run the
+consolidated doctor through `python3 scripts/python_env.py run
+scripts/harness_doctor.py all`. Stop setup work after the local static and
+research-state gates pass; continue the selected frontier item. On Windows,
+start the dispatcher with `py -3.12`.
 
 ## Periodic synthesis
 

@@ -10,18 +10,31 @@ research/FRONTIER.json, and research/CLAIMS.md.
 
 ## Start here
 
-Start with `docs/LOCAL_RUNTIME_CONTRACT.md` and create the repository-local
-Python 3.12 `.venv`. Then run the readiness checks:
+Start with `docs/LOCAL_RUNTIME_CONTRACT.md` and bootstrap the host's persistent
+Python 3.12 environment. Windows PowerShell:
 
+    py -3.12 scripts/bootstrap_python.py
+    py -3.12 scripts/setup_research.py init
+    py -3.12 scripts/python_env.py check --strict
+    py -3.12 scripts/python_env.py run scripts/research_state.py validate
+    py -3.12 scripts/python_env.py run scripts/harness_doctor.py all
+
+Linux/WSL:
+
+    python3 scripts/bootstrap_python.py
+    python3 scripts/setup_research.py init
     python3 scripts/python_env.py check --strict
     python3 scripts/python_env.py run scripts/research_state.py validate
-    python3 scripts/harness_doctor.py all
+    python3 scripts/python_env.py run scripts/harness_doctor.py all
 
-The dispatcher requires this checkout's `.venv`, Python 3.12, pinned
-requirements, and valid local config. It never falls back to system Python or
-Conda. `environment.yml` remains optional alignment metadata. The standalone
-`harness_doctor.py` reports missing prerequisites without launching native
-tools. Project guidance is in AGENTS.md and `.agents/skills/`.
+Bootstrap creates or repairs the Git-ignored host environment under `.local/`
+from the single pinned `requirements.txt` specification. Research tools run
+only through the strict dispatcher. If a preflight fails, bootstrap repairs
+the environment before the failure is treated as an external blocker. The
+setup-only initializer creates `config/local.env` from its example only if
+absent and preserves existing machine bindings. Native
+Windows is preferred for game-connected research; WSL uses a separate
+environment. Project guidance is in AGENTS.md and `.agents/skills/`.
 
 Local paths and research corpora belong in ignored config/local.env and
 .local/. Do not commit game files, saves, raw exports, local logs, private

@@ -1,19 +1,28 @@
 # Skyrim AE research tool routing
 
-Read docs/LOCAL_RUNTIME_CONTRACT.md first. Agent-facing research tools run only
-through this checkout's Python 3.12 .venv:
+Read docs/LOCAL_RUNTIME_CONTRACT.md first. Bootstrap or repair the current
+host environment before research. On Windows use `py -3.12`; on Linux/WSL use
+`python3`. Then route every research command through the strict dispatcher:
 
+    python3 scripts/bootstrap_python.py
+    python3 scripts/setup_research.py init  # preserves an existing local config
     python3 scripts/python_env.py check --strict
     python3 scripts/python_env.py run <script-or-module>
 
-On Windows start the dispatcher with:
+PowerShell forms:
 
-    & .\.venv\Scripts\python.exe scripts/python_env.py run <script-or-module>
+    py -3.12 scripts/bootstrap_python.py
+    py -3.12 scripts/setup_research.py init
+    py -3.12 scripts/python_env.py check --strict
+    py -3.12 scripts/python_env.py run <script-or-module>
 
-The dispatcher has no system-Python or Conda fallback. If it fails, use the
-standalone scripts/harness_doctor.py all only to report setup status; do not
-run research tools directly as a substitute. Local paths come only from the
-ignored config/local.env. The old .local/research-paths.toml is retired.
+The bootstrap can run before a venv exists and repairs the persistent
+`.local/python-envs/<host>` environment from pinned `requirements.txt`. A
+failed preflight triggers bootstrap repair, then a fresh strict check. The
+dispatcher never runs research children from system Python, Conda, or another
+ambient environment. Do not run research tools directly as a substitute.
+Local tool paths come only from ignored config/local.env. The old
+.local/research-paths.toml is retired.
 
 ## Runtime and profile gates
 
@@ -40,7 +49,7 @@ selected order.
 
 | Evidence need | Entry point | Limit |
 |---|---|---|
-| Current setup/readiness | python3 scripts/harness_doctor.py all | Read-only readiness checks; never deploys, launches Skyrim or selects an xEdit record. It may run the existing GOG query only after ProductVersion and Address Library checks pass. |
+| Current setup/readiness | python3 scripts/python_env.py run scripts/harness_doctor.py all | Read-only readiness checks; never deploys, launches Skyrim or selects an xEdit record. It may run the existing GOG query only after ProductVersion and Address Library checks pass. |
 | Local bindings | python3 scripts/python_env.py run scripts/local_paths.py doctor | Reads config/local.env and reports presence without printing values. |
 | xEdit helper bindings | python3 scripts/python_env.py run tools/xedit_bridge.py doctor | Stages eight configured source/template files into ignored .local and checks helper bindings. It does not launch SSEView. |
 | Bridge record retrieval (direct parser) | python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf | Read-only TES4 record retrieval through the documented bridge. It does not launch native xEdit or resolve winning overrides. |

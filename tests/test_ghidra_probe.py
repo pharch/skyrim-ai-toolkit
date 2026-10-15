@@ -8,7 +8,14 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
 
-from tools.ghidra_probe import GhidraProbeError, _normalize_windows_path, _windows_path, resolve_binding, run_query
+from tools.ghidra_probe import (
+    GhidraProbeError,
+    _normalize_windows_path,
+    _windows_path,
+    _wsl_project_workspace,
+    resolve_binding,
+    run_query,
+)
 
 
 class GhidraProbeTests(unittest.TestCase):
@@ -68,6 +75,26 @@ class GhidraProbeTests(unittest.TestCase):
         self.assertEqual(binding["project_rep_path"], project / "skyrim-gog.rep")
         self.assertEqual(binding["executable"], exe)
         self.assertNotEqual(binding["executable"], Path(config["SKYRIM_EXE_PATH"]))
+
+    def test_readonly_wsl_source_uses_reusable_copy_of_configured_project(self):
+        temporary, root, _legacy, project, _headless, _exe, config = self._fixture()
+        self.addCleanup(temporary.cleanup)
+        with patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"):
+            binding = resolve_binding(config, root=root)
+        source_rep = project / "skyrim-gog.rep"
+        (source_rep / "program.bin").write_bytes(b"existing analyzed program bytes")
+        with patch("tools.ghidra_probe.os.access", return_value=False):
+            first, mode = _wsl_project_workspace(binding, root=root)
+            second, second_mode = _wsl_project_workspace(binding, root=root)
+        cached_rep = root / ".local" / "ghidra" / "project-cache" / "skyrim-gog.rep"
+        self.assertEqual(mode, "ignored_wsl_copy_of_configured_existing_project")
+        self.assertEqual(second_mode, mode)
+        self.assertEqual(first["project_dir"], cached_rep.parent)
+        self.assertEqual(second["project_dir"], cached_rep.parent)
+        self.assertEqual((cached_rep / "program.bin").read_bytes(), b"existing analyzed program bytes")
+        self.assertEqual((source_rep / "program.bin").read_bytes(), b"existing analyzed program bytes")
+        manifest = json.loads((cached_rep.parent / "source-manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(manifest["source_rep_path"], str(source_rep.resolve()))
 
     def test_missing_project_config_fails_without_creating_a_project(self):
         temporary, root, _legacy, project, _headless, _exe, config = self._fixture()

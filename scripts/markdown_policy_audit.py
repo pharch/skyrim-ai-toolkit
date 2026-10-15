@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import sys
@@ -13,7 +14,7 @@ from urllib.parse import unquote
 ROOT = Path(__file__).resolve().parents[1]
 INVENTORY = ROOT / "migration" / "ACTIVE_MARKDOWN_AUDIT.md"
 EXCEPTIONS = ROOT / "migration" / "markdown-audit-exceptions.json"
-SKIP_DIRS = {".git", ".local", ".venv", "node_modules", "__pycache__"}
+SKIP_DIRS = {".git", ".local", ".venv", ".pytest_cache", "node_modules", "__pycache__"}
 # The machine-local handoff must not leak its path/hash. Mutable recovery
 # checkpoints are validated by research-state tooling; omit them from this
 # static inventory so every required next-action update does not stale it.
@@ -51,13 +52,21 @@ LINK_RE = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 
 def markdown_files(root: Path = ROOT) -> list[Path]:
     found: list[Path] = []
-    for path in root.rglob("*.md"):
-        relative = path.relative_to(root)
-        if any(part in SKIP_DIRS for part in relative.parts):
-            continue
-        if relative.as_posix() in SKIP_FILES:
-            continue
-        found.append(path)
+    # Prune ignored/heavy directories before descent. Filtering Path.rglob
+    # results skips their Markdown files only after walking every private
+    # Ghidra project/runtime file, which makes the cold-start audit stall.
+    for directory, child_dirs, filenames in os.walk(root, topdown=True):
+        child_dirs[:] = sorted(
+            name for name in child_dirs if name not in SKIP_DIRS
+        )
+        directory_path = Path(directory)
+        for filename in filenames:
+            if not filename.endswith(".md"):
+                continue
+            path = directory_path / filename
+            relative = path.relative_to(root)
+            if relative.as_posix() not in SKIP_FILES:
+                found.append(path)
     return sorted(found, key=lambda path: path.relative_to(root).as_posix().casefold())
 
 

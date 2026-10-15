@@ -9,7 +9,7 @@ The cold-start tool boundary is recorded in
 ../../../docs/HARNESS_READINESS.md. A staged Observer is not a live connection
 or state capture; do not launch the game from a readiness or unattended run.
 
-> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+> Startup: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md). Bootstrap with `python3 scripts/bootstrap_python.py` (Linux/WSL) or `py -3.12 scripts/bootstrap_python.py` (Windows), then use the strict dispatcher (`python3` or `py -3.12`, respectively). If a preflight fails, rerun bootstrap and strict validation before declaring an external blocker. A blocked capability cannot support a negative finding.
 
 Each `EXP-####` must provide: game/build/plugin version, experiment objective, competing hypotheses, predicted outcomes, observables, approved action surface, test save and rollback, minimal controls, instrument commands, data capture and result interpretation. If execution needs user input, record the whole protocol and mark item awaiting-user-data; continue other research.
 

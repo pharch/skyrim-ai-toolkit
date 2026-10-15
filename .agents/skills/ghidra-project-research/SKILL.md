@@ -5,9 +5,9 @@ description: Query the existing GOG Skyrim AE Ghidra project for build-attested 
 
 # Existing GOG Ghidra project research
 
-> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+> Startup: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md). Bootstrap with `python3 scripts/bootstrap_python.py` (Linux/WSL) or `py -3.12 scripts/bootstrap_python.py` (Windows), then use the strict dispatcher (`python3` or `py -3.12`, respectively). If a preflight fails, rerun bootstrap and strict validation before declaring an external blocker. A blocked capability cannot support a negative finding.
 
-Use this skill for static Skyrim AE code questions. The canonical local registry is ignored `config/local.env`. `GHIDRA_PROJECT_REP_PATH` must name the existing GOG `.rep` directory; the adapter verifies its adjacent `.gpr` and queries the project in place. The file binds three separate identities: the GOG `analysis_binary`, its existing `analysis_project`, and the runtime target used for record or live checks.
+Use this skill for static Skyrim AE code questions. The canonical local registry is ignored `config/local.env`. `GHIDRA_PROJECT_REP_PATH` must name the existing GOG `.rep` directory; the adapter verifies its adjacent `.gpr` and derives its project identity from this configured path. Native Windows queries that project directly. If WSL mounts the source read-only, the adapter copies the existing project files to an ignored `.local/ghidra/project-cache/` working copy, reuses it while source file metadata is unchanged, and queries that copy. It never creates a blank project, imports a binary, or reanalyzes it. The file binds three separate identities: the GOG `analysis_binary`, its existing `analysis_project`, and the runtime target used for record or live checks.
 Never select Ghidra from `SKYRIM_EXE_PATH`; it may identify Steam or another
 runtime build.
 
@@ -22,9 +22,9 @@ runtime build.
    python3 scripts/python_env.py run tools/ghidra_probe.py
    ```
 
-   The adapter invokes the existing project with `-process SkyrimSE.exe
-   -noanalysis -readOnly`. It does not offer import, overwrite, project
-   creation, or full auto-analysis.
+   The adapter invokes the configured existing project, or its WSL working
+   copy sourced from it, with `-process SkyrimSE.exe -noanalysis -readOnly`.
+   It does not offer import, overwrite, project creation, or full auto-analysis.
 3. For a named CommonLib symbol, resolve its ID and build-matched GOG RVA first:
 
    ```text
@@ -43,9 +43,9 @@ runtime build.
   `.local/ghidra/`. Cite the metadata artifact hash, executable version/hash,
   project alias/program, requested RVA when used, and each successful query
   component.
-- Ghidra may refresh internal project index timestamp files when opening in
-  read-only mode. Report that observed side effect. Do not restore or rewrite
-  the original program database as part of a query.
+- Ghidra may refresh internal project index timestamp files while opening a
+  working project. In WSL read-only-mount mode, those writes stay in the
+  ignored working copy; the configured source project is never modified.
 - Function names and nearby instructions do not establish gameplay meaning.
   Trace call/data flow, types, callers, and records; keep observations,
   hypotheses, and mechanism inferences distinct.
@@ -56,7 +56,6 @@ runtime build.
   resolved a function, incoming call edge, disassembly, and decompilation.
   It validates the tool route only, not a game mechanic.
 
-  Current cold-start status is in docs/HARNESS_READINESS.md: the fresh GOG
-  ProductVersion check failed through the WSL Windows bridge before Ghidra
-  launched. EV-0165–EV-0167 are retained historical evidence, not a current
-  query. Stop when identity validation fails; do not run a remembered RVA.
+  Current cold-start status is in docs/HARNESS_READINESS.md. A returned RVA
+  must come from a fresh Address Library probe in this session; stop when
+  identity validation fails and do not run a remembered RVA.

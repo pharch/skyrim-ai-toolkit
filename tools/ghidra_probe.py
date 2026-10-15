@@ -10,6 +10,7 @@ import ntpath
 import os
 from pathlib import Path
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -147,6 +148,84 @@ def _capture_hash(path: Path) -> str | None:
     return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
 
 
+def _project_source_manifest(project_dir: Path, project_name: str) -> dict[str, object]:
+    """Describe an existing project snapshot without changing its source tree."""
+    rep = project_dir / f"{project_name}.rep"
+    gpr = project_dir / f"{project_name}.gpr"
+    files = []
+    for path in sorted((gpr, *rep.rglob("*"))):
+        if not path.is_file():
+            continue
+        stat = path.stat()
+        files.append({
+            "path": path.relative_to(project_dir).as_posix(),
+            "size": stat.st_size,
+            "mtime_ns": stat.st_mtime_ns,
+        })
+    if not gpr.is_file() or not rep.is_dir() or not files:
+        raise GhidraProbeError("configured GOG Ghidra project cannot be snapshotted")
+    return {"source_rep_path": str(rep.resolve()), "files": files}
+
+
+def _wsl_project_workspace(binding: dict[str, object], *, root: Path) -> tuple[dict[str, object], str]:
+    """Use the configured source directly, or cache a faithful copy on read-only WSL mounts."""
+    source_dir = Path(binding["project_dir"])
+    if os.access(source_dir, os.W_OK):
+        return binding, "configured_existing_project"
+
+    source_name = str(binding["project_name"])
+    source_rep = Path(binding["project_rep_path"])
+    source_manifest = _project_source_manifest(source_dir, source_name)
+    manifest_payload = json.dumps(source_manifest, sort_keys=True, separators=(",", ":"))
+    source_fingerprint = hashlib.sha256(manifest_payload.encode("utf-8")).hexdigest()
+
+    cache_root = (root / ".local" / "ghidra" / "project-cache").resolve()
+    ignored_root = (root / ".local").resolve()
+    if ignored_root not in cache_root.parents:
+        raise GhidraProbeError("WSL Ghidra project cache must remain below ignored .local/")
+    cache_rep = cache_root / source_rep.name
+    cache_gpr = cache_root / f"{source_name}.gpr"
+    cache_manifest_path = cache_root / "source-manifest.json"
+    cached_manifest = None
+    if cache_manifest_path.is_file():
+        try:
+            cached_manifest = json.loads(cache_manifest_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            cached_manifest = None
+    cache_matches = bool(
+        cached_manifest
+        and cached_manifest.get("source_fingerprint") == source_fingerprint
+        and cached_manifest.get("source_rep_path") == source_manifest["source_rep_path"]
+        and cache_rep.is_dir()
+        and cache_gpr.is_file()
+    )
+    if not cache_matches:
+        if cache_root.exists():
+            # Delete only a cache carrying our exact ownership marker. Never
+            # remove an arbitrary directory at a configured or user path.
+            if not cached_manifest or cached_manifest.get("managed_by") != "tools/ghidra_probe.py":
+                raise GhidraProbeError(
+                    "WSL Ghidra project cache exists without its ownership manifest; inspect it before reuse"
+                )
+            if cached_manifest.get("source_rep_path") != source_manifest["source_rep_path"]:
+                raise GhidraProbeError("WSL Ghidra project cache belongs to a different configured source project")
+            shutil.rmtree(cache_root)
+        cache_root.mkdir(parents=True, exist_ok=True)
+        shutil.copytree(source_rep, cache_rep, symlinks=True)
+        shutil.copy2(source_dir / f"{source_name}.gpr", cache_gpr)
+        cache_manifest_path.write_text(json.dumps({
+            "schema": 1,
+            "managed_by": "tools/ghidra_probe.py",
+            "source_rep_path": source_manifest["source_rep_path"],
+            "source_fingerprint": source_fingerprint,
+            "source_file_count": len(source_manifest["files"]),
+        }, indent=2) + "\n", encoding="utf-8")
+
+    workspace = dict(binding)
+    workspace["project_dir"] = cache_root
+    return workspace, "ignored_wsl_copy_of_configured_existing_project"
+
+
 def run_query(*, root: Path = ROOT, config: dict[str, str] | None = None, timeout: int = 300,
               rva: int | None = None) -> dict[str, object]:
     """Run the checked-in query against the configured GOG project in place."""
@@ -158,6 +237,10 @@ def run_query(*, root: Path = ROOT, config: dict[str, str] | None = None, timeou
             raise GhidraProbeError("ignored config/local.env is missing; copy the portable template and bind local tools")
         config = read_local_config(root)
     binding = resolve_binding(config, root=root)
+    workspace = binding
+    project_workspace = "configured_existing_project"
+    if os.name != "nt":
+        workspace, project_workspace = _wsl_project_workspace(binding, root=root)
     script = root / "tools" / "ghidra_scripts" / "ReadOnlyTargetedQuery.java"
     if not script.is_file():
         raise GhidraProbeError("checked-in read-only Ghidra query script is missing")
@@ -171,27 +254,86 @@ def run_query(*, root: Path = ROOT, config: dict[str, str] | None = None, timeou
     stdout_path = output_dir / f"{stem}.stdout.raw"
     stderr_path = output_dir / f"{stem}.stderr.raw"
     metadata_path = output_dir / f"{stem}.meta.json"
-    wrapper = output_dir / f"{stem}.cmd"
+    wrapper: Path
 
     headless = binding["headless"]
-    project_dir = binding["project_dir"]
+    project_dir = workspace["project_dir"]
     project_name = str(binding["project_name"])
     program_name = str(binding["program_name"])
-    command = (
-        f'call "{_windows_path(headless)}" "{_windows_path(project_dir)}" "{project_name}" '
-        f'-process "{program_name}" -noanalysis -readOnly '
-        f'-scriptPath "{_windows_path(script.parent)}" '
-        f'-log "{_windows_path(log)}" -scriptlog "{_windows_path(script_log)}" '
-        f'-postScript "{script.name}"'
-        + (f' 0x{rva:X}' if rva is not None else "")
-    )
-    wrapper.write_text("@echo off\r\n" + command + "\r\nexit /b %ERRORLEVEL%\r\n", encoding="utf-8", newline="")
+    linux_headless = headless.parent / "analyzeHeadless"
+    invocation_env: dict[str, str] | None = None
+    if os.name != "nt" and linux_headless.is_file():
+        java_home_value = config.get("GHIDRA_JAVA_HOME_WSL", "").strip()
+        if java_home_value:
+            java_home = _native_path(java_home_value).resolve()
+            java = java_home / "bin" / "java"
+            if not java_home.is_dir() or not java.is_file():
+                raise GhidraProbeError("GHIDRA_JAVA_HOME_WSL must name a WSL Java 21+ home with bin/java")
+        else:
+            java_value = shutil.which("java")
+            if not java_value:
+                raise GhidraProbeError(
+                    "WSL has the paired Linux analyzeHeadless launcher but no Java 21+ runtime; "
+                    "set GHIDRA_JAVA_HOME_WSL in ignored config/local.env"
+                )
+            java = Path(java_value).resolve()
+            java_home = java.parent.parent
+        version_probe = subprocess.run(
+            [str(java), "-version"], capture_output=True, timeout=20, check=False,
+        )
+        java_version_text = (version_probe.stderr + version_probe.stdout).decode("utf-8", errors="replace")
+        java_version_match = re.search(r'version "(\d+)', java_version_text)
+        if version_probe.returncode != 0 or not java_version_match or int(java_version_match.group(1)) < 21:
+            raise GhidraProbeError("configured WSL Java runtime must start successfully and be version 21 or newer")
+        invocation_env = os.environ.copy()
+        invocation_env["JAVA_HOME"] = str(java_home)
+        invocation_env["PATH"] = str(java.parent) + os.pathsep + invocation_env.get("PATH", "")
+        user_home_value = config.get("GHIDRA_USER_HOME_WSL", ".local/ghidra-runtime/home").strip()
+        user_home = _native_path(user_home_value).resolve()
+        ignored_root = (root / ".local").resolve()
+        if user_home != ignored_root and ignored_root not in user_home.parents:
+            raise GhidraProbeError("GHIDRA_USER_HOME_WSL must resolve below this checkout's ignored .local directory")
+        user_home.mkdir(parents=True, exist_ok=True)
+        # Ghidra's LaunchSupport persists the selected JDK and preferences in
+        # user.home. Keep that state beside the local Java runtime so a managed
+        # WSL home or XDG setup is not an undocumented prerequisite.
+        java_home_option = str(user_home).replace("\\", "\\\\").replace('"', '\\"')
+        existing_java_options = invocation_env.get("JAVA_TOOL_OPTIONS", "").strip()
+        invocation_env["JAVA_TOOL_OPTIONS"] = " ".join(
+            part for part in (existing_java_options, f'-Duser.home="{java_home_option}"') if part
+        )
+        command_args = [
+            str(linux_headless), str(project_dir), project_name,
+            "-process", program_name, "-noanalysis", "-readOnly",
+            "-scriptPath", str(script.parent), "-log", str(log),
+            "-scriptlog", str(script_log), "-postScript", script.name,
+        ]
+        if rva is not None:
+            command_args.append(f"0x{rva:X}")
+        command = shlex.join(command_args)
+        wrapper = output_dir / f"{stem}.sh"
+        wrapper.write_text("#!/bin/sh\nexec " + command + "\n", encoding="utf-8")
+        wrapper.chmod(wrapper.stat().st_mode | 0o111)
+        invocation = command_args
+    else:
+        command = (
+            f'call "{_windows_path(headless)}" "{_windows_path(project_dir)}" "{project_name}" '
+            f'-process "{program_name}" -noanalysis -readOnly '
+            f'-scriptPath "{_windows_path(script.parent)}" '
+            f'-log "{_windows_path(log)}" -scriptlog "{_windows_path(script_log)}" '
+            f'-postScript "{script.name}"'
+            + (f' 0x{rva:X}' if rva is not None else "")
+        )
+        wrapper = output_dir / f"{stem}.cmd"
+        wrapper.write_text("@echo off\r\n" + command + "\r\nexit /b %ERRORLEVEL%\r\n", encoding="utf-8", newline="")
+        invocation = [_cmd_executable(), "/d", "/c", _windows_path(wrapper)]
 
     started = time.monotonic()
     try:
         result = subprocess.run(
-            [_cmd_executable(), "/d", "/c", _windows_path(wrapper)],
+            invocation,
             cwd=root,
+            env=invocation_env,
             capture_output=True,
             timeout=timeout,
             check=False,
@@ -224,9 +366,13 @@ def run_query(*, root: Path = ROOT, config: dict[str, str] | None = None, timeou
         "captured_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "operation": "existing_gog_project_read_only_query",
         "analysis_distribution": "GOG",
+        "execution_launcher": "wsl-linux-analyzeHeadless" if invocation_env is not None else "windows-analyzeHeadless",
         "analysis_binary_product_version": binding["version"],
         "analysis_binary_sha256": binding["sha256"],
         "project_alias": "config/local.env:GHIDRA_PROJECT_REP_PATH",
+        "project_workspace": project_workspace,
+        "project_workspace_rep_path": str((project_dir / f"{project_name}.rep").relative_to(root))
+        if project_workspace != "configured_existing_project" else "config/local.env:GHIDRA_PROJECT_REP_PATH",
         "program": program_name,
         "requested_rva": f"0x{rva:X}" if rva is not None else None,
         "program_executable_path_matches_gog_binary": path_matches,

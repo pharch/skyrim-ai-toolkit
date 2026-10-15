@@ -62,35 +62,24 @@ def audit(root: Path = ROOT) -> dict[str, object]:
     untracked_raw = [p for p in untracked if _is_raw_candidate(p)]
     probe_results = {path: _is_ignored(root, path) for path in IGNORE_PROBES}
 
-    local_heavy = []
-    local_root = root / ".local"
-    if local_root.is_dir():
-        for path in local_root.rglob("*"):
-            if path.is_file():
-                try:
-                    if path.stat().st_size >= HEAVY_LIMIT:
-                        local_heavy.append(path)
-                except OSError:
-                    local_heavy.append(path)
-    local_types = {"sqlite_database": 0, "compressed_source_archive": 0, "other": 0}
-    for path in local_heavy:
-        if path.suffix.casefold() in {".sqlite", ".sqlite3", ".db"}:
-            local_types["sqlite_database"] += 1
-        elif path.suffix.casefold() in {".bz2", ".gz", ".xz", ".zip", ".7z"}:
-            local_types["compressed_source_archive"] += 1
-        else:
-            local_types["other"] += 1
-    local_bytes = sum(path.stat().st_size for path in local_heavy if path.exists())
+    # `.local` contains the Ghidra project cache and can hold hundreds of
+    # thousands of small files. Git does not inspect ignored files, so walking
+    # that tree adds minutes of I/O without strengthening this audit. Verify
+    # the ignore contract directly and leave the private-size inventory
+    # explicitly unscanned.
+    local_root_ignored = _is_ignored(root, ".local/probe.sqlite3")
     return {
         "tracked_file_count": len(tracked),
         "tracked_raw_artifact_count": len(tracked_raw),
         "tracked_heavy_file_count": len(tracked_heavy),
         "unignored_untracked_raw_artifact_count": len(untracked_raw),
         "ignore_probes": probe_results,
-        "ignored_local_heavy_file_count": len(local_heavy),
-        "ignored_local_heavy_size_mib": round(local_bytes / (1024 * 1024), 1),
-        "ignored_local_heavy_types": local_types,
-        "pass": not tracked_raw and not tracked_heavy and not untracked_raw and all(probe_results.values()),
+        "local_root_ignored": local_root_ignored,
+        "ignored_local_heavy_inventory": "not_scanned_private_ignored_tree",
+        "ignored_local_heavy_file_count": None,
+        "ignored_local_heavy_size_mib": None,
+        "ignored_local_heavy_types": None,
+        "pass": not tracked_raw and not tracked_heavy and not untracked_raw and local_root_ignored and all(probe_results.values()),
     }
 
 

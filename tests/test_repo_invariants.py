@@ -10,12 +10,12 @@ from scripts.validate_overlay import _validate_markdown_links, _validate_python_
 
 
 class RepositoryInvariantTests(unittest.TestCase):
-    def test_ci_uses_python_test_runner_and_declares_pytest_in_dev_requirements(self):
+    def test_ci_bootstraps_the_canonical_pinned_environment_and_uses_pytest(self):
         workflow = (REPO / ".github/workflows/ci.yml").read_text(encoding="utf-8")
-        requirements = (REPO / "requirements-dev.txt").read_text(encoding="utf-8")
-        self.assertIn("python -m pytest -q", workflow)
+        requirements = (REPO / "requirements.txt").read_text(encoding="utf-8")
+        self.assertIn("scripts/bootstrap_python.py", workflow)
+        self.assertIn("python scripts/python_env.py run -m pytest -q", workflow)
         self.assertRegex(requirements, r"(?im)^pytest==[0-9][^\s]*$")
-        self.assertIn("-r requirements.txt", requirements)
         self.assertNotRegex(workflow, r"(?i)setup-node|npm test|node --test")
 
     def test_python_tool_surface_has_only_the_native_ghidra_payload_exception(self):

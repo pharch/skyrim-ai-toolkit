@@ -5,12 +5,15 @@ description: Route Skyrim AE research through tested Python entrypoints, with ex
 
 # Retained tool operations
 
-> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+> Startup: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md). Bootstrap with `python3 scripts/bootstrap_python.py` (Linux/WSL) or `py -3.12 scripts/bootstrap_python.py` (Windows), then use the strict dispatcher (`python3` or `py -3.12`, respectively). If a preflight fails, rerun bootstrap and strict validation before declaring an external blocker. A blocked capability cannot support a negative finding.
 
-Run agent-facing tools only through the repository-local Python 3.12
-`.venv` dispatcher described in `docs/LOCAL_RUNTIME_CONTRACT.md`. It has no
-system-Python or Conda fallback. Use `python3 scripts/harness_doctor.py all`
-for bootstrap status when the venv is missing.
+Run `scripts/bootstrap_python.py` before research to create or repair the
+host-specific environment under ignored `.local/python-envs/`. The canonical
+dependencies come from `requirements.txt`. Then use the strict dispatcher
+described in `docs/LOCAL_RUNTIME_CONTRACT.md`; only the Python child process
+must come from the validated environment. A failed preflight triggers
+bootstrap repair and a repeat strict check. Do not use Conda or ambient
+packages for research.
 
 ## Target and records
 

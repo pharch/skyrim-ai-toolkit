@@ -4,7 +4,8 @@
 > captures and may describe status that has since changed. They are not the
 > current readiness report or an alternate invocation contract. Use
 > `docs/HARNESS_READINESS.md` for current gates and
-> `docs/LOCAL_RUNTIME_CONTRACT.md` for the strict Python 3.12 `.venv`, local
+> `docs/LOCAL_RUNTIME_CONTRACT.md` for the bootstrap-first persistent Python
+> 3.12 environment under ignored `.local/`, local
 > configuration, and implemented commands. System-Python/Conda entries below
 > are historical diagnostics, never a research fallback.
 

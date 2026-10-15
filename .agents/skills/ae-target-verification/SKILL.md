@@ -5,16 +5,16 @@ description: Verify the exact Skyrim AE executable, runtime, active load order, 
 
 # Skyrim AE target verification
 
-> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+> Startup: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md). Bootstrap with `python3 scripts/bootstrap_python.py` (Linux/WSL) or `py -3.12 scripts/bootstrap_python.py` (Windows), then use the strict dispatcher (`python3` or `py -3.12`, respectively). If a preflight fails, rerun bootstrap and strict validation before declaring an external blocker. A blocked capability cannot support a negative finding.
 
 This repository targets Skyrim Anniversary Edition runtime 1.6.318 or newer.
 Research and runtime claims must be tied to the exact verified executable and
 active profile. Do not use this workflow to compare other editions.
 
-1. Create and verify the repository Python 3.12 `.venv` using
-   `docs/LOCAL_RUNTIME_CONTRACT.md`, then run
-   `python3 scripts/python_env.py run tools/ae_preflight.py` (or start
-   `scripts/python_env.py` with `.venv\Scripts\python.exe` on Windows). The
+1. Run the host bootstrap from `docs/LOCAL_RUNTIME_CONTRACT.md`, then run
+   `python3 scripts/python_env.py run tools/ae_preflight.py` (Windows PowerShell
+   uses `py -3.12` to start the dispatcher). If bootstrap or strict preflight
+   fails, repair and recheck before handing off an environment blocker. The
    gate reads executable ProductVersion, verifies AE 1.6.318+, hashes the
    binary, and validates the configured full order. `--probe-executable` is
    diagnostic only. `SKYRIM_EDITION=AE` is not executable evidence.
@@ -31,6 +31,7 @@ active profile. Do not use this workflow to compare other editions.
 5. Stop on an unsupported runtime, missing executable, empty/incomplete order,
    or identity mismatch. Do not fall back to another game folder or trust a
    typed version string.
-6. Linux tests can exercise parsers and policy with fixtures. Only Windows can
-   verify the real PE version resource, xEditLib DLL/registry behavior, and MO2
-   virtualized load order; only a controlled game test can verify live behavior.
+6. The Python PE-resource reader can verify the real executable ProductVersion
+   on Linux/WSL as well as Windows. Windows is still required to verify native
+   xEditLib DLL/registry behavior and MO2 virtualized load order; only a
+   controlled game test can verify live behavior.

@@ -21,9 +21,10 @@ only the source documents relevant to the selected question.
   plugin/record, probe artifact, tested protocol, URL/revision, message ID, or
   preserved legacy path. Unsupported claims remain unverified.
 - Verify the target from `SkyrimSE.exe` ProductVersion (AE runtime 1.6.318+);
-  do not accept a manually typed version as executable evidence. Use the
-  repository `.venv` dispatcher for `tools/ae_preflight.py` before xEdit or
-  live-game access. The exact Windows and Linux invocations are in
+  do not accept a manually typed version as executable evidence. Bootstrap the
+  host's ignored Python environment, then use the strict `scripts/python_env.py`
+  dispatcher for `tools/ae_preflight.py` before xEdit or live-game access. The
+  exact Windows, Linux, and WSL invocations are in
   `docs/LOCAL_RUNTIME_CONTRACT.md`.
 - Load the complete active AE profile order. An empty, partial, stale, or
   unverified order cannot support a negative finding. MO2 requires its selected
@@ -43,65 +44,91 @@ only the source documents relevant to the selected question.
 
 ## Python 3.12 environment
 
-Create one repository-local environment. On Windows PowerShell:
+The one supported dependency specification is pinned `requirements.txt`. The
+persistent environments are Git-ignored under `.local/python-envs/`, with
+separate `windows`, `wsl`, and `linux` directories. Use native Windows for
+game-connected research; WSL has its own independent environment for offline
+work. A healthy host environment is reused.
 
-    py -3.12 -m venv .venv
-    & .\.venv\Scripts\python.exe -m pip install --requirement requirements-dev.txt
-    Copy-Item config/local.env.example config/local.env
-    # Fill the private bindings described below, then:
-    & .\.venv\Scripts\python.exe scripts/python_env.py check --strict
-    & .\.venv\Scripts\python.exe scripts/python_env.py run scripts/research_state.py validate
-    & .\.venv\Scripts\python.exe scripts/harness_doctor.py all
+Bootstrap or repair from the host's installed Python launcher:
 
-On Linux/WSL:
+    # Windows PowerShell
+    py -3.12 scripts/bootstrap_python.py
 
-    python3 -m venv .venv
-    .venv/bin/python -m pip install --requirement requirements-dev.txt
-    cp config/local.env.example config/local.env
-    # Fill config/local.env, then:
+    # Linux or WSL
+    python3 scripts/bootstrap_python.py
+
+If `config/local.env` is absent, initialize its blank schema with the host
+Python launcher before strict validation:
+
+    # Windows PowerShell
+    py -3.12 scripts/setup_research.py init
+
+    # Linux or WSL
+    python3 scripts/setup_research.py init
+
+The setup-only initializer never overwrites existing machine bindings. Fill
+the host-specific paths required by a tool in `config/local.env`.
+
+The bootstrap detects the execution host, finds Python 3.12, creates the
+environment under `.local/` when absent, repairs incomplete environments, and
+installs or repairs every pin from `requirements.txt`. It reports the working
+environment path. It may use the host package manager or a verified local
+pip-wheel bootstrap when `venv` or `ensurepip` is missing. It does not delete a
+healthy environment. The native Windows environment is never the WSL
+environment.
+
+After bootstrap, check and dispatch research tools through the strict
+dispatcher. Use `py -3.12` as the launcher in Windows PowerShell and
+`python3` in Linux/WSL:
+
     python3 scripts/python_env.py check --strict
     python3 scripts/python_env.py run scripts/research_state.py validate
-    python3 scripts/harness_doctor.py all
+    python3 scripts/python_env.py run scripts/harness_doctor.py all
 
-If venv creation reports that ensurepip or venv is unavailable, the host's
-Python 3.12 venv package is missing. Install that Python prerequisite through
-the host's normal package channel, recreate .venv, and repeat the bootstrap.
-Do not substitute system Python, Conda, or an ambient environment for research
-commands.
+The dispatcher launches children only from the active host's validated
+`.local/python-envs/<host>` environment. The system launcher starts the
+dispatcher only; it is not a research-tool fallback. The bootstrap and
+one-time local-config initializer are setup-only commands. Never invoke a
+research script directly or use Conda/ambient site-packages. `check --strict` verifies
+Python 3.12, pip, every pinned distribution and import, and `config/local.env`.
+`run` returns 127 without starting a child when any strict prerequisite fails.
 
-requirements.txt pins active runtime third-party imports to lz4==4.3.3 and
-PyYAML==6.0.1; other active tools use the standard library. lz4 is required by
-scripts/read-save.py, including its --help import path. requirements-dev.txt
-includes those runtime pins and pytest==8.0.0 for the CI test runner. The dev
-split is deliberate; install requirements-dev.txt for a complete clean setup.
-environment.yml is optional Conda alignment metadata, not the active route.
-scripts/python_env.py always targets this checkout's .venv, requires Python
-3.12 and both pinned imports, and fails closed. check --strict reports setup
-status; run returns 127 without starting a child when the venv is missing or
-invalid. It never falls back.
+If a preflight fails, treat it as a repair task: rerun the bootstrap, read its
+specific diagnosis, allow its host-local repair attempts to finish, then repeat
+the strict check and readiness doctor. Do not hand off a missing or broken
+environment while bootstrap can repair it. Add a genuinely needed package as
+an exact `name==version` pin to `requirements.txt`, then rerun bootstrap and
+strict validation. Once bootstrap, strict Python, research-state validation,
+and locally available static checks pass, stop setup work and continue the
+selected research frontier. Do not keep setup as the active task.
 
-scripts/harness_doctor.py all is the bootstrap diagnostic entrypoint. It may
-be started with system Python because it must report a missing .venv; this does
-not make the system interpreter ready for research. Run research tools only
-through scripts/python_env.py run after the repository venv passes.
+The pinned active third-party imports are `lz4==4.3.3` for
+`scripts/read-save.py` and `PyYAML==6.0.1` for `scripts/validate_overlay.py`;
+`pip==24.0` supports bootstrap/repair, and `pytest==8.0.0` is pinned test
+tooling with pinned `iniconfig`, `packaging`, and `pluggy` dependencies.
+`requirements-dev.txt` is a compatibility include of the same full
+specification. `environment.yml` is retained historical metadata, not an
+alternate setup route.
 
 scripts/research_state.py validate checks durable transaction, frontier,
 evidence, claim, and recovery structure. It does not verify executable
 ProductVersion, load-order completeness against MO2, xEdit/Ghidra access, save
 parsing, or live-game behavior.
 
-Active research tools are Python entrypoints. Do not add Node, shell, Java,
-or other-language launchers to agent skills. A domain requiring an external
-native app remains blocked until its Python entrypoint and behavior are
-tested.
+Active research tools are Python entrypoints. Do not add Node, shell, Java, or
+other-language launchers to agent skills. A domain requiring an external native
+app remains blocked until its Python entrypoint and behavior are tested.
 
 ## Tool invocation
 
 - `config/local.env` is the only machine-specific configuration registry;
   domain skills must use it and the commands in
-  `docs/LOCAL_RUNTIME_CONTRACT.md`. For xEdit, bind `SKYRIM_EXE_PATH`,
-  `SKYRIM_DATA`, `SSEEDIT_EXE`, and `XEDIT_SCRIPTS` there. Invoke the implemented
-  routes with
+  `docs/LOCAL_RUNTIME_CONTRACT.md`. Bootstrap first; invoke
+  `python3 scripts/python_env.py run ...` on Linux/WSL or
+  `py -3.12 scripts/python_env.py run ...` on Windows. For xEdit, bind
+  `SKYRIM_EXE_PATH`, `SKYRIM_DATA`, `SSEEDIT_EXE`, and `XEDIT_SCRIPTS` there.
+  Invoke the implemented routes with
   `python3 scripts/python_env.py run tools/xedit_bridge.py doctor`,
   `python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf`,
   and `python3 scripts/python_env.py run tools/xedit_bridge.py prepare`.

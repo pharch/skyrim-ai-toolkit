@@ -1,5 +1,6 @@
 import base64
 import os
+import struct
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,6 +10,7 @@ from unittest.mock import patch
 from tools.ae_target import (
     REQUIRED_AE_MASTERS,
     TargetError,
+    _read_pe_product_version,
     assert_ae_target,
     parse_active_plugins,
     parse_version,
@@ -35,6 +37,61 @@ class AETargetTests(unittest.TestCase):
         self.assertEqual(parse_version("1.6.1170.0"), (1, 6, 1170))
         with self.assertRaisesRegex(TargetError, "cannot parse"):
             parse_version("Anniversary Edition")
+
+    def test_pe_product_version_reader_extracts_named_version_string(self):
+        def align4(data: bytearray) -> None:
+            while len(data) % 4:
+                data.append(0)
+
+        def block(key: str, value: bytes, value_length: int, value_type: int, children=()) -> bytes:
+            output = bytearray(6)
+            output.extend(key.encode("utf-16le") + b"\0\0")
+            align4(output)
+            output.extend(value)
+            align4(output)
+            for child in children:
+                output.extend(child)
+                align4(output)
+            struct.pack_into("<HHH", output, 0, len(output), value_length, value_type)
+            return bytes(output)
+
+        fixed_info = struct.pack(
+            "<13I", 0xFEEF04BD, 0x10000, 0x00010006, 0x049B0000,
+            0x00010006, 0x049B0000, 0, 0, 0x3F, 0, 0, 0, 0,
+        )
+        product = block("ProductVersion", "1.6.1179.0\0".encode("utf-16le"), 11, 1)
+        table = block("040904B0", b"", 0, 1, (product,))
+        strings = block("StringFileInfo", b"", 0, 1, (table,))
+        version_resource = block("VS_VERSION_INFO", fixed_info, len(fixed_info), 0, (strings,))
+
+        image = bytearray(0x600)
+        image[:2] = b"MZ"
+        struct.pack_into("<I", image, 0x3C, 0x80)
+        image[0x80:0x84] = b"PE\0\0"
+        coff = 0x84
+        struct.pack_into("<HHIIIHH", image, coff, 0x8664, 1, 0, 0, 0, 240, 0x22)
+        optional = coff + 20
+        struct.pack_into("<H", image, optional, 0x20B)
+        resource_dir = optional + 112 + 2 * 8
+        struct.pack_into("<II", image, resource_dir, 0x1000, 0x200)
+        section = optional + 240
+        image[section:section + 8] = b".rsrc\0\0\0"
+        struct.pack_into("<IIII", image, section + 8, 0x400, 0x1000, 0x400, 0x200)
+
+        resource = 0x200
+        struct.pack_into("<IIHHHH", image, resource, 0, 0, 0, 0, 0, 1)
+        struct.pack_into("<II", image, resource + 16, 16, 0x80000018)
+        struct.pack_into("<IIHHHH", image, resource + 24, 0, 0, 0, 0, 0, 1)
+        struct.pack_into("<II", image, resource + 40, 1, 0x80000030)
+        struct.pack_into("<IIHHHH", image, resource + 48, 0, 0, 0, 0, 0, 1)
+        struct.pack_into("<II", image, resource + 64, 1033, 72)
+        struct.pack_into("<IIII", image, resource + 72, 0x1100, len(version_resource), 0, 0)
+        image[resource + 0x100:resource + 0x100 + len(version_resource)] = version_resource
+
+        with tempfile.TemporaryDirectory() as temporary:
+            executable = Path(temporary) / "SkyrimSE.exe"
+            executable.write_bytes(image)
+            self.assertEqual(_read_pe_product_version(executable), "1.6.1179.0")
 
     def test_ae_target_uses_injected_product_version_reader(self):
         target = assert_ae_target(

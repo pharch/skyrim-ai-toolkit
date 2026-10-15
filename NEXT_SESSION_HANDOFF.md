@@ -1,50 +1,55 @@
-# Next session handoff — setup status
+# Next session handoff — research ready
 
-This is a setup handoff only; no bounty investigation started. Read
-`docs/HARNESS_READINESS.md` for the separate readiness gates and
-`docs/LOCAL_RUNTIME_CONTRACT.md` for the active setup and invocation
-procedure. Earlier rows in `docs/LOCAL_TOOL_HANDOFF.md` are historical.
+Setup is complete; no bounty investigation started in this session. Read
+`docs/HARNESS_READINESS.md` for separate capability gates and
+`docs/LOCAL_RUNTIME_CONTRACT.md` for the one Python bootstrap/dispatch route.
+Earlier tool records in `docs/LOCAL_TOOL_HANDOFF.md` are historical.
 
-## Current host blocker
+## Verified static workflow
 
-The active shell is Ubuntu 24.04 under WSL2 with CPython 3.12.3. It lacks
-`ensurepip` and pip. Installing the documented `python3.12-venv` package
-requires an unavailable sudo password. Windows `py.exe` and PowerShell fail
-at startup with `UtilBindVsockAnyPort:307`. The incomplete WSL-created
-`.venv` was removed. The current strict status is `FAIL_VENV_MISSING`; do
-not use system Python, Conda, or an ambient environment to run research tools.
-The captured outputs are under
-`.local/alignment/research-start-cold-start-20261015/`.
+- WSL2 Ubuntu 24.04 / CPython 3.12.3 uses the persistent ignored environment
+  `.local/python-envs/wsl`. Its seven pinned distributions pass strict check.
+- Bootstrap from an absent test path created and installed the environment;
+  the second call reused it; a deliberately removed `pytest==8.0.0` was
+  repaired in place. Captures are under ignored
+  `.local/alignment/python-bootstrap-final/`.
+- The configured GOG executable is ProductVersion 1.6.1179.0. The fresh
+  Address Library probe mapped `MagicItem::CalculateCost` to GOG RVA
+  `0x14C020`; the existing GOG Ghidra query returned function, caller xref,
+  disassembly, and decompilation. The read-only WSL source mount required an
+  ignored `.local/ghidra/project-cache/` copy sourced from
+  `GHIDRA_PROJECT_REP_PATH`. No binary import or reanalysis occurred.
+- The documented `xedit_bridge.py file-records` route returned one QUST record
+  from `Skyrim.esm` through the direct TES4 parser. This is not native SSEEdit
+  or a winning-record result. UESP and Apocrypha local database smoke checks
+  passed. Research-state validation passed.
 
-The consolidated doctor’s research-state check passes, but its overall verdict
-is BLOCKED because the strict Python, GOG, xEdit, and SKSE identity routes did
-not launch. The GOG project binding itself is valid: the configured existing
-GOG `.rep` and adjacent `.gpr` exist. No fresh Ghidra query or xEdit record
-retrieval was produced.
+## Separate unverified gates
 
-## Separate external gates
+- The selected MO2 profile and complete active order are not configured.
+  Profile-specific winners and negative findings remain unsupported until the
+  selected profile's explicit `plugins.txt` is validated.
+- Native SSEEdit record-tree export is not verified and is not required for
+  static research.
+- Installed SKSE files match the Steam AE 1.6.1170.0 file set. No game process,
+  Observer load, handshake, event, snapshot, or DevBench connection was tested.
+  Live SKSE is not required for static research.
+- Linux/WSL validation does not establish Windows MO2/xEdit or in-game AE
+  behavior.
 
-- `MO2_PROFILE_DIR` and `PLUGINS_TXT` are unset. The selected profile and
-  complete order are NOT_VERIFIED; this remains a blocker for profile-level
-  winner results and negative findings.
-- Native SSEEdit record export is not required to start static research.
-- SKSE identity and live connection/observation remain NOT_VERIFIED. A prior
-  successful build or staged Observer DLL is not a connection, plugin load,
-  handshake, or state observation. Live SKSE is not required for static
-  research.
+## Bootstrap and research start
 
-## Exact start command after the setup gates pass
+From the repository root on Linux/WSL:
 
-In Windows PowerShell, from the repository root:
+```sh
+python3 scripts/bootstrap_python.py
+python3 scripts/setup_research.py init
+python3 scripts/python_env.py check --strict
+python3 scripts/python_env.py run scripts/research_state.py validate
+```
 
-    & .\.venv\Scripts\python.exe scripts/python_env.py run scripts/research_state.py validate
-
-On Linux/WSL, after that host’s repository `.venv` passes the strict check:
-
-    python3 scripts/python_env.py run scripts/research_state.py validate
-
-Start only after the strict Python environment and the configured GOG
-function/xref/decompilation query pass. Then copy the exact initial prompt from
-`docs/RESEARCH_START_PROMPT.md`. It selects P0 OBJ-1/Q-0001 and its rival
-models. Recovery is idle and `next_frontier_id` is Q-0001; there is no active
-research transaction.
+Then paste the **Initial Codex prompt** in `docs/RESEARCH_START_PROMPT.md`.
+It begins `TX-0005` / `Q-0001` only after that session confirms the gates. The
+same document provides the exact `research_state.py begin` command. After
+strict Python, state validation, and static-tool checks pass, proceed with the
+frontier rather than continuing setup work.

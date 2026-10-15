@@ -2167,3 +2167,68 @@ New continuation: user authorized resolving remaining research-start blockers. E
 - The report has been rerun once more after the generated Markdown inventory refresh; the latest output remains under ignored `.local/alignment/harness-doctor/`. No bounty investigation started.
 - Recovery is idle, with no transaction, and `next_frontier_id=Q-0001`.
 - Exact next action: On a host with Python 3.12 ensurepip and working Windows tool interop (or after installing python3.12-venv with administrator rights), follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install requirements-dev.txt; verify strict Python, the GOG query, and research-state before starting Q-0001.
+
+
+## Persistent Python bootstrap implementation — 2026-10-15
+
+- User authorized focused bootstrap implementation, disposable missing-environment tests, tool validation, and a commit. No bounty research is authorized.
+- Exact next action: Inspect the active runtime contract, Python dispatcher, requirements/import inventory, readiness doctor, tool skills, and Git status; then design the .local persistent Python bootstrap and disposable validation lane.
+
+
+## Persistent Python bootstrap implementation — 2026-10-15
+
+- Contract, tool routes, imports, host, and current checkout state inspected. Active host is Ubuntu 24.04 on WSL2 with CPython 3.12.3; system `venv`/`ensurepip` is absent.
+- Exact next action: Implement an idempotent .local Python 3.12 bootstrap and strict dispatcher paths; resolve WSL venv prerequisites without touching any existing healthy environment; add disposable missing-environment, reuse, and dependency-repair validation.
+
+
+## Bootstrap implementation checkpoint — 2026-10-15
+
+- Added a host-aware `.local/python-envs/<host>` selector, a pinned `requirements.txt` parser, a strict dispatcher that validates pip and every declared package, and bootstrap repair logic. Focused dispatcher tests pass (10 pass, 1 expected skip); syntax compilation passes.
+- Exact next action: Finalize bootstrap logic and strict dispatcher tests, then replace active .venv and Conda setup instructions with the .local host-specific bootstrap workflow in AGENTS.md, the runtime contract, and Python-backed tool skills.
+
+
+## Startup contract reconciliation — 2026-10-15
+
+- Updated AGENTS.md, the local runtime contract, README, getting-started, tool routing, local binding guidance, the CI workflow, and Python-backed tool skills to use bootstrap plus the host-specific strict dispatcher. The full requirements set now has one pinned source file.
+- Exact next action: Complete remaining startup/readiness documentation and CI/skill consistency; run bootstrap and dispatcher unit tests; then execute the isolated missing-environment, reuse, and missing-dependency repair scenarios.
+
+
+## Environment integration test underway — 2026-10-15
+
+- Started an isolated bootstrap at `.local/bootstrap-validation/cold/wsl`; its target was absent and it uses only ignored storage. The command was granted network access for the pinned bootstrap/requirements downloads.
+- Exact next action: Reconcile stale readiness, handoff, and start-prompt reports with current bootstrap evidence; complete local Ghidra/xEdit/UESP/Apocrypha/research-state validation and the consolidated doctor.
+
+## WSL target-attestation and Ghidra adapter repair — 2026-10-15
+
+- Strict Python 3.12 and all seven pinned distributions pass. The WSL PE reader now attests the configured GOG executable as ProductVersion 1.6.1179.0; Address Library resolves `MagicItem::CalculateCost` to GOG RVA `0x14C020`. The paired Linux Ghidra launcher starts with local Java 21 and preferences under ignored `.local/`. Its first direct attempt proved the configured Windows project mount is read-only; Ghidra's own log refused to open the project. A cache-backed snapshot adapter now derives only from the configured project path and preserves the source.
+- Exact next action: Run the read-only function/xref/disassembly/decompilation query against the WSL snapshot of the configured GOG project and verify all query checks pass.
+
+## Local tool validation passes — 2026-10-15
+
+- The configured read-only xEdit bridge doctor passed and `file-records` returned exactly one `CreatureDialogueWerewolf` QUST record from `Skyrim.esm` using the direct TES4 parser. The domain doctor reports UESP (475,228 pages, 17,520 Skyrim pages) and Apocrypha (60,873 messages) indexes answer smoke searches. Installed SKSE loader/runtime DLL and Address Library identity match Steam AE 1.6.1170; no live connection was attempted.
+- Exact next action: Run research-state validation, the consolidated doctor, and the full test suite through the validated WSL environment; reconcile the final readiness reports and commit the setup work.
+
+## Final contract correction — 2026-10-15
+
+- Code review found a stale doctor payload that still advertised the retired `skyrim-ae-research` Conda environment. It now reports the active host-specific `.local` venv and canonical requirements pin count; overlay validation checks `requirements.txt` instead of treating `environment.yml` as the dependency source.
+- Exact next action: Capture a fresh absent-environment bootstrap, same-path reuse, and missing-package repair under a new disposable `.local` directory, then rerun research validation and the consolidated doctor.
+- The first fresh disposable path was created but dependency installation failed on the host's restricted DNS; its incomplete env was retained and the same-path retry repaired it successfully once package-network access was granted. Captures are in `.local/alignment/python-bootstrap-final/`.
+- Exact next action: Create a second fresh disposable WSL environment with the package index available, verify action=`created`, then capture reuse and missing-dependency repair without touching `.local/python-envs/wsl`.
+- Clean-path acceptance passed: a previously absent `.local/bootstrap-validation/final/created/wsl` returned `action=created` with all seven exact pins; the next bootstrap returned `action=reused`; after uninstalling `pytest==8.0.0`, bootstrap returned `action=repaired` and reinstalled it. A strict check on this disposable path passed. Captures remain under `.local/alignment/python-bootstrap-final/`.
+- Exact next action: Rerun the disposable strict check after correcting its displayed environment name, validate the repaired disposable environment through the dispatcher, then finalize readiness docs and run the consolidated doctor.
+
+## Setup closeout gates updated — 2026-10-15
+
+- Added EV-0203–EV-0205 for the disposable Python bootstrap acceptance, current configured GOG Ghidra query, and xEdit bridge record retrieval. Q-0001 is open again; recovery remains idle with no transaction started. Readiness/handoff/start-prompt now distinguish static readiness from MO2, native export, and live SKSE gates.
+- Exact next action: Refresh the active Markdown inventory, run strict Python and research-state validation, then run the consolidated harness doctor through the validated dispatcher and record its current capture.
+
+## Final doctor rerun — 2026-10-15
+
+- The first consolidated run exposed slow recursive scans of ignored `.local` project data in the Markdown and pre-push audits. Both audits now prune ignored/generated trees or verify the `.local` ignore rule directly; focused regression tests and standalone validators pass.
+- Exact next action: Collect the running consolidated doctor report, record its evidence-backed static and external gate results, rerun research-state validation, then review and commit the setup changes.
+
+## Static readiness complete — 2026-10-15
+
+- EV-0206 records the consolidated doctor capture: 21 checks, 19 PASS, two `BLOCKED_EXTERNAL`, zero FAIL. The GOG read-only function/xref/disassembly/decompilation query, xEdit file retrieval/preparation, local source-index smoke checks, SKSE installed identity, Python 3.12 pins, and 185-test suite pass. The only doctor gates remain the unconfigured selected MO2 profile/native export and untested live SKSE observation. No Skyrim launch or bounty investigation occurred.
+- The `.local` recursive scans in the Markdown and pre-push audits were pruned; focused regressions pass. No ignored project/runtime data or setup history was deleted.
+- Exact next action: At the start of the next research session, bootstrap and strictly validate Python, validate research state, then begin `TX-0005` / `Q-0001` using `docs/RESEARCH_START_PROMPT.md`.

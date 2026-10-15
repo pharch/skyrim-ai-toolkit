@@ -11,29 +11,45 @@ switch to and verify the maintained branch before setting up tools:
 The second command should print `glitch-hunting-setup`. Run repository scripts
 from this checkout, never from the game `Data` directory.
 
-## 1. Prepare the Python environment
+## 1. Bootstrap and validate Python
 
 Clone this research repository outside the Skyrim installation and open it
-in Codex. Check the Python dispatcher and initialize repository-local state:
+in Codex. Bootstrap the native host environment on Windows, or the separate
+WSL/Linux environment for offline work:
 
-    python3 scripts/python_env.py check
-    python3 scripts/python_env.py run scripts/setup_research.py init
+    # Windows PowerShell
+    py -3.12 scripts/bootstrap_python.py
+    py -3.12 scripts/setup_research.py init
+    py -3.12 scripts/python_env.py check --strict
+
+    # WSL/Linux
+    python3 scripts/bootstrap_python.py
+    python3 scripts/setup_research.py init
+    python3 scripts/python_env.py check --strict
+
+`setup_research.py init` creates `config/local.env` from the example only when
+it is absent and preserves existing machine bindings. Bind the private paths
+described below before using native tools. Then validate repository state:
+
     python3 scripts/python_env.py run scripts/setup_research.py check
     python3 scripts/python_env.py run tools/domain_doctor.py
     python3 scripts/python_env.py run -m unittest discover -s tests -v
 
-The dispatcher chooses `skyrim-ae-research` when Conda and that environment
-are available. Otherwise it reports the system-Python fallback. Do not install
-Ghidra, xEdit, CommonLib, or game tooling to satisfy a clone or doctor check.
-Python adapters call existing native tools only when their target and safety
-gates pass. Keep machine paths in `config/local.env` and corpora under ignored
-`.local/`.
+The bootstrap installs the single pinned `requirements.txt` specification
+into `.local/python-envs/<host>`. If a check fails, rerun bootstrap so it can
+repair the environment, then repeat strict validation. Research tools never
+run from system Python, Conda, or ambient packages. Do not install Ghidra,
+xEdit, CommonLib, or game tooling to satisfy a clone or doctor check. Python
+adapters call existing native tools only when target and safety gates pass.
+The commands below use `python3` as the dispatcher launcher; on Windows
+PowerShell use `py -3.12` with the same arguments. Keep machine paths in
+`config/local.env` and corpora under ignored `.local/`.
 
 ## 2. Verify the AE installation
 
-Copy `config/local.env.example` to ignored `config/local.env` and bind paths
-directly there. `scripts/local_paths.py doctor` reads only that file; it never
-syncs a second registry or prints configured values. Bind `SKYRIM_EDITION=AE`,
+Bind paths directly in ignored `config/local.env`. `scripts/local_paths.py
+doctor` reads only that file; it never syncs a second registry or prints
+configured values. Bind `SKYRIM_EDITION=AE`,
 `GAME_ROOT`, `SKYRIM_EXE_PATH`, `SKYRIM_DATA`, `MO2_PROFILE_DIR`, and the
 selected profile's `PLUGINS_TXT`. For MO2,
 `PLUGINS_TXT` must name the selected profile's explicit `plugins.txt`; the

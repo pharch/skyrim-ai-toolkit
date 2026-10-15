@@ -71,7 +71,7 @@ def _status_for_failure(stderr: str, stdout: str = "") -> str:
     text = (stderr + "\n" + stdout).casefold()
     if any(token in text for token in (
         "productversion", "powershell", "windows process", "wsl", "not accessible",
-        "repository .venv is incomplete", "fail_venv_missing",
+        "persistent python environment is incomplete", "fail_venv_missing",
     )):
         return "BLOCKED_EXTERNAL"
     return "FAIL"

@@ -1,37 +1,118 @@
 #!/usr/bin/env python3
-"""Check and dispatch research commands through this checkout's .venv."""
+"""Check and dispatch research commands through this host's persistent .local venv."""
 from __future__ import annotations
 
 import argparse
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 PYTHON_VERSION = (3, 12)
-REQUIRED_DISTRIBUTIONS = {"lz4": "4.3.3", "PyYAML": "6.0.1"}
-REQUIRED_MODULES = {"lz4": "lz4", "PyYAML": "yaml"}
 ENVIRONMENT_ERROR_EXIT = 127
+REQUIREMENTS_FILE = ROOT / "requirements.txt"
+
+
+def execution_host() -> str:
+    """Return the OS environment that owns native processes for this Python."""
+    if os.name == "nt" or sys.platform == "win32":
+        return "windows"
+    if sys.platform.startswith("linux"):
+        try:
+            release = Path("/proc/version").read_text(encoding="utf-8", errors="replace").casefold()
+        except OSError:
+            release = ""
+        if "microsoft" in release or os.environ.get("WSL_DISTRO_NAME"):
+            return "wsl"
+        return "linux"
+    return sys.platform
+
+
+def environment_dir(root: Path = ROOT, host: str | None = None) -> Path:
+    """Return this host's ignored persistent environment directory."""
+    host = execution_host() if host is None else host
+    override = os.environ.get("SKYRIM_PYTHON_ENV_DIR")
+    if override and root.resolve() == ROOT.resolve():
+        path = Path(override).expanduser().resolve()
+        local_root = (root / ".local").resolve()
+        if path != local_root and local_root not in path.parents:
+            raise ValueError("SKYRIM_PYTHON_ENV_DIR must stay under this checkout's ignored .local directory")
+        return path
+    return root / ".local" / "python-envs" / host
+
+
+def venv_python(
+    root: Path = ROOT,
+    *,
+    host: str | None = None,
+    environment_path: Path | None = None,
+) -> Path:
+    """Return the active host's Python path inside its persistent environment."""
+    host = execution_host() if host is None else host
+    directory = environment_dir(root, host) if environment_path is None else environment_path
+    if host == "windows":
+        return directory / "Scripts" / "python.exe"
+    return directory / "bin" / "python"
+
+
+def pinned_distributions(requirements_file: Path = REQUIREMENTS_FILE) -> dict[str, str]:
+    """Read the complete pinned requirements set, following nested -r files."""
+    found: dict[str, str] = {}
+    visited: set[Path] = set()
+
+    def visit(path: Path) -> None:
+        path = path.resolve()
+        if path in visited:
+            return
+        visited.add(path)
+        for raw_line in path.read_text(encoding="utf-8").splitlines():
+            line = raw_line.split("#", 1)[0].strip()
+            if not line:
+                continue
+            if line.startswith(("-r ", "--requirement ")):
+                visit(path.parent / line.split(maxsplit=1)[1])
+                continue
+            match = re.fullmatch(r"([A-Za-z0-9_.-]+)==([A-Za-z0-9_.+-]+)", line)
+            if not match:
+                raise ValueError(f"requirements must pin every package with ==: {path.name}: {line}")
+            name, version = match.groups()
+            normalized = name.casefold().replace("_", "-").replace(".", "-")
+            prior = next((key for key in found if key.casefold().replace("_", "-").replace(".", "-") == normalized), None)
+            if prior is not None and found[prior] != version:
+                raise ValueError(f"conflicting pins for {name}: {found[prior]} and {version}")
+            found[name if prior is None else prior] = version
+
+    visit(requirements_file)
+    return found
+
+
+REQUIRED_DISTRIBUTIONS = pinned_distributions()
+REQUIRED_MODULES = {"lz4": "lz4.block", "PyYAML": "yaml", "pytest": "pytest"}
 
 _PROBE = r'''
 import importlib
 import importlib.metadata
+import importlib.util
 import json
 from pathlib import Path
 import sys
 
 expected_prefix = Path(sys.argv[1]).resolve()
+required_distributions = json.loads(sys.argv[2])
+required_modules = json.loads(sys.argv[3])
 modules = {}
 versions = {}
-for distribution, module in (("lz4", "lz4.block"), ("PyYAML", "yaml")):
+for distribution, module in required_modules.items():
     try:
         importlib.import_module(module)
         modules[distribution] = True
     except Exception:
         modules[distribution] = False
+for distribution in required_distributions:
     try:
         versions[distribution] = importlib.metadata.version(distribution)
     except importlib.metadata.PackageNotFoundError:
@@ -56,22 +137,12 @@ print(json.dumps({
     "inside_repo_venv": Path(sys.prefix).resolve() == expected_prefix,
     "module_imports": modules,
     "distribution_versions": versions,
+    "pip_available": importlib.util.find_spec("pip") is not None,
     "config_present": config_present,
     "config_valid": config_valid,
     "config_error": config_error,
 }))
 '''
-
-
-def venv_python(root: Path = ROOT, *, windows: bool | None = None) -> Path:
-    """Return the platform-specific Python path inside the repository venv."""
-    if windows is None:
-        windows = os.name == "nt"
-    if windows:
-        return root / ".venv" / "Scripts" / "python.exe"
-    return root / ".venv" / "bin" / "python"
-
-
 def dependency_failures(versions: dict[str, str | None]) -> list[str]:
     return [
         f"{name}=={expected} (found {versions.get(name) or 'missing'})"
@@ -86,6 +157,8 @@ def probe_failures(report: dict[str, object]) -> list[str]:
         failures.append("wrong_interpreter")
     if tuple(report.get("python_major_minor", ())) != PYTHON_VERSION:
         failures.append("python_version")
+    if not report.get("pip_available"):
+        failures.append("pip_missing")
     failures.extend(f"dependency:{item}" for item in dependency_failures(
         report.get("distribution_versions", {})  # type: ignore[arg-type]
     ))
@@ -125,10 +198,12 @@ def external_binding_status(config: dict[str, str]) -> dict[str, bool]:
 
 
 def environment_status(root: Path = ROOT) -> dict[str, object]:
-    """Check the repository venv, its pinned runtime imports, and config syntax."""
-    interpreter = venv_python(root)
+    """Check the host's ignored persistent venv, all pinned packages, and config syntax."""
+    directory = environment_dir(root)
+    interpreter = venv_python(root, environment_path=directory)
     base: dict[str, object] = {
-        "environment_name": "repository-.venv",
+        "environment_name": directory.relative_to(root).as_posix(),
+        "environment_path": str(directory),
         "python_required": "3.12",
         "required_distributions": dict(REQUIRED_DISTRIBUTIONS),
         "venv_present": interpreter.is_file(),
@@ -147,7 +222,10 @@ def environment_status(root: Path = ROOT) -> dict[str, object]:
     if interpreter.is_file():
         try:
             result = subprocess.run(
-                [str(interpreter), "-c", _PROBE, str((root / ".venv").resolve())],
+                [
+                    str(interpreter), "-c", _PROBE, str(directory.resolve()),
+                    json.dumps(REQUIRED_DISTRIBUTIONS), json.dumps(REQUIRED_MODULES),
+                ],
                 cwd=root, text=True, capture_output=True, timeout=30, check=False,
             )
             if result.returncode != 0:
@@ -164,6 +242,8 @@ def environment_status(root: Path = ROOT) -> dict[str, object]:
                     base["python_status"] = "FAIL_WRONG_INTERPRETER"
                 elif "python_version" in failures:
                     base["python_status"] = "FAIL_PYTHON_VERSION"
+                elif "pip_missing" in failures:
+                    base["python_status"] = "FAIL_PIP_MISSING"
                 elif any(item.startswith("dependency:") or item.startswith("module_import:") for item in failures):
                     base["python_status"] = "FAIL_DEPENDENCIES"
                 elif "config_missing" in failures:
@@ -201,7 +281,7 @@ def environment_status(root: Path = ROOT) -> dict[str, object]:
 
 def command_for(arguments: list[str], *, interpreter: str | Path, ready: bool) -> list[str]:
     if not ready:
-        raise RuntimeError("repository .venv is incomplete; run the documented Python setup")
+        raise RuntimeError("persistent .local Python environment is incomplete; run scripts/bootstrap_python.py")
     return [str(interpreter), *arguments]
 
 
@@ -210,12 +290,12 @@ def dispatch(arguments: list[str], *, root: Path = ROOT, status: dict[str, objec
     if not checked.get("ready"):
         print(json.dumps({
             "ok": False,
-            "error": "repository .venv or config/local.env is incomplete",
+            "error": "persistent .local Python environment or config/local.env is incomplete",
             "python_status": checked.get("python_status"),
             "dependency_failures": checked.get("dependency_failures", []),
             "config_present": checked.get("config_present"),
             "config_valid": checked.get("config_valid"),
-            "setup": "Follow docs/LOCAL_RUNTIME_CONTRACT.md; research tools never install dependencies.",
+            "setup": "Run the host's documented bootstrap command; research tools never install dependencies.",
         }), file=sys.stderr)
         return ENVIRONMENT_ERROR_EXIT
     try:
@@ -230,9 +310,9 @@ def main(argv: list[str] | None = None) -> int:
     argv = list(sys.argv[1:] if argv is None else argv)
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
-    check = commands.add_parser("check", help="check repository .venv and local config without printing paths")
+    check = commands.add_parser("check", help="check the persistent .local environment and local config")
     check.add_argument("--strict", action="store_true", help="return nonzero unless venv, pins, and config all pass")
-    commands.add_parser("run", help="run a Python command through the complete repository .venv")
+    commands.add_parser("run", help="run a Python command through the validated persistent .local venv")
 
     if argv[:1] == ["run"]:
         if argv[1:2] in (["-h"], ["--help"]):

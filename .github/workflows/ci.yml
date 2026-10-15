@@ -18,18 +18,22 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install declared test dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+      - name: Bootstrap persistent Python environment
+        run: python scripts/bootstrap_python.py
+      - name: Prepare blank local configuration and check pins
+        run: |
+          cp config/local.env.example config/local.env
+          python scripts/python_env.py check --strict
       - name: Python tests
-        run: python -m pytest -q
+        run: python scripts/python_env.py run -m pytest -q
       - name: Python syntax
-        run: python -m compileall -q scripts tools tests
+        run: python scripts/python_env.py run -m compileall -q scripts tools tests
       - name: Durable evidence and frontier validation
-        run: python scripts/validate_research.py
+        run: python scripts/python_env.py run scripts/validate_research.py
       - name: Repository readiness gate
-        run: python scripts/validate_overlay.py
+        run: python scripts/python_env.py run scripts/validate_overlay.py
       - name: Active Markdown, references, and legacy-language audit
-        run: python scripts/markdown_policy_audit.py --check
+        run: python scripts/python_env.py run scripts/markdown_policy_audit.py --check
 
   windows-policy-fixtures:
     name: Windows path-policy fixtures (not game integration)
@@ -39,8 +43,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install declared test dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
+      - name: Bootstrap persistent Python environment
+        run: py -3.12 scripts/bootstrap_python.py
+      - name: Prepare blank local configuration and check pins
+        run: |
+          Copy-Item config/local.env.example config/local.env
+          py -3.12 scripts/python_env.py check --strict
+        shell: pwsh
       - name: AE targeting and recovery policy fixtures
-        run: python -m pytest -q tests/test_ae_target.py tests/test_python_env.py tests/test_research_state.py tests/test_setup_research.py tests/test_validate_research.py
+        run: py -3.12 scripts/python_env.py run -m pytest -q tests/test_ae_target.py tests/test_python_env.py tests/test_research_state.py tests/test_setup_research.py tests/test_validate_research.py
         shell: pwsh
