@@ -12,4 +12,12 @@ Recovery is idle after historical `TX-0004`; `Q-0001` / `OBJ-1` is currently the
 
 Static Python, the configured GOG Ghidra project, native xEdit official-five-master retrieval, UESP/Apocrypha lookups and research-state validation have passing evidence in [`docs/HARNESS_READINESS.md`](docs/HARNESS_READINESS.md). The selected MO2 order is unconfigured; profile-specific winner/negative claims are unavailable. SKSE installed identity is known, but live game/Observer handshake or telemetry is unverified and is not required for static research.
 
+## Local cleanup
+
+Ignored local cleanup is complete. Active Python, source databases, xEdit inputs,
+the configured GOG project/cache, and evidence-cited captures were preserved;
+unreferenced temporary environments, duplicate caches, old Ghidra projects, and
+generated setup/build outputs were removed. Research data validation passed;
+no bounty transaction was started.
+
 Exact next action: Read the active bounty and current Q-0001 evidence, validate Python and research state, then inspect recovery: recover/resume any active checkpoint, or, when recovery is idle, state H1/H2 discriminants and begin the highest-priority ready item with a generated ID.

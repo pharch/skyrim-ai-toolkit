@@ -2210,7 +2210,7 @@
       "id": "EV-0130",
       "kind": "tool",
       "source": "Native CommonLibSSE-NG CMake/MSVC build from original Observer project at commit b93280e832f263dbef44e44cbe2936622a02f91a",
-      "artifact": "private-local:.local/readiness/tests/commonlib-build.stdout.raw; .local/readiness/commonlib-observer-20261014-1621/commonlibsse-ng/Release/CommonLibSSE.lib",
+      "artifact": "private-local:.local/readiness/tests/commonlib-build.stdout.raw",
       "sha256": "747565ed7610e2d4eeee26268ad08162360fcd767340da449a30c95aaf7e4332",
       "captured_utc": "2026-10-14T16:48:52Z",
       "edition": "AE",
@@ -2224,7 +2224,7 @@
         "Windows SDK 10.0.22621",
         "CommonLibSSE-NG CMake commit b93280e832f263dbef44e44cbe2936622a02f91a"
       ],
-      "coverage": "Fresh CMake configure with AE enabled, SE/VR disabled, cached dependencies only and VCPKG_MANIFEST_INSTALL=OFF; actual CommonLibSSE.vcxproj compiled in a local .local build tree. Combined SkyrimStateObserver target did not complete.",
+      "coverage": "Fresh CMake configure with AE enabled, SE/VR disabled, cached dependencies only and VCPKG_MANIFEST_INSTALL=OFF; actual CommonLibSSE.vcxproj compiled in a local .local build tree. Combined SkyrimStateObserver target did not complete. The captured build stdout is retained; the emitted .lib was removed from ignored .local during the 2026-10-15 local-runtime cleanup.",
       "result": "CommonLibSSE.lib was produced (200524092 bytes; SHA256 230929f4ac49b5dbd8c3c143c43e3983ad788891a3c83baa9201060f32addda2). The enclosing Observer DLL translation unit failed in CommonLib REL/Version.h because standard-library declarations such as std::array, std::string_view, std::uint16_t and std::strong_ordering were unavailable; no SkyrimStateObserver.dll or live SKSE handshake was produced. A local-only include edit was staged but could not be rebuilt because WSL Windows interop failed before CMake/MSBuild invocation."
     },
     {
@@ -2396,7 +2396,7 @@
         "Ghidra 12.0.4",
         "Java 21.0.10"
       ],
-      "coverage": "Exact input hash matches EV-0109. Session ran 7,260.809 seconds with a 7,200-second per-file analysis limit, reported analysis_timeout_reported=true, and saved project AE_SkyrimSE_1_6_1170_longanalysis. Raw output is 134,783 bytes; companion stderr is empty. The saved project and command artifacts remain under ignored .local/readiness/ghidra/.",
+      "coverage": "Exact input hash matches EV-0109. Session ran 7,260.809 seconds with a 7,200-second per-file analysis limit, reported analysis_timeout_reported=true, and saved project AE_SkyrimSE_1_6_1170_longanalysis. Raw output is 134,783 bytes; companion stderr is empty. The temporary project was removed during the 2026-10-15 local cleanup after the configured existing GOG project became the canonical query target; command output and metadata remain under ignored .local/readiness/ghidra/.",
       "result": "Ghidra import and project save succeeded, but automatic analysis timed out after 7,199 seconds of analyzer time. The result is an incomplete project, not a binary-wide negative and not a targeted xref/decompilation query."
     },
     {
@@ -2435,7 +2435,7 @@
       "modified_state": false,
       "lane": "offline",
       "tools": [
-        "python3 scripts/python_env.py run tools/ghidra_probe.py --project-dir .local/readiness/ghidra/project_AE_SkyrimSE_1_6_1170_longanalysis --project-name AE_SkyrimSE_1_6_1170_longanalysis --timeout 300",
+        "Historical Ghidra probe against the temporary AE_SkyrimSE_1_6_1170_longanalysis project; that project was removed during local cleanup and is not a current workflow",
         "Ghidra 12.0.4 native headless launcher",
         "EV-0109/EV-0139/EV-0140 query-only attestation"
       ],
@@ -2645,7 +2645,7 @@
       "modified_state": false,
       "lane": "offline",
       "tools": [
-        "python3 scripts/python_env.py run tools/ghidra_probe.py --project-dir .local/readiness/ghidra/project_AE_SkyrimSE_1_6_1170_longanalysis --project-name AE_SkyrimSE_1_6_1170_longanalysis --timeout 300",
+        "Historical Ghidra probe against the temporary AE_SkyrimSE_1_6_1170_longanalysis project; that project was removed during local cleanup and is not a current workflow",
         "tools/ghidra_scripts/ReadOnlyTargetedQuery.java",
         "Ghidra analyzeHeadless.bat"
       ],
