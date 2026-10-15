@@ -327,11 +327,40 @@ def _record_checks(
                 checks[-1]["status"] = "FAIL"
                 checks[-1]["summary"] = "view preparation returned invalid JSON"
 
-    if not bindings.get("selected_profile_configured"):
-        detail = "selected MO2 profile directory and explicit plugins.txt are not both configured"
+    try:
+        from tools.xedit_bridge import validate_native_receipt
+
+        receipt = validate_native_receipt(ROOT)
+    except (ImportError, OSError, ValueError):
+        receipt = {"status": "STALE_OR_INVALID", "reason": "native query receipt could not be validated"}
+    receipt_status = receipt.get("status")
+    if receipt_status == "PASS":
+        checks.append(_check(
+            "native_xedit_record_export", "PASS",
+            "stored receipt verifies a real SSEView Apply Script field export",
+            record=receipt.get("record"),
+            loaded_files=receipt.get("loaded_files"),
+            tsv_sha256=receipt.get("tsv_sha256"),
+            result_json_sha256=receipt.get("result_json_sha256"),
+        ))
+    elif receipt_status == "NOT_RUN":
+        checks.append(_check(
+            "native_xedit_record_export", "NOT_RUN",
+            "native xEdit has not been launched by the non-launching doctor; run the documented native-query when Windows UI access is available",
+        ))
     else:
-        detail = "doctor does not automate safe SSEView record selection or Apply Script export"
-    checks.append(_check("native_xedit_record_export", "BLOCKED_EXTERNAL", detail))
+        checks.append(_check(
+            "native_xedit_record_export", "FAIL",
+            str(receipt.get("reason", "native xEdit receipt failed validation")),
+        ))
+
+    if not bindings.get("selected_profile_configured"):
+        profile_status = "NOT_CONFIGURED"
+        profile_summary = "MO2 profile is optional; profile-specific override resolution remains unverified"
+    else:
+        profile_status = "NOT_VERIFIED"
+        profile_summary = "a profile path is configured, but this doctor does not validate the complete order or resolve profile winners"
+    checks.append(_check("profile_override_resolution", profile_status, profile_summary))
 
 
 def _live_checks(
@@ -342,8 +371,9 @@ def _live_checks(
     config: dict[str, str],
 ) -> None:
     stage = _stage_status(config)
+    stage_status = "PASS" if stage["exists"] else "NOT_CONFIGURED"
     checks.append(_check(
-        "observer_staged_artifact", "PASS" if stage["exists"] else "BLOCKED_EXTERNAL",
+        "observer_staged_artifact", stage_status,
         "staged file metadata only; deployment/load/connection are not implied",
         **stage,
     ))
@@ -361,11 +391,11 @@ def _live_checks(
                              "strict repository venv is unavailable; identity probe was not dispatched"))
 
     if not bindings.get("live_bindings_configured"):
-        detail = "deployed DLL, disposable profile/plugins.txt, save, or observer log directory is unbound"
+        detail = "live Observer bindings are not configured; static research remains usable"
     else:
-        detail = "doctor does not launch Skyrim or claim an Observer handshake/snapshot"
+        detail = "live bindings are present, but the doctor does not launch Skyrim or claim an Observer handshake/snapshot"
     checks.append(_check(
-        "skse_live_observation", "BLOCKED_EXTERNAL",
+        "skse_live_observation", "NOT_VERIFIED",
         detail,
         game_process="not_probed",
         observer_loaded="not_probed",

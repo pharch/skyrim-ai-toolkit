@@ -1,0 +1,90 @@
+{
+  "provenance": {
+    "command": "python3 scripts/python_env.py run tools/xedit_bridge.py native-query --signature QUST --plugin Skyrim.esm --editor-id dunDA14MorvunskarQST --timeout 240",
+    "route": "native SSEView -view + original hotkey Apply Script field walker",
+    "xedit_window": "SSEView 4.1.5f",
+    "loader_status": "Background Loader: finished",
+    "capture_kind": "private native xEdit Apply Script export; exact raw TSV remains below ignored .local/",
+    "scope": "configured official Skyrim AE masters only; no active-profile override claim",
+    "native_data_storage": "private copies under ignored .local; each destination is hash-verified and read-only",
+    "native_data_files": [
+      {
+        "name": "Dawnguard.esm",
+        "sha256": "1bda804009a21228acf6b30aa6aa7a692b247ff8a0313fe9aa69b3617ed4a6c4"
+      },
+      {
+        "name": "Dragonborn.esm",
+        "sha256": "5f44f343552688c04f73bf83de58b90f70c7376b133fbbcb56b6fe33acf8778b"
+      },
+      {
+        "name": "HearthFires.esm",
+        "sha256": "ad4ca9f32c81e7ddd3e39ec95e03b07841f20712989e598778442ea69b6e6a97"
+      },
+      {
+        "name": "Skyrim.esm",
+        "sha256": "2bbc77fdec35a70ef96b710f8c525e50a1db9e63e11a391a0eb9ee8f56d36107"
+      },
+      {
+        "name": "Update.esm",
+        "sha256": "c1795e0a1218da45dbfd523f064f1857b42805c49714c46091e75277e525aed9"
+      }
+    ],
+    "source_bridge_sha256": {
+      "scripts/skyrim_tool.py": "0aaad348fffbb11cf2f6f36300b5bdd9e45733e7df7a6c7e53b43b55ad3a1231",
+      "scripts/run-xedit.ps1": "1cd3217cd187a364e0936b7712fcb3002f567acfb1df48dc011bc6391b684141",
+      "scripts/xedit-status.ps1": "fe958f96f807581dc6db42c5c080473bf27437176b76de8688730fd59dd82c4e",
+      "scripts/xedit-export-hotkey.ps1": "6a3885b2853758eb82f6c0ef965ce071f8a37ce5ce5aa4ee4b082e26ce19bb09",
+      "scripts/xedit/README.md": "93c76073897ff2b9703524e4959d842b145101a1684f3fcd77c70042ec891550",
+      "scripts/xedit/export-records.pas": "c88d86d9550d203f359a63c6118dc2fb4528d0493262c9cd08f5f8514878b1e4",
+      "scripts/xedit/investigation-export.pas": "80ba439b820850f5df4f41178f03ec7e689dfd957d8ae0cdcfb4b306636f94e7",
+      "scripts/xedit/investigation-references.pas": "7b3ae8de0d016ca609a19879c7df08318950bc66f1dc10f2944e8a0c31703368"
+    },
+    "native_script_sha256": "02809fbc84bca2305f9f34d1b425e2bd322bdcf24651b63bddc60482ff73fc6f",
+    "tsv_sha256": "e061837ec22bd737355f2cad1c6cedb5052fd4530d4b740f19b680fb6bcb4213"
+  },
+  "query": {
+    "plugin": "Skyrim.esm",
+    "signature": "QUST",
+    "editor_id": "dunDA14MorvunskarQST"
+  },
+  "plugins": [
+    "Skyrim.esm",
+    "Update.esm",
+    "Dawnguard.esm",
+    "HearthFires.esm",
+    "Dragonborn.esm"
+  ],
+  "loaded_files": [
+    "Skyrim.esm",
+    "SkyrimSE.exe",
+    "Update.esm",
+    "Dawnguard.esm",
+    "HearthFires.esm",
+    "Dragonborn.esm"
+  ],
+  "record": {
+    "source_plugin": "Skyrim.esm",
+    "form_id": "000427A0",
+    "editor_id": "dunDA14MorvunskarQST",
+    "signature": "QUST",
+    "winning_plugin_within_official_five_master_scope": "Skyrim.esm"
+  },
+  "field_count": 149,
+  "representative_stage_fields": [
+    {
+      "field_path": "QUST\\6:Stages\\2:Stage\\0:INDX - Stage Index\\0:Stage Index",
+      "value": "20",
+      "links_to": ""
+    },
+    {
+      "field_path": "QUST\\6:Stages\\4:Stage\\0:INDX - Stage Index\\0:Stage Index",
+      "value": "100",
+      "links_to": ""
+    },
+    {
+      "field_path": "QUST\\6:Stages\\4:Stage\\0:INDX - Stage Index\\1:Flags\\0:Shut Down Stage",
+      "value": "1",
+      "links_to": ""
+    }
+  ]
+}

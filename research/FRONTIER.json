@@ -1,12 +1,12 @@
 {
-  "session_next_action": "In the next research session, bootstrap and strictly validate Python, validate research state, then begin TX-0005/Q-0001 using docs/RESEARCH_START_PROMPT.md.",
+  "session_next_action": "At the next research session, run the documented Python bootstrap/strict check and research-state validation, read docs/RESEARCH_START_PROMPT.md, then begin TX-0005/Q-0001; setup closeout is complete and no bounty research has started here.",
   "schema_version": 3,
   "target": {
     "edition": "AE",
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
     "note": "Repository target policy is AE runtime 1.6.318+. Steam SkyrimSE.exe ProductVersion 1.6.1170.0 is verified (EV-0109), but no live game session or complete active MO2 order is verified. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Legacy source files are hashed in migration/legacy_markdown_manifest.tsv; source commit is unavailable. Active Python routes and native tool limits are documented in the capability matrix. Four evidence-linked transactions exercise blocker reselection, rival armor hypotheses, an AV39 record screen, and breadth synthesis; process-isolated recovery is tested.",
-    "next_action": "Refresh the Markdown inventory, run strict validation, research-state validation, and the consolidated doctor; then record its final static and external gate results."
+    "next_action": "At the next research session, run the documented Python bootstrap/strict check and research-state validation, read docs/RESEARCH_START_PROMPT.md, then begin TX-0005/Q-0001; setup closeout is complete and no bounty research has started here."
   },
   "items": [
     {
@@ -47,13 +47,13 @@
       ],
       "priority": 1.0,
       "information_gain": 0.8,
-      "next_action": "Begin the first P0 research transaction by identifying candidate vanilla quest/event gates and stating rival predictions; keep profile-specific winner and negative claims gated on the selected complete MO2 order.",
+      "next_action": "In the first research session, after strict Python and research-state checks, state and discriminate H1/H2 for a candidate vanilla quest/event initiation gate; use native xEdit only for official-master fields and require the actual complete target order for profile-specific winner or negative claims.",
       "linked_claims": [
         "CL-L062",
         "CL-L063",
         "CL-L064"
       ],
-      "cross_source_assessment": "Legacy static scan EV-0108 reports DA14 >=14; local UESP revision 3593351 EV-0129 independently lists ReqLevel=14. This is a threshold consistency check only. The current record reader has raw CTDA bytes but no semantic decode, and EV-0110 shows the active order is incomplete.",
+      "cross_source_assessment": "Legacy static scan EV-0108 reports DA14 >=14; local UESP revision 3593351 EV-0129 independently lists ReqLevel=14. This threshold consistency does not establish the native start gate. Native SSEView QUST fields are now queryable in the five-official-master scope (EV-0207); semantic condition tracing and profile-specific override resolution still require evidence.",
       "successors": [],
       "attempts": [
         {
@@ -1041,14 +1041,14 @@
     }
   ],
   "session_checkpoint": {
-    "timestamp_utc": "2026-10-15T07:11:12Z",
-    "task": "fresh-context final harness setup and reproducibility verification; no bounty research",
-    "next_action": "Update the canonical config contract and active instructions for exact xEdit/AE/Ghidra/SKSE routes."
+    "timestamp_utc": "2026-10-15T13:35:00Z",
+    "task": "complete recovered native xEdit integration and final harness readiness; no bounty research",
+    "next_action": "At the next research session, run the documented Python bootstrap/strict check and research-state validation, read docs/RESEARCH_START_PROMPT.md, then begin TX-0005/Q-0001; setup closeout is complete and no bounty research has started here."
   },
   "last_session_checkpoint": {
     "recorded_utc": "2026-10-15T05:39:44Z",
     "next_action": "At the next research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `docs/HARNESS_READINESS.md`, then start P0 OBJ-1/Q-0001 using `docs/RESEARCH_START_PROMPT.md`.",
     "active_process": "Historical: SSEView 4.1.5f PID 3948 responded during EV-0185/0189; current process liveness was not rechecked. Skyrim was not launched; Observer DLL remains staged only under ignored .local."
   },
-  "next_action": "In the next research session, bootstrap and strictly validate Python, validate research state, then begin TX-0005/Q-0001 using docs/RESEARCH_START_PROMPT.md."
+  "next_action": "At the next research session, run the documented Python bootstrap/strict check and research-state validation, read docs/RESEARCH_START_PROMPT.md, then begin TX-0005/Q-0001; setup closeout is complete and no bounty research has started here."
 }

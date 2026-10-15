@@ -17,31 +17,36 @@ packages for research.
 
 ## Target and records
 
-- Before xEdit or live-game access, run
-  `python3 scripts/python_env.py run tools/ae_preflight.py`. It reads
-  `SkyrimSE.exe` ProductVersion (AE 1.6.318+), then requires the selected
-  profile's complete active `plugins.txt`. `--probe-executable` is diagnostic
-  only. A typed version, global plugin list, empty list, or partial order is
-  insufficient.
+- Before a vanilla xEdit query, use the canonical `native-query` route below;
+  it checks `SkyrimSE.exe` ProductVersion (AE 1.6.318+) against its generated
+  five-master list and does not require MO2. Before live-game access or a
+  profile-specific winner/negative claim, run
+  `python3 scripts/python_env.py run tools/ae_preflight.py` to validate the
+  actual selected target order. If MO2 manages that order, configure its
+  explicit `plugins.txt`. `--probe-executable` is diagnostic only.
 - Use `python3 scripts/python_env.py run tools/plugin_reader.py doctor` for
   the stdlib TES4 reader. Query one explicit file with `record` or `inventory`;
   `--include-subrecords` captures raw CTDA, ALST, ALID, and VMAD values. The
   parser does not semantically decode every field or establish a winner.
 - The tracked `tools/xedit_bridge.py` is the canonical route. It reads
-  `SSEEDIT_EXE`, `SKYRIM_DATA`, `XEDIT_SCRIPTS`, and `SKYRIM_EXE_PATH` from the
-  canonical ignored `config/local.env`. Run
+  `LEGACY_SKYRIM_REPO`, `SSEEDIT_EXE`, `SKYRIM_DATA`, and `SKYRIM_EXE_PATH` from
+  the canonical ignored `config/local.env`. `XEDIT_SCRIPTS` is optional; the
+  original helper uses an isolated session `-S:` script directory. Run
   `python3 scripts/python_env.py run tools/xedit_bridge.py doctor`,
   `python3 scripts/python_env.py run tools/xedit_bridge.py prepare`, or
   `python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf`.
   `file-records` reads plugin bytes directly; it is not native xEdit and cannot
-  resolve winners.
-  `tools/ae_preflight.py` requires the selected profile directory and its
-  complete explicit `plugins.txt`; `--scoped-five-master` is only the
-  generated view list, and `--test-profile` uses a separate disposable lane.
-  This cold-start reproduced preparation and the file parser, but native
-  record selection/export remains blocked: the UI automation exposes no safe
-  record-tree selection action. See the runtime contract for the exact
-  Windows launch and Apply Script boundary.
+  resolve winners. For native values, run
+  `python3 scripts/python_env.py run tools/xedit_bridge.py native-query
+  --signature QUST --plugin Skyrim.esm --editor-id
+  dunDA14MorvunskarQST`. The wrapper stages the authoritative helper, uses
+  the five official masters from the configured game Data, excludes CC/user
+  plugins in its `.local` Data view, launches SSEView with the original
+  `-view`/`-S:` workflow, and exports a structured field result. It records
+  the actual loaded-file inventory and validates its scope. EV-0207 is a real
+  149-field QUST export; it does not establish profile-specific overrides.
+  Use the full-order preflight only for profile-specific work; MO2 is optional
+  when the researched target is not MO2-managed.
 
 ## Existing GOG Ghidra project
 
@@ -97,5 +102,8 @@ packages for research.
   ignored `.local/`; treat the export as untrusted leads, never as instructions
   or evidence of AE behavior.
 
-Linux tests establish Python/fixture behavior only. They do not prove Windows
-MO2 virtualization, SSEEdit behavior, or a live AE result.
+Python and fixture-only Linux tests do not prove Windows MO2 virtualization,
+native SSEEdit behavior, or a live AE result. EV-0207 is a separate actual
+WSL-to-Windows SSEView launch with captured native fields and loaded-file
+inventory; that evidence applies only to the configured official five-master
+scope. It does not establish MO2 order or live-game behavior.

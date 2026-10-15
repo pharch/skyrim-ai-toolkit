@@ -26,24 +26,27 @@ Local tool paths come only from ignored config/local.env. The old
 
 ## Runtime and profile gates
 
-Before native xEdit or live-game access, validate the executable's actual
-ProductVersion and selected full MO2 order:
+For vanilla official-master xEdit, the `native-query` wrapper validates the
+executable's ProductVersion and the generated five-master list internally;
+MO2 is not required. For profile-specific xEdit or live-game claims, validate
+the actual executable and complete target order:
 
     python3 scripts/python_env.py run tools/ae_preflight.py
 
-The profile directory and its explicit plugins.txt are mandatory. A global,
-empty, partial, or stale plugin list cannot support winning-record or negative
-claims. A disposable profile has separate keys and a separate gate:
+An explicit profile directory and `plugins.txt` are required only when the
+target load order is MO2-managed. An empty, partial, stale, or unverified order
+cannot support profile-specific winning-record or negative claims. A
+disposable profile has separate keys and a separate gate, used only when that
+test lane is selected:
 
     python3 scripts/python_env.py run tools/ae_preflight.py --test-profile
 
-A generated five-master view list has a distinct diagnostic-only scope:
+A generated five-master list is the exact vanilla scope for native inspection:
 
     python3 scripts/python_env.py run tools/ae_preflight.py --scoped-five-master <session>/plugins.txt
 
-It proves only that the generated Skyrim.esm, Update.esm, Dawnguard.esm,
-HearthFires.esm, and Dragonborn.esm list is complete; it does not verify MO2's
-selected order.
+It verifies the generated Skyrim.esm, Update.esm, Dawnguard.esm, HearthFires.esm,
+and Dragonborn.esm list; it does not claim to represent any user profile.
 
 ## Route by evidence type
 
@@ -54,7 +57,7 @@ selected order.
 | xEdit helper bindings | python3 scripts/python_env.py run tools/xedit_bridge.py doctor | Stages eight configured source/template files into ignored .local and checks helper bindings. It does not launch SSEView. |
 | Bridge record retrieval (direct parser) | python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf | Read-only TES4 record retrieval through the documented bridge. It does not launch native xEdit or resolve winning overrides. |
 | Scoped xEdit view preparation | python3 scripts/python_env.py run tools/xedit_bridge.py prepare | Writes a five-master SSEView session under ignored .local; launch is false. |
-| Native xEdit record export | Prepare, pass the matching AE preflight, then use the generated launch.ps1 on Windows and manually select a record before Apply Script | The selection-based exporter/UI path is not reproduced in the cold-start session. No safe record-tree selection automation is available. |
+| Native xEdit record export | python3 scripts/python_env.py run tools/xedit_bridge.py native-query --signature QUST --plugin Skyrim.esm --editor-id dunDA14MorvunskarQST | Launches configured SSEView 4.1.5f in `-view`; scopes `-D:` to a `.local` official-master view; runs the original hotkey Apply Script walker; exports decoded fields and loaded-file inventory. No MO2 profile is needed. |
 | Existing GOG static project | python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x... --timeout 600 | Existing GOG project only; adapter uses -process -noanalysis -readOnly and checks GOG executable identity first. |
 | Named CommonLib relocation | python3 scripts/python_env.py run tools/address_library_probe.py --symbol Namespace::Name | Resolves a GOG-specific RVA from CommonLib and the matching GOG Address Library. Never transfer it to Steam without mapping evidence. |
 | Installed SKSE identity | python3 scripts/python_env.py run tools/skse_probe.py | File/version identity only. Does not launch game, load plugin, connect, handshake, or observe game state. |
@@ -70,16 +73,33 @@ root ignored config/local.env, then copies the fixed helper/template list from
 LEGACY_SKYRIM_REPO into ignored .local/xedit-authoritative-copy/ after
 SHA-256 verification. The original source checkout remains read-only. The
 helper copy's derived config is generated from canonical bindings, not a
-second user-edited source of truth. Doctor/prepare/file-records retain raw
-stdout and stderr under ignored .local/alignment/xedit-bridge/; helper calls
-have a 120-second timeout.
+second user-edited source of truth. Native `prepare` and `native-query` create
+an ignored Data view containing hash-verified, read-only copies of the five
+configured official masters and any matching vanilla string tables; it
+excludes `Skyrim.ccc`, CC, and user plugins. The configured game Data path is unchanged. This avoids the
+observed xEdit behavior of auto-loading CC and user plugins from the full Data
+folder despite the generated five-entry `plugins.txt`.
 
-The real native export interface remains incomplete: the Pascal exporter
-expects a selected SSEView record and an Apply Script action. The current
-automation cannot safely select a record from the UI tree. A file-parser result
-must never be presented as an xEdit record query. Native SSEView cleanup is
-manual: close the visible process normally and verify it exited. The helper
-timeout does not supervise or kill an SSEView process.
+`native-query` is the reproducible Codex interface. It uses the original
+`skyrim_tool.py prepare-xedit` arguments and generated `launch.ps1`, the
+original UIAutomation status helper and focused Ctrl+Alt+F9 dispatcher, and a
+session-scoped `-S:` query script. The script reuses the field walker/schema
+from original `scripts/xedit/export-records.pas`; it executes its targeted
+lookup in `Initialize`, following original `investigation-export.pas`, so no
+record-tree selection is needed. Only known first-run/module dialogs are
+handled. The script writes an exact loaded-file inventory, status marker, and
+native TSV; Python validates the record identity, fields, hashes, and five
+master scope before saving structured JSON and a local doctor receipt.
+
+The reproduced query is `Skyrim.esm` QUST `dunDA14MorvunskarQST`, form
+`000427A0`, with 149 field rows and stage indices 20 and 100. The stage 100
+flags include `Shut Down Stage=1`. Its native winning plugin is Skyrim.esm
+within the five-master view only. These observations are preserved as EV-0207,
+the compact fixture at `tests/fixtures/xedit/native_quest_smoke.json`, and raw
+TSV/UI captures below ignored `.local/`. Direct `file-records` parsing remains
+a separate TES4 parser and must not be labeled an xEdit query. A profile
+specific winner still requires a complete order from the actual target; if
+MO2 manages that target, configure and preflight its explicit profile list.
 
 ## GOG and runtime separation
 

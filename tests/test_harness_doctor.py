@@ -9,6 +9,13 @@ class HarnessDoctorTests(unittest.TestCase):
         self.assertEqual(_overall_exit([{"status": "PASS"}, {"status": "BLOCKED_EXTERNAL"}]), 2)
         self.assertEqual(_overall_exit([{"status": "BLOCKED_EXTERNAL"}, {"status": "FAIL"}]), 1)
 
+    def test_unverified_optional_live_capabilities_do_not_block_static_readiness(self):
+        self.assertEqual(_overall_exit([
+            {"status": "PASS"},
+            {"status": "NOT_CONFIGURED"},
+            {"status": "NOT_VERIFIED"},
+        ]), 0)
+
     def test_native_identity_bridge_errors_are_blocked_not_negative_findings(self):
         self.assertEqual(_status_for_failure("could not read GOG executable ProductVersion"), "BLOCKED_EXTERNAL")
         self.assertEqual(_status_for_failure("PowerShell did not return a Skyrim ProductVersion"), "BLOCKED_EXTERNAL")

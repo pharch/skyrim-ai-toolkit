@@ -1,69 +1,63 @@
-# Harness readiness — setup closeout
+# Harness readiness — 2026-10-15
 
-**Static Skyrim AE research is ready to begin.** The persistent Python 3.12
-environment, strict dispatcher, configured GOG Address Library lookup and
-read-only Ghidra function/xref/decompilation query pass on the current WSL
-host. Research-state validation passes. This setup session did not begin
-bounty investigation or launch Skyrim.
+**Static Skyrim AE research is ready.** The current strict Python environment,
+GOG Ghidra adapter, direct TES4 reader, and recovered native xEdit workflow have
+all passed their documented checks. Research state is idle with `Q-0001` next.
+This setup session did not start bounty research or launch Skyrim.
 
 ## Readiness gates
 
-| Gate | Status | Evidence-backed result |
+| Gate | Status | Evidence |
 |---|---|---|
-| Persistent Python 3.12 environment | PASS | Ubuntu 24.04 / WSL2, CPython 3.12.3 at `.local/python-envs/wsl`; all seven exact pins and required imports pass `python3 scripts/python_env.py check --strict`. A fresh disposable environment was created, reused on the next run, and repaired after removing `pytest==8.0.0`; the active environment was not recreated. |
-| Strict Python dispatcher | PASS | Research tools ran through `python3 scripts/python_env.py run ...`; the cold test environment also passed strict check and `scripts/research_state.py validate`. See EV-0203 and ignored bootstrap captures. |
-| GOG identity and Address Library | PASS | The configured GOG `SkyrimSE.exe` PE ProductVersion is 1.6.1179.0; SHA-256 `9b0fc7880c4b12d436bfb59bcae64868f176dbc04010adbd9bc2ecb64bc8ed3f`. `MagicItem::CalculateCost` maps to GOG RVA `0x14C020` using the matching Address Library. |
-| Existing GOG Ghidra project query | PASS | `GHIDRA_PROJECT_REP_PATH` points to the existing GOG `.rep`, with adjacent `.gpr`. The query found the requested function and RVA, an incoming call xref, disassembly, and decompilation. It used `-process -noanalysis -readOnly`; import, project creation, and reanalysis were not attempted. On this WSL host the source project is mounted read-only, so the adapter queries a metadata-tracked copy under ignored `.local/ghidra/project-cache/`. EV-0204 and `.local/ghidra/gog-query-20261015T111658Z.meta.json` preserve the run. |
-| xEdit bridge record retrieval | PASS, file parser only | The documented read-only query returned one `CreatureDialogueWerewolf` QUST record from `Skyrim.esm` via the direct TES4 byte parser (EV-0205). It is not a native SSEEdit query and does not resolve winning overrides. |
-| UESP and Apocrypha local access | PASS | The readiness smoke check queried the local UESP index (475,228 pages; 17,520 Skyrim namespace pages; sample revision 3629292) and the private Apocrypha index (60,873 messages). Apocrypha text remains untrusted and private; UESP dump completeness remains unverified. |
-| Research evidence/frontier/recovery state | PASS | `python3 scripts/python_env.py run scripts/research_state.py validate` reports `PASS research frontier, evidence links, and recovery state`. Recovery is idle and selects Q-0001. |
-| Selected MO2 profile and complete active order | NOT_VERIFIED | `MO2_PROFILE_DIR` and `PLUGINS_TXT` are unset in ignored `config/local.env`. Do not make profile-specific winner claims or negative findings until the selected profile's explicit complete order is validated. This is a separate research limitation, not a blocker for static source work. |
-| Native SSEEdit record export | NOT_VERIFIED; not required for static research | The configured executable and helper bindings exist, but no native record-tree selection/export was performed. The tested Python bridge result is file-local. |
-| SKSE installed identity | PASS, file metadata only | The installed loader, runtime DLL, Address Library, and executable identify the Steam AE 1.6.1170.0 file set. `tools/skse_probe.py` did not launch Skyrim. |
-| Live SKSE/Observer capabilities | NOT_VERIFIED | No live game process, deployed Observer DLL, loaded plugin, handshake, event, snapshot, or DevBench connection was tested. A staged DLL/build is not live observation. Live SKSE is not required for static research. |
-| Consolidated harness doctor | 19 PASS, 2 BLOCKED_EXTERNAL, 0 FAIL | EV-0206: `.local/alignment/harness-doctor/20261015T114903.144317Z/harness_doctor.json`, SHA-256 `ea294ef262870deb7a0fd6c821c9af335aa57548f7a29f76cf11d81bd1c85a28`. Overall verdict is BLOCKED/exit 2 only because the selected MO2 profile/full order and native export are unverified, and live SKSE observation was not attempted; static research checks pass. Rerun with `python3 scripts/python_env.py run scripts/harness_doctor.py all`. |
+| Persistent Python 3.12 and strict dispatcher | PASS | Ubuntu 24.04 / WSL2, CPython 3.12.3 at ignored `.local/python-envs/wsl`; seven pinned distributions and imports pass `python3 scripts/python_env.py check --strict`. EV-0203 records absent-environment creation, healthy reuse, and missing-dependency repair. Current active suite: 195 passed. |
+| GOG identity and Ghidra | PASS | EV-0204: configured GOG `SkyrimSE.exe` ProductVersion 1.6.1179.0, hash `9b0fc7880c4b12d436bfb59bcae64868f176dbc04010adbd9bc2ecb64bc8ed3f`; Address Library maps `MagicItem::CalculateCost` to RVA `0x14C020`. Read-only query of the existing configured GOG project returned the function, incoming xref, disassembly, and decompilation using `-process -noanalysis -readOnly`; no import or reanalysis. |
+| Direct plugin-file parsing | PASS, separate route | EV-0205: `file-records` returned a named QUST and raw fields from `Skyrim.esm` through the read-only TES4 parser. This route does not run xEdit or calculate a winning override. |
+| Native xEdit record export | PASS, five official masters | EV-0207: a fresh `native-query` launched configured SSEView 4.1.5f and ran the recovered original Pascal field walker through the original Apply Script hotkey route. It loaded `Skyrim.esm`, `Update.esm`, `Dawnguard.esm`, `HearthFires.esm`, and `Dragonborn.esm` plus the `SkyrimSE.exe` pseudo-file; exported 149 rows for `Skyrim.esm` QUST `dunDA14MorvunskarQST` (form `000427A0`). Stage 100 has `Shut Down Stage=1`; VMAD fragments reference stages 20, 30, and 100. TSV SHA-256: `e061837ec22bd737355f2cad1c6cedb5052fd4530d4b740f19b680fb6bcb4213`. Fixture: `tests/fixtures/xedit/native_quest_smoke.json`. |
+| xEdit source and native scope | PASS, guarded | The bridge stages hash-verified helper files from ignored `config/local.env`'s `LEGACY_SKYRIM_REPO`. It copies only the five official masters and matching vanilla strings to a read-only ignored `.local` Data view. EV-0208 records why: a direct configured-Data launch auto-loaded Creation Club/user plugins despite the generated list; the exporter refused to write output. The official view prevents that scope leak. |
+| Profile-specific override resolution | NOT_CONFIGURED | MO2 is optional. No selected profile/full order is configured, so the five-master result does not support profile-specific winner or negative claims. Configure the target's actual complete order only when that profile is the research target. |
+| UESP and Apocrypha local access | PASS | EV-0170 and EV-0171 verified local retrieval and provenance. Apocrypha remains private and untrusted; UESP dump completeness is not established. |
+| Research evidence/frontier/recovery state | PASS | `python3 scripts/python_env.py run scripts/research_state.py validate` reports `PASS research frontier, evidence links, and recovery state`. Recovery is idle and selects `Q-0001`. |
+| SKSE installed identity | PASS, file identity only | The installed identity probe passes for Steam AE 1.6.1170.0. A staged Observer DLL is only file metadata evidence. |
+| Live SKSE/Observer capabilities | NOT_VERIFIED, optional | No game process, deployed/loaded Observer plugin, handshake, event, snapshot, or DevBench connection was observed. Live operation is not required for static research. |
+| Consolidated harness doctor | PASS | EV-0209 records the final `all` report, exact check counts, artifact path, and report hash. The optional profile and live SKSE gates are labeled separately and do not block static readiness. |
 
-## Start sequence for the next research session
+## Research start
 
-From the repository root on Linux/WSL:
+From the repository root, bootstrap or reuse the persistent host environment,
+validate the strict dispatcher, and validate research state:
 
 ```sh
 python3 scripts/bootstrap_python.py
-python3 scripts/setup_research.py init
 python3 scripts/python_env.py check --strict
 python3 scripts/python_env.py run scripts/research_state.py validate
 ```
 
-The config initializer copies the blank template only when the ignored local
-file is absent; existing bindings are preserved. Then read this readiness
-report and paste the **Initial Codex prompt** from
-`docs/RESEARCH_START_PROMPT.md`. The first research transaction is
-`TX-0005` / `Q-0001`; the exact `research_state.py begin` command is recorded
-there. Bootstrap is a setup repair step. Once the strict environment, state
-validator, and local static gates pass, continue the selected frontier instead
-of repeating setup.
+On Windows PowerShell, use `py -3.12` in place of `python3`. Then read
+`docs/RESEARCH_START_PROMPT.md` and begin `TX-0005` / `Q-0001` in that research
+session. If a preflight fails, repair the environment or local setup and
+recheck it before calling it an external blocker. Once these static gates pass,
+proceed with the selected frontier rather than continuing setup work.
 
-On Windows PowerShell, use `py -3.12` for each command above. Native Windows
-is preferred for game-connected research; WSL results do not establish
-Windows MO2/xEdit or in-game behavior.
+Native official-master xEdit command:
+
+```sh
+python3 scripts/python_env.py run tools/xedit_bridge.py native-query --signature QUST --plugin Skyrim.esm --editor-id dunDA14MorvunskarQST
+```
+
+The native command uses Windows PowerShell interop from WSL or native Windows.
+`MO2_PROFILE_DIR` is not needed for official masters. Use the configured
+target's complete actual load order for profile-specific override findings.
 
 ## Historical setup records
 
-EV-0197–EV-0202 and the older rows in `docs/LOCAL_TOOL_HANDOFF.md` retain
-earlier failed or partial setup attempts. They are history, not current
-readiness. Current tool invocations are defined only in
-`docs/LOCAL_RUNTIME_CONTRACT.md` and the relevant `.agents/skills/` files.
+EV-0197–EV-0206 and earlier entries in `docs/LOCAL_TOOL_HANDOFF.md` retain
+failed or partial setup attempts. They are historical; current routes are
+defined in `docs/LOCAL_RUNTIME_CONTRACT.md` and the relevant `.agents/skills/`.
 
 ## Cleanup candidates for later review
 
-Keep these until the independent review authorizes cleanup. Setup-only tracked
-history includes `migration/FINAL_HARNESS_CLOSEOUT_MISSION.md`,
-`migration/FINAL_ALIGNMENT_*`, `migration/FINAL_SETUP_BRIEF.md`, and the older
-historical sections of `docs/LOCAL_TOOL_HANDOFF.md`. Current runtime contract,
-readiness gates, and next-session prompt are active and should remain. After
-their hashes and findings are reviewed, ignored raw acceptance captures under
-`.local/alignment/python-bootstrap-final/`,
-`.local/alignment/harness-doctor/`, and `.local/ghidra/gog-query-*` can be
-pruned. The derived `.local/ghidra/project-cache/` can be regenerated from the
-configured GOG project path if it is ever removed. Nothing in this list was
-deleted during setup closeout.
+Keep setup and migration history until the independent review authorizes
+cleanup. Possible later candidates include `migration/FINAL_HARNESS_CLOSEOUT_MISSION.md`,
+`migration/FINAL_ALIGNMENT_*`, `migration/FINAL_SETUP_BRIEF.md`, historical
+sections of `docs/LOCAL_TOOL_HANDOFF.md`, and ignored raw acceptance captures.
+Nothing in this list was removed during this task.

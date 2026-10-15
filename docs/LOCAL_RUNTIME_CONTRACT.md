@@ -92,9 +92,11 @@ passing strict check through `SKYRIM_PYTHON_ENV_DIR`. Never uninstall from
 
 After bootstrap, strict Python, research-state validation, and locally
 available static checks pass, stop setup work and continue the selected
-frontier item. Missing MO2/game/live-tool bindings remain separate capability
-gates; they do not keep the agent in a setup loop. A Linux/WSL pass does not
-establish Windows xEdit/MO2 or live-game behavior.
+frontier item. Missing profile/game/live-tool bindings remain separate
+capability gates; they do not keep the agent in a setup loop. A Linux/WSL
+Python-only pass does not establish Windows xEdit/MO2 or live-game behavior;
+an actual WSL-to-Windows SSEView run with native output and loaded-file
+inventory establishes xEdit capability only for the tested scope.
 
 `scripts/research_state.py validate` checks durable transaction, frontier,
 evidence, claim, and recovery structure. It does not verify executable
@@ -114,11 +116,11 @@ this workstation.
 | SKYRIM_EDITION | Literal AE; runtime gate | AE | ae_preflight.py requires AE. |
 | GAME_ROOT | Absolute game directory | <Skyrim AE install> | Contains SkyrimSE.exe. |
 | SKYRIM_EXE_PATH | Optional absolute executable | <GAME_ROOT>\SkyrimSE.exe | Defaults to GAME_ROOT/SkyrimSE.exe; ProductVersion comes from the executable. |
-| SKYRIM_DATA | Absolute Data directory | <GAME_ROOT>\Data | xEdit helper binding; path doctor checks accessibility. |
-| MO2_PROFILE_DIR | Absolute selected MO2 profile | <MO2 profiles>\<selected profile> | Full-order preflight requires the explicit selected directory. |
-| PLUGINS_TXT | Absolute selected plugins.txt | <selected profile>\plugins.txt | Must belong to MO2_PROFILE_DIR and contain the full active list. |
-| SKYRIM_TEST_PROFILE_DIR | Absolute disposable profile | <MO2 profiles>\<test profile> | Required by ae_preflight.py --test-profile. |
-| SKYRIM_TEST_PLUGINS_TXT | Absolute test plugins.txt | <test profile>\plugins.txt | Must belong to SKYRIM_TEST_PROFILE_DIR and contain the full order. |
+| SKYRIM_DATA | Absolute Data directory | <GAME_ROOT>\Data | Source for direct parsing and the official masters; native xEdit makes an ignored `.local` view that omits CC and user plugins. |
+| MO2_PROFILE_DIR | Optional absolute selected MO2 profile | <MO2 profiles>\<selected profile> | Needed only when the researched target order is managed by this MO2 profile. |
+| PLUGINS_TXT | Optional absolute selected plugins.txt | <selected profile>\plugins.txt | For MO2 targets, must belong to MO2_PROFILE_DIR and contain the full active list. Not needed for official-master xEdit inspection. |
+| SKYRIM_TEST_PROFILE_DIR | Optional absolute disposable profile | <MO2 profiles>\<test profile> | Used only by ae_preflight.py --test-profile. |
+| SKYRIM_TEST_PLUGINS_TXT | Optional absolute test plugins.txt | <test profile>\plugins.txt | Used only with SKYRIM_TEST_PROFILE_DIR and must contain the full order. |
 | RESEARCH_TEST_SAVE | Absolute disposable save | <test profile save> | Never point at a user's baseline. |
 | SKSE_LOADER | Absolute SKSE loader executable | <GAME_ROOT>\skse64_loader.exe | skse_probe.py checks installed file identity; does not launch it. |
 | SKYRIM_OBSERVER_STAGED_DLL | Local staged DLL | .local/readiness/<build>/stage/SKSE/Plugins/SkyrimStateObserver.dll | Hash/PE inspection only; staged is not deployed or loaded. |
@@ -127,8 +129,8 @@ this workstation.
 | DEVBENCH_PORT | Optional integer | <local port> | Reserved only; no active toolkit connector consumes it. |
 | LEGACY_SKYRIM_REPO | Absolute read-only source checkout | <existing skyrim checkout> | xedit_bridge.py stages fixed source files under ignored .local and never edits source. |
 | SSEEDIT_EXE | Absolute SSEEdit executable | <SSEEdit install>\SSEEdit.exe | Required for helper doctor/prepare; native launch also needs AE preflight. |
-| XEDIT_SCRIPTS | Absolute custom script directory | <SSEEdit scripts> | Required xEdit binding; checked by helper doctor. |
-| INCLUDE_CREATION_CLUB | 0 or 1 | 0 | Validated by xedit_bridge.py; helper setting only. |
+| XEDIT_SCRIPTS | Optional absolute global script directory | <SSEEdit scripts> | Legacy compatibility path only; the native bridge installs the query script in its per-session `-S:` directory. |
+| INCLUDE_CREATION_CLUB | 0 or 1 | 0 | Official-master `prepare` and `native-query` require 0; CC records are outside the validated route. |
 | GHIDRA_HEADLESS_EXE | Absolute headless executable | <Ghidra>\support\analyzeHeadless.bat | Required by existing-project adapter. |
 | GHIDRA_PROJECT_REP_PATH | Absolute path to the existing GOG `.rep` data directory | <GOG project name>.rep | Adapter derives the project directory/name and requires this directory plus its adjacent `.gpr`; it never creates a project. |
 | GHIDRA_PROJECT_PROGRAM | Existing program name | SkyrimSE.exe | GOG program only. |
@@ -165,41 +167,68 @@ Use the strict dispatcher after bootstrap. On Windows invoke it with
     python3 scripts/python_env.py run tools/xedit_bridge.py doctor
     python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf
     python3 scripts/python_env.py run tools/xedit_bridge.py prepare
+    python3 scripts/python_env.py run tools/xedit_bridge.py native-query --signature QUST --plugin Skyrim.esm --editor-id dunDA14MorvunskarQST
     python3 scripts/python_env.py run tools/ae_preflight.py --scoped-five-master <prepared-session>/plugins.txt
-    python3 scripts/python_env.py run tools/ae_preflight.py
     python3 scripts/python_env.py run tools/ae_preflight.py --test-profile
 
-On Windows PowerShell, prepare returns JSON containing a session path. After
-the matching AE preflight passes, invoke its generated view-only launch file:
+On Windows PowerShell, invoke the same native query with the strict Windows
+launcher:
 
-    $prepared = py -3.12 scripts/python_env.py run tools/xedit_bridge.py prepare | ConvertFrom-Json
-    $session = Join-Path $PWD $prepared.session
-    py -3.12 scripts/python_env.py run tools/ae_preflight.py --scoped-five-master (Join-Path $session 'plugins.txt')
-    & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $session 'launch.ps1')
+    py -3.12 scripts/python_env.py run tools/xedit_bridge.py native-query --signature QUST --plugin Skyrim.esm --editor-id dunDA14MorvunskarQST
 
-doctor stages the configured authoritative helper/template files into
-ignored .local/xedit-authoritative-copy/, checks hashes and bindings, and
-captures helper stdout/stderr under ignored .local. The configured source
-`LEGACY_SKYRIM_REPO/scripts/skyrim_tool.py` documents `doctor`, `prepare-xedit`,
-`records`, and `inventory`. Its `records --signature QUST --plugin Skyrim.esm
---editor-id CreatureDialogueWerewolf` command was reproduced from the source
-and returned one record (`CreatureDialogueWerewolf`, local form `000E46`). The
-source dispatches `records` to its direct `read_plugin` TES4 reader; the tracked
-wrapper exposes the same route as `file-records`. This is a real read-only
-bridge record retrieval, but it does not invoke SSEEdit, select a record in the
-native record tree, or resolve winning overrides.
-prepare writes a scoped five-official-master SSEView session but does not
-launch it. --scoped-five-master validates only that generated list. Normal
-preflight validates the selected MO2 profile's explicit complete list;
---test-profile uses a separately designated disposable profile. Helper
-subprocess timeout is 120 seconds. The wrapper does not supervise or terminate
-native SSEView. Close the visible process normally and verify it exited.
+`doctor` stages the fixed helper files from the configured, read-only
+`LEGACY_SKYRIM_REPO` into ignored `.local/xedit-authoritative-copy/`, verifies
+their SHA-256 hashes, checks local bindings, and validates the latest native
+receipt without launching xEdit. `prepare` creates but does not launch a
+view-only session. Both use the official-master-only Data view under
+`.local/xedit-data/official-ae-v1`; it contains hash-verified read-only copies
+of only the five official masters and their matching vanilla string files from
+`SKYRIM_DATA`. This is needed
+because a direct launch against the configured game Data folder auto-loaded
+Creation Club and user plugins even though the original helper generated a
+five-entry `plugins.txt`. The overlay omits `Skyrim.ccc` and all non-master
+plugins. The source game Data files remain the inputs and are not written.
 
-A native record export still requires a visible SSEView record selection and
-the selection-based export-records.pas Apply Script operation. The exporter
-and a real native record export have not been validated in this cold-start
-session; the available UI automation has no safe record-tree selection
-control. Never label a file-parser result as an xEdit query or winner result.
+`native-query` is the canonical Codex route for native xEdit. It verifies the
+executable ProductVersion against its generated five-master list without
+requiring `MO2_PROFILE_DIR`, stages a per-session Pascal script through the
+original helper's `-S:` option, launches the configured executable using its
+original `-SSE -view -DontCache -D: -P: -I: -R: -O: -S:` arguments, and uses
+the original UIAutomation status and Ctrl+Alt+F9 helpers to dispatch the
+read-only Apply Script. The field walker and TSV columns come from the source
+`scripts/xedit/export-records.pas`; its global `Initialize` execution pattern
+is corroborated by `investigation-export.pas`. The query writes the actual
+loaded-file inventory, an explicit result status, decoded field values,
+`LinksTo` values, and the winning plugin within this five-master scope. Raw
+TSV/UI captures and structured JSON remain in ignored `.local/` paths. The
+wrapper requests a graceful close only for the SSEView process it launched;
+the closing window may outlive the initial two-second status sample. The
+acceptance run's specific process was absent in a later PID check.
+
+The native route was cold-start reproduced for `Skyrim.esm` QUST
+`dunDA14MorvunskarQST` (form `000427A0`): SSEView 4.1.5f reported
+`Background Loader: finished`, loaded exactly the five official masters plus
+the executable pseudo-file, and exported 149 field rows. The output includes
+stage indices 20 and 100 and the `Shut Down Stage=1` field under stage 100.
+See EV-0207 and `tests/fixtures/xedit/native_quest_smoke.json`. This validates
+native record fields and a stage-field relationship. It does not establish a
+profile-specific override: `WinningOverride` is reported only within the five
+official masters.
+
+Keep the three routes distinct:
+
+1. `file-records` reads raw plugin bytes through the original Python `read_plugin`
+   TES4 parser. It is not native xEdit and does not resolve a winning override.
+2. `native-query` loads the exact official-master view in SSEView and exports
+   native xEdit field values. No MO2 profile is needed for this vanilla scope.
+3. Profile-specific winner or negative claims require the complete order from
+   the actual target. If that target is MO2-managed, configure its selected
+   profile's explicit `plugins.txt` and run the regular `ae_preflight.py`.
+   Do not infer an effective winner from the five-master view.
+
+The wrapper uses Windows PowerShell/UIAutomation and a visible SSEView window;
+it requires a native Windows session or WSL2 Windows interop. A WSL Python
+check alone does not prove that the Windows GUI bridge is available.
 
 ### Existing GOG Ghidra project
 
@@ -246,10 +275,14 @@ established by skse_probe.py.
 
 ## Readiness boundary
 
-Run python3 scripts/harness_doctor.py all for the consolidated verdict. Its
-read-only checks cover Python/config, research-state validators, local path and
-tool status, and safe file-level smoke probes. It never launches xEdit,
-Ghidra, Skyrim, or an SKSE mutator. Native records, Ghidra access, and live
-observation remain separate gates in docs/HARNESS_READINESS.md. Linux/WSL
-validation does not establish Windows xEdit/MO2 or in-game AE behavior.
+Run `python3 scripts/python_env.py run scripts/harness_doctor.py all` for the
+consolidated verdict (Windows PowerShell: `py -3.12
+scripts/python_env.py run scripts/harness_doctor.py all`). Its read-only checks
+cover Python/config, research-state validators, local path and tool status,
+and safe file-level smoke probes. It never launches xEdit, Ghidra, Skyrim, or an
+SKSE mutator. Native records, Ghidra access, and live observation remain
+separate gates in docs/HARNESS_READINESS.md. Linux/WSL Python-only validation
+does not establish Windows xEdit/MO2 or in-game AE behavior. A
+WSL-to-Windows native export with loaded-file inventory is evidence for its
+exact xEdit scope; it does not verify the active profile or in-game behavior.
 

@@ -3723,6 +3723,61 @@
       ],
       "coverage": "The consolidated report contains 21 checks: 19 PASS, 2 BLOCKED_EXTERNAL, zero FAIL; overall verdict BLOCKED with exit 2. All local Python/configuration, research-state, overlay, domain-access, Markdown, privacy, compile, and 185 unit-test checks pass. The configured GOG Address Library and existing-project query pass function/RVA, incoming call xref, disassembly, and decompilation checks with no import, project creation, overwrite, or reanalysis. The xEdit helper and prepare route pass, and one QUST record is retrieved by the direct TES4 parser. SKSE installed file identity passes, but live game, plugin-load, handshake, event, snapshot, and DevBench states remain unobserved. Native record export is unverified because the selected MO2 profile and explicit plugins.txt are not configured. No bounty investigation or game launch occurred.",
       "result": "PASS for static research readiness. Overall doctor remains BLOCKED only on the separate selected-profile/native-export and live-observation gates; neither is required for static research."
+    },
+    {
+      "id": "EV-0207",
+      "kind": "tool",
+      "source": "Fresh native SSEView query through the recovered original Skyrim research repository helper and Pascal record-field exporter",
+      "artifact": "private-local:.local/xedit-authoritative-copy/out/xedit/20261015T131658.773702Z/native-result.json",
+      "sha256": "244dca821fc5b0861beeb6a03d7f4bc9ab323f1f3093f714fa2099e20eee0948",
+      "captured_utc": "2026-10-15T13:18:55.209437+00:00",
+      "edition": "AE",
+      "runtime": "WSL2 Ubuntu 24.04 / CPython 3.12.3 invoking configured Windows SSEView 4.1.5f through PowerShell; no Skyrim game process launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/xedit_bridge.py native-query --signature QUST --plugin Skyrim.esm --editor-id dunDA14MorvunskarQST --timeout 240",
+        "python3 scripts/python_env.py run tools/xedit_bridge.py doctor"
+      ],
+      "coverage": "The actual SSEView 4.1.5f Background Loader finished and the native Apply Script exporter produced structured JSON and TSV through the recovered original helper. The process loaded exactly Skyrim.esm, Update.esm, Dawnguard.esm, HearthFires.esm, and Dragonborn.esm plus the SkyrimSE.exe pseudo-file. It returned 149 fields for Skyrim.esm QUST dunDA14MorvunskarQST, form 000427A0. Native fields include VMAD fragment stage references 20, 30, and 100 and stage 100 INDX flag Shut Down Stage=1. TSV SHA-256 e061837ec22bd737355f2cad1c6cedb5052fd4530d4b740f19b680fb6bcb4213. The `WinningOverride` output is scoped only to these five masters and is not a target-profile winner. Source helper files were copied from configured LEGACY_SKYRIM_REPO and hash-checked. The query used a private read-only `.local` copy of the five official masters and matching strings; source Data hashes were rechecked after the run. No plugin or game files were edited. A later process query found the launched test PID absent.",
+      "result": "PASS for fresh native xEdit QUST retrieval, decoded fields, and stage relationship within the official five-master scope; profile override resolution remains unverified."
+    },
+    {
+      "id": "EV-0208",
+      "kind": "tool",
+      "source": "Guarded xEdit scope probe against the configured game Data directory before constructing the official-only private Data view",
+      "artifact": "private-local:.local/xedit-authoritative-copy/out/xedit/20261015T125332.045728Z/native-loaded-files.txt",
+      "sha256": "40355fd04a694474673967b535e655babf91154a68a6f6f5c21b813d6c445b0e",
+      "captured_utc": "2026-10-15T12:53:32.045728+00:00",
+      "edition": "AE",
+      "runtime": "Configured Windows SSEView 4.1.5f launched from WSL2; no Skyrim game process launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/xedit_bridge.py native-query --signature QUST --plugin Skyrim.esm --editor-id DA14"
+      ],
+      "coverage": "The original helper generated the official five-entry plugins.txt, but a direct launch against configured game Data auto-loaded Creation Club and user plugins. The read-only exporter guard captured ccasvsse001-almsivi.esm and wrote status `status=BLOCKED` with reason unexpected_loaded_plugin; no native record export was accepted. This observation prompted the wrapper to stage hash-verified read-only copies of only the five official masters and matching vanilla string tables under ignored .local before launching xEdit.",
+      "result": "PASS as a scope-safety observation; the guarded run refused out-of-scope data and did not modify source files."
+    },
+    {
+      "id": "EV-0209",
+      "kind": "tool",
+      "source": "Final consolidated harness doctor after the recovered native xEdit integration, current skill/handoff corrections, and refreshed Markdown inventory",
+      "artifact": "private-local:.local/alignment/harness-doctor/20261015T133230.012240Z/harness_doctor.json",
+      "sha256": "194b5a17268b0dd403e49f5493644d92555e0abc16cb4f924ee30f0f5789f5d5",
+      "captured_utc": "2026-10-15T13:32:30.012240Z",
+      "edition": "AE",
+      "runtime": "Ubuntu 24.04 / WSL2, CPython 3.12.3; actual Windows SSEView query is independently evidenced by EV-0207; doctor itself requests no native application launch",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py check --strict",
+        "python3 scripts/python_env.py run scripts/research_state.py validate",
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --check",
+        "python3 scripts/python_env.py run scripts/harness_doctor.py all"
+      ],
+      "coverage": "The consolidated `all` report has 22 checks: 20 PASS, 1 NOT_CONFIGURED (optional profile-specific override resolution), 1 NOT_VERIFIED (live SKSE/Observer observation), zero FAIL, exit 0, verdict READY. Strict Python 3.12, ignored local configuration, research-state and repository validators, Markdown audit, bundled unit tests, GOG Address Library and read-only existing-project query, xEdit helper, direct TES4 parse, prepared official five-master session, verified native xEdit receipt, and installed SKSE identity pass. No full MO2 profile order or live SKSE connection is asserted. Raw captures and report are private under ignored `.local`.",
+      "result": "PASS for static research readiness with profile-specific override resolution and live SKSE explicitly separate and unverified."
     }
   ]
 }

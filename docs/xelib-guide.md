@@ -1,32 +1,34 @@
 # Plugin record inspection and the xEdit boundary
 
-Use the Python reader for read-only inspection of an explicit plugin:
+For the active setup and exact commands, use
+[`docs/LOCAL_RUNTIME_CONTRACT.md`](LOCAL_RUNTIME_CONTRACT.md) and
+[`protocols/TOOL_ROUTING.md`](../protocols/TOOL_ROUTING.md).
 
-    python3 scripts/python_env.py run tools/plugin_reader.py doctor
-    python3 scripts/python_env.py run tools/plugin_reader.py inventory Skyrim.esm
-    python3 scripts/python_env.py run tools/plugin_reader.py record Skyrim.esm --signature QUST --form-id <local-id> --include-subrecords
+There are three distinct routes:
 
---include-subrecords returns each subrecord's signature, byte length, raw hex
-and a bounded CP1252 view. It exposes CTDA, ALST, ALID, and VMAD payloads for
-review. It does not decode every condition function or Papyrus property.
+1. `python3 scripts/python_env.py run tools/xedit_bridge.py file-records
+   --signature QUST --plugin Skyrim.esm --editor-id <substring>` parses a
+   configured plugin file directly. It returns raw record data and is not an
+   xEdit field query or winner resolution.
+2. `python3 scripts/python_env.py run tools/xedit_bridge.py native-query
+   --signature QUST --plugin Skyrim.esm --editor-id <exact-editor-id>` opens
+   configured SSEView in `-view`, loads only the five official masters from
+   the `.local` Data view, and returns the native xEdit field tree. It needs
+   no MO2 profile. EV-0207 preserves the cold-start QUST smoke result.
+3. A profile-specific winner or negative claim requires the complete active
+   order from the actual target. If MO2 manages it, configure that profile's
+   explicit `plugins.txt` and run the full `ae_preflight.py`.
 
-The reader processes one file at a time. The tested
-`resolve_record_winner(candidates, active_order)` helper can choose the final
-candidate when supplied the same logical FormID candidates and a complete
-validated AE order. It does not load every active file or discover the user's
-profile. Its two-record test fixture is synthetic; it is not a real winner
-query or a replacement for xEdit. The configured SSEEdit 4.1.5.0 executable
-exists and its current SHA-256 matches the file whose ProductVersion was read
-as 4.1.5.0 (EV-0120, EV-0181). EV-0172's `product_version_verified` field
-describes the Skyrim runtime target, not SSEEdit. A native call is blocked
-until the selected profile's full explicit `plugins.txt` passes:
+The underlying direct parser exposes ordered subrecords and raw CTDA, ALST,
+ALID, and VMAD payloads; it does not decode every condition function or
+Papyrus property. Native `WinningOverride` output is scoped to the actual
+loaded five-master view and must not be represented as an active-profile
+winner.
 
-    python3 scripts/python_env.py run tools/ae_preflight.py
+## Historical setup note (superseded)
 
-The current WSL PowerShell bridge fails before returning a ProductVersion with
-`UtilBindVsockAnyPort` (EV-0181). Retry preflight from a working WSL/Windows
-host after the selected MO2 profile and complete order are configured.
-
-Do not infer a winner from Skyrim.esm and Update.esm rows without verified
-load-order evidence. Keep original plugins read-only; retain raw outputs under
-ignored .local/ and cite plugin hashes in tracked research.
+Earlier readiness notes EV-0181–EV-0206 described the native export as blocked
+by a missing MO2 profile and manual record selection. That was the state before
+the original SSEView workflow was restored. EV-0207 records the tested native
+query and the exact loaded-file list. The older notes remain as setup history;
+they are not the current xEdit capability report.
