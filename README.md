@@ -10,19 +10,20 @@ research/FRONTIER.json, and research/CLAIMS.md.
 
 ## Start here
 
-Create the Python environment, then run checks and the tool doctor:
+Use the Python dispatcher, then run checks and the tool doctor:
 
-    conda env create -f environment.yml
     python3 scripts/python_env.py check
-    python3 scripts/python_env.py run --require-conda scripts/setup_research.py init
-    python3 scripts/python_env.py run --require-conda scripts/setup_research.py check
-    python3 scripts/python_env.py run --require-conda tools/domain_doctor.py
-    python3 scripts/python_env.py run -m pytest -q
+    python3 scripts/python_env.py run scripts/setup_research.py init
+    python3 scripts/python_env.py run scripts/setup_research.py check
+    python3 scripts/python_env.py run tools/domain_doctor.py
+    python3 scripts/python_env.py run -m unittest discover -s tests -v
 
 The dispatcher selects the named Conda environment when available and
 otherwise reports a system-Python fallback. Agent-facing tools use Python;
 a Python adapter may call a verified native research application such as
-Ghidra. Project guidance is in AGENTS.md and .agents/skills/.
+Ghidra. `environment.yml` describes the optional named environment; do not
+install local native applications as part of cloning or binding. Project
+guidance is in AGENTS.md and .agents/skills/.
 
 Local paths and research corpora belong in ignored config/local.env and
 .local/. Do not commit game files, saves, raw exports, local logs, private
@@ -30,13 +31,16 @@ Discord data, or personal paths.
 
 ## Skyrim AE targeting
 
-The supported executable is SkyrimSE.exe with ProductVersion 1.6.318 or newer.
-Configure SKYRIM_EDITION=AE, GAME_ROOT, SKYRIM_DATA, and the selected profile's
-explicit PLUGINS_TXT in ignored config/local.env. `scripts/local_paths.py sync`
-fills empty local paths from the ignored registry. Run the Python ae_preflight.py
-before SSEEdit or live access. MO2 users must select the profile's virtualized
-plugins.txt; a global list is not a substitute. See docs/getting-started.md for
-the maintained branch and Windows checkout steps.
+The supported runtime is SkyrimSE.exe with ProductVersion 1.6.318 or newer.
+Copy `config/local.env.example` to ignored `config/local.env` and bind the
+runtime, tools, and selected profile there. Run
+`python3 scripts/python_env.py run scripts/local_paths.py doctor` to check
+bindings. Run `tools/ae_preflight.py` before xEdit or live access. MO2 users
+must set the selected profile's explicit virtualized `plugins.txt`; a global
+list is not a substitute. Ghidra uses the separately configured existing GOG
+project and analysis binary, regardless of the runtime store. See
+[docs/LOCAL_TOOL_BINDINGS.md](docs/LOCAL_TOOL_BINDINGS.md) and
+[docs/getting-started.md](docs/getting-started.md).
 
 ## Research durability
 
@@ -53,13 +57,16 @@ the maintained branch and Windows checkout steps.
 
 The plugin reader supports file-level TES4 inspection with raw subrecords and
 has a synthetic explicit-order winner fixture; no real profile winner is
-established. The Python Ghidra adapter invokes the
-installed headless tool after verifying the AE executable. The PEX helper
+established until the selected full order passes preflight. The Python Ghidra
+adapter verifies and queries the existing GOG project with `-process`,
+`-noanalysis`, and `-readOnly`; it never imports or auto-analyzes a binary.
+The PEX helper
 extracts a narrow stream from the base Misc BSA to ignored `.local/` storage;
 it is not a general BSA extractor or full decompiler. `skse_probe.py` verifies
 local SKSE/Address Library file metadata only. xEdit is gated on the selected
-profile, CommonLib on a working build toolchain, and a live SKSE handshake on
-an already running game. UESP and Apocrypha use ignored local databases with
+profile and a live SKSE handshake on an already running game. The
+build-attested Address Library adapter reuses the retained legacy decoder and
+does not transfer a GOG RVA to another executable build. UESP and Apocrypha use ignored local databases with
 separate provenance and privacy limits.
 
 Never treat setstage, setlevel, injected scripts, altered plugins, or patched

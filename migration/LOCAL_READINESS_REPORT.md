@@ -1,5 +1,9 @@
 # Local Research Readiness Report
 
+> Historical report for the 74-criterion mission, superseded by
+> `migration/FINAL_ALIGNMENT_REPORT.md`. Its older native/project and gate
+> assertions are not current unless independently cited there.
+
 ## Audit identity
 
 - Mission: `migration/LOCAL_RESEARCH_READINESS_MISSION.md`, read in full; all 74 criteria A01–F12 are classified.

@@ -1,63 +1,65 @@
 # Skyrim AE research tool routing
 
-Use Python entrypoints through python3 scripts/python_env.py run.
-The dispatcher selects skyrim-ae-research when Conda is installed and
-reports when it falls back to current Python. Python adapters may dispatch
-native applications; do not add shell, Java, or Node agent-facing launchers.
+Run agent-facing Python entrypoints through `python3 scripts/python_env.py
+run ...`. The dispatcher selects the named Conda environment when it exists
+and reports a system-Python fallback otherwise. Local path bindings are read
+only from ignored `config/local.env`; `.local/research-paths.toml` is retired
+and is never synchronized into active configuration.
 
 ## Target and profile gate
 
 Before xEdit or live-game access, run:
 
-    python3 scripts/python_env.py run tools/ae_preflight.py
+```text
+python3 scripts/python_env.py run tools/ae_preflight.py
+```
 
-The gate reads ProductVersion from the actual SkyrimSE.exe resource, requires
-AE 1.6.318 or newer, hashes the executable, and checks the complete active
-plugin list. For MO2, PLUGINS_TXT must name the selected profile's explicit
-plugins.txt. --probe-executable verifies only the executable and never
-authorizes xEdit or game access.
+The gate reads `SkyrimSE.exe` ProductVersion from the executable, requires AE
+1.6.318+, hashes the binary, and validates the complete selected profile order
+including the five official masters. For MO2, `PLUGINS_TXT` must be the
+explicit `plugins.txt` from the selected profile. `--probe-executable` is
+diagnostic only. Do not use a global list or inferred profile to support a
+negative result or winning-record claim.
 
-## Python and native operations
+## Route by evidence type
 
-| Evidence need | Python command | Scope |
+| Evidence need | Tested entrypoint | Limits |
 |---|---|---|
-| Local readiness | python3 scripts/python_env.py run tools/domain_doctor.py | Reports detected tools and external gates without exposing paths or private message fields. |
-| One-plugin record and raw fields | python3 scripts/python_env.py run tools/plugin_reader.py record <plugin> --signature QUST --form-id <id> --include-subrecords | Read-only file parser; raw bytes, not a winner or Papyrus decode. |
-| Named PEX extraction and bytecode inspection | `python3 scripts/python_env.py run tools/papyrus_pex.py extract DA14Script` then `python3 scripts/python_env.py run tools/papyrus_pex.py disassemble .local/readiness/papyrus/DA14Script.pex` | Narrow extraction from configured `SKYRIM_DATA` `Skyrim - Misc.bsa`; output stays under ignored `.local/`. Classic PEX 3.2 forms only; not a general BSA extractor or full decompiler. |
-| Papyrus literal-string scan | `python3 scripts/python_env.py run tools/papyrus_pex.py scan-literals` | Scans only base `Skyrim - Misc.bsa` by default. `--include-creations` opts into every installed `cc*.bsa` archive (multi-GB); a stopped scan is not evidence. No literal hits do not exclude dynamic strings or native writers. |
-| Plugin inventory | python3 scripts/python_env.py run tools/plugin_reader.py inventory <plugin> | Counts records in one explicit file. |
-| Native Ghidra analysis | python3 scripts/python_env.py run tools/ghidra_probe.py --analyze --analysis-timeout 7200 | Verifies the AE target, imports into a fresh ignored project, and waits for Ghidra. |
-| Native Ghidra query | python3 scripts/python_env.py run tools/ghidra_probe.py --project-dir <ignored-project> --project-name <name> | Existing project opens read-only with analysis disabled; script errors are treated as failures. |
-| SKSE co-save | python3 scripts/python_env.py run tools/cosave-info.py <copy.skse> | Read-only structure; not full actor-state decoding. |
-| Local SKSE/Address Library identity | `python3 scripts/python_env.py run tools/skse_probe.py` | Verifies AE ProductVersion and hashes runtime-named SKSE/Address Library files; metadata only, no DLL load or live handshake. |
-| Papyrus and crash logs | python3 scripts/python_env.py run tools/papyrus-triage.py <log> and tools/crash-triage.py <file-or-dir> | Preserve coverage counts and keep inputs private. |
-| UESP | python3 scripts/python_env.py run -m tools.uesp doctor/search/page/related | Emits revision citations; source provenance is separate. |
-| Apocrypha | python3 scripts/python_env.py run -m tools.apocrypha doctor/search/context | Private untrusted source; keep identifiers and text local. |
+| Local bindings | `python3 scripts/python_env.py run scripts/local_paths.py doctor [--verify-target]` | Reads only `config/local.env`; output hides values. |
+| Existing GOG static project | `python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]` | Opens configured existing GOG `SkyrimSE.exe` with `-process -noanalysis -readOnly`; no import, overwrite, or project creation. EV-0165–0167. |
+| Named CommonLib relocation | `python3 scripts/python_env.py run tools/address_library_probe.py --symbol Namespace::Name` | Reads `Offsets.h`, verifies GOG ProductVersion and matching Address Library version/hash, and returns a GOG-specific RVA. EV-0167. |
+| One plugin's records/raw bytes | `python3 scripts/python_env.py run tools/plugin_reader.py record <plugin> --signature QUST --form-id <id> --include-subrecords` | File-level reader; not a winning-record/xEdit result. |
+| Load-order-aware winners | `python3 scripts/python_env.py run tools/ae_preflight.py`, then native SSEEdit only after it passes | The authoritative `skyrim` bridge helper/config copy was replayed byte-identically for helper files; all five xEdit settings, doctor, prepare, and scoped five-master preflight passed (EV-0191). The generated `-view` launch/load is verified (EV-0184–0185/0189), but no record query ran. The selected MO2 profile is absent, so winners and profile-dependent negatives remain blocked. |
+| Known Papyrus/BSA input | `python3 scripts/python_env.py run tools/papyrus_pex.py extract DA14Script`, then `disassemble` the ignored output | Narrow base `Skyrim - Misc.bsa` extraction; classic PEX 3.2 subset, not a full decompiler. EV-0169. |
+| Save/co-save structure | `python3 scripts/python_env.py run tools/cosave-info.py <designated-copy.skse>` | Structural parser; current tests use synthetic data. No designated real save/ReSaver path is configured (EV-0174). |
+| Installed SKSE identity | `python3 scripts/python_env.py run tools/skse_probe.py` | Hashes runtime-named loader/DLL/Address Library files; no DLL load or handshake. EV-0173. |
+| UESP citation | `python3 scripts/python_env.py run -m tools.uesp page --db .local/uesp.sqlite3 <title> --raw` | Returns revision ID/URL. Local dump completeness/source provenance is unverified. EV-0170. |
+| Private Apocrypha lead | `python3 scripts/python_env.py run -m tools.apocrypha search --db .local/apocrypha.sqlite3 --summary-only <terms>`, then `context` for a selected ID | Keep message text and stable identifiers under ignored `.local/`; treat as untrusted. EV-0171. |
+| Domain status | `python3 scripts/python_env.py run tools/domain_doctor.py` | Reports path/tool state only. It does not launch xEdit, game, or Ghidra. EV-0172. |
 
-## Gated domains
+## Current evidence boundary
 
-- xEdit/SSEEdit: selected profile is not identified, so full preflight fails
-  and xEdit remains unlaunched. The Python winner helper has only a synthetic
-  two-record fixture; do not report a real winner from file parsing.
-- Ghidra: native query on the EV-0139-attested Steam AE project passed (EV-0152),
-  exporting 93,587 functions, an address lookup, one call edge, 24 disassembly
-  instructions, and decompilation. The project remains incompletely analyzed;
-  the sample routine has no gameplay identification. Do not reuse GOG 1.6.1179
-  offsets for Steam 1.6.1170.
-- CommonLibSSE-NG: AE CommonLib and the Observer Release DLL build passed in an
-  ignored local copy (EV-0130, EV-0154, EV-0155). This proves build capability,
-  not a live SKSE load or handshake.
-- Live SKSE/DevBench requires a verified target and already running game
-  with a read-only probe. Do not launch a game or mutator automatically.
-- Keep archive and save work read-only; raw captures remain in ignored .local/.
+- The canonical Ghidra analysis target is the existing GOG project, GOG
+  `SkyrimSE.exe` 1.6.1179.0, SHA-256
+  `9b0fc7880c4b12d436bfb59bcae64868f176dbc04010adbd9bc2ecb64bc8ed3f`.
+  EV-0167's `0x14C020` result is build-specific. Do not transfer it to Steam.
+- The runtime target is separately verified as Steam AE 1.6.1170.0,
+  SHA-256 `c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9`
+  (EV-0168). Its executable identity does not verify a complete active order.
+- The selected MO2 profile and explicit plugin list are unavailable. An
+  approved SSEView 4.1.5f process opened the authoritative bridge's isolated
+  five-official-master `-view` session and completed its background load
+  (EV-0184–0185/0189); no record query ran, and this list cannot support
+  winners or profile-dependent negatives.
+- Steam AE 1.6.1170 SKSE files pass metadata checks (EV-0187). The fresh
+  Observer DLL is staged under `.local`, and a prepare-only manifest was
+  generated (EV-0186, EV-0188); it is not deployed or loaded. Gate 3 remains
+  `NOT_VERIFIED` until a safe profile/save lane and live handshake exist.
+- Never write to original game files, plugins, archives, saves, or co-saves.
+  Keep raw captures under ignored `.local/`; cite hashes, build identity,
+  coverage, and whether each statement is observation, inference, diagnostic
+  intervention, or vanilla reproduction.
 
-## Evidence boundary
-
-Record tool/build version, input identity/hash, exact operation, exit status,
-coverage, and durable output ID. Distinguish observation, inference,
-community lead, diagnostic intervention, and vanilla reproduction. A zero
-row result without verified coverage is not a negative finding.
-
-Linux fixture tests do not establish Windows MO2 virtualization, xEdit
-behavior, or live AE gameplay. Never write to original game files, plugins,
-archives, saves, or co-saves.
+Linux checks do not establish Windows MO2/SSEEdit behavior or in-game AE
+behavior. Continue independent static work when a profile/runtime capability
+is unavailable; do not make unsupported negative claims.

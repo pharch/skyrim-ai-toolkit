@@ -1,153 +1,260 @@
+from __future__ import annotations
+
 import hashlib
-from contextlib import redirect_stderr
-from io import StringIO
 import json
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
-from tools.ae_target import TargetError
-from tools.ghidra_probe import _attested_existing_project_target, _windows_path, main
+from tools.ghidra_probe import GhidraProbeError, _normalize_windows_path, _windows_path, resolve_binding, run_query
 
 
 class GhidraProbeTests(unittest.TestCase):
-    def _attested_fixture(self):
+    def _fixture(self):
         temporary = tempfile.TemporaryDirectory()
-        root = Path(temporary.name)
-        local = root / ".local" / "readiness"
-        local.mkdir(parents=True)
-        game_root = root / "game"
-        game_root.mkdir()
-        executable = game_root / "SkyrimSE.exe"
-        executable.write_bytes(b"verified AE executable fixture")
-        image_hash = hashlib.sha256(executable.read_bytes()).hexdigest()
-        version_capture = local / "version.stdout.raw"
-        version_capture.write_text("ProductVersion=1.6.1170.0\n", encoding="utf-8")
-        project_dir = local / "ghidra" / "project_AE_SkyrimSE_1_6_1170_attempt2"
-        project_dir.mkdir(parents=True)
-        metadata_path = local / "ghidra" / "analysis-attempt2.meta.json"
-        metadata = {"project_name": "AE_SkyrimSE_1_6_1170_attempt2", "input_sha256": image_hash}
-        metadata_path.write_text(json.dumps(metadata), encoding="utf-8")
-        long_project_dir = local / "ghidra" / "project_AE_SkyrimSE_1_6_1170_longanalysis"
-        long_project_dir.mkdir()
-        long_metadata_path = local / "ghidra" / "AE_SkyrimSE_1_6_1170_longanalysis.meta.json"
-        long_metadata_path.write_text(json.dumps({
-            "project_name": "AE_SkyrimSE_1_6_1170_longanalysis",
-            "input_sha256": image_hash,
-        }), encoding="utf-8")
-        long_stdout_path = local / "ghidra" / "AE_SkyrimSE_1_6_1170_longanalysis.stdout.raw"
-        long_stdout_path.write_bytes(b"analysis saved after timeout\n")
-        evidence = {
-            "schema_version": 1,
-            "items": [
-                {
-                    "id": "EV-0109", "edition": "AE", "runtime": "1.6.1170",
-                    "source": f"ProductVersion probe; input SHA256 {image_hash}",
-                    "artifact": "private-local:.local/readiness/version.stdout.raw",
-                    "sha256": hashlib.sha256(version_capture.read_bytes()).hexdigest(),
-                },
-                {
-                    "id": "EV-0113", "edition": "AE", "runtime": "1.6.1170",
-                    "source": f"Ghidra import; input SHA256 {image_hash}",
-                    "artifact": "private-local:.local/readiness/ghidra/analysis-attempt2.meta.json",
-                    "sha256": hashlib.sha256(metadata_path.read_bytes()).hexdigest(),
-                },
-                {
-                    "id": "EV-0139", "edition": "AE", "runtime": "1.6.1170",
-                    "source": f"Ghidra analysis session; input SHA256 {image_hash}",
-                    "artifact": "private-local:.local/readiness/ghidra/AE_SkyrimSE_1_6_1170_longanalysis.stdout.raw",
-                    "sha256": hashlib.sha256(long_stdout_path.read_bytes()).hexdigest(),
-                    "metadata_artifact": "private-local:.local/readiness/ghidra/AE_SkyrimSE_1_6_1170_longanalysis.meta.json",
-                    "metadata_sha256": hashlib.sha256(long_metadata_path.read_bytes()).hexdigest(),
-                },
-            ],
+        base = Path(temporary.name)
+        root = base / "toolkit"
+        root.mkdir()
+        script_dir = root / "tools" / "ghidra_scripts"
+        script_dir.mkdir(parents=True)
+        (script_dir / "ReadOnlyTargetedQuery.java").write_text("// fixture", encoding="utf-8")
+        legacy = base / "legacy-skyrim"
+        project = legacy / "data" / "ghidra_project"
+        project.mkdir(parents=True)
+        (project / "skyrim-gog.gpr").write_bytes(b"existing project marker")
+        (project / "skyrim-gog.rep").mkdir()
+        ghidra = base / "ghidra"
+        headless = ghidra / "support" / "analyzeHeadless.bat"
+        headless.parent.mkdir(parents=True)
+        headless.write_text("@echo off\n", encoding="utf-8")
+        exe = legacy / "GOG" / "SkyrimSE.exe"
+        exe.parent.mkdir()
+        exe.write_bytes(b"fixture GOG executable")
+        config = {
+            "LEGACY_SKYRIM_REPO": str(legacy),
+            "GHIDRA_HEADLESS_EXE": str(headless),
+            "GHIDRA_PROJECT_DIR": str(project),
+            "GHIDRA_PROJECT_NAME": "skyrim-gog",
+            "GHIDRA_PROJECT_PROGRAM": "SkyrimSE.exe",
+            "GHIDRA_ANALYSIS_EXE_GOG": str(exe),
+            # These are the separate runtime target and must not select Ghidra.
+            "GAME_ROOT": r"C:\Program Files (x86)\Steam\steamapps\common\Skyrim Special Edition",
+            "SKYRIM_EXE_PATH": r"C:\Program Files (x86)\Steam\steamapps\common\Skyrim Special Edition\SkyrimSE.exe",
         }
-        (root / "research").mkdir()
-        (root / "research" / "EVIDENCE.json").write_text(json.dumps(evidence), encoding="utf-8")
-        return temporary, root, game_root, executable, project_dir, long_project_dir
+        return temporary, root, legacy, project, headless, exe, config
 
-    def test_mounted_windows_path_is_quoted_by_caller_and_mapped_without_loss(self):
+    def test_mounted_windows_path_preserves_spaces(self):
         self.assertEqual(_windows_path(Path("/mnt/c/Program Files/Ghidra")), r"C:\Program Files\Ghidra")
 
-    def test_non_windows_host_paths_outside_a_mounted_drive_fail_closed(self):
-        with self.assertRaisesRegex(RuntimeError, "mounted Windows drive"):
+    def test_path_outside_mounted_drive_fails_closed_on_linux(self):
+        with self.assertRaisesRegex(GhidraProbeError, "mounted Windows drive"):
             _windows_path(Path("/tmp/not-a-windows-path"))
 
-    def test_result_distinguishes_missing_xref_from_function_and_disassembly_outputs(self):
-        script = Path(__file__).parents[1] / "tools" / "ghidra_scripts" / "ReadOnlyTargetedQuery.java"
-        source = script.read_text(encoding="utf-8")
-        self.assertIn("FUNCTION_LOOKUP=", source)
-        self.assertIn("DISASM=", source)
-        self.assertIn("XREF_CALL_EDGE=NOT_FOUND_IN_ANALYZED_PROJECT", source)
-        self.assertNotIn('throw new IllegalStateException("No direct call reference between analyzed functions was found")', source)
-
-    def test_attested_existing_project_query_requires_same_verified_image_hash(self):
-        temporary, root, game_root, _executable, project_dir, _long_project_dir = self._attested_fixture()
-        self.addCleanup(temporary.cleanup)
-        target = _attested_existing_project_target(
-            root=root,
-            config={"GAME_ROOT": str(game_root)},
-            project_dir=project_dir,
-            project_name="AE_SkyrimSE_1_6_1170_attempt2",
+    def test_normalize_ghidra_import_path(self):
+        self.assertEqual(
+            _normalize_windows_path("/C:/Program Files/GOG/SkyrimSE.exe"),
+            _normalize_windows_path(r"C:\Program Files\GOG\SkyrimSE.exe"),
         )
-        self.assertEqual(target["version"], "1.6.1170")
-        self.assertEqual(target["edition"], "AE")
 
-    def test_attested_existing_project_query_rejects_changed_executable(self):
-        temporary, root, game_root, executable, project_dir, _long_project_dir = self._attested_fixture()
+    def test_existing_gog_binding_is_resolved_without_using_runtime_path(self):
+        temporary, root, legacy, project, headless, exe, config = self._fixture()
         self.addCleanup(temporary.cleanup)
-        executable.write_bytes(b"different executable")
-        with self.assertRaisesRegex(RuntimeError, "current executable bytes"):
-            _attested_existing_project_target(
-                root=root,
-                config={"GAME_ROOT": str(game_root)},
-                project_dir=project_dir,
-                project_name="AE_SkyrimSE_1_6_1170_attempt2",
-            )
+        with patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"):
+            binding = resolve_binding(config, root=root)
+        self.assertEqual(binding["project_name"], "skyrim-gog")
+        self.assertEqual(binding["program_name"], "SkyrimSE.exe")
+        self.assertEqual(binding["project_dir"], project)
+        self.assertEqual(binding["executable"], exe)
+        self.assertNotEqual(binding["executable"], Path(config["SKYRIM_EXE_PATH"]))
 
-    def test_attested_existing_project_query_accepts_ev0139_longanalysis(self):
-        temporary, root, game_root, _executable, _project_dir, long_project_dir = self._attested_fixture()
+    def test_missing_project_config_fails_without_creating_a_project(self):
+        temporary, root, _legacy, project, _headless, _exe, config = self._fixture()
         self.addCleanup(temporary.cleanup)
-        target = _attested_existing_project_target(
-            root=root,
-            config={"GAME_ROOT": str(game_root)},
-            project_dir=long_project_dir,
-            project_name="AE_SkyrimSE_1_6_1170_longanalysis",
+        config["GHIDRA_PROJECT_DIR"] = ""
+        with patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"):
+            with self.assertRaisesRegex(GhidraProbeError, "GHIDRA_PROJECT_DIR"):
+                resolve_binding(config, root=root)
+        self.assertTrue(project.is_dir())
+        self.assertFalse((root / ".local").exists())
+
+    def test_missing_project_files_fail_without_silent_replacement(self):
+        temporary, root, _legacy, project, _headless, _exe, config = self._fixture()
+        self.addCleanup(temporary.cleanup)
+        (project / "skyrim-gog.gpr").unlink()
+        with patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"):
+            with self.assertRaisesRegex(GhidraProbeError, "configured GOG .gpr project is missing"):
+                resolve_binding(config, root=root)
+        self.assertFalse((project / "skyrim-gog.gpr").exists())
+
+    def test_missing_local_config_fails_without_creating_a_project_or_config(self):
+        temporary, root, _legacy, project, _headless, _exe, _config = self._fixture()
+        self.addCleanup(temporary.cleanup)
+        with self.assertRaisesRegex(GhidraProbeError, "config/local.env is missing"):
+            run_query(root=root)
+        self.assertTrue(project.is_dir())
+        self.assertFalse((root / "config" / "local.env").exists())
+        self.assertFalse((root / ".local").exists())
+
+    def test_project_inside_harness_checkout_is_rejected(self):
+        temporary, root, _legacy, _project, headless, exe, config = self._fixture()
+        self.addCleanup(temporary.cleanup)
+        local_project = root / ".local" / "should-not-be-a-project"
+        local_project.mkdir(parents=True)
+        (local_project / "skyrim-gog.gpr").touch()
+        (local_project / "skyrim-gog.rep").mkdir()
+        config["GHIDRA_PROJECT_DIR"] = str(local_project)
+        with patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"):
+            with self.assertRaisesRegex(GhidraProbeError, "external local installation/project"):
+                resolve_binding(config, root=root)
+        self.assertTrue(headless.is_file())
+        self.assertTrue(exe.is_file())
+
+    def test_readonly_query_selects_gog_even_when_runtime_path_is_steam(self):
+        temporary, root, _legacy, project, _headless, _exe, config = self._fixture()
+        self.addCleanup(temporary.cleanup)
+
+        def windows_path(path: Path) -> str:
+            if path.name == "SkyrimSE.exe":
+                return r"C:\GOG\SkyrimSE.exe"
+            if path.name == "ghidra_project":
+                return r"C:\legacy\data\ghidra_project"
+            if path.name == "legacy-skyrim":
+                return r"C:\legacy"
+            if path.name == "support":
+                return r"C:\ghidra\support"
+            if path.name == "ghidra_scripts":
+                return r"C:\toolkit\tools\ghidra_scripts"
+            return r"C:\toolkit\.local\ghidra\file"
+
+        stdout = (
+            b"PROGRAM_EXECUTABLE_PATH=/C:/GOG/SkyrimSE.exe (GhidraScript)\n"
+            b"FUNCTION_COUNT=12\nFUNCTION_LOOKUP=FUN_140001000 @ 140001000\n"
+            b"XREF_CALL_EDGE=140001010 -> 140001000 target=FUN_140001000\n"
+            b"DISASM=140001000 PUSH RBX\nDISASSEMBLY_INSTRUCTION_COUNT=1\n"
+            b"DECOMPILATION_BEGIN=FUN_140001000\nreturn;\nDECOMPILATION_END=FUN_140001000\n"
         )
-        self.assertEqual(target["version"], "1.6.1170")
+        with (
+            patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"),
+            patch("tools.ghidra_probe._windows_path", side_effect=windows_path),
+            patch("tools.ghidra_probe._cmd_executable", return_value="cmd.exe"),
+            patch("tools.ghidra_probe.subprocess.run", return_value=SimpleNamespace(returncode=0, stdout=stdout, stderr=b"")) as run,
+        ):
+            result = run_query(root=root, config=config, timeout=30)
 
-    def test_attested_existing_project_query_rejects_unregistered_name(self):
-        temporary, root, game_root, _executable, project_dir, _long_project_dir = self._attested_fixture()
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["analysis_distribution"], "GOG")
+        self.assertTrue(result["program_executable_path_matches_gog_binary"])
+        self.assertTrue(result["auto_analysis_disabled"])
+        self.assertTrue(result["read_only"])
+        self.assertFalse(result["import_attempted"])
+        self.assertEqual(result["checks"]["function_lookup"], True)
+        self.assertEqual(result["checks"]["xref_call_edge"], True)
+        self.assertEqual(result["checks"]["disassembly"], True)
+        self.assertEqual(result["checks"]["decompilation"], True)
+        command = next((root / ".local" / "ghidra").glob("*.cmd")).read_text(encoding="utf-8")
+        self.assertIn('"skyrim-gog"', command)
+        self.assertIn('-process "SkyrimSE.exe" -noanalysis -readOnly', command)
+        self.assertEqual(result["analysis_binary_sha256"], hashlib.sha256(_exe.read_bytes()).hexdigest())
+        self.assertNotIn("Steam", command)
+        self.assertNotIn("-import", command)
+        self.assertNotIn("-overwrite", command)
+        self.assertNotIn("-deleteProject", command)
+        self.assertTrue(project.is_dir())
+
+    def test_build_attested_rva_is_passed_to_existing_project_and_verified(self):
+        temporary, root, _legacy, project, _headless, _exe, config = self._fixture()
         self.addCleanup(temporary.cleanup)
-        with self.assertRaisesRegex(RuntimeError, "not in the hash-attested query allowlist"):
-            _attested_existing_project_target(
-                root=root,
-                config={"GAME_ROOT": str(game_root)},
-                project_dir=project_dir,
-                project_name="unregistered-project",
-            )
+        stdout = (
+            b"PROGRAM_EXECUTABLE_PATH=/C:/GOG/SkyrimSE.exe (GhidraScript)\n"
+            b"TARGET_RVA=0x14C020\nTARGET_ADDRESS=14014C020\n"
+            b"FUNCTION_LOOKUP=FUN_14014C000 @ 14014C000\n"
+            b"XREF_CALL_EDGE=14014C010 -> 14014C000 target=FUN_14014C000\n"
+            b"DISASM=14014C000 PUSH RBX\nDISASSEMBLY_INSTRUCTION_COUNT=1\n"
+            b"DECOMPILATION_BEGIN=FUN_14014C000\nreturn;\nDECOMPILATION_END=FUN_14014C000\n"
+        )
 
-    def test_attested_longanalysis_rejects_changed_metadata(self):
-        temporary, root, game_root, _executable, _project_dir, long_project_dir = self._attested_fixture()
+        def windows_path(path: Path) -> str:
+            if path.name == "SkyrimSE.exe":
+                return r"C:\\GOG\\SkyrimSE.exe"
+            return r"C:\\local\\path"
+
+        with (
+            patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"),
+            patch("tools.ghidra_probe._windows_path", side_effect=windows_path),
+            patch("tools.ghidra_probe._cmd_executable", return_value="cmd.exe"),
+            patch("tools.ghidra_probe.subprocess.run", return_value=SimpleNamespace(returncode=0, stdout=stdout, stderr=b"")) as run,
+        ):
+            result = run_query(root=root, config=config, timeout=30, rva=0x14C020)
+
+        self.assertTrue(result["ok"])
+        self.assertEqual(result["requested_rva"], "0x14C020")
+        self.assertTrue(result["checks"]["requested_rva_lookup"])
+        command = next((root / ".local" / "ghidra").glob("*.cmd")).read_text(encoding="utf-8")
+        self.assertIn('-process "SkyrimSE.exe" -noanalysis -readOnly', command)
+        self.assertIn(' -postScript "ReadOnlyTargetedQuery.java" 0x14C020', command)
+        self.assertNotIn("-import", command)
+        self.assertNotIn("-overwrite", command)
+        run.assert_called_once()
+        self.assertTrue(project.is_dir())
+
+    def test_negative_or_unreasonably_large_rva_fails_before_local_access(self):
+        with self.assertRaisesRegex(GhidraProbeError, "non-negative 63-bit"):
+            run_query(root=Path("/missing"), config={}, rva=-1)
+        with self.assertRaisesRegex(GhidraProbeError, "non-negative 63-bit"):
+            run_query(root=Path("/missing"), config={}, rva=2**63)
+
+    def test_wrong_project_program_path_fails_the_query(self):
+        temporary, root, _legacy, _project, _headless, _exe, config = self._fixture()
         self.addCleanup(temporary.cleanup)
-        metadata_path = root / ".local" / "readiness" / "ghidra" / "AE_SkyrimSE_1_6_1170_longanalysis.meta.json"
-        metadata_path.write_text("{}", encoding="utf-8")
-        with self.assertRaisesRegex(RuntimeError, "saved project metadata artifact is missing or has changed"):
-            _attested_existing_project_target(
-                root=root,
-                config={"GAME_ROOT": str(game_root)},
-                project_dir=long_project_dir,
-                project_name="AE_SkyrimSE_1_6_1170_longanalysis",
-            )
+        stdout = (
+            b"PROGRAM_EXECUTABLE_PATH=/C:/Steam/SkyrimSE.exe\n"
+            b"FUNCTION_LOOKUP=FUN_140001000\nXREF_CALL_EDGE=A -> B\n"
+            b"DISASM=A MOV\nDISASSEMBLY_INSTRUCTION_COUNT=1\n"
+            b"DECOMPILATION_BEGIN=FUN\nDECOMPILATION_END=FUN\n"
+        )
 
-    def test_target_errors_are_reported_as_json_not_tracebacks(self):
-        error = StringIO()
-        with patch("tools.ghidra_probe.run_query", side_effect=TargetError("unsupported Skyrim runtime")):
-            with redirect_stderr(error):
-                exit_code = main(["--timeout", "10"])
-        self.assertEqual(exit_code, 2)
-        self.assertIn('"error": "unsupported Skyrim runtime"', error.getvalue())
+        def windows_path(path: Path) -> str:
+            return r"C:\GOG\SkyrimSE.exe" if path.name == "SkyrimSE.exe" else r"C:\local\path"
+
+        with (
+            patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"),
+            patch("tools.ghidra_probe._windows_path", side_effect=windows_path),
+            patch("tools.ghidra_probe._cmd_executable", return_value="cmd.exe"),
+            patch("tools.ghidra_probe.subprocess.run", return_value=SimpleNamespace(returncode=0, stdout=stdout, stderr=b"")),
+        ):
+            result = run_query(root=root, config=config)
+        self.assertFalse(result["ok"])
+        self.assertFalse(result["checks"]["program_identity_matches_gog_binary"])
+
+    def test_ghidra_script_error_marker_fails_closed(self):
+        temporary, root, _legacy, _project, _headless, _exe, config = self._fixture()
+        self.addCleanup(temporary.cleanup)
+        stdout = (
+            b"ERROR REPORT SCRIPT ERROR\nPROGRAM_EXECUTABLE_PATH=/C:/GOG/SkyrimSE.exe\n"
+            b"FUNCTION_LOOKUP=FUN_140001000\nXREF_CALL_EDGE=A -> B\n"
+            b"DISASM=A MOV\nDISASSEMBLY_INSTRUCTION_COUNT=1\n"
+            b"DECOMPILATION_BEGIN=FUN\nDECOMPILATION_END=FUN\n"
+        )
+        def windows_path(path: Path) -> str:
+            return r"C:\GOG\SkyrimSE.exe" if path.name == "SkyrimSE.exe" else r"C:\local\path"
+        with (
+            patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"),
+            patch("tools.ghidra_probe._windows_path", side_effect=windows_path),
+            patch("tools.ghidra_probe._cmd_executable", return_value="cmd.exe"),
+            patch("tools.ghidra_probe.subprocess.run", return_value=SimpleNamespace(returncode=0, stdout=stdout, stderr=b"")),
+        ):
+            result = run_query(root=root, config=config)
+        self.assertFalse(result["ok"])
+        self.assertFalse(result["checks"]["script_no_error"])
+
+    def test_unsupported_analysis_binary_version_fails(self):
+        temporary, root, _legacy, _project, _headless, _exe, config = self._fixture()
+        self.addCleanup(temporary.cleanup)
+        with patch("tools.ghidra_probe.read_executable_version", return_value="1.5.97.0"):
+            with self.assertRaisesRegex(GhidraProbeError, "not a supported AE"):
+                resolve_binding(config, root=root)
 
 
 if __name__ == "__main__":

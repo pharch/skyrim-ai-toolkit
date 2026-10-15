@@ -13,12 +13,24 @@ For AE work, attach the verified runtime and active-profile identity to the
 manifest. If either is unavailable, do not schedule an in-game action: write
 the missing prerequisite and the offline discriminant into the frontier.
 
+The current Observer is a fresh Release build from an isolated authoritative
+`skyrim/observer` source copy (EV-0186); its launcher has produced a verified
+prepare-only manifest with the staged DLL and Steam 1.6.1170 identity (EV-0188).
+It has not been deployed or loaded. The live instrumentation gate therefore
+remains `NOT_VERIFIED`; require a complete disposable profile/save and reviewed
+Observer deployment path before proposing an in-game run. Treat Observer data
+as diagnostic-only, never as vanilla reproduction by itself.
+
 ## Python routes and evidence
 
-- Use `python3 scripts/python_env.py run tools/ghidra_probe.py` for native
-  binary evidence, `tools/plugin_reader.py record` for one explicit plugin,
-  `scripts/read-save.py` / `tools/cosave-info.py` for read-only save structure,
-  and `scripts/validate_research.py` to verify durable links.
+- Use `python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]`
+  to query the existing GOG project with analysis disabled and read-only mode.
+  Resolve named relocations with `tools/address_library_probe.py --symbol
+  Namespace::Name`; preserve the GOG build identity and never transfer its RVA
+  to a different runtime without independent mapping. Use
+  `tools/plugin_reader.py record` for one explicit plugin,
+  `tools/cosave-info.py` for read-only save structure, and
+  `scripts/validate_research.py` to verify durable links.
 - Save experiment protocol and raw outputs under ignored `.local/`; cite EV
   IDs, executable/plugin hashes, exact measurements, lane, controls, and
   coverage in the experiment record. Do not expose personal save paths.

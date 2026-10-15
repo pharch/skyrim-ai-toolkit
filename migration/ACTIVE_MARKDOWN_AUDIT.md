@@ -5,34 +5,36 @@ for local link targets and retired launcher/agent/non-AE workflows;
 archival files remain preserved and are excluded from active instructions.
 Hashes identify source snapshots, not Git commits.
 
-Inventory: 155 Markdown files; 70 active; 85 archival.
+Inventory: 163 Markdown files; 77 active; 86 archival.
 
 | Path | Class | SHA256 | Disposition |
 |---|---|---|---|
 | `.agents/skills/ae-target-verification/SKILL.md` | ACTIVE | `4f3e8878383fd80829ee25f2b847f4f884cba7b8beb8b63f93bba7b790e39bf7` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/apocrypha-grounding/SKILL.md` | ACTIVE | `c10d6e586bb3941ea297a4bc70e2faa270079c4f9b4695b7277ad0589a9444fe` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/archive-source-discovery/SKILL.md` | ACTIVE | `454c1773128bc7ab68f0e4bd4457d129564b47fb31b7ed4750de050f6b1baaf0` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/esp-record-research/SKILL.md` | ACTIVE | `baf668a456ae5bd1a4622156fae72fb6c5e30b38eef63fc324c20556babf8474` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/retained-tool-operations/SKILL.md` | ACTIVE | `9150c20e2436591aad8a6cfcd53dbc1b67cbc37b77fc5e03a0fb9a5a2075a63f` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/save-state-forensics/SKILL.md` | ACTIVE | `147cf651f03ac74b086145a0af091c6a39161e347071b0bd523c4351fbe9c3a1` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/skyrim-armor-xp-research/SKILL.md` | ACTIVE | `5b8d05b83f1f8e63ca30591b5d22752f394d15bf5e2955c732f1d0992f783c5a` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/esp-record-research/SKILL.md` | ACTIVE | `87e9fb2cbd309e7e13d746ff3d7027715d48601707a729c19a0613e40d411886` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/ghidra-project-research/SKILL.md` | ACTIVE | `cf852813ce9c1fdc01d44da36b8055a4913a6f404317974910aebff3b261efc0` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/retained-tool-operations/SKILL.md` | ACTIVE | `7739f2f3f9af1963bee88de51d8a617ac66646afa39fffeaef9440dbd9fd4d87` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/save-state-forensics/SKILL.md` | ACTIVE | `65da0a27da8c7a4709515d36c2ad0d8c55e033519562a0b873baafb36d22cc99` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/skyrim-armor-xp-research/SKILL.md` | ACTIVE | `eb7facaa3e14bdf2669afaff5db151cfdb637dd034a007f830aee0cc28953eb1` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/skyrim-cross-domain-synthesis/SKILL.md` | ACTIVE | `5fc19c987bebb20e153484b6bd6af4a97a47236628d040fdba8065283caa1816` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/skyrim-discriminating-experiments/SKILL.md` | ACTIVE | `4259d6e89ffb40c94c60d67f6b96de23fd217e63e6b29d90cb7d8f30afe02dae` | Current research guidance or evidence record; reviewed for policy and links. |
-| `.agents/skills/skyrim-quest-gate-research/SKILL.md` | ACTIVE | `eab1f92a0e929ae4cd81672edb3c6dcc41cd71e3397bc77e24af35ecb1763879` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/skyrim-discriminating-experiments/SKILL.md` | ACTIVE | `4dcf2b3b3a186532b20d2163e3344dcf49dedc331c64646a7e1555befd3b1e30` | Current research guidance or evidence record; reviewed for policy and links. |
+| `.agents/skills/skyrim-quest-gate-research/SKILL.md` | ACTIVE | `eeb69ae736a660e67facc4401c6b192a1e93ddf5f9dc9b72e0bc096552a3e849` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/skyrim-source-verification/SKILL.md` | ACTIVE | `84da5753af665f5fbef8773c3e66fe7c09633f2c25d59dbe086f79eed096f5fb` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.agents/skills/uesp-grounding/SKILL.md` | ACTIVE | `787780a0c6a840821fe8409d236d9a94bcb5f419d8c9394b8043d41838f41b30` | Current research guidance or evidence record; reviewed for policy and links. |
 | `.github/copilot-instructions.md` | ARCHIVAL | `f30319c6ec5e68a383eba1751dfe6484bf0e0759935d34298cb69d6365839387` | Retained historical or workflow source; not a primary instruction path. |
-| `AGENTS.md` | ACTIVE | `70d87dd3293667bbeca5da52eb78d927eb8cb23365e82bd3fd8953bf4ad23b49` | Current repository-level instruction or status document. |
+| `AGENTS.md` | ACTIVE | `e4df4de28de5357cf4416c6a385d0d81cfff5510a076affa94076671b5a4ed7b` | Current repository-level instruction or status document. |
 | `CHANGELOG.md` | ARCHIVAL | `cf4535fddd1ccc490b2b4af1be27fed14e46a5ceb3eb5bc99c1b0bddd01640bd` | Retained source; explicitly non-authoritative under AGENTS.md. |
-| `docs/CODEX_START_PROMPT.md` | ACTIVE | `700eb5e28dbf6ee96d433d291c9a5075f646a8dff4e7d7ac95482de54e264dd6` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/getting-started.md` | ACTIVE | `c230f9b273a98a01a2d5f58109263c0413c43d2766dea5c95631a8b4916f60d6` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/CODEX_START_PROMPT.md` | ACTIVE | `3ccf522bcb57971b1a966936286df6093db5e8fd1d948389dfba408e24f15bed` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/getting-started.md` | ACTIVE | `0c44e620311e2f0901cfc1ffb64a602396f70804e903bfd62793becdb37c919a` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/LOCAL_TOOL_BINDINGS.md` | ACTIVE | `0afa202ff5c40db96e15df4ab1de67b70e796024b956edcf57fb7ad2fd1cd147` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/README.md` | ACTIVE | `38fae874e09fd46636bc07ee8dc3681c7f5478868f4f1df3f52a64b0ebf6ca1a` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/RESEARCH_START_PROMPT.md` | ACTIVE | `6bf9d4147fda09cbfbe4574b7469e80edd7b565f693d7740fc2bb48ae666a8be` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/RESEARCH_START_PROMPT.md` | ACTIVE | `b5392f6dcad5ef894ab54f22d276333ed3b07841a2ad5f9c4d805e6496a88a6b` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/safety-philosophy.md` | ACTIVE | `6a273aee960bd614a5e3172fe8c882d303c41dc1fb4acaaa6fb1d685ea3187c3` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/SKSE_MCP_INTEGRATION.md` | ACTIVE | `7cbcb46a3d6752fb2afad8f0f767ed90598a21f351b8cd127b612b635a958507` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/WEEK_LONG_OPERATION.md` | ACTIVE | `f7a7d92f8198fd08e531fdd17ef386eb00a7e2ecc5b6adfe04e75630f87792ba` | Current research guidance or evidence record; reviewed for policy and links. |
 | `docs/WINDOWS_AE_VERIFICATION.md` | ACTIVE | `390700931a6ad1411c5c3a55b63ecd0ea74db4d092327115154bf6d25945a781` | Current research guidance or evidence record; reviewed for policy and links. |
-| `docs/xelib-guide.md` | ACTIVE | `c3b8fe459f458b4c3936fd8ba98495e04d67e1959dce4cfe7c1de6ec15ba26fe` | Current research guidance or evidence record; reviewed for policy and links. |
+| `docs/xelib-guide.md` | ACTIVE | `afc3e66d923d1a9d03cb1c977c80f211c797fea70c8c9e124f8c94bfa517ad5f` | Current research guidance or evidence record; reviewed for policy and links. |
 | `experiments/EXP-0008-quest-gate-continuity/expected-discriminants.md` | ACTIVE | `8ec8c1cc4afa9fcefd931e27520c3f4062d7ece9a3b0b084106c9d1048a1e40f` | Current research guidance or evidence record; reviewed for policy and links. |
 | `experiments/EXP-0008-quest-gate-continuity/hypothesis.md` | ACTIVE | `b24d2c984a56f7f7fbd527d23b3900966f2aa3e5e96b9d145e887f6699d9f1ea` | Current research guidance or evidence record; reviewed for policy and links. |
 | `experiments/EXP-0008-quest-gate-continuity/protocol.md` | ACTIVE | `dadeb9f41f686bc0a107a3b6eba2cd8be68a0da55599575004c2fc7e74cd6889` | Current research guidance or evidence record; reviewed for policy and links. |
@@ -57,6 +59,11 @@ Inventory: 155 Markdown files; 70 active; 85 archival.
 | `migration/archived_tools/legacy_nonpython/resaver-cli/analysis-overlay/NOTICE.md` | ARCHIVAL | `a984454a338162a609487d5290bd1bc2a7ab670969f578b89bd8d2cce34658db` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/archived_tools/README.md` | ARCHIVAL | `45dd04faced8382a03f67e956034214fef0687ec3c94325784c8b28dcb1cd37a` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/CONTINUITY_PILOT.md` | ACTIVE | `86d0b9557c1fde7a76d190046e6a4c4d4086bd30d4d2b0a8705587721f7abb45` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/FINAL_ALIGNMENT_CHANGES.md` | ACTIVE | `75cf0749c1a7294241e63438193b342c9abea5ee2cf69069603751d53a42c365` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/FINAL_ALIGNMENT_CHECKLIST.md` | ACTIVE | `57d809013a259faec1c2eef81205f659f8d5d3db50d806aa78bcce750a440b32` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/FINAL_ALIGNMENT_REPORT.md` | ACTIVE | `5636c9f7880500e11895007d87a00dd8b9f1b1f36a3aac7da615493e9a3c3f78` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/FINAL_ALIGNMENT_RESUME.md` | ACTIVE | `c5857b1828c481e1c80953fc6b7086884b4c8bbcc1d60e9f6ffae28b695a830f` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/FINAL_LOCAL_HARNESS_ALIGNMENT.md` | ARCHIVAL | `6686117ea6df0fee32f8795489f4606f9a83425f9d7f9c25a209ca9890d0acce` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/FINAL_SETUP_BRIEF.md` | ARCHIVAL | `6ca25fe39114137b086eb7087fb2b17232b60cdd4cc68471a4c08787d0173497` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/FINAL_VALIDATION.md` | ARCHIVAL | `72b9656d0a264b1ac6e4da0fd0ee4c2ab78de6b8bfb1ae10f4b3ecbb103507ed` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/FINALIZATION_CHECKLIST.md` | ARCHIVAL | `2f068a9e48eddfbea825f75e30b2375c7336173fe98ad82909be41eba7b2f824` | Prior migration artifact; retained for provenance, not active instructions. |
@@ -99,16 +106,16 @@ Inventory: 155 Markdown files; 70 active; 85 archival.
 | `migration/legacy_experiments/README.md` | ARCHIVAL | `2ebf3f2826c67c0667eefc8f598d16a17115c6d6e37b481f784a1a36c26e2ce8` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/LEGACY_FINALIZATION_CHECKLIST_82.md` | ARCHIVAL | `2e52848aa7a44cacea0b5d48a2a2196e1cae8fd447924e27898c49034c52856f` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/LEGACY_SOURCE_INDEX.md` | ARCHIVAL | `d9742def671d710d6f95fe42cb5fdc9a7044adc246f9b4e4dd48a9e551a5de04` | Prior migration artifact; retained for provenance, not active instructions. |
-| `migration/LOCAL_READINESS_BLOCKERS.md` | ACTIVE | `7e0b3948d77cd2d00eedcdf4588bed5f03d472b1d54a82cbae72d975131a9915` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/LOCAL_READINESS_BLOCKERS.md` | ACTIVE | `abd353015d5bf35223d094d68308a7401382d5f64f2356d899c2d428f300a8fa` | Current readiness/audit record; reviewed for policy and links. |
 | `migration/LOCAL_READINESS_CHANGES.md` | ACTIVE | `9690f7ea16e92cda6514639350507051a40754259944fb2fcb90b4f364e6b971` | Current readiness/audit record; reviewed for policy and links. |
-| `migration/LOCAL_READINESS_CHECKLIST.md` | ACTIVE | `f12a03a2bf2e0982523ccb8fff62429c9cecb80ae6a6034e46c2334e1d552932` | Current readiness/audit record; reviewed for policy and links. |
-| `migration/LOCAL_READINESS_REPORT.md` | ACTIVE | `e7d6a7b414bc624b48d980fb3591d9f8eb9aece8e0b59dce82791eb52264b26e` | Current readiness/audit record; reviewed for policy and links. |
-| `migration/LOCAL_READINESS_RESUME.md` | ACTIVE | `abef4e01b00861793e801cc83e98bd5c5203f0ff132a85289e0814c20d1ecab4` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/LOCAL_READINESS_CHECKLIST.md` | ACTIVE | `e6d0efbbe402c8a2a6c4d7b71816273c065ed987be84dbc40b302ebeb66173a4` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/LOCAL_READINESS_REPORT.md` | ACTIVE | `8feea629470f5efc059172b9234c01bf3194c02beeea441e56e836c5203a4f9c` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/LOCAL_READINESS_RESUME.md` | ACTIVE | `b2578985e2ad5a7df06e63adc86d50f929d18d8a48b66156e0665dbf234f64ad` | Current readiness/audit record; reviewed for policy and links. |
 | `migration/LOCAL_RESEARCH_READINESS_MISSION.md` | ACTIVE | `ee2768836341293fd0e8acc85be855cfe6bfe4dbeed10fa780047543769638c3` | Current readiness/audit record; reviewed for policy and links. |
 | `migration/LOCAL_SETUP_BASELINE.md` | ARCHIVAL | `793363481b7226e329e96c2171a763240d71fc6ac3faca6191cc9db6ace9c8f7` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/LOCAL_SETUP_CHECKLIST.md` | ARCHIVAL | `51586aa3e2faab74996acfb109ff0d245c8d34ea6004845778782212cee61c86` | Prior migration artifact; retained for provenance, not active instructions. |
-| `migration/LOCAL_SETUP_PROGRESS.md` | ARCHIVAL | `7a81f15ff61e8528b9f4def74bad73a306855d56500e0a55d40da427fa66204c` | Prior migration artifact; retained for provenance, not active instructions. |
-| `migration/LOCAL_SETUP_REPORT.md` | ARCHIVAL | `f9327caf93bd9b56bb0133c52f97c8c43e2da5e61f4c385995c13ce47f8c7b7f` | Prior migration artifact; retained for provenance, not active instructions. |
+| `migration/LOCAL_SETUP_PROGRESS.md` | ARCHIVAL | `14374dd5f5ccb5e0e01a6448c932c30d8ed7cb4c5e0eb2426cda00b7154dc31b` | Prior migration artifact; retained for provenance, not active instructions. |
+| `migration/LOCAL_SETUP_REPORT.md` | ARCHIVAL | `9103d0dfb8bdbf715a78146193c0792a37510a5a6ac05b2b2758266e60565d5f` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/LOCAL_SETUP_RESUME.md` | ARCHIVAL | `64b14074fb055197838c6388e07ca376c0ba3e3c1d2460bf24c1e9372dc2889d` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/MIGRATION_PROGRESS.md` | ARCHIVAL | `f2ab2b3e60a20dcf119d1233ac96f32ab1b56ec7501f50a264eb34552fb68500` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/OLD_REPO_INVENTORY.md` | ARCHIVAL | `6b2c8e9d2ba6086f152c18645809677c187cdd26cb271b247a41d808a45ec1be` | Prior migration artifact; retained for provenance, not active instructions. |
@@ -118,20 +125,20 @@ Inventory: 155 Markdown files; 70 active; 85 archival.
 | `migration/PRUNE_PLAN.md` | ARCHIVAL | `11d0625a43324c1761874c06efec8184cc8c2ae98660a4cf522209ef3abe51a5` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/PRUNE_REPORT.md` | ARCHIVAL | `c229da8450adf865be2ebeac816c74e74dac7e39b6f47cc797cdfdf279cb19fd` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/RESUME.md` | ARCHIVAL | `f0ec246d1a66d3c970e8c8afd00ffce2c7b760718ff4dea6bccfd623b1735a70` | Prior migration artifact; retained for provenance, not active instructions. |
-| `migration/SKILL_CAPABILITY_MATRIX.md` | ARCHIVAL | `3f2585021dfe8b16806e01448b26d3bf49035128ee0563982e984cccb9b5eb32` | Prior migration artifact; retained for provenance, not active instructions. |
+| `migration/SKILL_CAPABILITY_MATRIX.md` | ARCHIVAL | `2eca49e8433f3af28611b4d22e2d4bc4664760c8d368dc67dc76efde985916a1` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/SKILL_MIGRATION.md` | ARCHIVAL | `8ea45c2b3cdbe6afeab9f4bcf0f85a693b8da3b4a514714a1f0ab426ced6c8fd` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/SOURCE_MAP.md` | ARCHIVAL | `3afaffa63e3d7dad3ba71cb66fb9b7d633d534089bf24de09dfb92aebee3a74c` | Prior migration artifact; retained for provenance, not active instructions. |
 | `migration/TOOL_AUDIT.md` | ARCHIVAL | `13fbd2ed979142313def1a981b2b988e955875e8ba36118120b108c3de607508` | Prior migration artifact; retained for provenance, not active instructions. |
-| `migration/TOOL_CAPABILITY_MATRIX.md` | ACTIVE | `9678f4acbc173bee6cd1e821a2e259b2481745b3c7224101396b480740c4bf3d` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/TOOL_CAPABILITY_MATRIX.md` | ACTIVE | `795f75fe1f47534d85ba99145a2e5c4bb60e4bce1e27500f105aa35355f04b35` | Current readiness/audit record; reviewed for policy and links. |
 | `migration/TOOL_COMPATIBILITY_MATRIX.md` | ARCHIVAL | `c072efdee9ac4f4435d72fb4dbf20bc0acb4794f2f57bb100f46f668c627afc1` | Prior migration artifact; retained for provenance, not active instructions. |
-| `migration/TOOL_PATH_VERIFICATION.md` | ACTIVE | `c563129e4c7090678cfff75fd1d52b932c51548ee086f8f6fddcd899b8da7053` | Current readiness/audit record; reviewed for policy and links. |
+| `migration/TOOL_PATH_VERIFICATION.md` | ACTIVE | `d9639e216f01c0e0a88c7c56605bd4d705b66dab532f07fc0f729bf17921c3c0` | Current readiness/audit record; reviewed for policy and links. |
 | `migration/UNRESOLVED.md` | ARCHIVAL | `81a7a0c19a59bc172b10ca1626ba61e51a31cb500eca686073c5fe83b2363936` | Prior migration artifact; retained for provenance, not active instructions. |
 | `NORTH_STAR.md` | ACTIVE | `ff7d2f516ca1791dbe335b7e0a35a9aaec02829227c04f39d89fd3e331364088` | Current repository-level instruction or status document. |
 | `protocols/apocrypha.md` | ACTIVE | `307cf2dddde68c7675679f012f11a9bd4cd289af9eec95850fac2cc0c9861a82` | Current research guidance or evidence record; reviewed for policy and links. |
 | `protocols/LIVE_GAME.md` | ACTIVE | `a4536c8e11e14556b56bf1c497fa77d687059088d7ed91f89c65bb9e6ed75519` | Current research guidance or evidence record; reviewed for policy and links. |
 | `protocols/SOURCES.md` | ACTIVE | `9983864d564ce4d976cd9c2e97d108fb91fc44ff7bee2175529f8a4773fd78b5` | Current research guidance or evidence record; reviewed for policy and links. |
-| `protocols/TOOL_ROUTING.md` | ACTIVE | `dde93bfae2cf7101cb354347db4bafb40f8eb03f223c30068d5d2d4868344188` | Current research guidance or evidence record; reviewed for policy and links. |
-| `README.md` | ACTIVE | `ab664a11ce19111023ed0ad686b7307b033d18edfe42aad50ce2288a11245331` | Current repository-level instruction or status document. |
+| `protocols/TOOL_ROUTING.md` | ACTIVE | `8edb1430df5d709dda0b20929a432eaf7b9b149d1e3bb568f269b7efe2d6a678` | Current research guidance or evidence record; reviewed for policy and links. |
+| `README.md` | ACTIVE | `2bac9e2f3f864d27ae7c28fa0a79dadfca60f3ca29228cd9d7ae5876b2d4294d` | Current repository-level instruction or status document. |
 | `references/upstream/.claude/backups/kb/20261013_074133/CLAUDE.md` | ARCHIVAL | `fa528bb03e1a492b9f1f1f2c8eb965765f6ef8a6018567f6c8aaf2cdf75be112` | Retained source; explicitly non-authoritative under AGENTS.md. |
 | `references/upstream/.claude/backups/kb/20261013_074133/KNOWLEDGEBASE.md` | ARCHIVAL | `3047c0fd0f93b04abf6a7390a54a74bde702f24dbd4c98ec031207e0c9833883` | Retained source; explicitly non-authoritative under AGENTS.md. |
 | `references/upstream/.claude/skills/create-mod/SKILL.md` | ARCHIVAL | `a2bdeecbc57d49e2b3f508290941348abde010772ef70bb2b7711a158094d1f9` | Retained source; explicitly non-authoritative under AGENTS.md. |
@@ -154,13 +161,14 @@ Inventory: 155 Markdown files; 70 active; 85 archival.
 | `research/KNOWLEDGE_GRAPH.md` | ACTIVE | `a39de24c3558036c9e3c9556624f3a66bf33ba7dccce0737a8c2acba60e13dc1` | Current research guidance or evidence record; reviewed for policy and links. |
 | `research/MECHANISMS.md` | ACTIVE | `94fb6bc1552b27d138e3fbcd2e07822cd118ef1ae42f73a707580a9ff529879e` | Current research guidance or evidence record; reviewed for policy and links. |
 | `research/schema/markdown-entities.md` | ACTIVE | `c81cfc8411ba763c175af9238b35615bc4fba3f27fee6e53b956df9626cd65e2` | Current research guidance or evidence record; reviewed for policy and links. |
-| `research/SESSION_LOG.md` | ACTIVE | `d0336fd2f198b2b3b8cf73c182d3e2afc58935c8e6fec26a8defeeca7e5ad432` | Current research guidance or evidence record; reviewed for policy and links. |
+| `research/SESSION_LOG.md` | ACTIVE | `7319d64d8d96c440258574804e7b12f3ff652033fc45ca798ff8cdbea337446b` | Current research guidance or evidence record; reviewed for policy and links. |
 | `ROADMAP.md` | ACTIVE | `302a57c243b3ba571bd0e7d66c5b1c2041db2063f7bbddd5e5bf4949b125eede` | Current repository-level instruction or status document. |
 | `session-brief/LOCAL_CODEX_FINAL_AUDIT_PROMPT.md` | ARCHIVAL | `4f981b824b334eb7848c5dd51adec8959910b917ae82f4f1f81659b5f48b7322` | Retained historical or workflow source; not a primary instruction path. |
 | `session-brief/LOCAL_REPO_IMPORT_ADDENDUM.md` | ARCHIVAL | `cfb1c5a743e86f0bb6050b3cfe6edd23902423c5694b931cc0cd2ea9559dd10f` | Retained historical or workflow source; not a primary instruction path. |
 | `session-brief/README.md` | ARCHIVAL | `36d162c171750a1e3589a99f9ae93cd78455559ca0cf0db1fb3886f99f329f8d` | Retained historical or workflow source; not a primary instruction path. |
 | `session-brief/uesp-grounding/SKILL.md` | ARCHIVAL | `f6d001d03394888bda3ab4df881610b22c6f3e2ca3e1b6c489d98ec84f81b5cf` | Retained historical or workflow source; not a primary instruction path. |
 | `session-brief/UESP_OFFLINE_GUIDE.md` | ARCHIVAL | `6da5ac04a18d6e138eb0fa021092bd847ff6de5d60c74726dde817faad38b2f3` | Retained historical or workflow source; not a primary instruction path. |
+| `SESSION_LOG.md` | ACTIVE | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` | Current repository-level instruction or status document. |
 | `session_prompt.md` | ACTIVE | `caadbdab8aa6add3ae5077c506c659f383cdd433de2cca918ae498e58fa22e7e` | Current repository-level instruction or status document. |
-| `STATE.md` | ACTIVE | `9751d9993fb33502cb2e29ea0cc4aec87a97c67dd3e8870e91c521a00a5a4522` | Current repository-level instruction or status document. |
-| `tools/README.md` | ACTIVE | `b1ee783929ee50855d3797b6b7a73f99e1b33f13476185fab8dd596287de1d52` | Current research guidance or evidence record; reviewed for policy and links. |
+| `STATE.md` | ACTIVE | `5c763fd7ce8e9f2f4da9e03aab8e2a2295aa5ea2e2267628bde4c2b9b52b366c` | Current repository-level instruction or status document. |
+| `tools/README.md` | ACTIVE | `49331bc62a07f6e3e7ebfd3b09c9d958f2d93319e66e5fe5a322bd41f9d586eb` | Current research guidance or evidence record; reviewed for policy and links. |

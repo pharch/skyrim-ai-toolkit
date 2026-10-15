@@ -4,9 +4,23 @@
   "transaction_id": null,
   "frontier_id": null,
   "started_utc": null,
-  "checkpoint_utc": "2026-10-14T19:09:48Z",
-  "artifacts": [],
-  "next_action": "Set `PLUGINS_TXT` in ignored `config/local.env` to the selected MO2 profile's explicit `plugins.txt`, then run `python3 scripts/python_env.py run tools/ae_preflight.py`. Only after a complete active order and required masters pass, run the real xEdit winner query; keep the runtime, disposable-save, UESP-provenance, and Windows/CI blockers external until their inputs are supplied.",
-  "next_frontier_id": "Q-0003",
-  "last_transaction_id": "TX-0004"
+  "checkpoint_utc": "2026-10-15T06:03:55Z",
+  "artifacts": [
+    "EV-0184",
+    "EV-0185",
+    "EV-0186",
+    "EV-0187",
+    "EV-0188",
+    "EV-0189",
+    "EV-0190",
+    "EV-0191"
+  ],
+  "next_action": "At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while the xEdit full-profile/save and live Observer gates remain external.",
+  "next_frontier_id": "Q-0001",
+  "last_transaction_id": "TX-0004",
+  "readiness_gates": {
+    "STATIC_RESEARCH_READY": "READY",
+    "NATIVE_RESEARCH_READY": "PARTIAL",
+    "INSTRUMENTED_AUTONOMOUS_RESEARCH_READY": "NOT_VERIFIED"
+  }
 }

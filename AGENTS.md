@@ -42,7 +42,9 @@ source documents relevant to the selected question.
 ## Python environment
 
 - The named environment is defined in `environment.yml` as
-  `skyrim-ae-research`. Create it with `conda env create -f environment.yml`.
+  `skyrim-ae-research`. Use it when Conda is already available and the
+  environment exists; a fresh Conda environment is optional for local
+  alignment and must not trigger a native-tool installation or rebuild.
 - Run agent tools through `python3 scripts/python_env.py run <script-or-module>`
   so an active Conda environment is selected when available. If Conda is not
   installed, the dispatcher reports a system-Python fallback; record that

@@ -1,5 +1,9 @@
 # Codex session start prompt
 
+For the first post-alignment deep research session, use the exact prompt in
+[`docs/RESEARCH_START_PROMPT.md`](RESEARCH_START_PROMPT.md). This generic
+starter is retained for later sessions.
+
 ```text
 Read AGENTS.md, NORTH_STAR.md, STATE.md, ROADMAP.md,
 research/FRONTIER.json, research/EVIDENCE_MODEL.md, and

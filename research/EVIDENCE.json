@@ -2879,6 +2879,554 @@
       ],
       "coverage": "Full 139-test unittest discovery plus evidence/research, recovery-state, transaction, overlay and compileall validators after the idle recovery checkpoint repair and final tracker synchronization. Individual output hashes are included in the aggregate artifact.",
       "result": "PASS: all six commands exited 0; unittest reported 139 tests OK, transaction ledger reported four transactions and 17 events, and all repository validators passed."
+    },
+    {
+      "id": "EV-0165",
+      "kind": "tool",
+      "source": "GOG executable/build identity, existing Ghidra project provenance, and two real no-analysis read-only query operations",
+      "artifact": "private-local:.local/alignment/gog-project-integration-evidence.json",
+      "sha256": "fc01ed1056eb9df9452f331627feb6e8a884ec94fc8fb9bacfa86b452075676f",
+      "captured_utc": "2026-10-14T19:53:17Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179.0; Ghidra 12.0.4; Java runtime version not independently captured in this operation",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Ghidra analyzeHeadless -process SkyrimSE.exe -noanalysis -readOnly -postScript ProgramSummary.java",
+        "Ghidra analyzeHeadless -process SkyrimSE.exe -noanalysis -readOnly -postScript ReadOnlyTargetedQuery.java"
+      ],
+      "coverage": "Existing legacy project skyrim-gog, existing program SkyrimSE.exe; function and symbol counts, function lookup, real call xref, 24 disassembly instructions, decompilation. GOG ProductVersion/SHA256 verified; imported path matched. Existing program/user database .gbf sizes and mtimes unchanged. Ghidra refreshed four internal project index metadata timestamps during read-only open.",
+      "result": "PASS for integration: 172782 functions and 1050918 symbols; function lookup, call edge, disassembly and decompilation completed with exit 0. Generic queried routines are not gameplay-identified. No import, overwrite, delete or auto-analysis was run; no game files were modified. The Ghidra project index metadata timestamp refresh is disclosed."
+    },
+    {
+      "id": "EV-0166",
+      "kind": "tool",
+      "source": "Python-dispatched Ghidra query through the repaired canonical GOG project binding",
+      "artifact": "private-local:.local/alignment/gog-python-adapter-evidence.json",
+      "sha256": "61b8de53b7418f0b8af3a0e817372cdae6e70abb7bc7bb4aed822e3e3c7348a3",
+      "captured_utc": "2026-10-14T19:57:21+00:00",
+      "edition": "AE",
+      "runtime": "GOG ProductVersion 1.6.1179; Python 3.12.3 system fallback; Conda unavailable",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --timeout 600",
+        "Ghidra analyzeHeadless -process SkyrimSE.exe -noanalysis -readOnly -postScript ReadOnlyTargetedQuery.java"
+      ],
+      "coverage": "Existing project and program resolved from ignored config/local.env; imported GOG path matched; function lookup, real call xref, disassembly, decompilation and script status captured. No Steam runtime path affected project selection.",
+      "result": "PASS: exit 0; GOG 1.6.1179 SHA-256 matched EV-0165; all query checks true; import_attempted=false, overwrite_attempted=false, project_created=false. No gameplay mechanism claim is made."
+    },
+    {
+      "id": "EV-0167",
+      "kind": "tool",
+      "source": "Build-attested targeted GOG Address Library RVA query in the existing Ghidra project",
+      "artifact": "private-local:.local/ghidra/gog-query-20261014T200427Z.meta.json",
+      "sha256": "001b1a204434a4f6c7206178439d976279cabf1142794961e6d3f4a77ed89832",
+      "captured_utc": "2026-10-14T20:04:27Z",
+      "edition": "AE",
+      "runtime": "GOG 1.6.1179.0; Ghidra 12.0.4; Python 3.12.3 system fallback, Conda unavailable",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/address_library_probe.py --symbol MagicItem::CalculateCost",
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --timeout 600 --rva 0x14C020",
+        "Ghidra analyzeHeadless -process SkyrimSE.exe -noanalysis -readOnly -postScript ReadOnlyTargetedQuery.java 0x14C020"
+      ],
+      "coverage": "Matching GOG Address Library maps CommonLib AE ID 11321 to RVA 0x14C020. Existing project identity matched the GOG executable; Ghidra resolved FUN_14014c020, one incoming call edge, 24 instructions and decompilation; requested RVA and script checks passed. No Steam address was transferred. Read-only project index timestamp refreshes are disclosed in EV-0165.",
+      "result": "PASS for targeted native integration: process exit 0 in 17.837 seconds; all identity, RVA, function, xref, disassembly, decompilation and no-script-error checks are true; no import, overwrite or project creation. This is address/toolchain validation only, not a gameplay mechanism finding."
+    },
+    {
+      "id": "EV-0168",
+      "kind": "tool",
+      "source": "Separate Steam runtime executable ProductVersion and SHA-256 probe",
+      "artifact": "private-local:.local/alignment/steam-runtime-probe.stdout.raw",
+      "sha256": "d3ed5cf4eb7306bf7feaa148bc8b84871f96c59776540cdd33eb1fea7f522ebf",
+      "captured_utc": "2026-10-14T20:05:10Z",
+      "edition": "AE",
+      "runtime": "Steam ProductVersion 1.6.1170.0; Python 3.12.3 system fallback; Conda unavailable",
+      "modified_state": false,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/ae_preflight.py --probe-executable"
+      ],
+      "coverage": "The separately configured Steam runtime executable resolves to AE 1.6.1170 with SHA-256 c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9. Probe reports full_order_verified=false; no runtime process or load-order result is inferred.",
+      "result": "PASS for runtime identity only; active profile/load-order validation is not established."
+    },
+    {
+      "id": "EV-0169",
+      "kind": "tool",
+      "source": "Known-input Papyrus PEX extraction and bytecode parse from configured Skyrim base BSA",
+      "artifact": "private-local:.local/alignment/papyrus-extract.stdout.raw",
+      "sha256": "e6de5494ff595bbfee1cad884a2bdc02abfe63d241e4cbb37a80a042abe70990",
+      "captured_utc": "2026-10-14T20:09:29Z",
+      "edition": "AE",
+      "runtime": "Configured Steam Skyrim AE 1.6.1170 data path; Python 3.12.3 system fallback",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/papyrus_pex.py extract DA14Script --output .local/alignment/DA14Script.pex",
+        "python3 scripts/python_env.py run tools/papyrus_pex.py disassemble .local/alignment/DA14Script.pex"
+      ],
+      "coverage": "Extracted DA14Script.psc/PEX from Skyrim - Misc.bsa SHA-256 ddb19908dcd5c135b8bba240e8dfcdb95395b569852f715d330396e9c1390b9d; PEX is 507 bytes, parser consumed 507 bytes with zero trailing bytes. Extracted PEX SHA-256 24d5993e6fd6553638c70274b3922b7877b59b62ab2454acb6ed822e48339e5d. Raw PEX/text are ignored under .local/alignment/.",
+      "result": "PASS for known-input archive extraction and bounded PEX parse. This does not establish in-game Papyrus behavior or complete Papyrus decompilation."
+    },
+    {
+      "id": "EV-0170",
+      "kind": "wiki",
+      "source": "Local UESP MediaWiki database retrieval for a named Skyrim page",
+      "artifact": "private-local:.local/alignment/uesp-karstaag.raw.json",
+      "sha256": "f7185ea37b4fd295a9465fc6ddb88d859c4e174b3b7e8e9aaa6515cde3f7e334",
+      "captured_utc": "2026-10-14T20:10:54Z",
+      "edition": "unknown",
+      "runtime": "Offline UESP dump snapshot; page revision 3629292 dated 2026-09-08T02:32:02Z",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m tools.uesp doctor --db .local/uesp.sqlite3",
+        "python3 scripts/python_env.py run -m tools.uesp page --db .local/uesp.sqlite3 'Skyrim:Karstaag' --raw"
+      ],
+      "coverage": "Local doctor reports 475,228 rows, 17,520 Skyrim namespace pages, zero parse errors, and source hash b3ccaea9d10c653a1bf702d0da5d32c2bc9a5cafdcd374d258f5a063d6074ddb. The retrieved page reports revision 3629292 and revision-specific URL https://en.uesp.net/w/index.php?title=Skyrim:Karstaag&oldid=3629292. Dump source URL/license/completeness remain unverified.",
+      "result": "PASS for local retrieval and revision citation. No claim about AE records or game behavior is made; wiki content remains a lead."
+    },
+    {
+      "id": "EV-0171",
+      "kind": "discord",
+      "source": "Authorized private Apocrypha Discord export index and context retrieval",
+      "artifact": "private-local:.local/alignment/apocrypha-context.provenance.private.json",
+      "sha256": "51257c4714bb78fc47ecabdeee09c40ebd206d7fc1c2c9a746d8b3506c3f9678",
+      "captured_utc": "2026-10-14T20:10:54Z",
+      "edition": "unknown",
+      "runtime": "Private local export indexed 2026-10-14; export SHA-256 f2462adbb2b4c76e53fe5a0019215a8f5fee9b8ee6f455b4e785aafcc1143698",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m tools.apocrypha doctor --db .local/apocrypha.sqlite3",
+        "python3 scripts/python_env.py run -m tools.apocrypha search --db .local/apocrypha.sqlite3 --summary-only --limit 1 level",
+        "python3 scripts/python_env.py run -m tools.apocrypha context --db .local/apocrypha.sqlite3 --before 3 --after 3 <private-message-id>"
+      ],
+      "coverage": "One search summary result returned and its seven-message context query succeeded. Stable message ID, channel, timestamp and context hash are stored only in ignored `.local/alignment/apocrypha-context.provenance.private.json`; raw private context remains in ignored `.local/alignment/apocrypha-context.private.json`. No private text or ID is copied here.",
+      "result": "PASS for local private-index retrieval and stable provenance preservation. Discord content is untrusted and establishes no AE mechanic or result."
+    },
+    {
+      "id": "EV-0172",
+      "kind": "tool",
+      "source": "Actual canonical local-path and research-domain doctor runs",
+      "artifact": "private-local:.local/alignment/domain-doctor.stdout.raw",
+      "sha256": "a85cab744ed96b6c91104cf843647724b61541764f9cdad79dd82881cf00f2fe",
+      "captured_utc": "2026-10-14T20:17:49Z",
+      "edition": "AE",
+      "runtime": "Steam ProductVersion 1.6.1170; Python 3.12.3 system fallback; Conda unavailable",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run scripts/local_paths.py doctor --verify-target",
+        "python3 scripts/python_env.py run tools/domain_doctor.py"
+      ],
+      "coverage": "Local path doctor output `.local/alignment/local-path-doctor.stdout.raw` SHA-256 4886d5431eb2707fcf9b76b228a88bff711ae2f8fcd078efff0b5ee862813c1e; domain doctor output hash is this artifact. Path doctor reports canonical config/local.env, GOG project/runtime paths present, ProductVersion verified, and complete order false due missing selected profile/PLUGINS_TXT. Domain doctor reports existing GOG project, Java 21.0.10, CommonLib header/address-library candidates, local UESP/Apocrypha databases, no xEdit/live call, and Conda unavailable. Both outputs had zero detected personal/local path patterns. Windows CMake command lookup returned unavailable; no build was attempted.",
+      "result": "PASS for local binding/domain doctor execution and privacy-safe output; active-order, xEdit, and live-game gates remain unverified."
+    },
+    {
+      "id": "EV-0173",
+      "kind": "tool",
+      "source": "Installed SKSE loader, runtime DLL, and Address Library identity probe",
+      "artifact": "private-local:.local/alignment/skse-probe.stdout.raw",
+      "sha256": "cef1c06ba60419fc42988996deb6da1fb85a99383be209d3e888ce09f4a8ce3e",
+      "captured_utc": "2026-10-14T20:19:10Z",
+      "edition": "AE",
+      "runtime": "Steam SkyrimSE.exe ProductVersion 1.6.1170.0; SKSE ProductVersion 0, 2, 2, 6; Python 3.12.3 system fallback",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/skse_probe.py"
+      ],
+      "coverage": "Real loader and runtime DLL ProductVersion/hash were read; `skse64_1_6_1170.dll` filename and `versionlib-1-6-1170-0.bin` filename match the verified Steam runtime. Address Library SHA-256 c4093c569a3c83b26587f4b9ea4c55de9ae6e73b84a2af9fb3fbd30e2fe0d452. Probe is metadata-only.",
+      "result": "PASS for installed runtime-file identity only. No DLL load, live process, or SKSE handshake was attempted."
+    },
+    {
+      "id": "EV-0174",
+      "kind": "tool",
+      "source": "Observer deployment, Skyrim process, handshake artifact, test-save, and ReSaver availability status",
+      "artifact": "private-local:.local/alignment/runtime-capability-status.stdout.raw",
+      "sha256": "fe76c68c824ff508908cd1cdf5a85221cb402996d1612974e8ded4a2221cbf5a",
+      "captured_utc": "2026-10-14T20:19:06Z",
+      "edition": "AE",
+      "runtime": "Steam 1.6.1170; no live Skyrim process",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Read-only configured Observer build/deployment file inspection",
+        "Read-only Windows Get-Process SkyrimSE query",
+        "Read-only ignored handshake/DevBench artifact inventory",
+        "Read-only local.env RESEARCH_TEST_SAVE binding check",
+        "Read-only legacy ReSaver filename/config search"
+      ],
+      "coverage": "Existing Observer build is present (584,192 bytes, SHA-256 8ef8a660c8fe2878ee12b445740b70c99b995280bcc58776dba9820f7183e50b), but no deployed plugin was found in configured runtime Data. Process query succeeded and found no SkyrimSE process; zero handshake/DevBench named artifacts, no test-save binding, and zero ReSaver-named legacy files were found. No user save was opened.",
+      "result": "PASS for truthful status discovery; real save/ReSaver parsing and live handshake remain externally blocked."
+    },
+    {
+      "id": "EV-0175",
+      "kind": "tool",
+      "source": "Isolated clone, bind, doctor, startup prompt, and separate-process recovery exercise",
+      "artifact": "private-local:.local/alignment/final-clone-recovery/clone-recovery.meta.json",
+      "sha256": "17a98e548489d1454c8c8e8c3380930c6e1ad8487357f676bb9c20115d62fa9e",
+      "captured_utc": "2026-10-14T20:25:09Z",
+      "edition": "AE",
+      "runtime": "Python 3.12.3 system fallback; Conda unavailable; isolated temporary checkout from source revision 7e24ba61fff01d5da5c88b629a0da7744b408c78",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "git clone --no-hardlinks",
+        "python3 scripts/python_env.py run scripts/setup_research.py init",
+        "python3 scripts/python_env.py run scripts/setup_research.py check",
+        "python3 scripts/python_env.py run scripts/local_paths.py doctor",
+        "python3 scripts/python_env.py run scripts/research_state.py validate/begin/recover/resume"
+      ],
+      "coverage": "A temporary checkout received the current nonignored worktree overlay (279 files); fresh config was initialized; setup and binding doctors plus startup research validation passed. TX-9001 on Q-0006 was begun, marked interrupted in a separate process, resumed in another process, and validated. All commands exited 0; the temporary checkout was removed. Raw transcript SHA-256 9d19b2505bc138286958d44d48feed366a5f01bb44a92512c9b697ec620e619c.",
+      "result": "PASS for the clone→bind→doctor→interactive-startup path and separate-process recovery mechanics. Workflow-only test; no research hypothesis, game, xEdit, or native runtime was exercised."
+    },
+    {
+      "id": "EV-0176",
+      "kind": "tool",
+      "source": "Final local portable test, validator, skill-metadata, privacy, and environment-dependency checks",
+      "artifact": "private-local:.local/alignment/final-verification/commands-final.meta.json",
+      "sha256": "a921a6173517a1d62ef298b9430f55ec3af9b7c9fb71a17b37231a306bd0d8cc",
+      "captured_utc": "2026-10-14T20:32:09Z",
+      "edition": "AE",
+      "runtime": "Linux system Python 3.12.3 fallback; Conda unavailable; pytest and lz4 modules unavailable",
+      "modified_state": true,
+      "lane": "offline",
+      "coverage": "150/150 unittest tests passed. compileall, research/evidence, recovery, transaction, overlay, setup doctor, Markdown inventory write/check, and pre-push audit exited 0. Pre-push: 274 tracked files, zero tracked raw/heavy artifacts, zero unignored untracked raw artifacts, 11/11 ignore probes passed. All 13 active skills passed quick_validate.py; separate summary SHA-256 358ea4bc084ca823ac63dfe6669206f79a9a9b1bf2d52dbfdb266434ac3d557d. System Python check identifies pytest absent; pytest probe and read-save import/help probe exit 1 because pytest and lz4 are unavailable. No package install or CI service run was performed.",
+      "result": "PASS for the available portable unittest/repository validation set and all active skill metadata. Missing pytest and lz4 are environment limits; this is not a Windows xEdit/MO2, ReSaver, live-game or CI-runner result.",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests",
+        "python3 scripts/python_env.py run scripts/validate_research.py",
+        "python3 scripts/python_env.py run scripts/research_state.py validate",
+        "python3 scripts/python_env.py run scripts/research_transactions.py validate",
+        "python3 scripts/python_env.py run scripts/validate_overlay.py",
+        "python3 scripts/python_env.py run scripts/setup_research.py check",
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --write/--check",
+        "python3 scripts/python_env.py run scripts/pre_push_audit.py",
+        "python3 scripts/python_env.py run scripts/read-save.py --help",
+        "python3 scripts/python_env.py run -m pytest --version"
+      ]
+    },
+    {
+      "id": "EV-0177",
+      "kind": "tool",
+      "source": "Fresh-checkout portable suite without local Ghidra/game bindings",
+      "artifact": "private-local:.local/alignment/final-verification/fresh-clone/fresh-clone-suite.meta.json",
+      "sha256": "1ffee6969bd409b89d9cd9b4d0fab62255ff26667e8d78fc346207ace46ec6ad",
+      "captured_utc": "2026-10-14T20:35:29Z",
+      "edition": "AE",
+      "runtime": "Linux system Python 3.12.3 fallback; temporary checkout had no config/local.env, .local, Ghidra binding, or game binding",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "git clone --no-hardlinks",
+        "python3 scripts/python_env.py run scripts/setup_research.py init",
+        "python3 scripts/python_env.py run scripts/local_paths.py doctor",
+        "python3 scripts/python_env.py run scripts/research_state.py validate",
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests",
+        "python3 scripts/python_env.py run scripts/validate_research.py",
+        "python3 scripts/python_env.py run scripts/validate_overlay.py",
+        "python3 scripts/python_env.py run scripts/setup_research.py check",
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --write/--check",
+        "python3 scripts/python_env.py run scripts/pre_push_audit.py"
+      ],
+      "coverage": "Temporary checkout initialized a fresh ignored local.env. Binding doctor, startup research state, 150 unittests, compileall, evidence validation, overlay, setup doctor, Markdown write/check and pre-push audit all exited 0. The temporary checkout was removed after capture.",
+      "result": "PASS for portable clone/start/test behavior without installed Ghidra, Skyrim executable, or private local binding. Does not establish a hosted CI job or Windows/game behavior."
+    },
+    {
+      "id": "EV-0178",
+      "kind": "tool",
+      "source": "Final alignment 52-row, gate, provenance, privacy, and worktree audit",
+      "artifact": "private-local:.local/alignment/final-verification/final-alignment-audit.meta.json",
+      "sha256": "4862df1e8fe79221d87f7bba27816acfa8a88509a4f316971b44bb319ff9a9d5",
+      "captured_utc": "2026-10-14T20:43:04+00:00",
+      "edition": "AE",
+      "runtime": "Linux system Python 3.12.3 fallback; no game/xEdit process",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Python acceptance-ledger/evidence audit",
+        "scripts/markdown_policy_audit.py",
+        "scripts/pre_push_audit.py",
+        "git status and diff checks"
+      ],
+      "coverage": "52 unique acceptance criteria: 49 PASS and 3 BLOCKED_EXTERNAL, zero pending/unknown evidence references. Three gates agree across report/matrix/state/recovery. 13 cited private evidence artifact digests match; active path scan checked 38 files with zero matches; Markdown policy/link inventory current; Ghidra program databases unchanged with four disclosed internal index timestamp refreshes; mission file unchanged and local.env ignored.",
+      "result": "PASS: terminal acceptance, gate, provenance, active-path privacy, Markdown, Ghidra preservation, and worktree audit completed. Three external blockers remain correctly classified; no gameplay research or game/xEdit operation was run."
+    },
+    {
+      "id": "EV-0179",
+      "kind": "tool",
+      "source": "Post-EV-0178 complete test and repository validator rerun",
+      "artifact": "private-local:.local/alignment/final-verification/post-registration-closeout-bundle.meta.json",
+      "sha256": "46eff4ce1f28b248c16dc5db91e0ce1d60dca7570f4e70818c8b139586ed834e",
+      "captured_utc": "2026-10-14T20:47:00+00:00",
+      "edition": "AE",
+      "runtime": "Linux system Python 3.12.3 fallback; Conda unavailable; no game/xEdit process",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests",
+        "python3 scripts/python_env.py run scripts/validate_research.py",
+        "python3 scripts/python_env.py run scripts/research_state.py validate",
+        "python3 scripts/python_env.py run scripts/research_transactions.py validate",
+        "python3 scripts/python_env.py run scripts/validate_overlay.py",
+        "python3 scripts/python_env.py run scripts/setup_research.py check",
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --write/--check",
+        "python3 scripts/python_env.py run scripts/pre_push_audit.py",
+        "git diff --check"
+      ],
+      "coverage": "After EV-0178 registration, all 150 unittest tests passed and compileall, research/evidence, recovery, transaction, overlay, setup doctor, Markdown inventory write/check, pre-push audit and diff check passed (post_registration_full_suite). After the terminal handoff checkpoint was written, research/recovery/transaction/overlay/setup/Markdown/pre-push/diff checks all passed again (final_handoff_checks).",
+      "result": "PASS for the final post-registration test and handoff validation. Conda/pytest/lz4 and hosted CI remain unavailable; no Windows or live-game result is claimed."
+    },
+    {
+      "id": "EV-0180",
+      "kind": "tool",
+      "source": "Final xEdit capability correction, 52-row checklist and three-gate consistency audit",
+      "artifact": "private-local:.local/alignment/final-verification/final-correction-audit.meta.json",
+      "sha256": "d6c6ba4ae1e71b243162a593e0d1d09b9b8101abcc686eff2bcabdccbe9aff0e",
+      "captured_utc": "2026-10-14T20:57:30Z",
+      "edition": "AE",
+      "runtime": "Linux system Python 3.12.3 fallback; Conda unavailable; no game/xEdit process",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Python checklist/gate consistency audit",
+        "EV-0120 executable metadata",
+        "EV-0172 local domain doctor output"
+      ],
+      "coverage": "Rechecked all 52 unique criteria: 49 PASS, 3 BLOCKED_EXTERNAL (C02/C04/E03), zero pending or unknown references. All three gate verdicts agree across report, matrix, STATE.md and RECOVERY.json. Verified EV-0120 and EV-0172 artifact hashes; SSEEdit 4.1.5.0 exists and is ProductVersion-verified, while selected profile/full plugins.txt/order are absent and xedit_call=false. Final xEdit wording is aligned in six active documents; the earlier 74-criterion STATE snapshot is explicitly historical. No gameplay research, game launch or xEdit launch occurred.",
+      "result": "PASS for final xEdit status correction, criterion/gate consistency and source provenance audit."
+    },
+    {
+      "id": "EV-0181",
+      "kind": "tool",
+      "source": "Current runtime/xEdit identity recheck and domain-doctor ProductVersion semantics correction",
+      "artifact": "private-local:.local/alignment/final-verification/current-runtime-xedit-audit/runtime-xedit-recheck.meta.json",
+      "sha256": "a13b1b0e4762d1e945d69f0f15a62e8fc3b42ffc459d9b30016189975f045202",
+      "captured_utc": "2026-10-14T21:19:07Z",
+      "edition": "AE",
+      "runtime": "Linux WSL system Python 3.12.3 fallback; Conda unavailable; current target ProductVersion reread unavailable",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run scripts/local_paths.py doctor --verify-target",
+        "python3 scripts/python_env.py run tools/domain_doctor.py",
+        "python3 scripts/python_env.py run tools/ae_preflight.py --probe-executable",
+        "python3 scripts/python_env.py run tools/ae_preflight.py",
+        "Read-only PowerShell bridge diagnostic",
+        "python3 scripts/python_env.py run -m unittest discover -s tests -p test_domain_doctor.py -v"
+      ],
+      "coverage": "The configured GOG binary hash still matches EV-0165 (ProductVersion 1.6.1179.0); the separately configured Steam binary still matches EV-0168 (1.6.1170.0); configured SSEEdit still matches EV-0120 (4.1.5.0). The fresh target ProductVersion query cannot launch WSL PowerShell (UtilBindVsockAnyPort). No selected MO2 profile or explicit full plugins.txt is configured; xedit_call=false. Corrected the domain doctor to report the Skyrim runtime only under SSEEdit.runtime_target; 3 focused regression tests pass. EV-0180's prior SSEEdit ProductVersion conclusion based on EV-0172 was a field-semantics misinterpretation. No xEdit/game launch occurred.",
+      "result": "PASS for the reporting correction, focused regression tests, and exact current binary-hash continuity against prior version-attested evidence. Native xEdit readiness remains PARTIAL; current ProductVersion cannot be reread and the complete active order is absent."
+    },
+    {
+      "id": "EV-0182",
+      "kind": "tool",
+      "source": "Post-fix final local acceptance, readiness-gate, preservation, privacy, and handoff audit",
+      "artifact": "private-local:.local/alignment/final-verification/ev0182-post-fix/final-closeout-audit.meta.json",
+      "sha256": "41c5aa248dbfc08fe4c5157bed00b8d5068fb033d26c7a63e7e99f8f9a167043",
+      "captured_utc": "2026-10-14T21:25:34Z",
+      "edition": "AE",
+      "runtime": "Linux system Python 3.12.3 fallback; Conda unavailable; no game/xEdit process",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests",
+        "Research, state, transaction, overlay, setup, Markdown, pre-push, and diff validators",
+        "quick_validate.py on all 13 active skills",
+        "Python 52-row, evidence-reference, private-alias/hash, gate, prompt, privacy, Ghidra, and worktree audit"
+      ],
+      "coverage": "Post-fix suite: 151/151 unittest tests pass; compileall and all 11 captured repository validator/check commands exit 0; all 13 active skill metadata checks pass. Audited 52 unique acceptance rows (49 PASS, 3 BLOCKED_EXTERNAL, zero pending/fixable), 22 referenced private evidence artifacts with all 22 hashes matching through the documented legacy/local aliases, three readiness gates consistent across report/matrix/STATE/recovery, synchronized continuation checkpoints, exact first-session command and prompt logic, unchanged mission file, zero active-path privacy matches, and existing GOG binary/project identity and database preservation. EV-0175 documents separate-process research recovery; the start prompt explicitly models Q-0001 H1/H2 and requires continued hypothesis selection. Current Windows/xEdit and live-game behavior is not established.",
+      "result": "PASS for all locally actionable final-alignment tests and audit checks. STATIC_RESEARCH_READY=READY; NATIVE_RESEARCH_READY=PARTIAL; INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED. No open-ended gameplay research, game launch, or xEdit launch occurred."
+    },
+    {
+      "id": "EV-0183",
+      "kind": "tool",
+      "source": "Locally staged SKSE Observer build artifact and current offline analyzer verification",
+      "artifact": "private-local:.local/alignment/observer-build-validation-20261015.meta.json",
+      "sha256": "b28bb953cd6809781a0943d475a0dd68e9afd139d8600e37b4f76bc80ef5324f",
+      "captured_utc": "2026-10-15T04:43:48Z",
+      "edition": "AE",
+      "runtime": "Observer CMake configuration enables Skyrim AE; no current executable ProductVersion or live runtime was verified in this session.",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Existing Visual Studio 2022/MSVC 14.43.34808 and CMake 3.30.5 build output",
+        "Python dispatcher with system-Python fallback",
+        "Observer analyzer unittest fixtures"
+      ],
+      "coverage": "The existing Release staged DLL is PE32+ x86-64, 584192 bytes, SHA-256 recorded in the private metadata. The retained offline analyzer suite ran all 7 tests with 7 passes. The successful build log records the repaired source-tree build exit 0. No DLL load, handshake, deployment, game launch, current ProductVersion, or active profile verification.",
+      "result": "PASS for local build-artifact identity and offline analyzer fixtures only; SKSE runtime experiment readiness is not established."
+    },
+    {
+      "id": "EV-0184",
+      "kind": "tool",
+      "source": "Authoritative skyrim repository xEdit bridge config import, isolated session preparation, and scoped preflight",
+      "artifact": "private-local:.local/alignment/xedit-bridge-session-validation-20261015.meta.json",
+      "sha256": "ad79c9a0e136a60837acfa96a1a2035dbb7a35b2ff809f48993e943337a3be06",
+      "captured_utc": "2026-10-15T04:52:25Z",
+      "edition": "AE",
+      "runtime": "Steam 1.6.1170; read from SkyrimSE.exe ProductVersion during scoped preflight",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Authoritative skyrim scripts/skyrim_tool.py doctor and prepare-xedit via current Python dispatcher",
+        "python3 scripts/python_env.py run tools/ae_preflight.py with PLUGINS_TXT scoped to generated bridge session",
+        "SSEEdit 4.1.5.0 executable hash continuity from EV-0120"
+      ],
+      "coverage": "Seven source bridge doctor paths passed; exact SSEEDIT_EXE/SKYRIM_DATA/XEDIT_SCRIPTS bindings copied into ignored config; isolated session contains all five official masters. Prepared launch uses -view and no -autoload. Scoped preflight passed runtime identity and the 5-plugin list. At capture time, the actual MO2/game profile, modded winners, negative search coverage, and native SSEView launch were not established; later approved launch/load are recorded in EV-0185/EV-0189.",
+      "result": "PASS for copied authoritative bridge configuration, isolated vanilla session preparation, and scoped target/order verification; later SSEView launch/load evidence is registered separately."
+    },
+    {
+      "id": "EV-0185",
+      "kind": "tool",
+      "source": "Approved launch and live process verification of the authoritative isolated SSEView bridge session",
+      "artifact": "private-local:.local/alignment/sseview-live-process-20261015.meta.json",
+      "sha256": "2ef1896581b3151f1e4503ff2539b2f5e0af416a50c3c220c834bc892be7b1ca",
+      "captured_utc": "2026-10-15T04:52:46Z",
+      "edition": "AE",
+      "runtime": "Windows SSEEdit 4.1.5f process; Steam AE 1.6.1170 target/order separately verified in EV-0184",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Authoritative skyrim xEdit bridge generated -view/no-autoload session",
+        "PowerShell process query"
+      ],
+      "coverage": "PID 3948, title SSEView 4.1.5f, Responding=true. Opened session contains only five official masters. No record selection/export, active MO2 profile, winner result, plugin modification, or Skyrim launch.",
+      "result": "PASS for approved SSEView launch/process availability only; complete-profile record research remains blocked."
+    },
+    {
+      "id": "EV-0186",
+      "kind": "tool",
+      "source": "Fresh Release SKSE Observer build from an isolated authoritative skyrim source copy and offline analyzer verification",
+      "artifact": "private-local:.local/alignment/observer-authoritative-rebuild-20261015.meta.json",
+      "sha256": "17a71aacb18d5ce2577358eb4dd93351767a88fa34d7586e62aa5266bcbca22b",
+      "captured_utc": "2026-10-15T05:10:15Z",
+      "edition": "AE",
+      "runtime": "Steam 1.6.1170 target; binary was not loaded in-game",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Existing Visual Studio 2022 BuildTools/MSVC 14.43.34808",
+        "Existing CMake 3.30.5 and CommonLibSSE-NG/vcpkg dependencies",
+        "Python dispatcher and Observer analyzer unittest fixtures"
+      ],
+      "coverage": "Copied 22 authoritative observer files; 19 match exactly and 3 local compatibility edits are confined to CMakeLists/Observer.h/Observer.cpp; PCH addition is local build configuration. Fresh Observer.obj/PCH and DLL timestamps postdate source copy; CMake build exit 0. DLL is 584192 bytes PE32+ x86-64, SHA-256 108a4b9a73c97b0517a5cf23f11c02778b9ec3a8f88ac7aadc4fe129a7f7b084. Analyzer tests passed 7/7. DLL remains staged under ignored .local, not deployed or loaded.",
+      "result": "PASS for source-attested local build and offline fixtures; live SKSE capability remains NOT_VERIFIED."
+    },
+    {
+      "id": "EV-0187",
+      "kind": "tool",
+      "source": "Current installed SKSE loader/runtime/Address Library metadata probe for Steam AE 1.6.1170",
+      "artifact": "private-local:.local/alignment/skse-identity-probe-20261015.meta.json",
+      "sha256": "ac25557c4f69d6ac309c27ba81189c2ccae100054bb126c5decdbb8446a0c586",
+      "captured_utc": "2026-10-15T04:48:00Z",
+      "edition": "AE",
+      "runtime": "Steam SkyrimSE.exe ProductVersion 1.6.1170.0; SHA-256 c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run tools/skse_probe.py",
+        "Windows executable metadata reader"
+      ],
+      "coverage": "Loader skse64_loader.exe and runtime DLL report ProductVersion 0,2,2,6; runtime-named Address Library is present; hashes recorded in private metadata. Probe is metadata-only and did not attempt a live handshake.",
+      "result": "PASS for installed file identity only; it does not establish DLL load or runtime observer readiness."
+    },
+    {
+      "id": "EV-0188",
+      "kind": "tool",
+      "source": "Authoritative SKSE Observer launcher prepare-only manifest using the fresh staged DLL",
+      "artifact": "private-local:.local/alignment/skse-observer-prepare-20261015.meta.json",
+      "sha256": "ceeba1b571c7e21715d38275fd49fa94726830098058cf2f94766b60a75a28ac",
+      "captured_utc": "2026-10-15T05:10:15Z",
+      "edition": "AE",
+      "runtime": "Steam 1.6.1170.0 ProductVersion/hash verified by launcher and scoped preflight",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Authoritative skyrim/observer/tools/launch-observer.ps1 copied to ignored sandbox",
+        "PowerShell Start-Process with explicit StagedPlugin and no -Launch switch"
+      ],
+      "coverage": "Launcher exited 0 and created a session manifest under ignored .local. Manifest records the exact staged DLL hash and runtime identity; launch_requested=false, deployed_plugin=null, plugin_list=null. Skyrim/SKSE were not started and no game files changed.",
+      "result": "PASS for no-launch session preparation; safe test profile/deployment path and handshake remain unavailable."
+    },
+    {
+      "id": "EV-0189",
+      "kind": "tool",
+      "source": "SSEView isolated five-master module confirmation and completed background load with record-tree accessibility check",
+      "artifact": "private-local:.local/alignment/sseview-five-master-load-20261015.meta.json",
+      "sha256": "2ca5e41e12285fe69f92afafb6bdd9192a689ed3bb8633372c1f558d7a77d902",
+      "captured_utc": "2026-10-15T05:19:12Z",
+      "edition": "AE",
+      "runtime": "SSEEdit/SSEView 4.1.5f; isolated list scoped to Steam AE 1.6.1170.0 preflight in EV-0184",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Authoritative xEdit bridge launch.ps1 with -view/no-autoload",
+        "Authoritative xedit-status.ps1 exact-PID UIA status/guarded Module Selection confirmation"
+      ],
+      "coverage": "Exact five active masters and load order confirmed from generated files; guarded Module Selection OK action exited 0; UI status reported Background Loader: finished. The UIA tree exposes no record selection controls; session.log and fields.tsv were not created, so no record query/export ran. No plugin/Game file changed.",
+      "result": "PASS for isolated SSEView load capability. Full-profile record query remains blocked and is not claimed."
+    },
+    {
+      "id": "EV-0190",
+      "kind": "tool",
+      "source": "Final local alignment closeout: 52-criterion, readiness-gate, evidence-integrity, privacy, and portable-validation audit",
+      "artifact": "private-local:.local/alignment/final-closeout-20261015/final-closeout-audit.meta.json",
+      "sha256": "9960ac0afb76500050cdbe15d9225ff75692090765a1be2cea6ff9284445fa86",
+      "captured_utc": "2026-10-15T05:34:24Z",
+      "edition": "AE",
+      "runtime": "Linux system Python 3.12.3 fallback; Conda unavailable; no live game runtime launched.",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests",
+        "python3 scripts/python_env.py run scripts/local_paths.py doctor",
+        "python3 scripts/python_env.py run tools/domain_doctor.py",
+        "python3 scripts/python_env.py run scripts/validate_research.py",
+        "python3 scripts/python_env.py run scripts/research_state.py validate",
+        "python3 scripts/python_env.py run scripts/validate_overlay.py",
+        "python3 scripts/python_env.py run scripts/pre_push_audit.py",
+        "git diff --check",
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --write",
+        "python3 scripts/python_env.py run scripts/markdown_policy_audit.py --check"
+      ],
+      "coverage": "All 52 unique criteria audited (50 PASS, 2 BLOCKED_EXTERNAL, zero fixable or pending); all three gates match across current report, matrix, STATE, and recovery; 23 direct private evidence artifact hashes match; mission file and source repository are unchanged; no tracked local artifacts or active absolute source paths. The 151-test suite and repository validators pass both before and after EV-0190 registration; the post-registration outputs are hashed in the audit metadata. SSEView completed the isolated five-master load but no record query; Observer was built/tested/prepared only, not deployed or loaded.",
+      "result": "PASS for final local alignment and all locally actionable checks. C02 and C04 remain external. STATIC_RESEARCH_READY=READY; NATIVE_RESEARCH_READY=PARTIAL; INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED."
+    },
+    {
+      "id": "EV-0191",
+      "kind": "tool",
+      "source": "User-requested replay of the authoritative skyrim xEdit bridge config/helpers plus final post-edit local validation",
+      "artifact": "private-local:.local/alignment/final-xedit-replay-20261015/authoritative-xedit-config-replay.meta.json",
+      "sha256": "b33f9180f50490e109df088dfe3562da1bd42d9773566750e9b0edb921daeb25",
+      "captured_utc": "2026-10-15T06:00:02Z",
+      "edition": "AE",
+      "runtime": "Steam SkyrimSE.exe ProductVersion 1.6.1170.0 and hash verified by scoped preflight; Linux system Python 3.12.3 fallback; no live game loaded.",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "Authoritative skyrim xEdit helper files copied byte-identically to ignored .local sandbox",
+        "python3 scripts/python_env.py run .local/xedit-authoritative-copy/scripts/skyrim_tool.py doctor",
+        "python3 scripts/python_env.py run .local/xedit-authoritative-copy/scripts/skyrim_tool.py prepare-xedit",
+        "python3 scripts/python_env.py run tools/ae_preflight.py with PLUGINS_TXT scoped to generated official five-master list",
+        "python3 scripts/python_env.py run -m unittest discover -s tests -v",
+        "python3 scripts/python_env.py run -m compileall -q scripts tools tests",
+        "python3 scripts/python_env.py run scripts/local_paths.py doctor",
+        "python3 scripts/python_env.py run tools/domain_doctor.py",
+        "research/state/overlay/Markdown/pre-push validators; 13 active skill quick_validate.py runs",
+        "git diff --check"
+      ],
+      "coverage": "Eight helper/template files match the authoritative source byte-for-byte. All five xEdit-relevant config values match after adding INCLUDE_CREATION_CLUB=0 to ignored config. Bridge doctor and isolated prepare exit 0; scoped preflight verifies Steam 1.6.1170.0 and exactly five official masters. The local doctors exit 0 but WSL sandbox ProductVersion access remains unavailable; no selected MO2 profile or explicit full plugins.txt is configured. The complete post-edit suite ran 151 tests, all 13 active skills validated, and every captured validator/audit command exited 0. A final direct audit verifies all 52 criterion rows, three gate verdicts, prompt H1/H2 discriminants and 35 preserved raw-artifact hashes. Existing SSEView PID 3948 was not launched again; no record export occurred. EV-0186/EV-0188 Observer build/preparation remains staged and not deployed.",
+      "result": "PASS for exact bridge/config replay and all locally actionable post-edit validation. Native record research remains PARTIAL because the active profile and record query are absent; live Observer readiness remains NOT_VERIFIED."
     }
   ]
 }

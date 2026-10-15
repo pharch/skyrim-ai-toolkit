@@ -6,77 +6,93 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from scripts.local_paths import doctor, sync
-from scripts.local_config import read_local_config
+from scripts.local_paths import _native_path, doctor
 
 
-class LocalPathRegistryTests(unittest.TestCase):
-    def test_doctor_can_report_verified_runtime_without_exposing_target_path(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            (root / ".local").mkdir()
-            (root / "config").mkdir()
-            (root / "config" / "local.env").write_text("SKYRIM_EDITION=AE\n", encoding="utf-8")
-            with patch("tools.ae_target.assert_ae_target", return_value={"edition": "AE", "version": "1.6.1170"}):
-                status = doctor(root, verify_target=True)
+class LocalPathDoctorTests(unittest.TestCase):
+    def _root(self) -> tuple[tempfile.TemporaryDirectory, Path]:
+        temporary = tempfile.TemporaryDirectory()
+        root = Path(temporary.name)
+        (root / "config").mkdir()
+        return temporary, root
+
+    def test_doctor_reads_only_local_env_and_hides_bound_paths(self):
+        temporary, root = self._root()
+        self.addCleanup(temporary.cleanup)
+        local = root / ".local"
+        local.mkdir()
+        project = root / "external-project"
+        project.mkdir()
+        (project / "skyrim-gog.gpr").touch()
+        (project / "skyrim-gog.rep").mkdir()
+        gog = root / "external" / "GOG" / "SkyrimSE.exe"
+        gog.parent.mkdir(parents=True)
+        gog.touch()
+        commonlib = root / "external" / "CommonLibSSE-NG"
+        (commonlib / "include" / "RE").mkdir(parents=True)
+        (commonlib / "include" / "RE" / "Offsets.h").touch()
+        java = root / "external" / "Java" / "bin"
+        java.mkdir(parents=True)
+        (java / "java.exe").touch()
+        (local / "research-paths.toml").write_text(
+            '[configured_paths]\nghidra_home = "wrong-old-registry"\n', encoding="utf-8"
+        )
+        (root / "config" / "local.env").write_text(
+            f"GHIDRA_PROJECT_DIR='{project.as_posix()}'\n"
+            "GHIDRA_PROJECT_NAME='skyrim-gog'\n"
+            "GHIDRA_PROJECT_PROGRAM='SkyrimSE.exe'\n"
+            f"GHIDRA_ANALYSIS_EXE_GOG='{gog.as_posix()}'\n"
+            f"COMMONLIBSSE_ROOT='{commonlib.as_posix()}'\n"
+            f"JAVA_HOME='{java.parent.as_posix()}'\n"
+            "MO2_PROFILE_DIR=\nPLUGINS_TXT=\n",
+            encoding="utf-8",
+        )
+
+        status = doctor(root)
+        encoded = json.dumps(status)
+        self.assertEqual(status["canonical_registry"], "config/local.env")
+        self.assertFalse(status["legacy_toml_registry_read"])
+        self.assertTrue(status["existing_ghidra_project_files_present"])
+        self.assertTrue(status["gog_analysis_executable_exists"])
+        self.assertTrue(status["commonlibsse_source_exists"])
+        self.assertTrue(status["java_home_executable_exists"])
+        self.assertFalse(status["explicit_plugins_txt_configured_exists"])
+        self.assertFalse(status["mo2_profile_dir_configured_exists"])
+        self.assertNotIn(str(project), encoded)
+        self.assertNotIn(str(gog), encoded)
+        self.assertNotIn("wrong-old-registry", encoded)
+
+    def test_doctor_relative_index_paths_resolve_from_checkout(self):
+        temporary, root = self._root()
+        self.addCleanup(temporary.cleanup)
+        (root / ".local").mkdir()
+        (root / ".local" / "uesp.sqlite3").touch()
+        (root / ".local" / "apocrypha.sqlite3").touch()
+        (root / "config" / "local.env").write_text(
+            "UESP_INDEX_PATH=.local/uesp.sqlite3\nAPOCRYPHA_INDEX_PATH=.local/apocrypha.sqlite3\n",
+            encoding="utf-8",
+        )
+        status = doctor(root)
+        self.assertTrue(status["uesp_index_exists"])
+        self.assertTrue(status["apocrypha_index_exists"])
+
+    def test_verify_target_separates_executable_identity_from_full_order(self):
+        temporary, root = self._root()
+        self.addCleanup(temporary.cleanup)
+        (root / "config" / "local.env").write_text("SKYRIM_EDITION=AE\n", encoding="utf-8")
+        with (
+            patch("tools.ae_target.assert_ae_target", return_value={"edition": "AE", "version": "1.6.1170"}),
+            patch("tools.ae_target.preflight", side_effect=ValueError("set PLUGINS_TXT to selected MO2 profile")),
+        ):
+            status = doctor(root, verify_target=True)
         self.assertTrue(status["product_version_verified"])
         self.assertEqual(status["runtime"], "1.6.1170")
-        self.assertFalse(status["complete_active_order_verified"])
-        self.assertNotIn(str(root), json.dumps(status))
+        self.assertFalse(status["full_active_order_verified"])
+        self.assertIn("PLUGINS_TXT", status["active_order_error"])
 
-    def test_sync_fills_empty_values_and_doctor_hides_path_values(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            local = root / ".local"
-            config = root / "config"
-            local.mkdir()
-            config.mkdir()
-            game = root / "game"
-            game.mkdir()
-            exe = game / "SkyrimSE.exe"
-            exe.write_bytes(b"fixture")
-            xedit = root / "xEdit.exe"
-            xedit.write_bytes(b"fixture")
-            source = root / "private_export.json"
-            source.write_text('{"messages": []}', encoding="utf-8")
-            registry = f'''\n[target]\nraw_uesp_dump = "{source.as_posix()}"\n[configured_paths]\nskyrim_exe = "{exe.as_posix()}"\nsseedit_exe = "{xedit.as_posix()}"\n[private_sources]\napocrypha_json = "{source.as_posix()}"\n'''
-            registry = registry.replace("[private_sources]", f'skyrim_data = "{game.as_posix()}"\n[private_sources]')
-            (local / "research-paths.toml").write_text(registry, encoding="utf-8")
-            (config / "local.env.example").write_text("SKYRIM_EDITION=AE\nGAME_ROOT=\nSKYRIM_DATA=\nPLUGINS_TXT=\n", encoding="utf-8")
-            (config / "local.env").write_text("SKYRIM_EDITION=AE\nGAME_ROOT=\nSKYRIM_DATA=\nPLUGINS_TXT=\n", encoding="utf-8")
-
-            report = sync(root)
-            values = read_local_config(root)
-            status = doctor(root)
-
-            self.assertGreater(report["updated_values"], 0)
-            self.assertEqual(values["GAME_ROOT"], game.as_posix())
-            self.assertEqual(values["SKYRIM_EXE_PATH"], exe.as_posix())
-            self.assertEqual(values["SKYRIM_DATA"], game.as_posix())
-            self.assertEqual(values["PLUGINS_TXT"], "")
-            self.assertTrue(status["configured_executable_exists"])
-            self.assertFalse(status["active_plugins_txt_configured"])
-            self.assertFalse(status["product_version_verified"])
-            encoded = json.dumps(status)
-            self.assertNotIn(exe.as_posix(), encoded)
-            self.assertNotIn(source.as_posix(), encoded)
-
-    def test_sync_preserves_existing_nonempty_values_unless_overwrite(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            (root / ".local").mkdir()
-            (root / "config").mkdir()
-            exe = root / "candidate.exe"
-            (root / ".local" / "research-paths.toml").write_text(
-                f'[configured_paths]\nskyrim_exe = "{exe.as_posix()}"\n', encoding="utf-8"
-            )
-            (root / "config" / "local.env.example").write_text("", encoding="utf-8")
-            (root / "config" / "local.env").write_text("GAME_ROOT='user-choice'\nPLUGINS_TXT='profile-choice'\n", encoding="utf-8")
-
-            sync(root)
-            values = read_local_config(root)
-            self.assertEqual(values["GAME_ROOT"], "user-choice")
-            self.assertEqual(values["PLUGINS_TXT"], "profile-choice")
+    def test_windows_paths_map_to_mounted_drive_without_losing_spaces(self):
+        self.assertEqual(str(_native_path(r"C:\Program Files\GOG Galaxy")),
+                         "/mnt/c/Program Files/GOG Galaxy")
 
 
 if __name__ == "__main__":

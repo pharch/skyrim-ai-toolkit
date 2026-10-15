@@ -15,11 +15,17 @@ The reader processes one file at a time. The tested
 candidate when supplied the same logical FormID candidates and a complete
 validated AE order. It does not load every active file or discover the user's
 profile. Its two-record test fixture is synthetic; it is not a real winner
-query or a replacement for xEdit. The configured SSEEdit binary is present, but
-a native call is blocked until the selected profile's full explicit
-plugins.txt passes:
+query or a replacement for xEdit. The configured SSEEdit 4.1.5.0 executable
+exists and its current SHA-256 matches the file whose ProductVersion was read
+as 4.1.5.0 (EV-0120, EV-0181). EV-0172's `product_version_verified` field
+describes the Skyrim runtime target, not SSEEdit. A native call is blocked
+until the selected profile's full explicit `plugins.txt` passes:
 
     python3 scripts/python_env.py run tools/ae_preflight.py
+
+The current WSL PowerShell bridge fails before returning a ProductVersion with
+`UtilBindVsockAnyPort` (EV-0181). Retry preflight from a working WSL/Windows
+host after the selected MO2 profile and complete order are configured.
 
 Do not infer a winner from Skyrim.esm and Update.esm rows without verified
 load-order evidence. Keep original plugins read-only; retain raw outputs under

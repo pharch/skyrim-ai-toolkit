@@ -1,5 +1,9 @@
 # Local Research Readiness Checklist
 
+> Historical 74-criterion ledger. Current final-alignment status is maintained
+> in `migration/FINAL_ALIGNMENT_CHECKLIST.md` and its report; do not use this
+> older tally as the present readiness verdict.
+
 Evidence ledger for the 74 criteria in LOCAL_RESEARCH_READINESS_MISSION.md. Each row records observed status, command, source IDs and remaining limit; the seven external blockers are listed separately with exact unblock steps.
 
 | ID | Acceptance criterion | Status | Checked at | Command / operation | Observed output / artifact | Source / test reference | Change / commit | Remaining limitations |

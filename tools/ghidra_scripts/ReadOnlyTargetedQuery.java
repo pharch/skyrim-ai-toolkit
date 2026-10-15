@@ -14,10 +14,22 @@ import ghidra.program.model.symbol.ReferenceIterator;
 public class ReadOnlyTargetedQuery extends ghidra.app.script.GhidraScript {
     @Override
     public void run() throws Exception {
+        Long targetRva = null;
+        String[] scriptArgs = getScriptArgs();
+        if (scriptArgs.length > 1) throw new IllegalArgumentException("Expected at most one RVA script argument");
+        if (scriptArgs.length == 1) {
+            String token = scriptArgs[0].trim();
+            if (token.startsWith("0x") || token.startsWith("0X")) token = token.substring(2);
+            targetRva = Long.parseLong(token, 16);
+            if (targetRva < 0) throw new IllegalArgumentException("RVA must be non-negative");
+        }
+
         FunctionManager manager = currentProgram.getFunctionManager();
         println("PROGRAM_NAME=" + currentProgram.getName());
+        println("PROGRAM_EXECUTABLE_PATH=" + currentProgram.getExecutablePath());
         println("PROGRAM_LANGUAGE=" + currentProgram.getLanguageID());
         println("PROGRAM_COMPILER=" + currentProgram.getCompilerSpec().getCompilerSpecID());
+        println("PROGRAM_IMAGE_BASE=" + currentProgram.getImageBase());
         long functionCount = 0;
         FunctionIterator functions = manager.getFunctions(true);
         while (functions.hasNext()) {
@@ -27,12 +39,20 @@ public class ReadOnlyTargetedQuery extends ghidra.app.script.GhidraScript {
         println("FUNCTION_COUNT=" + functionCount);
 
         Function sample = null;
-        functions = manager.getFunctions(true);
-        while (functions.hasNext()) {
-            Function candidate = functions.next();
-            if (!candidate.isThunk() && !candidate.isExternal()) {
-                sample = candidate;
-                break;
+        if (targetRva != null) {
+            Address targetAddress = currentProgram.getImageBase().add(targetRva.longValue());
+            println("TARGET_RVA=0x" + Long.toHexString(targetRva.longValue()).toUpperCase());
+            println("TARGET_ADDRESS=" + targetAddress);
+            sample = manager.getFunctionContaining(targetAddress);
+            if (sample == null) throw new IllegalStateException("No existing function contains the requested RVA");
+        } else {
+            functions = manager.getFunctions(true);
+            while (functions.hasNext()) {
+                Function candidate = functions.next();
+                if (!candidate.isThunk() && !candidate.isExternal()) {
+                    sample = candidate;
+                    break;
+                }
             }
         }
         if (sample == null) throw new IllegalStateException("No analyzed non-thunk function is available");
@@ -58,6 +78,7 @@ public class ReadOnlyTargetedQuery extends ghidra.app.script.GhidraScript {
         functions = manager.getFunctions(true);
         while (functions.hasNext() && chosen == null) {
             Function target = functions.next();
+            if (targetRva != null && !target.equals(sample)) continue;
             if (target.isThunk()) continue;
             ReferenceIterator incoming = currentProgram.getReferenceManager().getReferencesTo(target.getEntryPoint());
             while (incoming.hasNext()) {

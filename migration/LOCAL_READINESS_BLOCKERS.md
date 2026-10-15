@@ -1,5 +1,9 @@
 # Local Research Readiness Blockers
 
+> Historical blocker snapshot for the previous 74-criterion setup pass. See
+> `migration/FINAL_ALIGNMENT_REPORT.md` for the current profile, save, and live
+> runtime blockers.
+
 These are genuine environment or source-provenance dependencies, not claims that the associated software is generally unavailable. Raw command results stay in ignored `.local/readiness/`. Seven checklist rows remain externally blocked across five root causes; C07/C08/F08 are resolved with EV-0152/EV-0153, and the Observer build is verified with EV-0154/EV-0155.
 
 ## 1. Selected MO2 profile and complete load order — A04, C01, C03

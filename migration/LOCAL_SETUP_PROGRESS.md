@@ -1,5 +1,8 @@
 # Local Setup Progress
 
+> Historical progress log for an earlier setup run; current work and recovery
+> instructions are in `migration/FINAL_ALIGNMENT_RESUME.md`.
+
 ## Final local pass — 2026-10-14
 
 - The active agent-facing tools and skill commands use Python through

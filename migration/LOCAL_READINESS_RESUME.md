@@ -1,5 +1,8 @@
 # Local Research Readiness Resume
 
+> Historical resume note for the prior setup mission. Continue from
+> `migration/FINAL_ALIGNMENT_RESUME.md` for the current alignment pass.
+
 ```yaml
 phase: Final local verification and external handoff
 current_criterion: All 74 criteria classified; 67 PASS, 7 BLOCKED_EXTERNAL, 0 pending

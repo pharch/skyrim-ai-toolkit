@@ -51,25 +51,34 @@ def _tool_paths(config: dict[str, str]) -> dict[str, object]:
     exe = _path(config.get("SKYRIM_EXE_PATH", ""))
     game_root = _path(config.get("GAME_ROOT", ""))
     plugins = _path(config.get("PLUGINS_TXT", ""))
-    ghidra_home = _path(config.get("GHIDRA_HOME", ""))
-    ghidra_headless = _path(config.get("GHIDRA_HEADLESS", ""))
-    commonlib = _path(config.get("COMMONLIBSSE_NG", ""))
+    ghidra_headless = _path(config.get("GHIDRA_HEADLESS_EXE", ""))
+    ghidra_project = _path(config.get("GHIDRA_PROJECT_DIR", ""))
+    ghidra_name = config.get("GHIDRA_PROJECT_NAME", "").strip()
+    ghidra_program = config.get("GHIDRA_PROJECT_PROGRAM", "").strip()
+    gog_exe = _path(config.get("GHIDRA_ANALYSIS_EXE_GOG", ""))
+    commonlib = _path(config.get("COMMONLIBSSE_ROOT", ""))
     xedit = _path(config.get("SSEEDIT_EXE", ""))
     java_home = _path(config.get("JAVA_HOME", ""))
-    java_bin = (java_home / "bin" / ("java.exe" if os.name == "nt" else "java")) if java_home else None
-    ghidra_launchers = [
-        ghidra_home / "support" / "analyzeHeadless.bat",
-        ghidra_home / "support" / "analyzeHeadless",
-    ] if ghidra_home else []
+    java_bin = next((java_home / "bin" / name for name in ("java.exe", "java")
+                     if java_home and (java_home / "bin" / name).is_file()), None)
+    project_present = bool(ghidra_project and ghidra_name
+                           and (ghidra_project / f"{ghidra_name}.gpr").is_file()
+                           and (ghidra_project / f"{ghidra_name}.rep").is_dir())
+    offsets_header = commonlib / "include" / "RE" / "Offsets.h" if commonlib else None
+    gog_data_plugins = gog_exe.parent / "Data" / "SKSE" / "Plugins" if gog_exe else None
+    gog_address_library_present = bool(gog_data_plugins and list(gog_data_plugins.glob("versionlib-*.bin")))
     return {
         "ae_executable_configured_exists": bool(exe and exe.is_file()),
         "game_root_configured_exists": bool(game_root and game_root.is_dir()),
         "explicit_plugins_txt_configured_exists": bool(plugins and plugins.is_file()),
-        "ghidra_home_configured_exists": bool(ghidra_home and ghidra_home.is_dir()),
-        "ghidra_headless_configured_exists": bool(ghidra_headless and ghidra_headless.exists()),
-        "ghidra_standard_launcher_exists": any(p.is_file() for p in ghidra_launchers),
+        "ghidra_headless_configured_exists": bool(ghidra_headless and ghidra_headless.is_file()),
+        "ghidra_project_present": project_present,
+        "ghidra_project_program_configured": ghidra_program.casefold() == "skyrimse.exe",
+        "gog_analysis_executable_exists": bool(gog_exe and gog_exe.is_file()),
+        "gog_address_library_candidate_exists": gog_address_library_present,
         "commonlibsse_source_configured_exists": bool(commonlib and commonlib.is_dir()),
         "commonlibsse_cmake_project_present": bool(commonlib and (commonlib / "CMakeLists.txt").is_file()),
+        "commonlibsse_offsets_header_present": bool(offsets_header and offsets_header.is_file()),
         "sseedit_executable_configured_exists": bool(xedit and xedit.is_file()),
         "java_home_configured_exists": bool(java_bin and java_bin.is_file()),
     }
@@ -114,6 +123,28 @@ def _verified_target(config: dict[str, str], root: Path) -> dict[str, object]:
         return {"verified": False, "error": str(exc)}
 
 
+def _sseedit_status(config: dict[str, str], paths: dict[str, object], target: dict[str, object]) -> dict[str, object]:
+    """Report xEdit file/profile availability without conflating it with runtime identity."""
+    executable_exists = bool(paths["sseedit_executable_configured_exists"])
+    return {
+        "status": "configured_executable_profile_unverified" if executable_exists else "blocked_external",
+        "configured_executable_exists": executable_exists,
+        "windows_host": os.name == "nt",
+        "runtime_target": {
+            "product_version_verified": bool(target.get("verified")),
+            "version": target.get("runtime"),
+            "error": target.get("error"),
+        },
+        # A configured file path is only a candidate. Target preflight must
+        # parse and validate the entire current profile before this is true.
+        "full_active_order_verified": False,
+        "explicit_plugins_txt_candidate_exists": bool(paths["explicit_plugins_txt_configured_exists"]),
+        "selected_mo2_profile_configured": bool(_path(config.get("MO2_PROFILE_DIR", ""))),
+        "xedit_call": False,
+        "python_fallback": "python3 scripts/python_env.py run tools/plugin_reader.py",
+    }
+
+
 def run_doctor(root: Path = ROOT) -> dict[str, object]:
     config = read_local_config(root)
     paths = _tool_paths(config)
@@ -130,46 +161,42 @@ def run_doctor(root: Path = ROOT) -> dict[str, object]:
     except Exception as exc:  # a concise doctor should still report later domains
         reports["SKSE"] = {"status": "technical_failure", "error": type(exc).__name__}
 
-    ghidra_ready = bool(paths["ghidra_standard_launcher_exists"] and java["available"])
-    ghidra_meta = sorted((root / ".local" / "readiness" / "ghidra").glob("*.meta.json"))
+    ghidra_ready = bool(paths["ghidra_headless_configured_exists"]
+                        and paths["ghidra_project_present"]
+                        and paths["gog_analysis_executable_exists"])
+    ghidra_meta = sorted((root / ".local" / "ghidra").glob("gog-query-*.meta.json"))
     reports["Ghidra"] = {
-        "status": "native_launcher_and_jdk_verified" if ghidra_ready else "blocked_external",
-        "configured_home_exists": paths["ghidra_home_configured_exists"],
+        "status": "existing_gog_project_bound" if ghidra_ready else "blocked_external",
+        "analysis_distribution": "GOG",
+        "project_alias": "config/local.env:GHIDRA_PROJECT_NAME",
+        "project_program_configured": paths["ghidra_project_program_configured"],
+        "existing_project_files_present": paths["ghidra_project_present"],
+        "analysis_executable_present": paths["gog_analysis_executable_exists"],
         "configured_headless_path_exists": paths["ghidra_headless_configured_exists"],
-        "standard_launcher_exists": paths["ghidra_standard_launcher_exists"],
         "java_home_executable_exists": paths["java_home_configured_exists"],
         "host_java": java,
-        "path_invocation_available": bool(shutil.which("analyzeHeadless") or shutil.which("ghidraRun")),
-        "analysis_run": bool(ghidra_meta),
-        "analysis_metadata_count": len(ghidra_meta),
+        "read_only_query_metadata_count": len(ghidra_meta),
+        "query_command": "python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]",
+        "query_mode": "existing project; -process -noanalysis -readOnly; no import or overwrite",
     }
 
     cmake = _windows_command("cmake.exe --version")
 
     reports["CommonLibSSE"] = {
-        "status": "ready_to_build" if paths["commonlibsse_source_configured_exists"] and cmake["available"] else "blocked_external",
+        "status": "source_and_header_present" if paths["commonlibsse_source_configured_exists"] and paths["commonlibsse_offsets_header_present"] else "blocked_external",
         "source_candidate_present": bool(paths["commonlibsse_source_configured_exists"]),
         "source_directory_exists": paths["commonlibsse_source_configured_exists"],
         "cmake_project_present": paths["commonlibsse_cmake_project_present"],
+        "offsets_header_present": paths["commonlibsse_offsets_header_present"],
+        "matching_gog_address_library_candidate_present": paths["gog_address_library_candidate_exists"],
+        "address_library_probe_command": "python3 scripts/python_env.py run tools/address_library_probe.py --symbol Namespace::Name",
         "cmake_available": bool(shutil.which("cmake") or cmake["available"]),
         "host_cmake_probe": {key: cmake[key] for key in cmake if key != "output"},
         "native_compiler_available": any(shutil.which(command) for command in ("cl", "clang++", "g++")),
-        "build_run": False,
+        "new_build_run": False,
     }
 
-    reports["SSEEdit"] = {
-        "status": "configured_executable_present_but_unverified" if paths["sseedit_executable_configured_exists"] else "blocked_external",
-        "configured_executable_exists": paths["sseedit_executable_configured_exists"],
-        "windows_host": os.name == "nt",
-        "product_version_verified": target["verified"],
-        "runtime": target.get("runtime"),
-        # A configured file path is only a candidate. Target preflight must
-        # parse and validate the entire current profile before this is true.
-        "full_active_order_verified": False,
-        "explicit_plugins_txt_candidate_exists": bool(paths["explicit_plugins_txt_configured_exists"]),
-        "xedit_call": False,
-        "python_fallback": "python3 scripts/python_env.py run tools/plugin_reader.py",
-    }
+    reports["SSEEdit"] = _sseedit_status(config, paths, target)
 
     try:
         from tools.uesp.core import doctor as uesp_doctor, page as uesp_page, search as uesp_search

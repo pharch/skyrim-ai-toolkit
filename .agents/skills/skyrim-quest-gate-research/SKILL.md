@@ -1,37 +1,42 @@
 ---
 name: skyrim-quest-gate-research
-description: Investigate level-locked vanilla Skyrim quests, encounters and events, locate actual gate mechanisms, and develop reproducible level-one bypass experiments.
+description: Investigate Skyrim AE quest, encounter, and event level gates and design reproducible level-one bypass tests.
 ---
 
 # Skyrim AE quest/event gate research
 
-1. Choose a precisely identified quest/encounter with a plausible level prerequisite; verify from UESP and game data.
-2. Distinguish quest startup, journal display, dialogue availability, alias fill, story-manager event and actual world encounter spawn.
-3. Enumerate all entry points and their conditions (QUST, SM nodes, INFO branches, aliases, scripts, native callbacks).
-4. Identify when the player-level predicate is read; whether result is cached, reevaluated, or bypassed by alternate vanilla event sources. Do not invent native offsets.
-5. Write rival hypotheses and predicted observations; test in an isolated diagnostic save with tagged interventions only if approved.
-6. Attempt player-available unmodified-game reproduction; `setstage`/`startquest` do not qualify.
-7. Capture quest instance state, stage transitions, alias/world changes, level and XP throughout. Repeat from clean baseline.
-8. Generalize only after a second independent gate case and a shared mechanism are supported.
-
-## Tool route and evidence
-
-- Ground a candidate with `python3 scripts/python_env.py run -m tools.uesp
-  page --db .local/uesp.sqlite3 '<page>'`; retain the exact revision URL.
-- Before xEdit/game access, run `python3 scripts/python_env.py run
-  tools/ae_preflight.py`. Query exact plugin records with
-  `python3 scripts/python_env.py run tools/plugin_reader.py record <plugin>
-  --signature QUST --form-id <ID> --include-subrecords`.
-- Preserve page revisions, plugin hashes, raw record bytes, gate/transition
-  coverage, and EV IDs. If the active profile is incomplete, do not claim the
-  winning gate or schedule in-game work; if no entry transition is found,
-  report the exact records/functions searched and continue independently.
+1. Choose a precisely identified quest, encounter, or event with a plausible
+   level prerequisite; ground the lead in UESP and game data.
+2. Distinguish quest startup, journal display, dialogue availability, alias
+   fill, story-manager event, and actual encounter spawn.
+3. Enumerate entry points and conditions across QUST, story-manager records,
+   INFO branches, aliases, scripts, and native callbacks.
+4. Identify when the player-level predicate is read and whether the value is
+   cached, reevaluated, or bypassed through another vanilla entry source.
+   Never invent native offsets.
+5. State rival causal models and the predicted observation that would
+   discriminate them. Use diagnostic intervention only in a separate lane;
+   console `setstage`/`startquest` is not a vanilla reproduction.
+6. For native code, use the existing GOG project via
+   `python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]`.
+   Resolve named CommonLib symbols with
+   `python3 scripts/python_env.py run tools/address_library_probe.py --symbol
+   Namespace::Name`. Keep GOG binary evidence distinct from the runtime build.
+7. Before xEdit or game access, run
+   `python3 scripts/python_env.py run tools/ae_preflight.py`; query exact file
+   records with
+   `python3 scripts/python_env.py run tools/plugin_reader.py record <plugin>
+   --signature QUST --form-id <id> --include-subrecords`. Record queries do
+   not establish the winning override without the complete selected profile.
+8. Preserve page revision, executable/plugin hashes, raw record bytes,
+   transition coverage, and EV IDs. If the active profile is absent, keep
+   winner/runtime claims blocked and continue static GOG or other independent
+   offline work.
 
 ## Failure modes
 
-- A wiki prerequisite or level condition is not proof of the actual start
-  transition. Missing aliases, conditions, script bindings, story-manager
-  edges, or native callbacks leave the gate unresolved.
-- A stale/partial plugin order blocks winner claims; an unavailable in-game
-  profile blocks runtime scheduling. Preserve the specific blocker and choose
-  an independent offline question rather than reporting a bypass result.
+A wiki prerequisite or level condition does not prove the quest initiation
+transition. Missing aliases, conditions, scripts, story-manager edges, or
+native callbacks leave the gate unresolved. An empty result from an incomplete
+order is not negative evidence. Linux tests do not establish Windows xEdit,
+MO2, or in-game behavior.

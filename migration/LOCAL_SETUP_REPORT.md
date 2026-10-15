@@ -1,5 +1,8 @@
 # Local setup report
 
+> Historical setup report; final local alignment and current gate verdict are
+> in `migration/FINAL_ALIGNMENT_REPORT.md`.
+
 Date: 2026-10-14
 
 ## Readiness

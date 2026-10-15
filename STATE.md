@@ -1,4 +1,66 @@
-# Current Research State
+# Final local harness alignment — 2026-10-15 follow-up
+
+## Readiness gates
+
+- `STATIC_RESEARCH_READY`: READY — existing GOG 1.6.1179.0 Ghidra project passed real read-only function, xref, disassembly and decompilation queries (EV-0165–EV-0167).
+- `NATIVE_RESEARCH_READY`: PARTIAL — Steam AE 1.6.1170.0 and the scoped five-official-master preflight pass (EV-0184/0191). SSEView opened and loaded all five masters in `-view` (EV-0185/0189); the exact source bridge/config replay passes (EV-0191), but the UI exposes no safe record selector, no record query ran, and the selected full MO2 order is absent.
+- `INSTRUMENTED_AUTONOMOUS_RESEARCH_READY`: NOT_VERIFIED — the Observer was freshly built, its analyzer passes 7/7, and a no-launch session manifest was prepared (EV-0186/0188/0191); the DLL remains undeployed, with no live handshake, safe MO2 test profile, or disposable test save (EV-0174/0187/0191).
+
+Mission: complete the 52 criteria in `migration/FINAL_LOCAL_HARNESS_ALIGNMENT.md`; do not start open-ended glitch research.
+
+## Current handoff
+
+At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then use the complete prompt in `docs/RESEARCH_START_PROMPT.md`. Start P0 OBJ-1/Q-0001; continue independent offline questions while the xEdit full-profile/save and live Observer gates remain external.
+
+
+GOG Ghidra lane: EV-0165/0166 verify the existing `skyrim-gog` project against GOG AE 1.6.1179.0, SHA-256 `9b0fc7880c4b12d436bfb59bcae64868f176dbc04010adbd9bc2ecb64bc8ed3f`; read-only queries pass.
+
+CommonLib/Address Library finding: the real Python-dispatched adapter reads CommonLib `RE/Offsets.h` and resolves `MagicItem::CalculateCost` as AE ID 11321. Matching GOG Address Library 1.6.1179.0 resolves it to RVA `0x14C020`; SHA-256 is `3ee46b2f3a8a24b9cda1f2aa63b0f0f47dea347e52701a6739327e5ea1b5838e`. The retained `symbols_ae_relevant.json` has no runtime provenance and reports `0x14C1F0`, so it is not accepted for GOG. Exact evidence is `.local/alignment/address-library-gog-python.stdout.raw`; this is a setup/build-provenance check, not a mechanic conclusion.
+
+Exact next action: Add unit coverage for the build-attested Address Library adapter and optional `--rva` targeting, then run the existing GOG project's no-analysis/read-only query at Address Library RVA `0x14C020` through `python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020`; preserve the result only in ignored `.local/` evidence.
+
+Completed after that checkpoint: 18 targeted adapter tests pass. The real Python-dispatched query against `local-config:skyrim-gog` resolved RVA `0x14C020` to an existing function and passed identity, RVA, xref, disassembly, decompilation, and script checks with `-process -noanalysis -readOnly`; it returned exit 0 in 17.837 seconds. Metadata is `.local/ghidra/gog-query-20261014T200427Z.meta.json`; raw wrapper output is `.local/alignment/gog-rva-query.stdout.raw`. No import, overwrite, or project creation occurred.
+
+Exact next action: hash and register the targeted GOG query artifact as EV-0167, then verify and preserve the separate Steam runtime ProductVersion/hash probe; continue the installed-tool capability checks without launching the game or xEdit until the selected full profile is proven.
+
+Completed after that checkpoint: EV-0167 candidate is the real Ghidra metadata `.local/ghidra/gog-query-20261014T200427Z.meta.json` (hash `001b1a204434a4f6c7206178439d976279cabf1142794961e6d3f4a77ed89832`). The raw Ghidra stdout resolves `TARGET_RVA=0x14C020`, `FUN_14014c020`, an incoming call edge from `140230365`, 24 instructions and decompilation. The Steam runtime ProductVersion/hash probe passed: AE 1.6.1170, SHA-256 `c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9`; `full_order_verified=false`.
+
+EV-0167 records the real GOG RVA query and EV-0168 the separate Steam runtime probe. Read-only filename enumeration found no `plugins.txt` or `ModOrganizer.ini` in the searched roots. The only `profiles.ini` match was Firefox data, not MO2. `MO2_PROFILE_DIR`, `PLUGINS_TXT`, `SKYRIM_LOADORDER_DIR`, `LOCALAPPDATA`, and `USERPROFILE` are blank in ignored config.
+
+The focused MO2 executable/profile search across the known Documents, AppData, Modding, Games and standard install roots found zero candidate files. The broader filename search returned only Firefox `profiles.ini` and was stopped after it exceeded one minute; no selected MO2 profile was found. On 2026-10-15, an approved isolated five-master SSEView `-view` launch succeeded (EV-0184/0185); no record query or full-order conclusion was made.
+
+Exact next action: use the configured Steam `SKYRIM_DATA` binding to run the Python-dispatched known-input Papyrus/BSA inspection for `DA14Script` read-only; save raw output under ignored `.local/alignment/` and preserve the base archive identity.
+
+Completed: EV-0169 records Python-dispatched extraction and PEX 3.2 inspection of `DA14Script.psc` from configured `Skyrim - Misc.bsa`: archive SHA-256 `ddb19908dcd5c135b8bba240e8dfcdb95395b569852f715d330396e9c1390b9d`; extracted 507 bytes; parsed 507 bytes with zero trailing bytes. Raw text and extracted PEX remain ignored under `.local/alignment/`. This proves the known-input parser path, not script behavior in a running game.
+
+Exact next action: run the local UESP page query for `Skyrim:Karstaag` and private Apocrypha search through their Python module entrypoints; preserve source revision/provenance privately and do not expose message text or identifiers in tracked records.
+
+Completed: EV-0170 verifies UESP `Skyrim:Karstaag`, revision 3629292 (2026-09-08T02:32:02Z), revision URL returned by the local corpus; dump SHA-256 `b3ccaea9d10c653a1bf702d0da5d32c2bc9a5cafdcd374d258f5a063d6074ddb`. The dump source/completeness remains unverified. EV-0171 verifies the private Apocrypha index and one `level` search hit followed by seven-message context retrieval; source export SHA and stable ID/channel/timestamp are preserved only in ignored `.local/alignment/` private artifacts. No gameplay claim is derived.
+
+Exact next action: reconcile the active path registry and `domain_doctor.py` with the canonical ignored `config/local.env` GOG project keys; remove active `.local/research-paths.toml` synchronization assumptions, update tests/docs, and rerun the path and doctor tests.
+
+Completed after that checkpoint: `scripts/local_paths.py` now reads only `config/local.env`, has no TOML sync command, resolves relative index paths from the checkout, and hides configured values. `tools/domain_doctor.py` now reports the existing GOG project binding and configured CommonLib offsets header. The old TOML example was removed; ignored `.local/research-paths.toml` was preserved. Readme/getting-started/bindings guide and retained-tool/Ghidra/armor/discriminating-experiment skill routes now describe the tested GOG workflow. Focused suite: 24 tests passed.
+
+Exact next action: run the real local path doctor and domain doctor through the Python dispatcher; capture their output under ignored `.local/alignment/`, verify no private path leakage, and fix any runtime findings before continuing the final capability/repository audit.
+
+Completed: the actual target doctor verifies Steam ProductVersion 1.6.1170 while correctly reporting the active order unverified (`PLUGINS_TXT`/selected MO2 profile absent). The domain doctor reports existing GOG project files and headless launcher, Java 21.0.10, CommonLib header/address-library candidates, usable local UESP and Apocrypha indices, and Python 3.12.3 fallback. It does not call xEdit or live SKSE. Both doctor outputs contain zero matched local-path patterns. Windows `cmake.exe --version` was not available through the configured host command path; no new build was attempted.
+
+EV-0172 records both actual doctor operations. The local path doctor output hash is `4886d5431eb2707fcf9b76b228a88bff711ae2f8fcd078efff0b5ee862813c1e`; domain doctor output hash is `a85cab744ed96b6c91104cf843647724b61541764f9cdad79dd82881cf00f2fe`.
+
+Completed: real `skse_probe.py` passes for Steam AE 1.6.1170; `skse64_loader.exe` and `skse64_1_6_1170.dll` both report ProductVersion `0, 2, 2, 6`; runtime-named Address Library is present and hashes to `c4093c56...0d452`. Existing Observer build is present (584,192 bytes, hash `8ef8a660...e50b`) but not deployed. Read-only process query reports no Skyrim process; no handshake capture or `RESEARCH_TEST_SAVE` is configured. Legacy repo config/scripts contain no ReSaver path or named binary.
+
+Exact next action: rerun the compact Observer/process/save/ReSaver status check with its sanitized result saved under ignored `.local/alignment/`, hash it and the saved SKSE probe as EV-0173/0174, then update the capability report and exact external blockers.
+
+Completed: EV-0173 captures matching Steam 1.6.1170 SKSE runtime files with loader/runtime ProductVersion `0, 2, 2, 6`; EV-0174 captures the compact local status: no process, no handshake artifact, Observer build present but undeployed, no research save binding, no legacy ReSaver file/config route, no game modification.
+
+Exact next action: reconcile `protocols/TOOL_ROUTING.md`, `tools/README.md`, and all active skills with the tested GOG/Address Library route and actual profile/save/runtime limits; update stale readiness reports as historical, then continue through the 52-item acceptance ledger and final validation.
+
+# Historical research-state snapshot — 74-criterion mission
+
+This snapshot and its next-action text are preserved from the earlier local
+readiness mission. They are historical and superseded by the final 52-criterion
+alignment status and first-session handoff at the top of this file and in the
+final alignment report.
 
 Updated: 2026-10-14
 
@@ -949,3 +1011,462 @@ Next action: Add standard headers to the copied Observer target via target_preco
 
 Last completed: the pinned CommonLib API exposes ActorState through `Actor::AsActorState()` for AE; the method exists on ActorState, not PlayerCharacter, because AE uses relocated multiple-inheritance subobjects. No external source was changed.
 Next action: Set `PLUGINS_TXT` in ignored `config/local.env` to the selected MO2 profile's explicit `plugins.txt`, then run `python3 scripts/python_env.py run tools/ae_preflight.py`. Only after a complete active order and required masters pass, run the real xEdit winner query; keep the runtime, disposable-save, UESP-provenance, and Windows/CI blockers external until their inputs are supplied.
+# Final alignment continuation checkpoint — 2026-10-14T20:23:00Z
+
+- Last completed: GOG targeted query, local tool/knowledge source probes, path/domain doctors, and core routing/skill repairs are recorded through EV-0174. The 52-row checklist exists; rows A02 onward still require final criterion-specific status/evidence reconciliation. Prompt artifacts exist and require inspection.
+- Exact next action: inspect the final research prompt and current report/checklist artifacts, then complete the 52-row ledger and validate the end-to-end recovery workflow. Do not begin open-ended glitch research.
+
+# Alignment evidence reconciliation checkpoint — 2026-10-14T20:23:31Z
+
+- Last completed: confirmed `docs/RESEARCH_START_PROMPT.md` and `docs/CODEX_START_PROMPT.md` exist; the prompt specifies first command and continuous autonomous research behavior. Read the full mission and checklist criteria while planning final evidence mapping.
+- Exact next action: inspect actual evidence ledger structure, recovery validators, active config/ignore rules and tracked file inventory; then run isolated clone→bind→doctor and checkpoint recovery exercises before filling final statuses.
+
+# Clone and recovery exercise checkpoint — 2026-10-14T20:25:09Z
+
+- Last completed: an isolated checkout overlaid the current public worktree (279 tracked/nonignored files), initialized fresh ignored configuration, passed setup/local-binding doctors and startup validation, then began TX-9001 on Q-0006, recovered it in a separate process, resumed it in another process, and validated the recovered state. All commands exited 0; the temporary checkout was removed. Raw output is ignored at `.local/alignment/final-clone-recovery/clone-recovery.stdout.raw`.
+- Exact next action: register this workflow evidence, reconcile all 52 acceptance rows, update current capability/gate documentation, and produce the final report, resume note and changes map. Then run the complete portable suite and final privacy/reference/gate audits.
+
+# Final report drafting checkpoint — 2026-10-14T20:25:57Z
+
+- Last completed: EV-0175 now records the isolated clone/bind/doctor/startup and process-recovery rehearsal; the raw transcript hash is `9d19b2505bc138286958d44d48feed366a5f01bb44a92512c9b697ec620e619c`.
+- Exact next action: verify and correct EV-0175's metadata-artifact digest, then draft the current capability matrix, 52-row evidence ledger, final report, resume handoff and changes map using verified evidence only.
+
+# Terminal verification checkpoint — 2026-10-14T20:28:29Z
+
+- Last completed: corrected EV-0175's metadata SHA-256; rewrote the capability matrix with current GOG/runtime/gate state, corrected the xEdit and save-state skill wording, and added the changes map and resume handoff. A direct save-parser help probe confirms `lz4` is missing under system Python; no save was supplied or opened.
+- Exact next action: run the full portable test suite and all repository validators, record each command/exit/output hash under ignored `.local/`, then finish the criterion ledger and final report with exact results and blockers.
+
+# Validator repair checkpoint — 2026-10-14T20:29:51Z
+
+- Last completed: first terminal run completed 150 unittest cases with one failure and overlay/setup doctor failures because `FINAL_ALIGNMENT_REPORT.md` is referenced but not yet written; pytest is unavailable in system Python. Compileall, research/evidence, recovery, and transaction validators passed. Captures are in ignored `.local/alignment/final-verification/`.
+- Exact next action: create the final report to resolve those local-link failures, then rerun unittest, overlay/setup doctor, Markdown policy, and all final audits. Continue with available unittest; record missing pytest as an environment limitation without installing packages.
+
+# Post-report test rerun checkpoint — 2026-10-14T20:30:29Z
+
+# Portable suite pass checkpoint — 2026-10-14T20:32:09Z
+
+# Checklist completion checkpoint — 2026-10-14T20:33:52Z
+
+# Fresh checkout portability checkpoint — 2026-10-14T20:35:29Z
+
+# Terminal acceptance audit checkpoint — 2026-10-14T20:36:11Z
+
+# Active report audit repair checkpoint — 2026-10-14T20:36:45Z
+
+- Last completed: registered EV-0177 and updated the final report. The active Markdown classifier now includes the four final alignment artifacts so link and retired-workflow checks apply to them.
+- Exact next action: rerun the complete test/validator set and Markdown inventory after this policy fix; then audit the checklist, evidence links, gate consistency, path privacy, and worktree state.
+
+# Terminal validator pass checkpoint — 2026-10-14T20:38:24Z
+
+- Last completed: terminal rerun after the active Markdown policy fix passed 150/150 unit tests, compileall, research/evidence, recovery, transaction, overlay, setup doctor, Markdown write/check, pre-push audit, and `git diff --check`. Captures are in `.local/alignment/final-verification/terminal/`.
+- Exact next action: perform the final 52-row/evidence-hash/gate/checkpoint/path/privacy/worktree audit, register its evidence, and run a post-registration research/recovery/overlay validation.
+
+# Closeout audit repair checkpoint — 2026-10-14T20:39:35Z
+
+- Last completed: terminal audit confirms 52 unique criteria (49 PASS/3 BLOCKED_EXTERNAL), all current gate verdicts agree, 13 cited private evidence hashes match, active-path scan has zero matches, mission file is unchanged, and Ghidra preservation capture reports zero program database changes. It found the checklist's anticipated EV-0178 reference is not registered yet and the Markdown inventory is stale after the latest checkpoint edits; the inline audit also had a field-name bug.
+- Exact next action: add the final audit evidence entry, refresh/check the active Markdown inventory, rerun a corrected 52-row/gate/privacy/worktree audit, then run post-registration research/recovery/overlay validators.
+
+# Gate alignment repair checkpoint — 2026-10-14T20:40:43Z
+
+- Last completed: corrected final audit now confirms 52 unique rows, 49 PASS and 3 BLOCKED_EXTERNAL, zero pending/unknown references, consistent report/matrix gates, 13 cited private-artifact hashes matching, current Markdown inventory, zero active-path matches, unchanged mission file, and preserved Ghidra databases. It found the frontier checkpoint's last-successful-test text does not yet repeat all three gate verdicts.
+- Exact next action: synchronize the three gate verdicts into `STATE.md`, the frontier checkpoint and idle recovery state; rerun the acceptance audit and final validators, then freeze the first-research prompt and final worktree report.
+
+# Final cross-record verification checkpoint — 2026-10-14T20:41:02Z
+
+- Last completed: `STATE.md`, `research/FRONTIER.json`, and `research/RECOVERY.json` now state the same gates: `STATIC_RESEARCH_READY=READY`, `NATIVE_RESEARCH_READY=PARTIAL`, `INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED`. Recovery remains idle and points to the current final-alignment audit step.
+- Exact next action: rerun the corrected 52-row, evidence, gate, artifact-hash, active-path, Markdown, Ghidra-preservation and worktree audit; then validate research/recovery/overlay after EV-0178 is finalized.
+
+# Prompt audit assertion repair — 2026-10-14T20:42:08Z
+
+- Last completed: the closeout audit passed checklist, gate, state/recovery, evidence hashes, Markdown, path privacy, Ghidra and worktree checks. It rejected only a mismatched audit predicate: the prompt states rival `(H1)/(H2)` models and asks for a “discriminating prediction,” while the audit looked for the internal JSON field label `predicted_discriminant`.
+- Exact next action: correct the prompt assertion to check its actual H1/H2 and discriminating-prediction wording, rerun the closeout audit, finalize EV-0178's artifact digest, then run final research/recovery/overlay checks.
+
+# Post-registration validation checkpoint — 2026-10-14T20:43:18Z
+
+- Last completed: the corrected EV-0178 terminal audit passed: 52 unique rows, 49 PASS, 3 BLOCKED_EXTERNAL, no pending/unknown evidence references; the three gate verdicts match across report/matrix/state/recovery; 13 cited private artifact hashes match; active path scan has zero matches; Markdown inventory is current; Ghidra databases and user mission file are unchanged.
+- Exact next action: set the terminal handoff checkpoint to the first deep research command, refresh the active Markdown inventory, run the post-registration full test/validator suite, register its results, and validate the evidence/recovery state once more.
+
+# Final research handoff checkpoint — 2026-10-14T20:45:13Z
+
+- Last completed: EV-0179 records the post-EV-0178 rerun: 150/150 unittest tests passed; compileall, research/evidence, recovery, transaction, overlay, setup doctor, Markdown write/check, pre-push audit and `git diff --check` passed.
+- Exact next action: mark this alignment complete in STATE/frontier/recovery and set the first-session command to `python3 scripts/python_env.py run scripts/research_state.py validate`; refresh Markdown and run final research/recovery/overlay validators.
+
+# Final alignment complete — 2026-10-14T20:45:32Z
+
+- All 52 acceptance criteria now have final evidence-backed statuses: 49 PASS and 3 BLOCKED_EXTERNAL. EV-0178 contains the final criteria/gates/privacy/worktree audit; EV-0179 records the post-registration 150-test and validator rerun.
+- Gates: `STATIC_RESEARCH_READY=READY`; `NATIVE_RESEARCH_READY=PARTIAL`; `INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED`.
+- No open-ended glitch research was started. The exact next action is `python3 scripts/python_env.py run scripts/research_state.py validate`, then start a new interactive Codex session with `docs/RESEARCH_START_PROMPT.md` at P0 OBJ-1 / Q-0001.
+- Changes remain local and uncommitted because Git metadata is read-only in this workspace. No private/raw artifact is staged or tracked; no push occurred.
+
+# Final xEdit binding audit continuation — 2026-10-14T20:48:04Z
+
+- Last completed: the final post-registration evidence/recovery/overlay/Markdown/pre-push validation passed. A previous inventory reports xEdit 4.1.5, while the current local doctor sees no `SSEEDIT_EXE` binding.
+- Exact next action: inspect the legacy `skyrim` workspace and current machine-local tool metadata read-only for an existing xEdit executable/wrapper; bind it only in ignored `config/local.env` if a provenance-backed path is found. Do not launch xEdit without a verified complete profile/order.
+
+# xEdit binding verified; report correction — 2026-10-14T20:49:13Z
+
+- Last completed: EV-0172's domain-doctor output confirms `SSEEdit.configured_executable_exists=true`, ProductVersion verified, and `xedit_call=false`; EV-0120 records the existing xEdit 4.1.5.0 executable. The current and legacy bindings match and the file exists. The selected MO2 profile and explicit full load order are absent.
+- Exact next action: run the post-correction sequence: Markdown audit `--write` and `--check`, `validate_research`, `research_state validate`, transaction validation, overlay validation, pre-push audit, and `git diff --check`; then refresh the final acceptance-audit metadata/hashes if any audited artifact changed. Do not launch xEdit.
+
+- Last completed: EV-0177 records a fresh checkout with no private config/Ghidra/game bindings passing initialization, 150 unit tests, compileall, research/overlay/setup checks, Markdown policy, and pre-push audit. The final report now includes both 150-test passes and explicit pytest/`lz4` limits.
+- Exact next action: audit all 52 checklist statuses/evidence references, gate agreement, active-path privacy, Markdown links, Ghidra-project preservation metadata, and final Git status; repair any local mismatch and rerun affected validators.
+
+- Last completed: EV-0176 records the 150-test local run and repository validators; the 52-row checklist now has 49 PASS and 3 BLOCKED_EXTERNAL entries. A fresh checkout with no private config, `.local`, Ghidra or game binding passed init, binding doctor, startup-state validation, all 150 unittests, compileall, research/overlay/setup validation, Markdown write/check, and pre-push audit. Temporary checkout was removed.
+- Exact next action: register fresh-checkout evidence, update the report/checklist for final test results, then run terminal reference, policy, status, privacy and research-state audits; attempt no game/xEdit operation.
+
+- Last completed: confirmed 150/150 unittest passes; all 13 active skills pass `quick_validate.py`; the captured Ghidra preservation audit reports zero program-database changes, unchanged database size/mtime, and four disclosed internal index timestamp updates. The pre-push audit reports 274 tracked files, zero tracked raw/heavy artifacts, zero unignored untracked raw artifacts, and all ignore probes passing. Added-line personal-path scan: 1,032 lines, zero matches.
+- Exact next action: record final verification evidence, replace all 52 PENDING rows with criterion-specific statuses, then test the fresh checkout's portable suite and rerun final validators, privacy, reference, gate, and worktree audits.
+
+- Last completed: 150 unittest tests passed; compileall, research/evidence, recovery, transaction, overlay, setup doctor, Markdown write/check and pre-push artifact audit exited 0. System Python confirms pytest and `lz4` are unavailable. Captures and SHA-256 metadata are under ignored `.local/alignment/final-verification/`.
+- Exact next action: inspect captured test/audit summaries, run skill metadata validation and final path/project-preservation checks, then register test evidence, complete all 52 checklist rows, and rerun post-edit validators and privacy audits.
+
+- Last completed: wrote `migration/FINAL_ALIGNMENT_REPORT.md` with the three separate gate decisions, tested GOG integration, and exact profile/save/live unblock steps; previously missing report links now resolve.
+- Exact next action: rerun unittest plus overlay/setup doctor and all independent validators; capture the missing-pytest and missing-`lz4` probes as environment limitations. Then finish the 52-row checklist and update the report with final evidence IDs.
+
+# Final correction audit checkpoint — 2026-10-14T20:54:55Z
+
+- Last completed: the 52-row documentation and historical-state correction passed Markdown, research/evidence, startup, transaction, overlay, setup-doctor, pre-push privacy and diff checks. SSEEdit 4.1.5.0 is present; the selected profile/full order is not configured and `xedit_call=false`.
+- Exact next action: Run python3 scripts/python_env.py run scripts/research_state.py validate; then start a new interactive Codex session at the repository root with docs/RESEARCH_START_PROMPT.md after reviewing migration/FINAL_ALIGNMENT_REPORT.md. The prompt begins at P0 OBJ-1 / Q-0001 and compares it against other P0 work. Do not execute that prompt during this alignment pass.
+
+# Current-state completion audit — 2026-10-14T21:13:23Z
+
+- Last completed: the current preflight failure is the WSL PowerShell bridge (`UtilBindVsockAnyPort` socket failure), not a missing executable. The domain doctor currently labels Skyrim runtime ProductVersion as an SSEEdit ProductVersion field; this is an actionable reporting defect.
+- Exact next action: Rename the domain-doctor SSEEdit fields so Skyrim target ProductVersion status cannot be mistaken for SSEEdit's file version; add unit coverage. Rehash the configured SSEEdit binary against EV-0120, update C02/E03/report/matrix/state for the current WSL bridge failure, register a correction audit, then rerun tests and validators. Do not launch xEdit or the game.
+
+# Final research handoff — 2026-10-14T21:00:02Z
+
+- Alignment mission complete: all 52 acceptance criteria are dispositioned, with 49 PASS, 3 BLOCKED_EXTERNAL, zero fixable failures, and zero pending rows.
+- Readiness gates: STATIC_RESEARCH_READY=READY; NATIVE_RESEARCH_READY=PARTIAL; INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED.
+- EV-0180 verifies SSEEdit 4.1.5.0 exists and is version-verified; no selected MO2 profile/full plugins.txt exists and no xEdit call occurred. The old 74-criterion state snapshot is labeled historical. No gameplay research began.
+- Final test and validator evidence: EV-0176/EV-0177/EV-0179 include 150/150 unittest passes and portable fresh-checkout validation; post-EV-0180 Markdown, research/evidence, startup, transaction, overlay, setup, pre-push privacy, and diff checks passed. Conda, pytest, and lz4 are unavailable in the system-Python environment.
+- Exact next action: Run python3 scripts/python_env.py run scripts/research_state.py validate; then start a new interactive Codex session at the repository root with docs/RESEARCH_START_PROMPT.md after reviewing migration/FINAL_ALIGNMENT_REPORT.md. The prompt begins at P0 OBJ-1 / Q-0001 and compares it against other P0 work. Do not execute that prompt during this alignment pass.
+
+# EV-0180 registered — 2026-10-14T20:57:33Z
+
+- Last completed: EV-0180 records the 52-criterion re-audit, aligned gates, and verified SSEEdit 4.1.5.0 status: executable present, no selected profile/full order, and no xEdit call.
+- Exact next action: Run post-EV-0180 validation: Markdown policy check, research evidence, startup state, transaction, overlay, setup doctor, pre-push privacy, and git diff --check; then update the terminal checkpoint to the exact first-session command and rerun final state/Markdown checks. Do not launch xEdit or begin gameplay research.
+
+# Current-state completion audit — 2026-10-14T21:17:48Z
+
+- Last completed: corrected `tools/domain_doctor.py` so Skyrim target ProductVersion status is nested under `runtime_target`, added a regression test (3 focused tests pass), and captured current PowerShell/preflight failures plus GOG, Steam, and SSEEdit executable hashes. All three current file hashes still match their prior build-attested evidence; the WSL PowerShell bridge fails with `UtilBindVsockAnyPort` and the complete active profile/order is absent.
+- Exact next action: Add the EV-0181 correction note and align C02/E03/E11/F02 citations; sync the current session checkpoints; run the complete unittest, compileall, skill and repository validator set; then re-audit all 52 rows, private hashes, gates, start prompt and worktree. No xEdit/game launch or gameplay research.
+
+# EV-0181 correction registered — 2026-10-14T21:19:48Z
+
+- Last completed: EV-0181 now records that EV-0180's `product_version_verified` field came from Skyrim target metadata, not SSEEdit. The current GOG/Steam/SSEEdit file hashes match EV-0165/EV-0168/EV-0120; the domain doctor regression test passes 3/3. C02/E03/E11/F02 and the final report explain the correction. Current PowerShell bridge and full-order blockers remain external.
+- Exact next action: Run the final 52-row/evidence/hash/gate/prompt/Ghidra-preservation/worktree audit, write EV-0182 closeout evidence and update F01/F02/E11, then rerun post-registration validators. No xEdit/game launch or gameplay research.
+
+# Final closeout audit checkpoint — 2026-10-14T21:21:23Z
+
+- Last completed: post-fix validation passed 151/151 unittest tests, compileall, research/evidence, state, transaction (4 transactions / 17 events), overlay, setup doctor, Markdown policy, pre-push privacy, diff check, and all 13 active skill validators.
+- Exact next action: Finalize EV-0182 with the 151-test, skill, validator, 52-row/gate/hash/prompt/Ghidra/privacy audit results; register it and update F01/F02/E11/F04; then run post-registration validators and final status audit. No xEdit/game launch or gameplay research.
+
+# Final local alignment complete — 2026-10-14T21:38:06Z
+
+- Last completed: final report, checklist, and evidence records are complete. Post-fix tests passed 151/151; all 13 skills and repository checks passed; the terminal audit confirms all 52 rows, 22 matching private artifact hashes including EV-0182, aligned gates/checkpoints, the prepared prompt, GOG project preservation, privacy, and worktree status. No glitch research began.
+- Exact next action: Next research session: at the repository root, first run `python3 scripts/python_env.py run scripts/research_state.py validate`; review `migration/FINAL_ALIGNMENT_REPORT.md`; then follow `docs/RESEARCH_START_PROMPT.md` at P0 OBJ-1/Q-0001. The alignment closeout ran the state validation and Markdown check; it did not execute the research prompt.
+
+
+# SSEEdit approval and SKSE experiment preparation — 2026-10-15T04:39:32Z
+
+- Last completed: the prior 52-criterion local alignment pass ended with static research READY, native research PARTIAL, and instrumented live research NOT_VERIFIED. The user now requests an approval-gated SSEEdit launch attempt and preparation of an SKSE experiment.
+- Exact next action: Re-read NORTH_STAR.md, STATE.md, ROADMAP.md, research/FRONTIER.json, and protocols/TOOL_ROUTING.md; inspect current local target/profile bindings and existing SSEEdit/Observer build state read-only; run python3 scripts/python_env.py run tools/ae_preflight.py. Do not launch xEdit or the game until the target and complete active order are verified. Keep any SKSE build output under ignored .local/.
+
+
+# SSEEdit and SKSE follow-up checkpoint — 2026-10-15T04:40:34Z
+
+- Last completed: Python-dispatched AE preflight and SKSE probe both failed before runtime verification because PowerShell returned no Skyrim ProductVersion. Local doctor confirms configured SSEEdit/runtime binaries and GOG static tooling exist, but no configured MO2 profile or explicit plugins.txt; no xEdit/game process was launched. Conda is unavailable and dispatcher used system Python.
+- Exact next action: Inspect the configured SSEEdit binary and documented launch routes without executing it; inspect the existing SKSE Observer source/build artifact and compatible local toolchain read-only; then determine the exact approval request and local build action. Preserve the preflight result and do not launch xEdit or Skyrim until runtime ProductVersion and the explicit complete active profile order pass.
+
+
+# Observer binary and xEdit launch preparation — 2026-10-15T04:41:06Z
+
+- Last completed: Existing local evidence and docs confirm a retained Observer source/build route under ignored readiness storage, and xEdit remains subject to the full AE/profile preflight. Current preflight fails on PowerShell ProductVersion, while profile and plugins.txt bindings are absent. No launch attempted.
+- Exact next action: Inventory every current ignored Observer DLL and build output; inspect the existing repaired source, build scripts, compiler/toolchain executables, and prior raw build evidence without printing private paths. Then choose the least invasive verified build action. For SSEEdit, prepare an approval request only for an operation whose exact target and complete profile can pass the mandatory preflight; keep xEdit unlaunched while either gate is absent.
+
+
+# Observer build and gate verification — 2026-10-15T04:42:02Z
+
+- Last completed: Audited ignored readiness artifacts. The repaired build directory contains a staged Observer DLL matching prior EV-0174 hash 8ef8a660…e50b, plus MSVC object/link outputs. CMake is not on the Linux PATH; PowerShell.exe is present. Earlier local logs show the repaired build completed and a prior source-tree build failed on a missing C++ <jthread> header. No native DLL was deployed.
+- Exact next action: Run the repository's offline Observer analyzer/fixture tests through the Python dispatcher and verify the existing staged DLL's PE identity, hash, version target, and source/build provenance. Use the existing ignored VS/CMake build directory for a local rebuild only if the artifact is stale or mismatched; do not deploy it. Then request the missing selected-profile plugins.txt binding and attempt the read-only Windows preflight through an explicit approval path before any xEdit launch.
+
+
+# SKSE Observer and SSEEdit gate result — 2026-10-15T04:43:01Z
+
+- Last completed: Full Python-dispatched repository suite passed 151/151. The ignored staged SkyrimStateObserver.dll is PE32+ x86-64, 584192 bytes, SHA-256 8ef8a660c8fe2878ee12b445740b70c99b995280bcc58776dba9820f7183e50b. Existing raw build log shows VS 2022/MSVC 14.43/CMake 3.30 build exit 0 from the repaired source tree to the staged .local path. No rebuild needed and no game deployment occurred.
+- Exact next action: Run the retained Observer analyzer tests and preserve their output/hash under ignored .local; record the current staged DLL PE/hash and successful Windows build-log evidence. Then request elevated approval for the read-only Python-dispatched AE preflight. Keep SSEEdit unlaunched unless ProductVersion and the user's explicit complete MO2 profile order both pass; keep the Observer staged only under .local.
+
+
+# Observer tests preserved; request preflight approval — 2026-10-15T04:43:19Z
+
+- Last completed: The retained Observer analyzer test suite passed 7/7; raw stdout is .local/alignment/observer-analyzer-tests-20261015.stdout.raw (SHA-256 452b0243c175a1e3fa83235db6c12261efc286959847882cf0bb16fc15281913). Staged DLL is PE32+ x86-64, 584192 bytes, SHA-256 8ef8a660c8fe2878ee12b445740b70c99b995280bcc58776dba9820f7183e50b. Existing build log reports exit 0.
+- Exact next action: Register the captured 7/7 Observer analyzer run and verified staged PE/build provenance as durable evidence. Then attempt the Python-dispatched read-only AE preflight via explicit elevated approval; capture its exact result under ignored .local. Do not run SSEEdit unless the ProductVersion and explicit complete active MO2 profile order both verify; keep the Observer staged and undeployed.
+
+
+# EV-0183 recorded; preflight approval request — 2026-10-15T04:43:56Z
+
+- Last completed: EV-0183 records the 7/7 Observer analyzer fixture run and identity/provenance of the existing staged Release DLL. Its private metadata hash is b28bb953cd6809781a0943d475a0dd68e9afd139d8600e37b4f76bc80ef5324f. Full repository tests passed 151/151.
+- Exact next action: Request explicit host approval to run the exact read-only Python-dispatched AE preflight and capture ProductVersion/profile results under ignored .local. If preflight passes only after the user provides a complete selected MO2 plugins.txt, submit the exact read-only SSEEdit launch as a separate approval request. Otherwise record the blocking reason and keep xEdit/game unlaunched.
+
+
+# Approval-backed preflight result — 2026-10-15T04:44:26Z
+
+- Last completed: Explicit host approval was granted to run the read-only Python-dispatched AE preflight. It exited 1 with “active plugin list contains no active plugins.” This is not a valid complete active load order, so xEdit and live-game access remain gated. No app/game process launched.
+- Exact next action: Preserve the approval-backed preflight result and run the executable-only ProductVersion probe via the approved host route. Inspect the local Observer launcher’s required bindings and confirm whether any safe test profile, SKSE loader, staged/deployed plugin path, or user save is configured. Do not start xEdit or Skyrim while the active order is empty/unverified; report the exact missing user input and keep the DLL undeployed.
+
+
+# Authoritative xEdit bridge inspection — 2026-10-15T04:45:35Z
+
+- Last completed: Current Steam executable-only probe returned AE 1.6.1170 and SHA-256 c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9, but full order is false; approved full preflight failed because the active plugin list contains no active plugins. Observer launcher requires explicit SKSE loader and deployed-plugin bindings; none is configured, and it never deploys into Data.
+- Exact next action: Inspect the authoritative `skyrim` research repository read-only for its xEdit bridge definition, required bindings, and safe invocation; read any repository instructions that apply. Copy the exact applicable bridge configuration into this checkout's canonical local configuration without modifying the source repo, then run its documented read-only test and the required AE/profile preflight. Keep xEdit unlaunched unless ProductVersion and complete active order verify.
+
+
+# xEdit bridge source validated; local copy/test — 2026-10-15T04:48:15Z
+
+- Last completed: Read the user-designated repository instructions and xEdit protocol/bridge implementation. Its skyrim_tool.py doctor, run via this checkout's dispatcher, passed all 7 executable/Data/master-file checks. Its source and current local.env bindings resolve to the same SSEEdit executable and Skyrim Data directory; source XEDIT_SCRIPTS exists. The bridge prepares a vanilla five-master -view session and writes under out/xedit; it is not an active MO2 profile or a full active-order winner route.
+- Exact next action: Copy the authoritative skyrim repository's exact SSEEDIT_EXE, SKYRIM_DATA, and XEDIT_SCRIPTS bindings into this checkout's ignored config/local.env, preserving all other local bindings. In an ignored .local sandbox, stage the exact read-only bridge preparation code and exporter from that repository, run prepare-xedit through this checkout's Python dispatcher, and verify the generated session/flags/plugin list without launching xEdit. Then rerun the mandatory preflight and capture its blocker.
+
+
+# xEdit bridge preparation created in local sandbox — 2026-10-15T04:49:03Z
+
+- Last completed: Copied exact authoritative SSEEDIT_EXE, SKYRIM_DATA and XEDIT_SCRIPTS values into this checkout's ignored config/local.env; source repo was not modified. In .local/xedit-bridge-sandbox, the copied bridge doctor passed 7/7 file checks and prepare-xedit exited 0, creating a session under ignored .local. No SSEEdit process was started.
+- Exact next action: Inspect profile/load-order-related keys in both local configs without exposing values; if the authoritative repository binds a candidate list, prove it is the selected MO2 profile's explicit complete plugins.txt before importing it. Verify the copied bridge's generated manifest, five-master vanilla list, -view flags, and .local output boundary. Then rerun local doctors/preflight and capture exact outcomes; do not launch xEdit unless the selected full-order gate passes.
+
+
+# Profile bindings and isolated bridge session audited — 2026-10-15T04:49:59Z
+
+- Last completed: Neither authoritative nor current config defines MO2/profile/load-order keys; current MO2_PROFILE_DIR, PLUGINS_TXT and SKYRIM_LOADORDER_DIR are unset. The copied source bridge session passes checks for five exact vanilla masters, -view, no -autoload, prepared-not-executed, exporter/launcher presence, and output under .local. It is not evidence of the active game profile.
+- Exact next action: Inspect the AE/profile preflight implementation and routing docs to determine whether they can verify the bridge's isolated vanilla five-master session as a separate scoped xEdit order without claiming it is the game's active MO2 order. Do not weaken or bypass gates. If the bridge order is accepted within the documented scope, run the preflight against that exact session list and request user approval for the prepared -view launch; otherwise leave xEdit unlaunched and report the blocker.
+
+
+# Scoped vanilla xEdit preflight decision — 2026-10-15T04:50:36Z
+
+- Last completed: The target preflight code requires an explicit absolute plugins.txt and validates Skyrim.esm first plus all five official AE masters; it rejects a list inside the game root. The prepared bridge's five-master plugins.txt is outside the game root and is the exact -P list used by its isolated -view session. This scope does not attest or replace an active MO2/game profile.
+- Exact next action: Run AE preflight with PLUGINS_TXT supplied only for the generated isolated vanilla xEdit session, capturing its runtime and exact five-master order evidence under .local; do not bind it as the MO2/game profile. Recheck the copied SSEEdit executable identity. If both checks pass, request user approval for the exact generated -view launch.ps1; otherwise leave xEdit unlaunched.
+
+
+# Scoped preflight retry requires host PowerShell — 2026-10-15T04:51:06Z
+
+- Last completed: Scoped default-sandbox preflight did not reach order validation because WSL PowerShell again returned no ProductVersion. SSEEdit executable hash is ccb7ca9e6d826868b186b0b9a0fc012affb3fdc9688250583353e6d84e6a2545, still matching EV-0120's 4.1.5.0 attestation. The isolated session manifest/order remain valid; no launch occurred.
+- Exact next action: Retry the exact bridge-session AE preflight with explicit host approval and PLUGINS_TXT bound only for the generated five-master -view session; capture sanitized runtime/order output under .local. The prior default-sandbox attempt again failed at PowerShell ProductVersion. If the approved preflight passes, ask user approval for the exact prepared SSEEdit -view launch; do not launch without that approval.
+
+
+# Isolated xEdit-session preflight passed — 2026-10-15T04:51:34Z
+
+- Last completed: Host-approved scoped preflight passed for Steam AE 1.6.1170, executable SHA-256 c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9, and the exact five-master plugins.txt used by the prepared bridge session (EV candidate raw hash 9da07e4d…b060d). The scope is isolated vanilla view-only xEdit, not an MO2/game-profile attestation. No xEdit launch yet.
+- Exact next action: Statically verify and hash the generated SSEEdit launch script, prepared manifest/list, copied config, and approved preflight artifact; register EV-0184. Then submit the exact PowerShell -File launch of the prepared -view session through an explicit user-approval request. Launch only this isolated vanilla five-master session; make no MO2/game-profile or negative findings.
+
+
+# EV-0184 recorded; explicit SSEEdit launch approval — 2026-10-15T04:52:37Z
+
+- Last completed: EV-0184 records the authoritative config import, 7/7 bridge doctor, isolated five-master session, -view/no-autoload launch script, and passing host-approved scoped preflight (AE 1.6.1170, expected executable hash). Full MO2/game profile remains unknown; xEdit has not launched.
+- Exact next action: Request explicit user approval to launch the generated .local/xedit-bridge-sandbox/out/xedit/20261015T044836.539990Z/launch.ps1 with PowerShell -NoProfile -ExecutionPolicy Bypass -File. The prepared SSEEdit command is -view, no -autoload, and reads only the isolated five official masters; logs stay under the ignored .local session. Do not start Skyrim or use this session for MO2 winners/negative findings. If approval is denied, report the reviewer/user decision and leave xEdit unlaunched.
+
+
+# Approved SSEEdit command returned — 2026-10-15T04:53:00Z
+
+- Last completed: The user-approved PowerShell -File invocation for the generated read-only -view session returned exit 0. This proves command completion only; process/window and xEdit session load are not yet confirmed.
+- Exact next action: Read-only verify whether the approved launch produced a live SSEdit/SSEView process and session.log in .local/xedit-bridge-sandbox/out/xedit/20261015T044836.539990Z; capture only PID/window/version/status metadata and log hash under .local. Do not send UI input, select records, run scripts, save, or launch Skyrim. If the process is absent, preserve the exact failure and leave the prepared session available.
+
+
+# SSEView launch independently verified — 2026-10-15T04:53:38Z
+
+- Last completed: PowerShell Get-Process returned PID 3948, window title SSEView 4.1.5f, Responding=true, start 2026-10-15T04:52:46.3515763Z. The isolated session contains the generated vanilla five-master list and a settings file; no record export or script execution occurred.
+- Exact next action: Persist the read-only SSEView PID/title/responding/start metadata under the generated .local session and register EV-0185. Then run the SKSE identity probe with explicit host approval against the verified Steam runtime and capture sanitized file identity/status output. Do not send xEdit UI input, execute the exporter, launch Skyrim, or deploy the Observer DLL.
+
+
+# SSEView and installed SKSE identity preserved — 2026-10-15T04:59:18Z
+
+- Last completed: SSEView process query was saved under .local (PID 3948, responsive SSEView 4.1.5f). Host-approved Python-dispatched SKSE probe passed for Steam AE 1.6.1170; loader and runtime DLL are present with ProductVersion 0,2,2,6 and the runtime-named Address Library matches. No live handshake or Skyrim launch.
+- Exact next action: Register EV-0185 for the independently verified live SSEView process and EV-0186 for the approved SKSE metadata probe. Compare the built Observer source hashes against the user-designated skyrim/observer source, and inspect that repository's SKSE loader/deployment/profile config by presence/hash only. Reuse any safe existing staged target; do not write to game Data or launch Skyrim.
+
+
+# Authoritative Observer source mismatch found — 2026-10-15T04:59:49Z
+
+- Last completed: Source hash inventory found 3 differing files (CMakeLists.txt, Observer.h, Observer.cpp) and one local-only ObserverPCH.h; 21 files match. The authoritative skyrim local config has no SKSE_LOADER, deployed Observer DLL, plugin list, MO2 profile, or PLUGINS_TXT. The built DLL is not yet accepted as authoritative-source-equivalent.
+- Exact next action: Review the full diffs between authoritative skyrim/observer and the repaired local build source, checking that every change is build-only and preserves observer read-only behavior. Inspect the authoritative implementation/config and determine whether the staged DLL is safe to retain or must be rebuilt from a fresh local copy. Do not modify the authoritative repo or deploy any DLL.
+
+## Resume checkpoint — 2026-10-15
+Next action: rebuild the SKSE Observer from an isolated copy of the authoritative skyrim/observer source, applying only the reviewed header/API compatibility and PCH build edits; reuse the existing MSVC/CMake/CommonLib/vcpkg installation, verify the output and offline analyzer, and prepare a no-launch session manifest. Do not deploy or start Skyrim.
+
+## Resume checkpoint — 2026-10-15 build invocation correction
+Next action: Correct the PowerShell wrapper after its pipeline activation error; invoke the existing CMake build directly with a reliable process exit code, save raw output under .local/alignment, then validate DLL hash/format and the offline analyzer. Do not deploy or start Skyrim.
+
+## Resume checkpoint — 2026-10-15 build freshness audit
+Next action: Confirm that the authoritative-source build compiled current source rather than reusing the prior DLL by comparing source/output timestamps and build records; if freshness is not proven, clean only the local Observer target and rebuild, then capture analyzer test output and PE/hash metadata.
+
+## Resume checkpoint — 2026-10-15 verified build
+Next action: Record the verified SKSE loader binding in ignored local config, prepare a no-launch Observer session manifest with the fresh staged DLL and observed runtime identity, clarify the xEdit skill/routing boundary (isolated five-master view vs full MO2 winners), then register evidence and refresh the final gates/report. Do not deploy Observer or launch Skyrim.
+
+## Resume checkpoint — 2026-10-15 evidence parsing
+Next action: Inspect the SSEView process raw capture framing without altering it, parse the JSON payload while preserving the original bytes/hash, complete metadata for the prepared Observer session, current SKSE probe and fresh build, then register evidence.
+
+## Resume checkpoint — 2026-10-15 final evidence registered
+Next action: Update the active xEdit/SKSE instructions, 52-row checklist, final gate report, state summary, and first-session prompt using EV-0184–EV-0188; keep NATIVE_PARTIAL and INSTRUMENTED_NOT_VERIFIED, then run the full relevant validator/test set and reconcile evidence hashes.
+
+## Resume checkpoint — 2026-10-15 post-edit verification
+Next action: Run the complete post-edit unittest, compileall, research/recovery, skill/overlay, Markdown/link, privacy/pre-push and diff validators; fix actionable failures, refresh the 52-row checklist and three gates, then perform a final evidence-link/hash audit and update the handoff.
+
+## Resume checkpoint — 2026-10-15 xEdit smoke-query gate
+Next action: Inspect the copied authoritative xEdit exporter and generated launcher to determine whether a read-only official-master smoke query is safe in the already-open five-master view; run it only if its target/output are explicit and non-mutating. Preserve C02 as blocked if record selection/export needs GUI or a full profile; then resume post-edit validators.
+
+## Resume checkpoint — 2026-10-15 bounded xEdit query attempt
+Next action: Read-only inspect SSEView PID 3948 controls with the authoritative status helper; if the isolated Module Selection dialog is present, confirm only the prepared five official masters, then query/export one small official record in -view. Do not use script mode, modify plugins, or start Skyrim. If the UI cannot be controlled safely, preserve C02 as blocked and resume validators.
+
+## Resume checkpoint — 2026-10-15 module selection validation
+Next action: Read the Module Selection dialog checkbox states for SSEView PID 3948; compare them to the generated five-master plugins.txt. Only if the checked set matches exactly, invoke the source status helper -ConfirmModuleSelection for PID 3948 and verify the resulting session.log/module list; otherwise do not click. Keep the isolated view read-only and run no Skyrim process.
+
+## Resume checkpoint — 2026-10-15 isolated module confirmation
+Next action: Recheck that the generated plugins.txt contains exactly the five official masters and that SSEView PID 3948 reports loading that file; then invoke the reviewed status helper -ConfirmModuleSelection (OK only) for that PID, verify the resulting session log and live window, and attempt a one-record exporter test only if a record can be selected safely in -view.
+
+## Resume checkpoint — 2026-10-15 plugin-list format check
+Next action: Inspect the generated plugins.txt bytes/lines and the scoped preflight manifest to account for its active-marker format; normalize only the documented marker for comparison, require exactly the five official masters in order, then reattempt the guarded OK click only if that check and the SSEView message agree. Do not click on any extra, missing, or unknown entry.
+
+## Resume checkpoint — 2026-10-15 SSEView loading
+Next action: Poll the existing SSEView process and Messages pane until background loading completes; check that the isolated session records a stable loaded state. Do not start another instance. If record controls remain inaccessible to safe UI automation, preserve C02 as blocked and proceed to full post-edit validators.
+
+## Resume checkpoint — 2026-10-15 xEdit load complete
+Next action: Inspect the post-load SSEView UI Automation tree for a record tree or tree items and verify the session output state. If record selection is not exposed through a safe control, do not send blind keystrokes; record module-load evidence, leave the exporter unrun, preserve C02 as blocked, and resume post-edit validators.
+
+## Resume checkpoint — 2026-10-15 final validation phase
+Next action: Register the completed isolated SSEView load/process and UI-accessibility limitation as evidence, then run full post-edit unittest, compileall, research/recovery, overlay, Markdown/link, privacy/pre-push and diff validators; repair actionable failures, refresh all gates/checklist rows, and finish with a final evidence hash audit.
+
+## Resume checkpoint — 2026-10-15 full validation
+Next action: Run full post-edit unittest, compileall, research/recovery, overlay/skill, Markdown/link, privacy/pre-push and diff validators; fix actionable failures, refresh the 52-row checklist and three gates, then perform the final evidence hash audit and handoff check.
+
+## Resume checkpoint — 2026-10-15 evidence-lane validation failure
+Next action: Inspect the evidence validator lane vocabulary, change EV-0185/0186/0188/0189 to allowed accurate lane labels without changing artifact contents, verify evidence hashes/criteria, then rerun all 151 tests and continue remaining validators.
+
+## Resume checkpoint — 2026-10-15 final report reconciliation
+Next action: At the next research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then start P0 OBJ-1/Q-0001 using `docs/RESEARCH_START_PROMPT.md`. Do not relaunch SSEView or Skyrim for that session.
+
+## Resume checkpoint — 2026-10-15 runtime/profile gate re-evaluation
+Next action: Run the current AE ProductVersion/active-order preflight and read-only SSEView process/session status; verify the staged Observer hash/source and deployment bindings. Prepare a specific read-only xEdit query and request user approval only if its target/profile gates pass. Do not launch Skyrim or write to game files.
+
+## Final alignment closeout — 2026-10-15
+
+- All 52 criteria are dispositioned: 50 PASS, 2 BLOCKED_EXTERNAL (C02 and C04), zero fixable failures, zero pending.
+- Gates: `STATIC_RESEARCH_READY=READY`; `NATIVE_RESEARCH_READY=PARTIAL`; `INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED`.
+- SSEView was approval-launched and loaded the exact isolated five official masters; the background loader finished. UI Automation exposed no safe record selector, so no record query/export ran (EV-0184/0185/0189).
+- The authoritative Observer source was rebuilt locally; its analyzer tests passed 7/7 and a prepare-only manifest was created. It remains undeployed, with no Skyrim/SKSE launch or handshake (EV-0186/0187/0188).
+- After the final EV-0190 evidence digest refresh, the full portable run passed 151/151 unittests, compileall, local/domain doctors, research/recovery/overlay validators, pre-push audit and `git diff --check`; raw outputs are under `.local/alignment/final-hash-refresh-20261015/`. System Python 3.12.3 was used because Conda is unavailable; Linux checks do not establish Windows MO2/xEdit or live-game behavior.
+- Exact next action: run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then start P0 OBJ-1/Q-0001 using `docs/RESEARCH_START_PROMPT.md`. Do not relaunch SSEView or Skyrim for that first deep-research session.
+
+
+## Resume checkpoint — 2026-10-15T05:48:23Z exact bridge and single-record route
+
+Current evidence: Skyrim AE ProductVersion 1.6.1170.0 was verified; the configured active plugin list is empty; an isolated five-master view list passes the scoped preflight; existing SSEView PID 3948 is responding and loaded, but UI automation exposes no record tree; the local Observer source/build manifests match and its offline analyzer passes 7/7 tests.
+
+Next exact action: compare the authoritative skyrim repository xEdit bridge configuration with this checkout byte-for-byte where applicable, confirm what was copied into the isolated .local session, then determine and verify a supported read-only route to query only Skyrim.esm GMST fXPLevelUpBase without claiming winners. If safely executable in the already-open view, prepare the exact artifact and request user approval before running it. Continue independent SKSE Observer experiment preparation without deploying into the game or original inputs.
+
+
+## Resume checkpoint — 2026-10-15T05:50:11Z copied bridge configuration test
+
+The authoritative xEdit helper files were copied byte-for-byte under ignored `.local/xedit-authoritative-copy`; the source config values for SSEEDIT_EXE, SKYRIM_DATA, XEDIT_SCRIPTS, SKYRIM_EXE, and INCLUDE_CREATION_CLUB were inspected. The first four path settings already matched this checkout; INCLUDE_CREATION_CLUB was absent locally.
+
+Next exact action: Test the byte-identical authoritative skyrim xEdit bridge copy using the copied exact xEdit config: run doctor and prepare-xedit through python_env.py, then scope preflight to the generated official five-master list; do not launch another xEdit process or invoke record export.
+
+
+## Resume checkpoint — 2026-10-15T05:50:27Z isolated bridge preflight
+
+The authoritative bridge copy now passes doctor and prepare-xedit; all five xEdit config values match source; generated launch manifest is view-only with the five official masters, and launch was not repeated because SSEView PID 3948 already exists.
+
+Next exact action: Run the target AE preflight with PLUGINS_TXT bound only to the authoritative bridge copy’s generated isolated five-master session; verify runtime and ordered masters, then capture the scoped result. Full selected-MO2-profile winner evidence remains separate.
+
+
+## Resume checkpoint — 2026-10-15T05:50:54Z authoritative bridge tested
+
+The copied authoritative xEdit bridge passed doctor and prepare-xedit through `python_env.py`; all five xEdit config values now match the source; generated session is `-view`, five official masters, and was not launched a second time. Scoped AE preflight against its plugin list passed with runtime 1.6.1170.0 and the verified executable hash. Raw outputs are in `.local/alignment/current-gate-20261015/`.
+
+Next exact action: Register the copied authoritative xEdit bridge/config test as durable evidence; verify the new INCLUDE_CREATION_CLUB setting through local config doctor; update the active xEdit routing skill and final report with the scoped test boundary; rerun focused repository consistency validators and re-evaluate all three gates.
+
+
+## Resume checkpoint — 2026-10-15T05:53:08Z .agents write boundary
+
+The authoritative bridge replay passed doctor, prepare, and scoped AE preflight. Target local/domain doctors run successfully and still report the selected MO2 profile/ProductVersion unavailable from sandboxed WSL PowerShell; the approved escalated preflight verifies the isolated Steam 1.6.1170.0 list. The portable config template was updated. A direct write to `.agents/skills/retained-tool-operations/SKILL.md` was denied because `.agents` is explicitly read-only in the filesystem permissions.
+
+Next exact action: Finish writable report/routing/checklist updates; create the EV-0191 private audit record and register the exact bridge/config test; request scoped workspace approval for the two active .agents skill updates; run final test/validator bundle and reconcile the three gates.
+
+
+## Resume checkpoint — 2026-10-15T05:53:54Z post-replay validation
+
+The exact authoritative bridge/config replay is recorded in the final report/checklist/routing, and the two requested active skill paragraphs are updated after a scoped write approval. `config/local.env.example` now includes the copied xEdit script/creation-club settings.
+
+Next exact action: Run the full portable regression suite and all current repository doctors/validators after the xEdit config, report, routing, and skill updates; capture every raw output under ignored .local, fix any actionable failures, then register EV-0191 and perform post-registration evidence/recovery validation.
+
+
+## Resume checkpoint — 2026-10-15T05:55:33Z final evidence registration
+
+The post-edit validation bundle passed: 151/151 unittests; compileall; local/domain doctors; research, recovery, overlay, Markdown, pre-push, diff, and all 13 active skill validators (all exit 0). Conda is unavailable; system Python 3.12.3 fallback is active. The exact bridge copy/config replay and scoped preflight pass; the full active MO2 profile remains absent.
+
+Next exact action: Register the exact xEdit bridge/config replay and post-edit validation outputs in durable local evidence, reconcile the recovery/final report references, then run post-registration research/evidence, recovery, overlay, Markdown, privacy, and gate consistency checks.
+
+
+## Resume checkpoint — 2026-10-15T05:56:04Z post-registration audit
+
+EV-0191 is registered for the exact byte-identical bridge/config replay, scoped Steam AE preflight, and fresh post-edit 151-test/validator bundle. The prior session's approved SSEView instance is unchanged; no record query ran.
+
+Next exact action: Run post-EV-0191 evidence/recovery/overlay/Markdown/privacy validators and a direct final audit of all 52 criterion IDs, three gate verdicts, config/source hashes, prepared xEdit scope, Observer staging/deployment bindings, and exact research-start prompt; then update the handoff to the next authorized research session.
+
+
+## Resume checkpoint — 2026-10-15T05:57:09Z handoff prompt audit correction
+
+All post-registration research/recovery/overlay/Markdown/privacy validators pass. The direct audit confirms all 52 criteria are terminal and gates are aligned. One assertion was over-specific because the prepared prompt names the competing H1/H2 models rather than using the literal word “hypothesis”; the prompt itself contains the discriminants and exact first command.
+
+Next exact action: Add EV-0191 exact bridge/config replay and fresh test evidence to the prepared initial prompt, then rerun the final criteria/gate/hash/prompt audit with correct H1/H2 discriminant assertions and refresh Markdown inventory.
+
+
+## Resume checkpoint — 2026-10-15T05:59:12Z final gate audit passed
+
+The corrected final audit passes: 52 criteria (50 PASS, 2 BLOCKED_EXTERNAL, zero fixable/pending); all three gate verdicts agree across the report, capability matrix, STATE, and recovery; source bridge helper copy 8/8 and config 5/5 match; Observer staged DLL hash matches its verified build and analyzer passes 7/7; the exact H1/H2 prompt is prepared.
+
+Next exact action: Attach the final gate/criteria/raw-hash audit and prepared prompt hash to EV-0191, refresh STATE/FRONTIER/RECOVERY/SESSION_LOG to the exact next research action, then validate the registered evidence and clean handoff one final time.
+
+
+## Resume checkpoint — 2026-10-15T06:00:02Z evidence hash correction
+
+The report, recovery, frontier, and EV-0191 registry update were persisted. The closing session-log append did not run because a path guard used the wrong log location. The final audit also needs a non-circular checksum structure: its JSON must not embed the hash of the EV-0191 metadata that itself hashes the audit JSON.
+
+Next exact action: Rewrite the EV-0191 final audit without a circular self-hash, append the final research session-log handoff, then run the final post-registration validators and direct audit.
+
+
+## Resume checkpoint — 2026-10-15T06:00:30Z final post-registration verification
+
+EV-0191 has a non-circular metadata digest and covers the final gate audit, prompt hash, and 43 preserved private artifact hashes. The exact next action is final post-registration validation before handing off.
+
+Next exact action: Run final post-EV-0191 research/evidence, recovery, overlay, Markdown, privacy, diff and 52-row/gate/hash/prompt checks; if all pass, update STATE/FRONTIER/SESSION_LOG to the exact next research action and confirm the final recovery validator.
+
+
+## 2026-10-15T06:00:30Z — Final post-registration checks passed
+
+EV-0191 verifies the exact authoritative xEdit helper/config replay, the isolated five-master scoped preflight, and the fresh post-edit validation. All 43 preserved private artifact hashes match. The 52-row checklist is 50 PASS / 2 BLOCKED_EXTERNAL / zero fixable or pending. Readiness gates: STATIC_RESEARCH_READY=READY; NATIVE_RESEARCH_READY=PARTIAL; INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED. No open-ended glitch research started.
+
+Next exact action: At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while the xEdit full-profile/save and live Observer gates remain external.
+
+
+## Resume checkpoint — 2026-10-15T06:01:58Z final handoff verification
+
+EV-0191 now contains the exact authoritative xEdit config replay, fresh test/validator bundle, 52-row/gate audit, and prepared prompt hash. The next work is only the final post-handoff file validation; deep research has not started.
+
+Next exact action: run post-handoff evidence, recovery, overlay, Markdown, privacy, and diff validation; then preserve the exact next research prompt as the handoff.
+
+
+## 2026-10-15T06:02:42Z — Local alignment complete; deep research not started
+
+Final post-handoff validation passes. The checklist has 52 terminal criteria (50 PASS, 2 BLOCKED_EXTERNAL, zero fixable or pending). Gates: STATIC_RESEARCH_READY=READY; NATIVE_RESEARCH_READY=PARTIAL; INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED. EV-0191 hashes the exact bridge/config replay, 151-test and validator bundle, Observer 7/7 analyzer check, final prompt, and private raw artifacts.
+
+Next exact action: At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while the xEdit full-profile/save and live Observer gates remain external.
+
+
+## Resume checkpoint — 2026-10-15T06:03:05Z final Markdown inventory refresh
+
+All post-handoff research/evidence/recovery/overlay checks passed. The last Markdown check detected that the inventory was stale after the final STATE and SESSION_LOG lines were appended; refresh the index and check it before stopping. No gameplay research or tool launch is pending.
+
+Next exact action: Refresh migration/ACTIVE_MARKDOWN_AUDIT.md with `python3 scripts/python_env.py run scripts/markdown_policy_audit.py --write`, verify it with `--check`, then proceed at the next research session using docs/RESEARCH_START_PROMPT.md.
+
+
+## 2026-10-15T06:03:55Z — Final research handoff set
+
+Final local alignment is complete; no open-ended Skyrim research was started. EV-0191 holds the exact source bridge/config replay, fresh tests/validators, final gate audit, prompt hash, and private artifact hashes.
+
+Next exact action: At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while the xEdit full-profile/save and live Observer gates remain external.

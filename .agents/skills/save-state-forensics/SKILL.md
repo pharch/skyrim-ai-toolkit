@@ -11,7 +11,9 @@ description: Use read-only Skyrim save and co-save analysis to test quest-state,
 2. Use `python3 scripts/python_env.py run scripts/read-save.py` only for its
    documented header/string/byte scans, and
    `python3 scripts/python_env.py run tools/cosave-info.py <copy.skse>` for a
-   structural co-save survey. These tools do not parse Papyrus variables or
+   structural co-save survey. The system-Python fallback currently lacks the
+   `lz4` dependency needed by `read-save.py`; do not install it from this skill.
+   These tools do not parse Papyrus variables or
    prove an ActiveEffect remains active. Structured ReSaver analysis is not an
    active Python tool in this checkout; do not invoke retired Java/shell
    entrypoints.

@@ -1,335 +1,265 @@
 #!/usr/bin/env python3
-"""Dispatch bounded, read-only Ghidra work through the local Windows install.
-
-Agent-facing invocations stay in Python. This adapter calls Ghidra's native
-Windows headless launcher and keeps the project and logs in ignored .local/.
-"""
+"""Query the existing, configured GOG Skyrim AE Ghidra project read-only."""
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import json
+import ntpath
 import os
-from pathlib import Path, PureWindowsPath
+from pathlib import Path
 import re
 import shutil
 import subprocess
 import sys
-import tempfile
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+
 from scripts.local_config import read_local_config  # noqa: E402
-from scripts.local_paths import _native_path  # noqa: E402
-from tools.ae_target import TargetError, assert_ae_target  # noqa: E402
+from tools.ae_target import (  # noqa: E402
+    MIN_AE_VERSION,
+    TargetError,
+    _native_path,
+    compare_version,
+    parse_version,
+    read_executable_version,
+)
 
 
 class GhidraProbeError(RuntimeError):
-    pass
+    """The configured existing-project query cannot be run safely."""
 
 
 def _windows_path(path: Path) -> str:
+    """Map a mounted WSL path to a Windows path without dropping spaces."""
     resolved = path.resolve()
+    if os.name == "nt":
+        return str(resolved)
     text = resolved.as_posix()
-    if os.name != "nt":
-        if not text.startswith("/mnt/") or len(text) < 7:
-            raise GhidraProbeError("Ghidra paths must resolve under a mounted Windows drive")
-        drive = text[5].upper()
-        return drive + ":\\" + text[7:].replace("/", "\\")
-    return str(resolved)
+    match = re.match(r"^/mnt/([a-z])(?:/(.*))?$", text, re.IGNORECASE)
+    if not match:
+        raise GhidraProbeError("Ghidra paths must resolve under a mounted Windows drive")
+    return match.group(1).upper() + ":\\" + (match.group(2) or "").replace("/", "\\")
 
 
-def _configured_path(config: dict[str, str], key: str) -> Path:
+def _required_path(config: dict[str, str], key: str) -> Path:
     value = config.get(key, "").strip()
     if not value:
-        raise GhidraProbeError(f"{key} is missing from ignored config/local.env")
+        raise GhidraProbeError(
+            f"{key} is missing from ignored config/local.env; no Ghidra project will be created"
+        )
     return _native_path(value).resolve()
 
 
-def _attested_existing_project_target(
-    *, root: Path, config: dict[str, str], project_dir: Path, project_name: str,
-) -> dict[str, str]:
-    """Verify an existing imported project by the previously ProductVersion-verified image hash.
+def _normalize_windows_path(value: str) -> str:
+    text = value.strip().replace("/", "\\")
+    if re.match(r"^\\[A-Za-z]:\\", text):
+        text = text[1:]
+    return ntpath.normcase(ntpath.normpath(text))
 
-    This fallback is query-only. New imports and profile/live tools still use the
-    native ProductVersion read. The exact project, evidence artifacts and current
-    executable bytes must all match the recorded Steam AE 1.6.1170 identity.
-    """
-    project_specs = {
-        "AE_SkyrimSE_1_6_1170_attempt2": {
-            "evidence_id": "EV-0113",
-            "directory": "project_AE_SkyrimSE_1_6_1170_attempt2",
-            "metadata_artifact_key": "artifact",
-            "metadata_hash_key": "sha256",
-        },
-        "AE_SkyrimSE_1_6_1170_longanalysis": {
-            "evidence_id": "EV-0139",
-            "directory": "project_AE_SkyrimSE_1_6_1170_longanalysis",
-            "metadata_artifact_key": "metadata_artifact",
-            "metadata_hash_key": "metadata_sha256",
-        },
-    }
-    project_spec = project_specs.get(project_name)
-    if project_spec is None:
-        raise GhidraProbeError("requested project name is not in the hash-attested query allowlist")
-    evidence_path = root / "research" / "EVIDENCE.json"
-    evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
-    items = {item.get("id"): item for item in evidence.get("items", [])}
-    version_row = items.get("EV-0109", {})
-    import_row = items.get(str(project_spec["evidence_id"]), {})
-    if (version_row.get("edition"), version_row.get("runtime")) != ("AE", "1.6.1170"):
-        raise GhidraProbeError("recorded executable ProductVersion evidence is missing or mismatched")
-    if (import_row.get("edition"), import_row.get("runtime")) != ("AE", "1.6.1170"):
-        raise GhidraProbeError("recorded Ghidra import evidence is missing or mismatched")
 
-    def source_hash(row: dict[str, object]) -> str:
-        match = re.search(r"input SHA256 ([0-9a-f]{64})", str(row.get("source", "")))
-        if not match:
-            raise GhidraProbeError("recorded evidence does not identify the executable input hash")
-        return match.group(1)
+def resolve_binding(config: dict[str, str], *, root: Path = ROOT) -> dict[str, object]:
+    """Resolve one local.env binding; never infer a project from the runtime path."""
+    required_values = (
+        "LEGACY_SKYRIM_REPO",
+        "GHIDRA_HEADLESS_EXE",
+        "GHIDRA_PROJECT_DIR",
+        "GHIDRA_PROJECT_NAME",
+        "GHIDRA_PROJECT_PROGRAM",
+        "GHIDRA_ANALYSIS_EXE_GOG",
+    )
+    missing = [key for key in required_values if not config.get(key, "").strip()]
+    if missing:
+        raise GhidraProbeError(
+            "missing GOG project binding in ignored config/local.env: "
+            + ", ".join(missing)
+            + "; no import or replacement project will be attempted"
+        )
 
-    expected_hash = source_hash(version_row)
-    if source_hash(import_row) != expected_hash:
-        raise GhidraProbeError("ProductVersion and Ghidra import evidence refer to different executables")
+    legacy_repo = _required_path(config, "LEGACY_SKYRIM_REPO")
+    headless = _required_path(config, "GHIDRA_HEADLESS_EXE")
+    project_dir = _required_path(config, "GHIDRA_PROJECT_DIR")
+    executable = _required_path(config, "GHIDRA_ANALYSIS_EXE_GOG")
+    project_name = config["GHIDRA_PROJECT_NAME"].strip()
+    program_name = config["GHIDRA_PROJECT_PROGRAM"].strip()
 
-    local = (root / ".local" / "readiness").resolve()
-    for row in (version_row, import_row):
-        artifact = str(row.get("artifact", ""))
-        if not artifact.startswith("private-local:"):
-            raise GhidraProbeError("target identity evidence artifact is not marked private-local")
-        artifact_path = (root / artifact.removeprefix("private-local:")).resolve()
-        try:
-            artifact_path.relative_to(local)
-        except ValueError as exc:
-            raise GhidraProbeError("target identity artifact resolves outside ignored .local") from exc
-        if not artifact_path.is_file() or hashlib.sha256(artifact_path.read_bytes()).hexdigest() != row.get("sha256"):
-            raise GhidraProbeError("target identity evidence artifact is missing or has changed")
+    if not legacy_repo.is_dir():
+        raise GhidraProbeError("configured LEGACY_SKYRIM_REPO is not an accessible directory")
+    if not headless.is_file():
+        raise GhidraProbeError("configured GHIDRA_HEADLESS_EXE is not an accessible file")
+    if program_name.casefold() != "skyrimse.exe":
+        raise GhidraProbeError("GHIDRA_PROJECT_PROGRAM must identify the existing AE SkyrimSE.exe")
+    if not re.fullmatch(r"[A-Za-z0-9._-]+", project_name):
+        raise GhidraProbeError("GHIDRA_PROJECT_NAME must be a simple existing project name")
+    if not project_dir.is_dir():
+        raise GhidraProbeError("configured GHIDRA_PROJECT_DIR is missing; no project will be created")
+    if not (project_dir / f"{project_name}.gpr").is_file():
+        raise GhidraProbeError("configured GOG .gpr project is missing; no replacement will be created")
+    if not (project_dir / f"{project_name}.rep").is_dir():
+        raise GhidraProbeError("configured GOG project data directory is missing; no replacement will be created")
+    if not executable.is_file() or executable.name.casefold() != "skyrimse.exe":
+        raise GhidraProbeError("configured GOG analysis executable must be an accessible SkyrimSE.exe")
 
-    metadata_artifact = str(import_row.get(str(project_spec["metadata_artifact_key"]), ""))
-    if not metadata_artifact.startswith("private-local:"):
-        raise GhidraProbeError("saved project metadata artifact is not marked private-local")
-    metadata_path = (root / metadata_artifact.removeprefix("private-local:")).resolve()
+    repository = root.resolve()
+    for external_path, key in ((project_dir, "GHIDRA_PROJECT_DIR"), (executable, "GHIDRA_ANALYSIS_EXE_GOG")):
+        if external_path == repository or repository in external_path.parents:
+            raise GhidraProbeError(f"{key} must point to an external local installation/project, not this Git checkout")
+
     try:
-        metadata_path.relative_to(local)
-    except ValueError as exc:
-        raise GhidraProbeError("saved project metadata resolves outside ignored .local") from exc
-    metadata_hash_key = str(project_spec["metadata_hash_key"])
-    if not metadata_path.is_file() or hashlib.sha256(metadata_path.read_bytes()).hexdigest() != import_row.get(metadata_hash_key):
-        raise GhidraProbeError("saved project metadata artifact is missing or has changed")
-    metadata = json.loads(metadata_path.read_text(encoding="utf-8"))
-    if metadata.get("project_name") != project_name or metadata.get("input_sha256") != expected_hash:
-        raise GhidraProbeError("saved Ghidra project metadata does not match the attested executable")
-    expected_location = root / ".local" / "readiness" / "ghidra" / str(project_spec["directory"])
-    if project_dir.resolve() != expected_location.resolve() or not project_dir.is_dir():
-        raise GhidraProbeError("requested project is not the attested existing Ghidra project")
+        version_text = read_executable_version(executable)
+        version = parse_version(version_text)
+    except (TargetError, OSError, UnicodeError) as exc:
+        raise GhidraProbeError("could not read ProductVersion from the configured GOG executable") from exc
+    if version[0] != 1 or version[1] != 6 or compare_version(version, MIN_AE_VERSION) < 0:
+        raise GhidraProbeError("configured GOG analysis executable is not a supported AE 1.6.318+ build")
 
-    game_value = config.get("GAME_ROOT", "").strip()
-    if not game_value:
-        raise GhidraProbeError("GAME_ROOT is required to hash-check the existing project input")
-    game_root = _native_path(game_value).resolve()
-    executable_value = config.get("SKYRIM_EXE_PATH", "").strip() or str(game_root / "SkyrimSE.exe")
-    executable = _native_path(executable_value).resolve()
-    if executable.name.casefold() != "skyrimse.exe" or game_root not in executable.parents:
-        raise GhidraProbeError("configured executable is not SkyrimSE.exe under GAME_ROOT")
-    if not executable.is_file() or hashlib.sha256(executable.read_bytes()).hexdigest() != expected_hash:
-        raise GhidraProbeError("current executable bytes do not match the ProductVersion-attested Ghidra project")
-    return {"edition": "AE", "game_root": str(game_root), "executable": str(executable), "version": "1.6.1170"}
+    digest = hashlib.sha256(executable.read_bytes()).hexdigest()
+    return {
+        "legacy_repo": legacy_repo,
+        "headless": headless,
+        "project_dir": project_dir,
+        "project_name": project_name,
+        "program_name": program_name,
+        "executable": executable,
+        "version": ".".join(map(str, version)),
+        "sha256": digest,
+    }
 
 
 def _cmd_executable() -> str:
     candidate = shutil.which("cmd.exe") or shutil.which("cmd")
-    if not candidate:
-        windows_cmd = Path("/mnt/c/Windows/System32/cmd.exe")
-        if windows_cmd.is_file():
-            candidate = str(windows_cmd)
+    if not candidate and os.name != "nt":
+        fallback = Path("/mnt/c/Windows/System32/cmd.exe")
+        if fallback.is_file():
+            candidate = str(fallback)
     if not candidate:
         raise GhidraProbeError("Windows cmd.exe bridge is unavailable")
     return candidate
 
 
-def run_query(
-    *, root: Path = ROOT, project_dir: Path | None = None,
-    project_name: str = "AE_SkyrimSE_1_6_1170_attempt2",
-    program_name: str = "SkyrimSE.exe", timeout: int = 300,
-) -> dict[str, object]:
-    """Run the checked-in native script against an existing project read-only."""
-    config = read_local_config(root)
-    try:
-        target = assert_ae_target(root=root)
-    except TargetError as exc:
-        if str(exc) != "PowerShell did not return a Skyrim ProductVersion":
-            raise
-        fallback_project = (project_dir or root / ".local" / "readiness" / "ghidra" / "project_AE_SkyrimSE_1_6_1170_attempt2").resolve()
-        target = _attested_existing_project_target(
-            root=root, config=config, project_dir=fallback_project, project_name=project_name,
-        )
-    headless = _configured_path(config, "GHIDRA_HEADLESS")
+def _capture_hash(path: Path) -> str | None:
+    return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else None
+
+
+def run_query(*, root: Path = ROOT, config: dict[str, str] | None = None, timeout: int = 300,
+              rva: int | None = None) -> dict[str, object]:
+    """Run the checked-in query against the configured GOG project in place."""
+    if rva is not None and (rva < 0 or rva >= 2**63):
+        raise GhidraProbeError("--rva must be a non-negative 63-bit image-relative address")
+    local_env = root / "config" / "local.env"
+    if config is None:
+        if not local_env.is_file():
+            raise GhidraProbeError("ignored config/local.env is missing; copy the portable template and bind local tools")
+        config = read_local_config(root)
+    binding = resolve_binding(config, root=root)
     script = root / "tools" / "ghidra_scripts" / "ReadOnlyTargetedQuery.java"
-    if not headless.is_file():
-        raise GhidraProbeError("configured Ghidra headless launcher is missing")
     if not script.is_file():
         raise GhidraProbeError("checked-in read-only Ghidra query script is missing")
-    local = root / ".local" / "readiness" / "ghidra"
-    local.mkdir(parents=True, exist_ok=True)
-    project = (project_dir or local / "project_AE_SkyrimSE_1_6_1170_attempt2").resolve()
-    if not project.is_dir():
-        raise GhidraProbeError("the requested Ghidra project does not exist")
-    win_project = _windows_path(project)
-    win_scripts = _windows_path(script.parent.resolve())
-    win_log = _windows_path((local / "readonly-query.log").resolve())
-    win_script_log = _windows_path((local / "readonly-query-script.log").resolve())
-    win_headless = _windows_path(headless)
-    lines = [
-        "@echo off",
-        f'call "{win_headless}" "{win_project}" "{project_name}" -process "{program_name}" -readOnly -noanalysis -scriptPath "{win_scripts}" -postScript "ReadOnlyTargetedQuery.java" -log "{win_log}" -scriptlog "{win_script_log}"',
-        "exit /b %ERRORLEVEL%",
-        "",
-    ]
-    with tempfile.NamedTemporaryFile(
-        mode="w", encoding="utf-8", suffix=".cmd", prefix="ghidra-readonly-",
-        dir=local, delete=False, newline="\r\n",
-    ) as stream:
-        stream.write("\r\n".join(lines))
-        wrapper = Path(stream.name)
-    try:
-        result = subprocess.run(
-            [_cmd_executable(), "/d", "/c", _windows_path(wrapper)],
-            cwd=root, capture_output=True, text=False, timeout=timeout, check=False,
-        )
-    except (OSError, subprocess.TimeoutExpired) as exc:
-        raise GhidraProbeError(f"native Ghidra invocation failed: {type(exc).__name__}") from exc
-    stdout = result.stdout.decode("utf-8", errors="replace")
-    stderr = result.stderr.decode("utf-8", errors="replace")
-    script_error = "ERROR REPORT SCRIPT ERROR" in stdout
-    response = {
-        "ok": result.returncode == 0 and not script_error,
-        "operation": "read_only_function_lookup_xref_disassembly_and_decompile",
-        "runtime": target["version"],
-        "program": program_name,
-        "project": project_name,
-        "native_headless_launcher": str(headless),
-        "exit_code": result.returncode,
-        "stdout": stdout[-20000:],
-        "stderr": stderr[-12000:],
-        "script_error_reported": script_error,
-        "function_lookup_exported": "FUNCTION_LOOKUP=" in stdout,
-        "call_edge_found": "XREF_CALL_EDGE=" in stdout and "NOT_FOUND_IN_ANALYZED_PROJECT" not in stdout,
-        "disassembly_exported": "DISASM=" in stdout,
-        "decompilation_exported": "DECOMPILATION_BEGIN=" in stdout,
-        "log_artifacts": [".local/readiness/ghidra/readonly-query.log", ".local/readiness/ghidra/readonly-query-script.log"],
-        "read_only": True,
-    }
-    return response
 
+    output_dir = root / ".local" / "ghidra"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    stem = f"gog-query-{stamp}"
+    log = output_dir / f"{stem}.log"
+    script_log = output_dir / f"{stem}.script.log"
+    stdout_path = output_dir / f"{stem}.stdout.raw"
+    stderr_path = output_dir / f"{stem}.stderr.raw"
+    metadata_path = output_dir / f"{stem}.meta.json"
+    wrapper = output_dir / f"{stem}.cmd"
 
-def run_analysis(
-    *, root: Path = ROOT,
-    project_name: str = "AE_SkyrimSE_1_6_1170_fullanalysis",
-    analysis_timeout: int = 7200, max_cpu: int = 8,
-) -> dict[str, object]:
-    """Import and analyze the configured executable in a fresh ignored project.
+    headless = binding["headless"]
+    project_dir = binding["project_dir"]
+    project_name = str(binding["project_name"])
+    program_name = str(binding["program_name"])
+    command = (
+        f'call "{_windows_path(headless)}" "{_windows_path(project_dir)}" "{project_name}" '
+        f'-process "{program_name}" -noanalysis -readOnly '
+        f'-scriptPath "{_windows_path(script.parent)}" '
+        f'-log "{_windows_path(log)}" -scriptlog "{_windows_path(script_log)}" '
+        f'-postScript "{script.name}"'
+        + (f' 0x{rva:X}' if rva is not None else "")
+    )
+    wrapper.write_text("@echo off\r\n" + command + "\r\nexit /b %ERRORLEVEL%\r\n", encoding="utf-8", newline="")
 
-    The Python process waits for Ghidra to finish; it has no fixed wall-clock
-    kill timer. Ghidra's per-file analyzer timeout is an explicit CLI setting.
-    """
-    config = read_local_config(root)
-    target = assert_ae_target(root=root)
-    headless = _configured_path(config, "GHIDRA_HEADLESS")
-    executable = _native_path(target["executable"]).resolve()
-    if not headless.is_file() or not executable.is_file():
-        raise GhidraProbeError("configured Ghidra launcher or verified AE executable is missing")
-    local = root / ".local" / "readiness" / "ghidra"
-    local.mkdir(parents=True, exist_ok=True)
-    project = local / f"project_{project_name}"
-    if project.exists():
-        raise GhidraProbeError("fresh Ghidra project path already exists; choose a new --project-name")
-    project.mkdir(parents=True)
-    image_hash = hashlib.sha256(executable.read_bytes()).hexdigest()
-    output_path = local / f"{project_name}.stdout.raw"
-    error_path = local / f"{project_name}.stderr.raw"
-    log_path = local / f"{project_name}.log"
-    script_log_path = local / f"{project_name}-script.log"
-    win_project = _windows_path(project)
-    win_exe = _windows_path(executable)
-    win_headless = _windows_path(headless)
-    win_log = _windows_path(log_path)
-    win_script_log = _windows_path(script_log_path)
-    batch = [
-        "@echo off",
-        f'for %%I in ("{win_exe}") do set "SKYRIM_EXE=%%~sI"',
-        f'call "{win_headless}" "{win_project}" "{project_name}" -import "%SKYRIM_EXE%" -max-cpu {max_cpu} -analysisTimeoutPerFile {analysis_timeout} -log "{win_log}" -scriptlog "{win_script_log}"',
-        "exit /b %ERRORLEVEL%",
-        "",
-    ]
-    wrapper_path = local / f"{project_name}.cmd"
-    wrapper_path.write_text("\r\n".join(batch), encoding="utf-8", newline="")
     started = time.monotonic()
     try:
         result = subprocess.run(
-            [_cmd_executable(), "/d", "/c", _windows_path(wrapper_path)],
-            capture_output=True, text=False, check=False,
+            [_cmd_executable(), "/d", "/c", _windows_path(wrapper)],
+            cwd=root,
+            capture_output=True,
+            timeout=timeout,
+            check=False,
         )
-    except OSError as exc:
-        raise GhidraProbeError(f"native Ghidra invocation failed: {type(exc).__name__}") from exc
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        raise GhidraProbeError(f"read-only Ghidra invocation failed: {type(exc).__name__}") from exc
     elapsed = round(time.monotonic() - started, 3)
-    output_path.write_bytes(result.stdout)
-    error_path.write_bytes(result.stderr)
+    stdout_path.write_bytes(result.stdout)
+    stderr_path.write_bytes(result.stderr)
     stdout = result.stdout.decode("utf-8", errors="replace")
-    analysis_timed_out = "Analysis timed out at" in stdout
-    meta = {
+    script_error = "ERROR REPORT SCRIPT ERROR" in stdout
+    program_path_match = re.search(r"PROGRAM_EXECUTABLE_PATH=([^\r\n]+)", stdout)
+    reported_program_path = program_path_match.group(1).split(" (GhidraScript)")[0].strip() if program_path_match else ""
+    path_matches = bool(
+        reported_program_path
+        and _normalize_windows_path(reported_program_path)
+        == _normalize_windows_path(_windows_path(binding["executable"]))
+    )
+    checks = {
+        "program_identity_matches_gog_binary": path_matches,
+        "function_lookup": "FUNCTION_LOOKUP=" in stdout,
+        "requested_rva_lookup": rva is None or f"TARGET_RVA=0x{rva:X}" in stdout,
+        "xref_call_edge": "XREF_CALL_EDGE=" in stdout and "NOT_FOUND_IN_ANALYZED_PROJECT" not in stdout,
+        "disassembly": "DISASM=" in stdout and "DISASSEMBLY_INSTRUCTION_COUNT=" in stdout,
+        "decompilation": "DECOMPILATION_BEGIN=" in stdout and "DECOMPILATION_END=" in stdout,
+        "script_no_error": not script_error,
+    }
+    script_log_hash = _capture_hash(script_log)
+    meta: dict[str, object] = {
+        "captured_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "operation": "existing_gog_project_read_only_query",
+        "analysis_distribution": "GOG",
+        "analysis_binary_product_version": binding["version"],
+        "analysis_binary_sha256": binding["sha256"],
+        "project_alias": f"local-config:{project_name}",
+        "program": program_name,
+        "requested_rva": f"0x{rva:X}" if rva is not None else None,
+        "program_executable_path_matches_gog_binary": path_matches,
         "exit_code": result.returncode,
         "elapsed_seconds": elapsed,
-        "input_sha256": image_hash,
-        "runtime": target["version"],
-        "project_name": project_name,
-        "project_location": project.relative_to(root).as_posix(),
-        "analysis_timeout_per_file_seconds": analysis_timeout,
-        "analysis_timeout_reported": analysis_timed_out,
-        "stdout_bytes": len(result.stdout),
-        "stderr_bytes": len(result.stderr),
+        "checks": checks,
         "stdout_sha256": hashlib.sha256(result.stdout).hexdigest(),
         "stderr_sha256": hashlib.sha256(result.stderr).hexdigest(),
+        "script_log_sha256": script_log_hash,
+        "artifacts": {
+            "stdout": stdout_path.relative_to(root).as_posix(),
+            "stderr": stderr_path.relative_to(root).as_posix(),
+            "log": log.relative_to(root).as_posix(),
+            "script_log": script_log.relative_to(root).as_posix(),
+        },
+        "read_only": True,
+        "auto_analysis_disabled": True,
+        "import_attempted": False,
+        "overwrite_attempted": False,
+        "project_created": False,
     }
-    (local / f"{project_name}.meta.json").write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
-    return {
-        "ok": result.returncode == 0 and not analysis_timed_out,
-        "operation": "native_headless_import_and_analysis",
-        **meta,
-        "stdout_tail": stdout[-12000:],
-        "stderr_tail": result.stderr.decode("utf-8", errors="replace")[-4000:],
-        "read_only_input": True,
-    }
+    meta["metadata_artifact"] = metadata_path.relative_to(root).as_posix()
+    meta["ok"] = result.returncode == 0 and all(checks.values())
+    metadata_path.write_text(json.dumps(meta, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    return meta
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--project-dir", type=Path, help="existing ignored Ghidra project directory")
-    parser.add_argument("--project-name", default="AE_SkyrimSE_1_6_1170_attempt2")
-    parser.add_argument("--program", default="SkyrimSE.exe")
-    parser.add_argument("--timeout", type=int, default=300)
-    parser.add_argument("--analyze", action="store_true", help="import and analyze the verified executable in a fresh .local project")
-    parser.add_argument("--analysis-timeout", type=int, default=7200, help="Ghidra per-file timeout in seconds")
-    parser.add_argument("--max-cpu", type=int, default=8)
-    parser.add_argument("--analysis-project-name", default="AE_SkyrimSE_1_6_1170_fullanalysis")
+    parser.add_argument("--timeout", type=int, default=300, help="headless query timeout in seconds (1-1800)")
+    parser.add_argument("--rva", type=lambda value: int(value, 0), help="optional image-relative function RVA to query")
     args = parser.parse_args(argv)
     if args.timeout < 1 or args.timeout > 1800:
         parser.error("--timeout must be between 1 and 1800 seconds")
-    if not 1 <= args.analysis_timeout <= 14400:
-        parser.error("--analysis-timeout must be between 1 and 14400 seconds")
-    if not 1 <= args.max_cpu <= 32:
-        parser.error("--max-cpu must be between 1 and 32")
     try:
-        if args.analyze:
-            result = run_analysis(
-                project_name=args.analysis_project_name,
-                analysis_timeout=args.analysis_timeout, max_cpu=args.max_cpu,
-            )
-        else:
-            result = run_query(
-                project_dir=args.project_dir, project_name=args.project_name,
-                program_name=args.program, timeout=args.timeout,
-            )
+        result = run_query(timeout=args.timeout, rva=args.rva)
         print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0 if result["ok"] else 1
     except (OSError, ValueError, GhidraProbeError, TargetError) as exc:

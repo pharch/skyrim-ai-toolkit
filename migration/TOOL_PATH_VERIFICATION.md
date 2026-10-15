@@ -1,5 +1,10 @@
 # Local tool path verification
 
+> Historical snapshot from the prior Steam-oriented setup pass. Superseded for
+> current GOG/runtime bindings and readiness by
+> `migration/FINAL_ALIGNMENT_REPORT.md`; EV IDs below remain historical unless
+> the final report explicitly reuses them.
+
 Machine paths remain in ignored .local/research-paths.toml and
 config/local.env. This report records evidence without reproducing those paths.
 

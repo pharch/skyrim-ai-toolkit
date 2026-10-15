@@ -5,7 +5,7 @@
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
     "note": "Repository target policy is AE runtime 1.6.318+. Steam SkyrimSE.exe ProductVersion 1.6.1170.0 is verified (EV-0109), but no live game session or complete active MO2 order is verified. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Legacy source files are hashed in migration/legacy_markdown_manifest.tsv; source commit is unavailable. Active Python routes and native tool limits are documented in the capability matrix. Four evidence-linked transactions exercise blocker reselection, rival armor hypotheses, an AV39 record screen, and breadth synthesis; process-isolated recovery is tested.",
-    "next_action": "Set `PLUGINS_TXT` in ignored `config/local.env` to the selected MO2 profile's explicit `plugins.txt`, then run `python3 scripts/python_env.py run tools/ae_preflight.py`. Only after a complete active order and required masters pass, run the real xEdit winner query; keep the runtime, disposable-save, UESP-provenance, and Windows/CI blockers external until their inputs are supplied."
+    "next_action": "Next session: run `python3 scripts/python_env.py run scripts/research_state.py validate`, review the final alignment report, then start P0 OBJ-1/Q-0001 using docs/RESEARCH_START_PROMPT.md. Continue with independent high-information frontier items and preserve the verified GOG/static versus native/live gate boundaries."
   },
   "items": [
     {
@@ -1039,20 +1039,28 @@
       ]
     }
   ],
-  "session_next_action": "Remove the hard-coded A09 scan-line count; EV-0162 preserves the exact count. Refresh EV-0161–EV-0163 and Markdown inventory, restage the 15 paths, rerun research/pre-push/path/reference checks, verify mission-file states, then commit locally without pushing.",
+  "session_next_action": "At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while the xEdit full-profile/save and live Observer gates remain external.",
   "session_checkpoint": {
-    "date": "2026-10-14",
-    "phase": "Local readiness complete; awaiting selected MO2 profile",
-    "current_criterion": "All locally actionable checks are complete; A04/C01/C03 remain blocked on the explicitly selected complete AE profile order",
-    "last_successful_test": "Terminal research/overlay, diff, pre-push, path and 74-row/checkpoint audits all passed; 685 added lines scanned with zero host paths.",
-    "current_tool_or_target": "Readiness checklist, report, blockers, tool-path record and resume note",
-    "actual_blocker_if_any": "A04/C01/C03 selected MO2 order; C12 live AE+SKSE handshake; C13 copied disposable save; D09 UESP provenance; F10 Windows/CI.",
-    "next_exact_action": "Remove the hard-coded A09 scan-line count; EV-0162 preserves the exact count. Refresh EV-0161–EV-0163 and Markdown inventory, restage the 15 paths, rerun research/pre-push/path/reference checks, verify mission-file states, then commit locally without pushing.",
-    "working_tree_and_commit": "branch glitch-hunting-setup; starting HEAD e13ae4b253a6f5fd66f0f8abc3e49e6f9b29a6cc; preserve the pre-existing deleted migration/RESEARCH_READINESS_MISSION.md and untracked user mission file."
+    "timestamp_utc": "2026-10-15T06:03:55Z",
+    "status": "local alignment complete; no gameplay research started",
+    "criteria": {
+      "PASS": 50,
+      "BLOCKED_EXTERNAL": 2,
+      "FAIL_FIXABLE": 0,
+      "NOT_APPLICABLE": 0,
+      "PENDING": 0
+    },
+    "readiness_gates": {
+      "STATIC_RESEARCH_READY": "READY",
+      "NATIVE_RESEARCH_READY": "PARTIAL",
+      "INSTRUMENTED_AUTONOMOUS_RESEARCH_READY": "NOT_VERIFIED"
+    },
+    "latest_evidence": "EV-0191",
+    "next_action": "At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while the xEdit full-profile/save and live Observer gates remain external."
   },
   "last_session_checkpoint": {
-    "recorded_utc": "2026-10-14T18:53:35Z",
-    "next_action": "Remove the hard-coded A09 scan-line count; EV-0162 preserves the exact count. Refresh EV-0161–EV-0163 and Markdown inventory, restage the 15 paths, rerun research/pre-push/path/reference checks, verify mission-file states, then commit locally without pushing.",
-    "active_process": "none; all local research-readiness gates evaluated; no game process launched"
+    "recorded_utc": "2026-10-15T05:39:44Z",
+    "next_action": "At the next research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then start P0 OBJ-1/Q-0001 using `docs/RESEARCH_START_PROMPT.md`.",
+    "active_process": "SSEView 4.1.5f PID 3948; Skyrim not launched; Observer DLL staged only under ignored .local"
   }
 }
