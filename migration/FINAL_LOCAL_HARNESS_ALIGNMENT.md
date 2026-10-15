@@ -1,3 +1,10 @@
+# Historical alignment note
+
+This file preserves a migration-era configuration sketch. It is not the active
+tool contract. Use `docs/LOCAL_RUNTIME_CONTRACT.md`; the current Ghidra binding
+is `GHIDRA_PROJECT_REP_PATH` in ignored `config/local.env` and must point to an
+existing `.rep` directory with its adjacent `.gpr` file.
+
 # Final local alignment mission — Skyrim AE glitch-hunting harness
 
 > **Run once in an interactive Codex session at the root of `pharch/skyrim-ai-toolkit`, on the `glitch-hunting-setup` branch.** This is the final environment-alignment and functional-validation task **before** deep research. Do the actual work and tests; do not merely report recommendations. Once the checks pass, stop the setup mission and hand off a precise ready-to-run research entrypoint.

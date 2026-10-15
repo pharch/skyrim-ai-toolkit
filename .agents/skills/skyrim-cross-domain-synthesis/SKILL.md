@@ -5,6 +5,8 @@ description: Periodically synthesize Skyrim reverse-engineering findings across 
 
 # Skyrim AE cross-domain synthesis
 
+> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+
 After five meaningful investigation results, a major contradiction, or surprising behavior:
 
 1. Review recently changed claims, mechanisms, observations and raw evidence.

@@ -34,8 +34,7 @@ class DomainDoctorTests(unittest.TestCase):
             (java_bin / "java.exe").touch()
             config = {
                 "GHIDRA_HEADLESS_EXE": str(headless),
-                "GHIDRA_PROJECT_DIR": str(project),
-                "GHIDRA_PROJECT_NAME": "skyrim-gog",
+                "GHIDRA_PROJECT_REP_PATH": str(project / "skyrim-gog.rep"),
                 "GHIDRA_PROJECT_PROGRAM": "SkyrimSE.exe",
                 "GHIDRA_ANALYSIS_EXE_GOG": str(gog),
                 "JAVA_HOME": str(java_bin.parent),

@@ -5,6 +5,8 @@ description: Investigate Skyrim AE quest, encounter, and event level gates and d
 
 # Skyrim AE quest/event gate research
 
+> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+
 1. Choose a precisely identified quest, encounter, or event with a plausible
    level prerequisite; ground the lead in UESP and game data.
 2. Distinguish quest startup, journal display, dialogue availability, alias

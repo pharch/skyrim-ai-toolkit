@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install declared test dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements.txt
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
       - name: Python tests
         run: python -m pytest -q
       - name: Python syntax
@@ -40,7 +40,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install declared test dependencies
-        run: python -m pip install --disable-pip-version-check -r requirements.txt
+        run: python -m pip install --disable-pip-version-check -r requirements-dev.txt
       - name: AE targeting and recovery policy fixtures
         run: python -m pytest -q tests/test_ae_target.py tests/test_python_env.py tests/test_research_state.py tests/test_setup_research.py tests/test_validate_research.py
         shell: pwsh

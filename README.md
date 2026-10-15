@@ -10,20 +10,18 @@ research/FRONTIER.json, and research/CLAIMS.md.
 
 ## Start here
 
-Use the Python dispatcher, then run checks and the tool doctor:
+Start with `docs/LOCAL_RUNTIME_CONTRACT.md` and create the repository-local
+Python 3.12 `.venv`. Then run the readiness checks:
 
-    python3 scripts/python_env.py check
-    python3 scripts/python_env.py run scripts/setup_research.py init
-    python3 scripts/python_env.py run scripts/setup_research.py check
-    python3 scripts/python_env.py run tools/domain_doctor.py
-    python3 scripts/python_env.py run -m unittest discover -s tests -v
+    python3 scripts/python_env.py check --strict
+    python3 scripts/python_env.py run scripts/research_state.py validate
+    python3 scripts/harness_doctor.py all
 
-The dispatcher selects the named Conda environment when available and
-otherwise reports a system-Python fallback. Agent-facing tools use Python;
-a Python adapter may call a verified native research application such as
-Ghidra. `environment.yml` describes the optional named environment; do not
-install local native applications as part of cloning or binding. Project
-guidance is in AGENTS.md and .agents/skills/.
+The dispatcher requires this checkout's `.venv`, Python 3.12, pinned
+requirements, and valid local config. It never falls back to system Python or
+Conda. `environment.yml` remains optional alignment metadata. The standalone
+`harness_doctor.py` reports missing prerequisites without launching native
+tools. Project guidance is in AGENTS.md and `.agents/skills/`.
 
 Local paths and research corpora belong in ignored config/local.env and
 .local/. Do not commit game files, saves, raw exports, local logs, private
@@ -33,14 +31,15 @@ Discord data, or personal paths.
 
 The supported runtime is SkyrimSE.exe with ProductVersion 1.6.318 or newer.
 Copy `config/local.env.example` to ignored `config/local.env` and bind the
-runtime, tools, and selected profile there. Run
-`python3 scripts/python_env.py run scripts/local_paths.py doctor` to check
-bindings. Run `tools/ae_preflight.py` before xEdit or live access. MO2 users
-must set the selected profile's explicit virtualized `plugins.txt`; a global
-list is not a substitute. Ghidra uses the separately configured existing GOG
-project and analysis binary, regardless of the runtime store. See
-[docs/LOCAL_TOOL_BINDINGS.md](docs/LOCAL_TOOL_BINDINGS.md) and
-[docs/getting-started.md](docs/getting-started.md).
+runtime, tools, and selected profile there. Run the dispatched
+`scripts/local_paths.py doctor` to check bindings and `tools/ae_preflight.py`
+before xEdit or live access. MO2 users must set the selected profile's
+explicit `plugins.txt`; a global list is not a substitute. Ghidra uses the
+separately configured existing GOG project and analysis binary, regardless
+of the runtime store. See [the runtime contract](docs/LOCAL_RUNTIME_CONTRACT.md),
+[current readiness](docs/HARNESS_READINESS.md),
+[tool bindings](docs/LOCAL_TOOL_BINDINGS.md), and
+[getting started](docs/getting-started.md).
 
 ## Research durability
 
@@ -60,14 +59,18 @@ has a synthetic explicit-order winner fixture; no real profile winner is
 established until the selected full order passes preflight. The Python Ghidra
 adapter verifies and queries the existing GOG project with `-process`,
 `-noanalysis`, and `-readOnly`; it never imports or auto-analyzes a binary.
-The PEX helper
-extracts a narrow stream from the base Misc BSA to ignored `.local/` storage;
-it is not a general BSA extractor or full decompiler. `skse_probe.py` verifies
-local SKSE/Address Library file metadata only. xEdit is gated on the selected
-profile and a live SKSE handshake on an already running game. The
-build-attested Address Library adapter reuses the retained legacy decoder and
-does not transfer a GOG RVA to another executable build. UESP and Apocrypha use ignored local databases with
-separate provenance and privacy limits.
+`tools/xedit_bridge.py` stages the configured helper and prepares a scoped
+view. Its `file-records` command is the read-only bridge record retrieval,
+implemented as a direct TES4 file parser rather than native xEdit. A native
+record-tree export is not currently reproduced. `skse_probe.py` reports
+installed file identity only and never establishes an SKSE connection or
+observation. The PEX helper extracts a narrow stream from the base Misc BSA
+to ignored `.local/` storage; it is not a general BSA extractor or full
+decompiler. Live observation needs a separate disposable profile/save, a
+deployed Observer, and verified handshake/snapshot. The build-attested
+Address Library adapter reuses the retained legacy decoder and does not
+transfer a GOG RVA to another executable build. UESP and Apocrypha use ignored
+local databases with separate provenance and privacy limits.
 
 Never treat setstage, setlevel, injected scripts, altered plugins, or patched
 executables as a vanilla-valid result. Do not write to original game files,

@@ -5,10 +5,12 @@ description: Route Skyrim AE research through tested Python entrypoints, with ex
 
 # Retained tool operations
 
-Run agent-facing tools through `python3 scripts/python_env.py run ...`. The
-dispatcher selects `skyrim-ae-research` when Conda and that environment are
-available; otherwise it reports a system-Python fallback. Do not install or
-rebuild local native applications to make a route visible.
+> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+
+Run agent-facing tools only through the repository-local Python 3.12
+`.venv` dispatcher described in `docs/LOCAL_RUNTIME_CONTRACT.md`. It has no
+system-Python or Conda fallback. Use `python3 scripts/harness_doctor.py all`
+for bootstrap status when the venv is missing.
 
 ## Target and records
 
@@ -22,21 +24,18 @@ rebuild local native applications to make a route visible.
   the stdlib TES4 reader. Query one explicit file with `record` or `inventory`;
   `--include-subrecords` captures raw CTDA, ALST, ALID, and VMAD values. The
   parser does not semantically decode every field or establish a winner.
-- SSEEdit is Windows-only. The authoritative `skyrim` bridge's exact
-  xEdit-relevant config (`SSEEDIT_EXE`, `SKYRIM_DATA`, `XEDIT_SCRIPTS`,
-  `SKYRIM_EXE`, `INCLUDE_CREATION_CLUB=0`) and helper files were replayed from
-  an isolated copy; all five values match and `doctor`, `prepare-xedit`, and a
-  scoped five-master AE preflight pass (EV-0191). The generated
-  `-view`/no-`-autoload` session opened after explicit approval (EV-0184–0185)
-  and completed its background load (EV-0189). This verifies the isolated view
-  route only: it does not supply the selected MO2 profile and produced no
-  record query. Require the complete selected-profile order for winner or
-  profile-dependent negative claims; continue offline work when that order is
-  absent. The bridge itself is not checked into this toolkit: this machine's
-  tested helper copy is ignored under `.local/xedit-authoritative-copy/` and
-  originates in the sibling `skyrim` repository. See
-  `protocols/TOOL_ROUTING.md` for the exact replay commands and persistence
-  boundary; do not assume a fresh clone contains the bridge.
+- The tracked `tools/xedit_bridge.py` is the canonical route. Run
+  `python3 scripts/python_env.py run tools/xedit_bridge.py doctor`, then
+  `prepare` for a scoped five-master session. `file-records --signature QUST
+  --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf` reads plugin
+  bytes directly; it is not native xEdit and cannot resolve winners.
+  `tools/ae_preflight.py` requires the selected profile directory and its
+  complete explicit `plugins.txt`; `--scoped-five-master` is only the
+  generated view list, and `--test-profile` uses a separate disposable lane.
+  This cold-start reproduced preparation and the file parser, but native
+  record selection/export remains blocked: the UI automation exposes no safe
+  record-tree selection action. See the runtime contract for the exact
+  Windows launch and Apply Script boundary.
 
 ## Existing GOG Ghidra project
 

@@ -38,8 +38,7 @@ class LocalPathDoctorTests(unittest.TestCase):
             '[configured_paths]\nghidra_home = "wrong-old-registry"\n', encoding="utf-8"
         )
         (root / "config" / "local.env").write_text(
-            f"GHIDRA_PROJECT_DIR='{project.as_posix()}'\n"
-            "GHIDRA_PROJECT_NAME='skyrim-gog'\n"
+            f"GHIDRA_PROJECT_REP_PATH='{(project / 'skyrim-gog.rep').as_posix()}'\n"
             "GHIDRA_PROJECT_PROGRAM='SkyrimSE.exe'\n"
             f"GHIDRA_ANALYSIS_EXE_GOG='{gog.as_posix()}'\n"
             f"COMMONLIBSSE_ROOT='{commonlib.as_posix()}'\n"

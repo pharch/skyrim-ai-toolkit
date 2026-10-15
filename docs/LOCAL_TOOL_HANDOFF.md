@@ -121,3 +121,64 @@ commit.
 
 Git closeout status is reported with this handoff. The private path note and
 all `.local/` artifacts remain ignored.
+
+## Cold-start reproducibility rerun — 2026-10-15
+
+This section supersedes the earlier handoff only for the later fresh-context
+checks. Earlier rows describe the configuration snapshot and successful calls
+from their capture time; they are not proof that the next session can invoke
+the same tools.
+
+- The toolkit now has a tracked `tools/xedit_bridge.py` route. Its doctor
+  staged and hash-checked eight helper/template files; its file-records call
+  returned one `Skyrim.esm` QUST from the direct TES4 file parser; and prepare
+  generated the five-master view session without launch. The record result is
+  not a native xEdit query. The current WSL session cannot start the Windows
+  PowerShell/SSEView process, and the available UI automation has no safe
+  record-tree selection control for the selection-based Pascal export.
+  The configured authoritative `scripts/skyrim_tool.py` help independently
+  exposed `records` and `inventory` alongside `doctor`/`prepare-xedit`; the
+  exact `records --signature QUST --plugin Skyrim.esm --editor-id
+  CreatureDialogueWerewolf` query also exited 0 with the same one-record
+  result. Source inspection confirms it dispatches to the direct TES4
+  `read_plugin` parser. This is a real read-only bridge record retrieval, not
+  native SSEEdit record-tree export or a winning override. Current artifact
+  IDs: EV-0192–EV-0194.
+- Fresh GOG Address Library, Ghidra, SKSE identity, and scoped AE preflight
+  calls stopped before external-tool access because the Windows PowerShell
+  bridge did not return ProductVersion. Current raw artifacts are under
+  ignored `.local/alignment/cold-start-final-20261015/`; see EV-0195–EV-0196.
+- The staged Observer remains a build artifact. Read-only source inspection of
+  `observer/docs/README.md` (SHA-256
+  `7e237e9932e34ccbda4fedced5a734a25ff922a15c8c758d8793f50d4ed56049`)
+  confirms a bounded fixed-size event sink, requested snapshot/flush/abort
+  controls, and offline timeline/state-diff analysis. It explicitly lacks
+  native skill-use, ActiveEffect-lifetime, craft, hit-routing, inventory
+  ExtraData, perk/spell-list, and Story Manager hooks. The extension plan is
+  proposed work, not an implemented capability. This rerun observed no
+  deployed DLL, game process, plugin load, handshake, snapshot, or DevBench
+  connection.
+- The ignored root config was aligned with the example only after verifying
+  that the deprecated executable alias matched the canonical value. Empty
+  deprecated global list fields were removed; selected and disposable profile
+  bindings remain empty. Private values were not printed.
+- `python3 tools/xedit_bridge.py --help` exposes `doctor`, `prepare`, and
+  `file-records` only; it explicitly disclaims native record export. The fresh
+  Ghidra, Address Library, SKSE, and preflight diagnostic scripts were invoked
+  directly with system Python only after the strict dispatcher gate failed;
+  all stopped at ProductVersion/Windows interop before native access. They are
+  not new supported invocation routes.
+- A repeat clean-venv attempt failed because `ensurepip` is absent; system pip,
+  uv, pip3, Conda, and `py` are unavailable. The save reader still fails import
+  because `lz4` is absent. No package installation was attempted.
+- The primary Python route is now the repository-local Python 3.12 `.venv`
+  with pinned `lz4` and PyYAML. This host lacks `.venv`, ensurepip/pip, and
+  `lz4`; `python_env.py` fails closed instead of falling back. See
+  `docs/LOCAL_RUNTIME_CONTRACT.md` and `docs/HARNESS_READINESS.md`.
+
+The repeat environment capture is under `.local/alignment/cold-start-final-20261015/python-bootstrap-repro/` and its redacted summary is `python_environment_repro.json`. A clean Python 3.12 venv failed because `ensurepip` is absent; pip, uv, pip3, Conda and the Windows `py` launcher were not installed. `read-save.py --help` failed because lz4 is absent. No packages were installed. The consolidated doctor artifact at `.local/alignment/harness-doctor/20261015T082659.406448Z/harness_doctor.json` (EV-0198) reports 19 checks, 12 PASS and 7 BLOCKED_EXTERNAL, zero FAIL, exit 2; its system-Python suite ran 176 tests with 3 dependency-gated skips. `python3 tools/xedit_bridge.py --help` confirms the wrapper exposes no native record query/export command. EV-0197 records the Python probe; EV-0198 is the final consolidated doctor capture.
+
+The previous Conda/system-Python fallback text in older handoff material is
+historical; the current dispatcher contract is strict. The current worktree
+retains the user-provided untracked closeout mission and bounty packet. No
+bounty research was started.

@@ -52,8 +52,7 @@ def _tool_paths(config: dict[str, str]) -> dict[str, object]:
     game_root = _path(config.get("GAME_ROOT", ""))
     plugins = _path(config.get("PLUGINS_TXT", ""))
     ghidra_headless = _path(config.get("GHIDRA_HEADLESS_EXE", ""))
-    ghidra_project = _path(config.get("GHIDRA_PROJECT_DIR", ""))
-    ghidra_name = config.get("GHIDRA_PROJECT_NAME", "").strip()
+    ghidra_project_rep = _path(config.get("GHIDRA_PROJECT_REP_PATH", ""))
     ghidra_program = config.get("GHIDRA_PROJECT_PROGRAM", "").strip()
     gog_exe = _path(config.get("GHIDRA_ANALYSIS_EXE_GOG", ""))
     commonlib = _path(config.get("COMMONLIBSSE_ROOT", ""))
@@ -61,9 +60,10 @@ def _tool_paths(config: dict[str, str]) -> dict[str, object]:
     java_home = _path(config.get("JAVA_HOME", ""))
     java_bin = next((java_home / "bin" / name for name in ("java.exe", "java")
                      if java_home and (java_home / "bin" / name).is_file()), None)
-    project_present = bool(ghidra_project and ghidra_name
-                           and (ghidra_project / f"{ghidra_name}.gpr").is_file()
-                           and (ghidra_project / f"{ghidra_name}.rep").is_dir())
+    project_present = bool(ghidra_project_rep
+                           and ghidra_project_rep.suffix.casefold() == ".rep"
+                           and ghidra_project_rep.is_dir()
+                           and ghidra_project_rep.with_suffix(".gpr").is_file())
     offsets_header = commonlib / "include" / "RE" / "Offsets.h" if commonlib else None
     gog_data_plugins = gog_exe.parent / "Data" / "SKSE" / "Plugins" if gog_exe else None
     gog_address_library_present = bool(gog_data_plugins and list(gog_data_plugins.glob("versionlib-*.bin")))
@@ -168,7 +168,7 @@ def run_doctor(root: Path = ROOT) -> dict[str, object]:
     reports["Ghidra"] = {
         "status": "existing_gog_project_bound" if ghidra_ready else "blocked_external",
         "analysis_distribution": "GOG",
-        "project_alias": "config/local.env:GHIDRA_PROJECT_NAME",
+        "project_alias": "config/local.env:GHIDRA_PROJECT_REP_PATH",
         "project_program_configured": paths["ghidra_project_program_configured"],
         "existing_project_files_present": paths["ghidra_project_present"],
         "analysis_executable_present": paths["gog_analysis_executable_exists"],

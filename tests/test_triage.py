@@ -13,7 +13,10 @@ it can be committed will eventually be committed unscrubbed.
 from __future__ import annotations
 
 import inspect
+import contextlib
+import io
 import os
+import runpy
 import subprocess
 import sys
 import tempfile
@@ -30,6 +33,16 @@ CRASH = REPO / "tools" / "crash-triage.py"
 def run(script: Path, *args: str):
     return subprocess.run([sys.executable, str(script), *args],
                           capture_output=True, text=True, timeout=120)
+
+
+def run_auto_selected_papyrus(log_dir: Path):
+    """Exercise newest-log selection without bypassing local.env in the CLI."""
+    namespace = runpy.run_path(str(PAPYRUS))
+    output = io.StringIO()
+    with patch.object(namespace["skyrim_paths"], "resolve_dir", return_value=(log_dir, None)), \
+            patch.object(sys, "argv", [str(PAPYRUS)]), contextlib.redirect_stdout(output):
+        code = namespace["main"]()
+    return type("Result", (), {"stdout": output.getvalue(), "returncode": code})()
 
 
 # --------------------------------------------------------------------------
@@ -490,7 +503,7 @@ def _papyrus_log() -> str:
     ])
 
 
-def case_test_papyrus_reports_the_age_of_an_auto_selected_log(tmp_path, monkeypatch):
+def case_test_papyrus_reports_the_age_of_an_auto_selected_log(tmp_path):
     """The log's age has to be on screen. It is the difference between a report on
     this session and a confident report on one from months ago."""
     import os, time
@@ -500,19 +513,17 @@ def case_test_papyrus_reports_the_age_of_an_auto_selected_log(tmp_path, monkeypa
     log.write_text(_papyrus_log(), encoding="utf-8")
     old = time.time() - 60 * 86400
     os.utime(log, (old, old))
-    monkeypatch.setenv("PAPYRUS_LOG_DIR", str(d))
-    r = run(PAPYRUS)
+    r = run_auto_selected_papyrus(d)
     assert "log age" in r.stdout, r.stdout
     assert "STALE" in r.stdout, r.stdout
 
 
-def case_test_papyrus_does_not_call_a_fresh_log_stale(tmp_path, monkeypatch):
+def case_test_papyrus_does_not_call_a_fresh_log_stale(tmp_path):
     """The control. A guard that calls every log stale says nothing."""
     d = tmp_path / "Logs" / "Script"
     d.mkdir(parents=True)
     (d / "Papyrus.0.log").write_text(_papyrus_log(), encoding="utf-8")
-    monkeypatch.setenv("PAPYRUS_LOG_DIR", str(d))
-    r = run(PAPYRUS)
+    r = run_auto_selected_papyrus(d)
     assert "log age" in r.stdout, r.stdout
     assert "STALE" not in r.stdout, r.stdout
 

@@ -3427,6 +3427,178 @@
       ],
       "coverage": "Eight helper/template files match the authoritative source byte-for-byte. All five xEdit-relevant config values match after adding INCLUDE_CREATION_CLUB=0 to ignored config. Bridge doctor and isolated prepare exit 0; scoped preflight verifies Steam 1.6.1170.0 and exactly five official masters. The local doctors exit 0 but WSL sandbox ProductVersion access remains unavailable; no selected MO2 profile or explicit full plugins.txt is configured. The complete post-edit suite ran 151 tests, all 13 active skills validated, and every captured validator/audit command exited 0. A final direct audit verifies all 52 criterion rows, three gate verdicts, prompt H1/H2 discriminants and 35 preserved raw-artifact hashes. Existing SSEView PID 3948 was not launched again; no record export occurred. EV-0186/EV-0188 Observer build/preparation remains staged and not deployed.",
       "result": "PASS for exact bridge/config replay and all locally actionable post-edit validation. Native record research remains PARTIAL because the active profile and record query are absent; live Observer readiness remains NOT_VERIFIED."
+    },
+    {
+      "id": "EV-0192",
+      "kind": "tool",
+      "source": "Independent cold-start xEdit bridge doctor and authoritative source CLI audit",
+      "artifact": "private-local:.local/alignment/xedit-bridge/20261015T073525.149220Z/stdout.raw",
+      "sha256": "c560a29930524f21e35530bac92b8f451a5e473b1a5d91b488ba66957ccf659d",
+      "captured_utc": "2026-10-15T08:18:44.962000Z",
+      "edition": "unknown",
+      "runtime": "Offline Linux/WSL system Python 3.12.3; no game executable ProductVersion reverified",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 tools/xedit_bridge.py doctor",
+        "python3 tools/xedit_bridge.py --help",
+        "python3 <LEGACY_SKYRIM_REPO>/scripts/skyrim_tool.py --help",
+        "python3 <LEGACY_SKYRIM_REPO>/scripts/skyrim_tool.py records --help"
+      ],
+      "coverage": "The configured helper route returned exit 0 and reported the official master/SSEEdit/Data bindings. The authoritative source CLI was independently inspected: its documented commands are doctor, prepare-xedit, records, and inventory; the source hash and help artifact are in cold_start_manifest.json. Helper staging stays under ignored .local; native SSEView was not launched. The strict repository dispatcher was unavailable.",
+      "result": "PASS for local bridge configuration and helper staging only; this does not demonstrate a native xEdit record query."
+    },
+    {
+      "id": "EV-0193",
+      "kind": "tool",
+      "source": "Independent cold-start QUST retrieval through the authoritative helper records command and tracked bridge alias",
+      "artifact": "private-local:.local/alignment/cold-start-final-20261015/authoritative-helper-help/records-query.stdout.raw",
+      "sha256": "b7524b1706e111bd0efa5d7af4957a07d88581aef006c94945118238f735f26b",
+      "captured_utc": "2026-10-15T08:19:10.365570Z",
+      "edition": "unknown",
+      "runtime": "Offline plugin-file parsing; no game runtime verified",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 <LEGACY_SKYRIM_REPO>/scripts/skyrim_tool.py records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf",
+        "python3 tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf"
+      ],
+      "coverage": "The authoritative helper records command and tracked wrapper alias each returned the same single QUST CreatureDialogueWerewolf record from Skyrim.esm, local form 000E46 (file form 00000E46), with EDID/FULL/DNAM/CTDA/NEXT/ANAM subrecords. The authoritative source dispatches records to read_plugin: this is a genuine read-only bridge record retrieval through direct TES4 parsing, not native SSEEdit selection/export and not a winning-override query.",
+      "result": "PASS for the documented bridge record query through its direct TES4 reader; native xEdit record-tree/export and winner resolution remain separate and unavailable."
+    },
+    {
+      "id": "EV-0194",
+      "kind": "tool",
+      "source": "Independent cold-start preparation of a scoped view-only five-master SSEView session",
+      "artifact": "private-local:.local/alignment/xedit-bridge/20261015T073538.212908Z/stdout.raw",
+      "sha256": "81856b9cad5503b295ef1b8107e08c3938d34840f741345593514883788a643d",
+      "captured_utc": "2026-10-15T07:35:38.568034Z",
+      "edition": "unknown",
+      "runtime": "Offline setup; no native game or xEdit process launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 tools/xedit_bridge.py prepare"
+      ],
+      "coverage": "Exit 0 prepared a view-only session for Skyrim.esm, Update.esm, Dawnguard.esm, HearthFires.esm, and Dragonborn.esm. The session was not launched and is not the selected MO2 profile/order.",
+      "result": "PASS for session preparation only; native record selection/export remains unavailable."
+    },
+    {
+      "id": "EV-0195",
+      "kind": "tool",
+      "source": "Fresh WSL cold-start attempts to read the configured GOG executable identity before Ghidra and Address Library analysis",
+      "artifact": "private-local:.local/alignment/cold-start-final-20261015/cold_start_manifest.json",
+      "sha256": "a4a9d456fd17aa786eadfac5bd4aab614e86545b1cea2692eae55a640cd4b5a3",
+      "captured_utc": "2026-10-15T07:36:06.383705Z",
+      "edition": "AE",
+      "runtime": "GOG analysis runtime is configured, but current ProductVersion could not be read through the WSL Windows-process bridge",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 tools/ghidra_probe.py --rva 0x14C020 --timeout 600 (direct diagnostic)",
+        "python3 tools/address_library_probe.py --symbol MagicItem::CalculateCost (direct diagnostic)",
+        "python3 tools/ae_preflight.py --scoped-five-master <prepared-session>/plugins.txt (direct diagnostic)"
+      ],
+      "coverage": "Fresh probes stopped before Ghidra or Address Library lookup because PowerShell could not return SkyrimSE.exe ProductVersion. Captured diagnostics and hashes are in cold_start_manifest.json; no reanalysis or project write occurred. Prior EV-0165–EV-0167 are historical and are not treated as fresh reproduction.",
+      "result": "BLOCKED_EXTERNAL: this WSL host cannot reach the configured Windows executable metadata bridge, so the existing GOG project query was not reproduced."
+    },
+    {
+      "id": "EV-0196",
+      "kind": "tool",
+      "source": "Fresh SKSE identity and Observer capability classification, separated from build/stage status",
+      "artifact": "private-local:.local/alignment/cold-start-final-20261015/cold_start_manifest.json",
+      "sha256": "a4a9d456fd17aa786eadfac5bd4aab614e86545b1cea2692eae55a640cd4b5a3",
+      "captured_utc": "2026-10-15T08:19:52.997952Z",
+      "edition": "AE",
+      "runtime": "Steam live runtime ProductVersion could not be reverified in this WSL capture",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 tools/skse_probe.py (direct diagnostic)",
+        "python3 scripts/harness_doctor.py all",
+        "read-only staged Observer file hash and source-document inspection"
+      ],
+      "coverage": "The staged Observer DLL exists at 584192 bytes with SHA-256 108a4b9a73c97b0517a5cf23f11c02778b9ec3a8f88ac7aadc4fe129a7f7b084. Read-only source docs specify bounded fixed-size event capture, requested snapshots/flush/abort, and offline analysis; they explicitly say native skill-use, ActiveEffect lifetime, craft transactions, hit routing, inventory ExtraData, perks/spells, and Story Manager are not hooked. The DLL is not deployed; no compatible game process, handshake, event, or snapshot was observed.",
+      "result": "PASS for accurately classifying the documented source capability and staged file; BLOCKED_EXTERNAL for any live connection or observation."
+    },
+    {
+      "id": "EV-0197",
+      "kind": "tool",
+      "source": "Fresh Python 3.12 environment reproducibility and dependency import check without installing packages",
+      "artifact": "private-local:.local/alignment/cold-start-final-20261015/python_environment_repro.json",
+      "sha256": "503e9bcc56350ffd8ccbc2eb66ab6087fef5702b1eaa6dca3ff644cbfd88ec7c",
+      "captured_utc": "2026-10-15T08:10:02.471235Z",
+      "edition": "unknown",
+      "runtime": "Linux/WSL system Python 3.12.3 only; no repository .venv or Conda",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 -m venv <ignored clean-venv probe>",
+        "python3 -m ensurepip --version",
+        "python3 -m pip --version",
+        "python3 scripts/python_env.py check --strict",
+        "python3 scripts/python_env.py run scripts/read-save.py --help",
+        "python3 scripts/read-save.py --help"
+      ],
+      "coverage": "A clean Python 3.12 venv bootstrap failed because ensurepip is unavailable; the host diagnostic explicitly suggests python3.12-venv. The ensurepip and pip modules, uv/pip3/pip/conda/py launchers are absent. Strict check reports FAIL_VENV_MISSING; direct save-reader help fails because lz4 is absent. No package installation was attempted.",
+      "result": "BLOCKED_EXTERNAL: this host cannot reproduce the pinned Python environment; the documented venv setup needs a Python 3.12 distribution with venv/ensurepip and pip, then pinned requirements installation."
+    },
+    {
+      "id": "EV-0198",
+      "kind": "tool",
+      "source": "Final consolidated cold-start harness doctor after closeout documentation and acceptance artifacts",
+      "artifact": "private-local:.local/alignment/harness-doctor/20261015T082659.406448Z/harness_doctor.json",
+      "sha256": "06ae6e835a855de0bb9b9b91c106bde3ffa5d3839a992108504645bd719a8ab7",
+      "captured_utc": "2026-10-15T08:26:59.406448Z",
+      "edition": "unknown",
+      "runtime": "Offline Linux/WSL system Python 3.12.3; no game runtime launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/harness_doctor.py all",
+        "python3 scripts/markdown_policy_audit.py --check",
+        "python3 -m unittest discover -s tests -v"
+      ],
+      "coverage": "The final doctor wrote a 19-check report: 12 PASS, 7 BLOCKED_EXTERNAL, zero FAIL; overall BLOCKED with exit 2. The system-Python test suite ran 176 tests with 3 dependency-gated skips. Its read-only domain smoke queries retrieved UESP Skyrim:Karstaag revision 3629292 and three Apocrypha summary-only search results without private fields. It did not dispatch Ghidra/xEdit/SKSE research commands because the strict venv is missing; no native application or game process launched.",
+      "result": "PASS for the consolidated local diagnostic run with explicit external gates; overall harness research dispatch remains BLOCKED_EXTERNAL."
+    },
+    {
+      "id": "EV-0199",
+      "kind": "tool",
+      "source": "Read-only verification of the explicit GOG Ghidra project path in the private local binding",
+      "artifact": "private-local:.local/ghidra/binding-verification.json",
+      "sha256": "370ac2090592b166fdb2050d12cf414a26b21571c66b2bd404627d85f0882f2d",
+      "captured_utc": "2026-10-15T08:48:25+00:00",
+      "edition": "AE",
+      "runtime": "Linux/WSL system Python 3.12.3; no Ghidra process launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/harness_doctor.py all",
+        "python3 -m unittest discover -s tests",
+        "python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600"
+      ],
+      "coverage": "The ignored config/local.env now binds the user-designated existing GOG .rep directory via GHIDRA_PROJECT_REP_PATH. The .rep directory and adjacent .gpr were verified without opening or writing the project. The probe reads config/local.env via scripts.local_config.read_local_config and validates both existing files. The documented query invocation stopped at FAIL_VENV_MISSING before the probe launched. Full suite: 177 tests, 3 dependency-gated skips.",
+      "result": "PASS for exact private binding and existing project-file checks; Ghidra analysis remains BLOCKED_EXTERNAL and was not claimed."
+    },
+    {
+      "id": "EV-0200",
+      "kind": "tool",
+      "source": "Final consolidated harness doctor after explicit Ghidra project binding and Markdown inventory refresh",
+      "artifact": "private-local:.local/alignment/harness-doctor/20261015T084558.620330Z/harness_doctor.json",
+      "sha256": "c254e2a03a52edf5fc83c8cf525429d62ccc20e13bcdcaab8e543fd83910c6d5",
+      "captured_utc": "2026-10-15T08:45:58.620330Z",
+      "edition": "unknown",
+      "runtime": "Offline Linux/WSL system Python 3.12.3; no game runtime launched",
+      "modified_state": true,
+      "lane": "offline",
+      "tools": [
+        "python3 scripts/harness_doctor.py all",
+        "python3 scripts/markdown_policy_audit.py --check",
+        "python3 -m unittest discover -s tests"
+      ],
+      "coverage": "The 19-check report contains 12 PASS, 7 BLOCKED_EXTERNAL, and zero FAIL; overall verdict BLOCKED with exit 2. Config schema/ignore validation, research validators, local path doctor, domain doctor, Markdown audit, pre-push audit, compile check, and unit tests pass. The suite ran 177 tests with 3 dependency-gated skips. Python dispatch is blocked because the repository .venv is absent; native Ghidra/xEdit and SKSE identity/observation were not run.",
+      "result": "BLOCKED_EXTERNAL for research dispatch on this host; no bounty investigation or game launch occurred."
     }
   ]
 }

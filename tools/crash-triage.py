@@ -25,7 +25,7 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
-# Discovered, not hardcoded. Override with $SKSE_CRASH_DIR.
+# Resolve only from config/local.env; do not trust ambient environment state.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import skyrim_paths  # noqa: E402
 

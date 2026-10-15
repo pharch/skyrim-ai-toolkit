@@ -35,8 +35,7 @@ class GhidraProbeTests(unittest.TestCase):
         config = {
             "LEGACY_SKYRIM_REPO": str(legacy),
             "GHIDRA_HEADLESS_EXE": str(headless),
-            "GHIDRA_PROJECT_DIR": str(project),
-            "GHIDRA_PROJECT_NAME": "skyrim-gog",
+            "GHIDRA_PROJECT_REP_PATH": str(project / "skyrim-gog.rep"),
             "GHIDRA_PROJECT_PROGRAM": "SkyrimSE.exe",
             "GHIDRA_ANALYSIS_EXE_GOG": str(exe),
             # These are the separate runtime target and must not select Ghidra.
@@ -66,18 +65,27 @@ class GhidraProbeTests(unittest.TestCase):
         self.assertEqual(binding["project_name"], "skyrim-gog")
         self.assertEqual(binding["program_name"], "SkyrimSE.exe")
         self.assertEqual(binding["project_dir"], project)
+        self.assertEqual(binding["project_rep_path"], project / "skyrim-gog.rep")
         self.assertEqual(binding["executable"], exe)
         self.assertNotEqual(binding["executable"], Path(config["SKYRIM_EXE_PATH"]))
 
     def test_missing_project_config_fails_without_creating_a_project(self):
         temporary, root, _legacy, project, _headless, _exe, config = self._fixture()
         self.addCleanup(temporary.cleanup)
-        config["GHIDRA_PROJECT_DIR"] = ""
+        config["GHIDRA_PROJECT_REP_PATH"] = ""
         with patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"):
-            with self.assertRaisesRegex(GhidraProbeError, "GHIDRA_PROJECT_DIR"):
+            with self.assertRaisesRegex(GhidraProbeError, "GHIDRA_PROJECT_REP_PATH"):
                 resolve_binding(config, root=root)
         self.assertTrue(project.is_dir())
         self.assertFalse((root / ".local").exists())
+
+    def test_project_binding_must_name_the_existing_rep_directory(self):
+        temporary, root, _legacy, project, _headless, _exe, config = self._fixture()
+        self.addCleanup(temporary.cleanup)
+        config["GHIDRA_PROJECT_REP_PATH"] = str(project / "skyrim-gog.gpr")
+        with self.assertRaisesRegex(GhidraProbeError, r"\.rep directory"):
+            resolve_binding(config, root=root)
+        self.assertTrue((project / "skyrim-gog.rep").is_dir())
 
     def test_missing_project_files_fail_without_silent_replacement(self):
         temporary, root, _legacy, project, _headless, _exe, config = self._fixture()
@@ -104,7 +112,7 @@ class GhidraProbeTests(unittest.TestCase):
         local_project.mkdir(parents=True)
         (local_project / "skyrim-gog.gpr").touch()
         (local_project / "skyrim-gog.rep").mkdir()
-        config["GHIDRA_PROJECT_DIR"] = str(local_project)
+        config["GHIDRA_PROJECT_REP_PATH"] = str(local_project / "skyrim-gog.rep")
         with patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"):
             with self.assertRaisesRegex(GhidraProbeError, "external local installation/project"):
                 resolve_binding(config, root=root)
@@ -239,15 +247,22 @@ class GhidraProbeTests(unittest.TestCase):
         )
         def windows_path(path: Path) -> str:
             return r"C:\GOG\SkyrimSE.exe" if path.name == "SkyrimSE.exe" else r"C:\local\path"
+        config_dir = root / "config"
+        config_dir.mkdir()
+        (config_dir / "local.env").write_text(
+            "\n".join(f"{key}='{value}'" for key, value in config.items()) + "\n",
+            encoding="utf-8",
+        )
         with (
             patch("tools.ghidra_probe.read_executable_version", return_value="1.6.1179.0"),
             patch("tools.ghidra_probe._windows_path", side_effect=windows_path),
             patch("tools.ghidra_probe._cmd_executable", return_value="cmd.exe"),
             patch("tools.ghidra_probe.subprocess.run", return_value=SimpleNamespace(returncode=0, stdout=stdout, stderr=b"")),
         ):
-            result = run_query(root=root, config=config)
+            result = run_query(root=root)
         self.assertFalse(result["ok"])
         self.assertFalse(result["checks"]["script_no_error"])
+        self.assertEqual(result["project_alias"], "config/local.env:GHIDRA_PROJECT_REP_PATH")
 
     def test_unsupported_analysis_binary_version_fails(self):
         temporary, root, _legacy, _project, _headless, _exe, config = self._fixture()

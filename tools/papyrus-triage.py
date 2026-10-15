@@ -39,8 +39,7 @@ import sys
 from collections import Counter, defaultdict
 from pathlib import Path
 
-# Discovered, not hardcoded -- and never picked silently when a machine
-# carries more than one Skyrim install. Override with $PAPYRUS_LOG_DIR.
+# Resolve only from config/local.env -- never from ambient environment state.
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import skyrim_paths  # noqa: E402
 

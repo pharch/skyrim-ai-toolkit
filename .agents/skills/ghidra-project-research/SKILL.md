@@ -5,6 +5,8 @@ description: Query the existing GOG Skyrim AE Ghidra project for build-attested 
 
 # Existing GOG Ghidra project research
 
+> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+
 Use this skill for static Skyrim AE code questions. `config/local.env` binds
 three separate identities: the GOG `analysis_binary`, its existing
 `analysis_project`, and the runtime target used for record or live checks.
@@ -55,3 +57,8 @@ runtime build.
   `MagicItem::CalculateCost` AE ID 11321, RVA `0x14C020`; the existing project
   resolved a function, incoming call edge, disassembly, and decompilation.
   It validates the tool route only, not a game mechanic.
+
+  Current cold-start status is in docs/HARNESS_READINESS.md: the fresh GOG
+  ProductVersion check failed through the WSL Windows bridge before Ghidra
+  launched. EV-0165–EV-0167 are retained historical evidence, not a current
+  query. Stop when identity validation fails; do not run a remembered RVA.

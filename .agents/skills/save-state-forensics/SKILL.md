@@ -5,6 +5,8 @@ description: Use read-only Skyrim save and co-save analysis to test quest-state,
 
 # Save-state forensics
 
+> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+
 1. Confirm the save belongs to the stated edition and test lane; record its path
    privately, file size, modification time, and cryptographic hash. Never edit,
    overwrite, or clean the original save.

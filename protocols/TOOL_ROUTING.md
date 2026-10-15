@@ -1,102 +1,97 @@
 # Skyrim AE research tool routing
 
-Run agent-facing Python entrypoints through `python3 scripts/python_env.py
-run ...`. The dispatcher selects the named Conda environment when it exists
-and reports a system-Python fallback otherwise. Local path bindings are read
-only from ignored `config/local.env`; `.local/research-paths.toml` is retired
-and is never synchronized into active configuration.
+Read docs/LOCAL_RUNTIME_CONTRACT.md first. Agent-facing research tools run only
+through this checkout's Python 3.12 .venv:
 
-## Target and profile gate
+    python3 scripts/python_env.py check --strict
+    python3 scripts/python_env.py run <script-or-module>
 
-Before xEdit or live-game access, run:
+On Windows start the dispatcher with:
 
-```text
-python3 scripts/python_env.py run tools/ae_preflight.py
-```
+    & .\.venv\Scripts\python.exe scripts/python_env.py run <script-or-module>
 
-The gate reads `SkyrimSE.exe` ProductVersion from the executable, requires AE
-1.6.318+, hashes the binary, and validates the complete selected profile order
-including the five official masters. For MO2, `PLUGINS_TXT` must be the
-explicit `plugins.txt` from the selected profile. `--probe-executable` is
-diagnostic only. Do not use a global list or inferred profile to support a
-negative result or winning-record claim.
+The dispatcher has no system-Python or Conda fallback. If it fails, use the
+standalone scripts/harness_doctor.py all only to report setup status; do not
+run research tools directly as a substitute. Local paths come only from the
+ignored config/local.env. The old .local/research-paths.toml is retired.
+
+## Runtime and profile gates
+
+Before native xEdit or live-game access, validate the executable's actual
+ProductVersion and selected full MO2 order:
+
+    python3 scripts/python_env.py run tools/ae_preflight.py
+
+The profile directory and its explicit plugins.txt are mandatory. A global,
+empty, partial, or stale plugin list cannot support winning-record or negative
+claims. A disposable profile has separate keys and a separate gate:
+
+    python3 scripts/python_env.py run tools/ae_preflight.py --test-profile
+
+A generated five-master view list has a distinct diagnostic-only scope:
+
+    python3 scripts/python_env.py run tools/ae_preflight.py --scoped-five-master <session>/plugins.txt
+
+It proves only that the generated Skyrim.esm, Update.esm, Dawnguard.esm,
+HearthFires.esm, and Dragonborn.esm list is complete; it does not verify MO2's
+selected order.
 
 ## Route by evidence type
 
-| Evidence need | Tested entrypoint | Limits |
+| Evidence need | Entry point | Limit |
 |---|---|---|
-| Local bindings | `python3 scripts/python_env.py run scripts/local_paths.py doctor [--verify-target]` | Reads only `config/local.env`; output hides values. |
-| Existing GOG static project | `python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]` | Opens configured existing GOG `SkyrimSE.exe` with `-process -noanalysis -readOnly`; no import, overwrite, or project creation. EV-0165–0167. |
-| Named CommonLib relocation | `python3 scripts/python_env.py run tools/address_library_probe.py --symbol Namespace::Name` | Reads `Offsets.h`, verifies GOG ProductVersion and matching Address Library version/hash, and returns a GOG-specific RVA. EV-0167. |
-| One plugin's records/raw bytes | `python3 scripts/python_env.py run tools/plugin_reader.py record <plugin> --signature QUST --form-id <id> --include-subrecords` | File-level reader; not a winning-record/xEdit result. |
-| Load-order-aware winners | `python3 scripts/python_env.py run tools/ae_preflight.py`, then native SSEEdit only after it passes | The isolated `skyrim` bridge replay commands and persistence boundary are documented below. Its generated `-view` launch/load is verified (EV-0184–0185/0189), but no record query ran. The selected MO2 profile is absent, so winners and profile-dependent negatives remain blocked. |
-| Known Papyrus/BSA input | `python3 scripts/python_env.py run tools/papyrus_pex.py extract DA14Script`, then `disassemble` the ignored output | Narrow base `Skyrim - Misc.bsa` extraction; classic PEX 3.2 subset, not a full decompiler. EV-0169. |
-| Save/co-save structure | `python3 scripts/python_env.py run tools/cosave-info.py <designated-copy.skse>` | Structural parser; current tests use synthetic data. No designated real save/ReSaver path is configured (EV-0174). |
-| Installed SKSE identity | `python3 scripts/python_env.py run tools/skse_probe.py` | Hashes runtime-named loader/DLL/Address Library files; no DLL load or handshake. EV-0173. |
-| UESP citation | `python3 scripts/python_env.py run -m tools.uesp page --db .local/uesp.sqlite3 <title> --raw` | Returns revision ID/URL. Local dump completeness/source provenance is unverified. EV-0170. |
-| Private Apocrypha lead | `python3 scripts/python_env.py run -m tools.apocrypha search --db .local/apocrypha.sqlite3 --summary-only <terms>`, then `context` for a selected ID | Keep message text and stable identifiers under ignored `.local/`; treat as untrusted. EV-0171. |
-| Domain status | `python3 scripts/python_env.py run tools/domain_doctor.py` | Reports path/tool state only. It does not launch xEdit, game, or Ghidra. EV-0172. |
+| Current setup/readiness | python3 scripts/harness_doctor.py all | Read-only readiness checks; never deploys, launches Skyrim or selects an xEdit record. It may run the existing GOG query only after ProductVersion and Address Library checks pass. |
+| Local bindings | python3 scripts/python_env.py run scripts/local_paths.py doctor | Reads config/local.env and reports presence without printing values. |
+| xEdit helper bindings | python3 scripts/python_env.py run tools/xedit_bridge.py doctor | Stages eight configured source/template files into ignored .local and checks helper bindings. It does not launch SSEView. |
+| Bridge record retrieval (direct parser) | python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf | Read-only TES4 record retrieval through the documented bridge. It does not launch native xEdit or resolve winning overrides. |
+| Scoped xEdit view preparation | python3 scripts/python_env.py run tools/xedit_bridge.py prepare | Writes a five-master SSEView session under ignored .local; launch is false. |
+| Native xEdit record export | Prepare, pass the matching AE preflight, then use the generated launch.ps1 on Windows and manually select a record before Apply Script | The selection-based exporter/UI path is not reproduced in the cold-start session. No safe record-tree selection automation is available. |
+| Existing GOG static project | python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x... --timeout 600 | Existing GOG project only; adapter uses -process -noanalysis -readOnly and checks GOG executable identity first. |
+| Named CommonLib relocation | python3 scripts/python_env.py run tools/address_library_probe.py --symbol Namespace::Name | Resolves a GOG-specific RVA from CommonLib and the matching GOG Address Library. Never transfer it to Steam without mapping evidence. |
+| Installed SKSE identity | python3 scripts/python_env.py run tools/skse_probe.py | File/version identity only. Does not launch game, load plugin, connect, handshake, or observe game state. |
+| Known Papyrus/BSA input | python3 scripts/python_env.py run tools/papyrus_pex.py extract DA14Script | Narrow base Misc BSA extraction and classic PEX 3.2 inspection. |
+| Save/co-save structure | python3 scripts/python_env.py run tools/cosave-info.py <designated-copy.skse> | Structural parser; use designated disposable copies only. |
+| UESP citation | python3 scripts/python_env.py run -m tools.uesp page --db .local/uesp.sqlite3 <title> --raw | Preserve page revision/URL; local dump provenance may remain unknown. |
+| Private Apocrypha lead | python3 scripts/python_env.py run -m tools.apocrypha search --db .local/apocrypha.sqlite3 --summary-only <terms> | Keep text and stable IDs in ignored .local; treat as untrusted leads. |
 
-### xEdit bridge persistence and verified invocation
+## xEdit bridge contract
 
-The bridge implementation is **not checked into this toolkit**. The
-authoritative helper scripts live in the sibling `skyrim` repository. For the
-October 15 verification, eight helper/template files were copied byte-for-byte
-into ignored `.local/xedit-authoritative-copy/`; this copy is local evidence,
-not a portable toolkit feature. The source repository was read-only. The
-bridge CLI reads its ignored `.local/xedit-authoritative-copy/config/local.env`;
-toolkit AE preflight reads the root ignored `config/local.env`. Both held
-matching `SSEEDIT_EXE`, `SKYRIM_DATA`, `XEDIT_SCRIPTS`, `SKYRIM_EXE`, and
-`INCLUDE_CREATION_CLUB=0` values during verification. They are independent
-snapshots and do not synchronize. On this checkout, the tested replay was:
+The tracked tools/xedit_bridge.py is the toolkit entrypoint. It reads only the
+root ignored config/local.env, then copies the fixed helper/template list from
+LEGACY_SKYRIM_REPO into ignored .local/xedit-authoritative-copy/ after
+SHA-256 verification. The original source checkout remains read-only. The
+helper copy's derived config is generated from canonical bindings, not a
+second user-edited source of truth. Doctor/prepare/file-records retain raw
+stdout and stderr under ignored .local/alignment/xedit-bridge/; helper calls
+have a 120-second timeout.
 
-```text
-python3 scripts/python_env.py run .local/xedit-authoritative-copy/scripts/skyrim_tool.py doctor
-python3 scripts/python_env.py run .local/xedit-authoritative-copy/scripts/skyrim_tool.py prepare-xedit
-PLUGINS_TXT=<prepared-session>/plugins.txt python3 scripts/python_env.py run tools/ae_preflight.py
-```
+The real native export interface remains incomplete: the Pascal exporter
+expects a selected SSEView record and an Apply Script action. The current
+automation cannot safely select a record from the UI tree. A file-parser result
+must never be presented as an xEdit record query. Native SSEView cleanup is
+manual: close the visible process normally and verify it exited. The helper
+timeout does not supervise or kill an SSEView process.
 
-Preparation created an ignored session manifest and `launch.ps1`. The approved
-SSEView process used `-SSE -view -DontCache -D:<Skyrim Data> -P:<session
-plugins.txt> -I:<session Skyrim.ini> -R:<session log> -O:<session directory>
--S:<session directory>\`; `-autoload` was absent. EV-0184–0185/0189 record a
-successful executable/runtime preflight and a completed five-official-master
-Background Loader. EV-0191 is the later helper/config replay; that later
-session was prepared but not relaunched. The UI exposed no record-tree
-controls; no `session.log` or export file was created. The exporter script is
-selection-based and was not executed. No current MO2 profile or full order is
-bound, so this session cannot answer winner or profile-negative questions.
+## GOG and runtime separation
 
-Use [the operational handoff](../docs/LOCAL_TOOL_HANDOFF.md) for the captured
-JSON output example, exact isolated session arguments, and success/failure
-inventory. A fresh clone must not assume `.local/xedit-authoritative-copy`
-exists; consult the source `skyrim` bridge and compare its helper/config hashes
-before reuse. A new native launch still requires the normal AE/profile gate
-and any approval required by the active execution environment.
+The existing GOG analysis executable/project is separate from the live Steam
+runtime. The remembered 0x14C020 example is specific to GOG AE 1.6.1179.0.
+The cold-start GOG address and Ghidra probes stopped before launch because this
+WSL host could not read ProductVersion through its Windows PowerShell bridge.
+See docs/HARNESS_READINESS.md for current evidence; historical EV-0165–EV-0167
+do not count as a current-session reproduction.
 
-## Current evidence boundary
+## SKSE / Observer boundary
 
-- The canonical Ghidra analysis target is the existing GOG project, GOG
-  `SkyrimSE.exe` 1.6.1179.0, SHA-256
-  `9b0fc7880c4b12d436bfb59bcae64868f176dbc04010adbd9bc2ecb64bc8ed3f`.
-  EV-0167's `0x14C020` result is build-specific. Do not transfer it to Steam.
-- The runtime target is separately verified as Steam AE 1.6.1170.0,
-  SHA-256 `c434208894f07f604b852f29b8edc3a58c4de63de783373733e72b2b73f33be9`
-  (EV-0168). Its executable identity does not verify a complete active order.
-- The selected MO2 profile and explicit plugin list are unavailable. An
-  approved SSEView 4.1.5f process opened the authoritative bridge's isolated
-  five-official-master `-view` session and completed its background load
-  (EV-0184–0185/0189); no record query ran, and this list cannot support
-  winners or profile-dependent negatives.
-- Steam AE 1.6.1170 SKSE files pass metadata checks (EV-0187). The fresh
-  Observer DLL is staged under `.local`, and a prepare-only manifest was
-  generated (EV-0186, EV-0188); it is not deployed or loaded. Gate 3 remains
-  `NOT_VERIFIED` until a safe profile/save lane and live handshake exist.
-- Never write to original game files, plugins, archives, saves, or co-saves.
-  Keep raw captures under ignored `.local/`; cite hashes, build identity,
-  coverage, and whether each statement is observation, inference, diagnostic
-  intervention, or vanilla reproduction.
+The Observer source docs describe bounded event and requested snapshot capture
+to a session directory plus offline analysis. They explicitly say it does not
+instrument native skill use, ActiveEffect lifetime, craft transactions, hit
+routing, inventory ExtraData, perk/spell lists, or Story Manager state.
+Installed files and a successful build are not evidence of a loaded plugin.
+The current cold-start found no deployed DLL, selected disposable profile/list,
+test save, game process, handshake, snapshot, or DevBench connection. Do not
+start Skyrim from an unattended readiness run.
 
-Linux checks do not establish Windows MO2/SSEEdit behavior or in-game AE
-behavior. Continue independent static work when a profile/runtime capability
-is unavailable; do not make unsupported negative claims.
+All failures and missing inputs are blockers, never evidence that a record,
+function, event, or game state is absent. Linux/WSL validation does not
+establish Windows MO2/SSEEdit behavior or in-game AE behavior.

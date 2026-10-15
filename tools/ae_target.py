@@ -30,9 +30,10 @@ class TargetError(ValueError):
 def settings(env: Mapping[str, str] | None = None, root: Path = ROOT) -> dict[str, str]:
     from scripts.local_config import read_local_config
 
-    merged = read_local_config(root)
-    merged.update(dict(os.environ if env is None else env))
-    return merged
+    values = read_local_config(root)
+    if env is not None:
+        values.update(dict(env))
+    return values
 
 
 def parse_version(value: str) -> tuple[int, int, int]:
@@ -184,29 +185,54 @@ def assert_ae_target(
     }
 
 
-def resolve_plugins_txt(env: Mapping[str, str] | None = None, *, game_root: str | Path | None = None, root: Path = ROOT) -> Path:
-    config = settings(env, root)
-    candidate = config.get("PLUGINS_TXT", "").strip()
-    if not candidate and config.get("SKYRIM_LOADORDER_DIR", "").strip():
-        candidate = str(Path(config["SKYRIM_LOADORDER_DIR"]) / "plugins.txt")
-    if not candidate and config.get("LOCALAPPDATA", "").strip():
-        candidate = str(Path(config["LOCALAPPDATA"]) / "Skyrim Special Edition" / "plugins.txt")
-    if not candidate and config.get("USERPROFILE", "").strip():
-        candidate = str(Path(config["USERPROFILE"]) / "AppData" / "Local" / "Skyrim Special Edition" / "plugins.txt")
+def _resolve_explicit_profile_plugins(
+    config: Mapping[str, str],
+    *,
+    list_key: str,
+    profile_key: str,
+    game_root: str | Path | None,
+    require_profile: bool = False,
+) -> Path:
+    candidate = config.get(list_key, "").strip()
     if not candidate:
-        raise TargetError("set PLUGINS_TXT to the selected AE/MO2 profile's explicit plugins.txt")
+        raise TargetError(f"set {list_key} to the explicit plugins.txt for {profile_key}")
     windows_path = PureWindowsPath(candidate)
     path = _native_path(candidate)
     if not path.is_absolute() and not windows_path.is_absolute():
-        raise TargetError("PLUGINS_TXT must be an absolute path")
+        raise TargetError(f"{list_key} must be an absolute path")
     path = path.resolve()
     if path.name.casefold() != "plugins.txt":
-        raise TargetError("PLUGINS_TXT must name the active plugins.txt, not loadorder.txt")
+        raise TargetError(f"{list_key} must name plugins.txt, not loadorder.txt")
     if not path.is_file():
-        raise TargetError("the configured active plugins.txt is missing or inaccessible")
+        raise TargetError(f"the configured {list_key} is missing or inaccessible")
     if game_root is not None and Path(game_root).resolve() in path.parents:
-        raise TargetError("PLUGINS_TXT must be the active profile list, not a file inside GAME_ROOT")
+        raise TargetError(f"{list_key} must be a profile list outside GAME_ROOT")
+    profile = config.get(profile_key, "").strip()
+    if require_profile and not profile:
+        raise TargetError(f"set {profile_key} to the explicitly selected MO2 profile")
+    if profile:
+        profile_path = _native_path(profile).resolve()
+        if not profile_path.is_dir():
+            raise TargetError(f"configured {profile_key} is not an accessible directory")
+        if path.parent.resolve() != profile_path:
+            raise TargetError(f"{list_key} must belong to the explicitly selected {profile_key}")
     return path
+
+
+def resolve_plugins_txt(env: Mapping[str, str] | None = None, *, game_root: str | Path | None = None, root: Path = ROOT) -> Path:
+    config = settings(env, root)
+    return _resolve_explicit_profile_plugins(
+        config, list_key="PLUGINS_TXT", profile_key="MO2_PROFILE_DIR", game_root=game_root,
+        require_profile=True,
+    )
+
+
+def resolve_test_plugins_txt(env: Mapping[str, str] | None = None, *, game_root: str | Path | None = None, root: Path = ROOT) -> Path:
+    config = settings(env, root)
+    return _resolve_explicit_profile_plugins(
+        config, list_key="SKYRIM_TEST_PLUGINS_TXT", profile_key="SKYRIM_TEST_PROFILE_DIR", game_root=game_root,
+        require_profile=True,
+    )
 
 
 def parse_active_plugins(text: str) -> list[str]:
@@ -229,12 +255,47 @@ def parse_active_plugins(text: str) -> list[str]:
     return active
 
 
-def preflight(env: Mapping[str, str] | None = None, *, root: Path = ROOT, version_reader=read_executable_version) -> dict[str, object]:
+def preflight(
+    env: Mapping[str, str] | None = None,
+    *,
+    root: Path = ROOT,
+    version_reader=read_executable_version,
+    scoped_five_master: str | Path | None = None,
+    test_profile: bool = False,
+) -> dict[str, object]:
+    if scoped_five_master is not None and test_profile:
+        raise TargetError("choose either a scoped five-master list or the designated test profile")
     target = assert_ae_target(env, root=root, version_reader=version_reader)
-    load_order = resolve_plugins_txt(env, game_root=target["game_root"], root=root)
+    if test_profile:
+        load_order = resolve_test_plugins_txt(env, game_root=target["game_root"], root=root)
+        scope = "designated-disposable-profile"
+        full_order_verified = True
+    elif scoped_five_master is None:
+        load_order = resolve_plugins_txt(env, game_root=target["game_root"], root=root)
+        scope = "explicit-active-order"
+        full_order_verified = True
+    else:
+        windows_path = PureWindowsPath(str(scoped_five_master))
+        load_order = _native_path(scoped_five_master)
+        if not load_order.is_absolute() and not windows_path.is_absolute():
+            raise TargetError("scoped five-master list must be an explicit absolute path")
+        load_order = load_order.resolve()
+        if load_order.name.casefold() != "plugins.txt":
+            raise TargetError("scoped five-master input must be the generated plugins.txt")
+        if not load_order.is_file():
+            raise TargetError("scoped five-master plugins.txt is missing or inaccessible")
+        if Path(target["game_root"]).resolve() in load_order.parents:
+            raise TargetError("scoped plugin list must remain in the isolated research session")
+        scope = "scoped-five-master"
+        full_order_verified = False
     load_bytes = load_order.read_bytes()
     plugins = parse_active_plugins(load_bytes.decode("utf-8-sig"))
+    if scoped_five_master is not None and [x.casefold() for x in plugins] != [x.casefold() for x in REQUIRED_AE_MASTERS]:
+        raise TargetError("scoped list must contain exactly the five official AE masters in canonical order")
     exe_bytes = Path(target["executable"]).read_bytes()
+    config = settings(env, root)
+    selected_profile = bool(config.get("MO2_PROFILE_DIR", "").strip()) and scoped_five_master is None and not test_profile
+    disposable_profile = bool(config.get("SKYRIM_TEST_PROFILE_DIR", "").strip()) and test_profile
     return {
         "edition": target["edition"],
         "runtime": target["version"],
@@ -243,5 +304,9 @@ def preflight(env: Mapping[str, str] | None = None, *, root: Path = ROOT, versio
         "base_plugin": plugins[0],
         "load_order": str(load_order),
         "load_order_sha256": hashlib.sha256(load_bytes).hexdigest(),
+        "scope": scope,
+        "full_order_verified": full_order_verified,
+        "selected_profile_verified": selected_profile,
+        "disposable_test_profile_verified": disposable_profile,
         "live_runtime_tested": False,
     }

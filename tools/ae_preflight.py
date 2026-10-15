@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify the exact Skyrim AE executable and complete active plugin order."""
+"""Verify Skyrim AE executable identity and either a selected order or scoped list."""
 from __future__ import annotations
 
 import argparse
@@ -16,6 +16,11 @@ from tools.ae_target import TargetError, assert_ae_target, preflight, read_execu
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--probe-executable", action="store_true", help="read ProductVersion/hash only; this does not pass the xEdit/live gate")
+    scope = parser.add_mutually_exclusive_group()
+    scope.add_argument("--scoped-five-master", metavar="PLUGINS_TXT",
+                       help="validate the isolated five-official-master view list; does not verify the selected MO2 order")
+    scope.add_argument("--test-profile", action="store_true",
+                       help="validate the explicitly designated disposable profile and its complete plugins.txt")
     parser.add_argument("--game-root", action="store_true", help=argparse.SUPPRESS)
     args = parser.parse_args(argv)
     try:
@@ -23,6 +28,10 @@ def main(argv: list[str] | None = None) -> int:
             target = assert_ae_target()
             digest = hashlib.sha256(Path(target["executable"]).read_bytes()).hexdigest()
             print(json.dumps({"edition": "AE", "runtime": target["version"], "executable_sha256": digest, "full_order_verified": False}, indent=2))
+        elif args.scoped_five_master:
+            print(json.dumps(preflight(scoped_five_master=args.scoped_five_master), indent=2))
+        elif args.test_profile:
+            print(json.dumps(preflight(test_profile=True), indent=2))
         elif args.game_root:
             target = assert_ae_target()
             print(target["game_root"])

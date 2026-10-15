@@ -5,6 +5,8 @@ description: Trace Skyrim AE quest gates, combat XP entry points, perks, effects
 
 # ESP and record research
 
+> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+
 Use this workflow when a hypothesis depends on a plugin record, condition,
 script attachment, or effective override.
 
@@ -44,13 +46,11 @@ script attachment, or effective override.
 ## Failure modes
 
 Parser errors, missing records, incomplete orders, and absent overrides are
-coverage limits. The authoritative `skyrim` bridge's exact xEdit config and helper files were
-replayed from an isolated copy; all five relevant settings match, and its
-`doctor`, `prepare-xedit`, and scoped five-master preflight pass (EV-0191). The
-approved generated `-view` session loaded the five official masters
-(EV-0184–0185/0189), but this list is not the active MO2 order and no record
-was queried/exported. For winner research, require the selected profile's
-complete explicit `plugins.txt` and a passing
-`python3 scripts/python_env.py run tools/ae_preflight.py`; keep winner and
-profile-dependent negative findings blocked until then. Linux record tests do
-not establish Windows xEdit or MO2 behavior.
+coverage limits. The tracked tools/xedit_bridge.py doctor/prepare route is
+documented in docs/LOCAL_RUNTIME_CONTRACT.md. Its file-records command is a
+direct TES4 parser and is not an xEdit query. The cold-start prepared an
+isolated view but did not launch it; native export still needs a safe selected
+record plus Apply Script. For winner research, require the selected profile's
+complete explicit plugins.txt and a passing
+python3 scripts/python_env.py run tools/ae_preflight.py. The current cold-start
+lacks both the full profile and native selection interface.

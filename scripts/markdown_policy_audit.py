@@ -14,9 +14,14 @@ ROOT = Path(__file__).resolve().parents[1]
 INVENTORY = ROOT / "migration" / "ACTIVE_MARKDOWN_AUDIT.md"
 EXCEPTIONS = ROOT / "migration" / "markdown-audit-exceptions.json"
 SKIP_DIRS = {".git", ".local", ".venv", "node_modules", "__pycache__"}
-# This machine-local handoff must not leak its path or content hash into the
-# tracked inventory.
-SKIP_FILES = {"config/LOCAL_TOOL_HANDOFF.private.md"}
+# The machine-local handoff must not leak its path/hash. Mutable recovery
+# checkpoints are validated by research-state tooling; omit them from this
+# static inventory so every required next-action update does not stale it.
+SKIP_FILES = {
+    "config/LOCAL_TOOL_HANDOFF.private.md",
+    "STATE.md",
+    "research/SESSION_LOG.md",
+}
 ACTIVE_MIGRATION = {
     "migration/LOCAL_RESEARCH_READINESS_MISSION.md",
     "migration/LOCAL_READINESS_CHECKLIST.md",
@@ -64,6 +69,8 @@ def classification(relative: str) -> tuple[str, str]:
         if relative in ACTIVE_MIGRATION:
             return "ACTIVE", "Current readiness/audit record; reviewed for policy and links."
         return "ARCHIVAL", "Prior migration artifact; retained for provenance, not active instructions."
+    if parts and parts[0] == "bounties":
+        return "ACTIVE", "User-provided review packet; context only, not current-session evidence or research instructions."
     if parts and parts[0] in {"docs", "protocols", "research", ".agents", "config", "experiments", "tools"}:
         return "ACTIVE", "Current research guidance or evidence record; reviewed for policy and links."
     if len(parts) == 1:

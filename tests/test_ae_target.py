@@ -12,8 +12,10 @@ from tools.ae_target import (
     assert_ae_target,
     parse_active_plugins,
     parse_version,
+    preflight,
     read_executable_version,
     resolve_plugins_txt,
+    resolve_test_plugins_txt,
 )
 
 
@@ -70,9 +72,88 @@ class AETargetTests(unittest.TestCase):
     def test_plugins_path_must_be_explicit_absolute_active_list(self):
         with self.assertRaisesRegex(TargetError, "set PLUGINS_TXT"):
             resolve_plugins_txt({}, root=self.root)
-        plugins = self.root / "plugins.txt"
+        profile = self.root / "profile"
+        profile.mkdir()
+        plugins = profile / "plugins.txt"
         plugins.write_text("*Skyrim.esm\n", encoding="utf-8")
-        self.assertEqual(resolve_plugins_txt({"PLUGINS_TXT": str(plugins)}, root=self.root), plugins)
+        with self.assertRaisesRegex(TargetError, "MO2_PROFILE_DIR"):
+            resolve_plugins_txt({"PLUGINS_TXT": str(plugins)}, root=self.root)
+        self.assertEqual(resolve_plugins_txt({"PLUGINS_TXT": str(plugins), "MO2_PROFILE_DIR": str(profile)}, root=self.root), plugins)
+
+    def test_process_environment_and_global_loadorder_fallbacks_are_not_used(self):
+        with patch.dict(os.environ, {
+            "PLUGINS_TXT": str(self.root / "global-plugins.txt"),
+            "SKYRIM_LOADORDER_DIR": str(self.root),
+            "LOCALAPPDATA": str(self.root),
+        }):
+            with self.assertRaisesRegex(TargetError, "set PLUGINS_TXT"):
+                resolve_plugins_txt(root=self.root)
+
+    def test_mo2_plugins_file_must_belong_to_selected_profile(self):
+        selected = self.root / "profile"
+        other = self.root / "other"
+        selected.mkdir(); other.mkdir()
+        wrong = other / "plugins.txt"
+        wrong.write_text("*Skyrim.esm\n", encoding="utf-8")
+        with self.assertRaisesRegex(TargetError, "MO2_PROFILE_DIR"):
+            resolve_plugins_txt({"PLUGINS_TXT": str(wrong), "MO2_PROFILE_DIR": str(selected)}, root=self.root)
+
+    def test_test_plugins_file_requires_designated_disposable_profile(self):
+        profile = self.root / "test-profile"
+        profile.mkdir()
+        plugins = profile / "plugins.txt"
+        plugins.write_text("*Skyrim.esm\n", encoding="utf-8")
+        with self.assertRaisesRegex(TargetError, "SKYRIM_TEST_PROFILE_DIR"):
+            resolve_test_plugins_txt({"SKYRIM_TEST_PLUGINS_TXT": str(plugins)}, root=self.root)
+        self.assertEqual(resolve_test_plugins_txt({
+            "SKYRIM_TEST_PROFILE_DIR": str(profile), "SKYRIM_TEST_PLUGINS_TXT": str(plugins),
+        }, root=self.root), plugins)
+
+    def test_test_profile_preflight_is_separate_from_selected_order(self):
+        profile = self.root / "test-profile"
+        profile.mkdir()
+        plugins = profile / "plugins.txt"
+        plugins.write_text("".join(f"*{name}\n" for name in REQUIRED_AE_MASTERS), encoding="utf-8")
+        result = preflight(
+            {
+                "SKYRIM_EDITION": "AE", "GAME_ROOT": str(self.game),
+                "SKYRIM_TEST_PROFILE_DIR": str(profile), "SKYRIM_TEST_PLUGINS_TXT": str(plugins),
+            },
+            root=self.root,
+            version_reader=lambda _: "1.6.1170.0",
+            test_profile=True,
+        )
+        self.assertEqual(result["scope"], "designated-disposable-profile")
+        self.assertTrue(result["disposable_test_profile_verified"])
+        self.assertFalse(result["selected_profile_verified"])
+        self.assertTrue(result["full_order_verified"])
+
+    def test_scoped_five_master_preflight_is_distinct_from_selected_order(self):
+        plugins = self.root / "out" / "session" / "plugins.txt"
+        plugins.parent.mkdir(parents=True)
+        plugins.write_text("".join(f"*{name}\n" for name in REQUIRED_AE_MASTERS), encoding="utf-8")
+        result = preflight(
+            {"SKYRIM_EDITION": "AE", "GAME_ROOT": str(self.game)},
+            root=self.root,
+            version_reader=lambda _: "1.6.1170.0",
+            scoped_five_master=plugins,
+        )
+        self.assertEqual(result["scope"], "scoped-five-master")
+        self.assertEqual(result["active_plugins"], 5)
+        self.assertFalse(result["full_order_verified"])
+        self.assertFalse(result["selected_profile_verified"])
+
+    def test_scoped_five_master_rejects_mods_and_noncanonical_order(self):
+        plugins = self.root / "out" / "session" / "plugins.txt"
+        plugins.parent.mkdir(parents=True)
+        plugins.write_text("".join(f"*{name}\n" for name in REQUIRED_AE_MASTERS) + "*Example.esl\n", encoding="utf-8")
+        with self.assertRaisesRegex(TargetError, "exactly the five official AE masters"):
+            preflight(
+                {"SKYRIM_EDITION": "AE", "GAME_ROOT": str(self.game)},
+                root=self.root,
+                version_reader=lambda _: "1.6.1170.0",
+                scoped_five_master=plugins,
+            )
 
     @unittest.skipIf(os.name == "nt", "exercises the WSL PowerShell bridge")
     def test_wsl_version_reader_uses_ascii_transport_for_non_ascii_output(self):

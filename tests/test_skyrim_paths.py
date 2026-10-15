@@ -40,11 +40,16 @@ class SkyrimPathTests(unittest.TestCase):
     def test_explicit_tool_path_override_is_preserved(self):
         with tempfile.TemporaryDirectory() as temporary:
             override = Path(temporary) / "explicit" / "Papyrus"
-            with patch.dict("os.environ", {"PAPYRUS_LOG_DIR": str(override)}):
+            with patch.object(skyrim_paths, "read_local_config", return_value={"PAPYRUS_LOG_DIR": str(override)}):
                 chosen, others = skyrim_paths.resolve_dir("PAPYRUS_LOG_DIR", "Logs/Script")
 
             self.assertEqual(chosen, override)
             self.assertEqual(others, [])
+
+    def test_default_path_requires_canonical_local_config(self):
+        with patch.object(skyrim_paths, "read_local_config", return_value={}):
+            with self.assertRaisesRegex(ValueError, "SKYRIM_CONFIG_DIR"):
+                skyrim_paths.resolve_dir("PAPYRUS_LOG_DIR", "Logs/Script")
 
     def test_ambiguous_game_folders_never_change_the_ae_target(self):
         with tempfile.TemporaryDirectory() as temporary:

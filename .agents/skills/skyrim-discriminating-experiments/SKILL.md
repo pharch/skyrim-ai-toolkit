@@ -5,6 +5,12 @@ description: Design Ghidra, xEdit, SKSE, save-state and player tests that discri
 
 # Skyrim AE experiment construction
 
+The cold-start tool boundary is recorded in
+../../../docs/HARNESS_READINESS.md. A staged Observer is not a live connection
+or state capture; do not launch the game from a readiness or unattended run.
+
+> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+
 Each `EXP-####` must provide: game/build/plugin version, experiment objective, competing hypotheses, predicted outcomes, observables, approved action surface, test save and rollback, minimal controls, instrument commands, data capture and result interpretation. If execution needs user input, record the whole protocol and mark item awaiting-user-data; continue other research.
 
 Prefer measurements that separate multiple plausible mechanisms. Observe precise state transitions, numerical representations and timing where relevant. Treat float rounding and ULP claims as numerical hypotheses requiring raw binary representation tests, not decimal intuition. Use read-only tools by default. Capture empty/negative results with denominators and verified tool liveness. Do not rewrite observed results to match prior predictions.

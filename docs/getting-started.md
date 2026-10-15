@@ -78,7 +78,9 @@ message content or identifiers into tracked research.
 - Ghidra: `python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]`
   queries the existing GOG project using `-process -noanalysis -readOnly`.
   This route cannot import or create a project. `GHIDRA_ANALYSIS_EXE_GOG` and
-  `GHIDRA_PROJECT_DIR/NAME/PROGRAM` are separate from the runtime target.
+  `GHIDRA_PROJECT_REP_PATH/PROGRAM` are separate from the runtime target. The
+  probe reads the full existing `.rep` path from ignored `config/local.env` and
+  checks its adjacent `.gpr` before invocation.
 - CommonLib/Address Library: `python3 scripts/python_env.py run
   tools/address_library_probe.py --symbol Namespace::Name` reads the matching
   GOG ProductVersion and Address Library, then obtains the AE ID from the

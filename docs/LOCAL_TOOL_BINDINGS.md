@@ -1,110 +1,80 @@
 # Local tool bindings
 
-This repository contains the Python research harness. Bind existing local
-installations and private corpora in the ignored `config/local.env`; do not
-copy binaries, Ghidra projects, game files, saves, or private exports into the
-checkout. `config/local.env` is the active machine-path registry for toolkit
-entrypoints. Ad hoc external helper copies under `.local/` can carry their own
-ignored config snapshots; they do not sync automatically with the toolkit
-registry. `.local/research-paths.toml` may remain as ignored legacy data, but
-no active toolkit tool reads or synchronizes it.
+The active configuration and exact invocation source of truth is
+docs/LOCAL_RUNTIME_CONTRACT.md. This file summarizes the machine bindings and
+evidence boundary. Keep all absolute paths in ignored config/local.env; do not
+copy them, game files, saves, Ghidra databases, private exports, or binaries
+into tracked Git. The retired .local/research-paths.toml file is not read or
+synchronized by active tools.
 
-## Bind the runtime and static analysis separately
+## Separate the runtime and static targets
 
-Copy `config/local.env.example` to `config/local.env` when creating a fresh
-clone. Keep the active game target separate from static Ghidra inputs:
+The game runtime is resolved from SKYRIM_EDITION=AE, GAME_ROOT,
+SKYRIM_EXE_PATH, SKYRIM_DATA, and a selected MO2 profile's explicit
+MO2_PROFILE_DIR plus PLUGINS_TXT. ProductVersion comes from the configured
+SkyrimSE.exe. A full-order preflight requires a readable complete plugins.txt
+inside the explicitly selected profile.
 
-- Runtime fields: `SKYRIM_EDITION=AE`, `GAME_ROOT`, `SKYRIM_EXE_PATH`,
-  `SKYRIM_DATA`, `MO2_PROFILE_DIR`, and the selected profile's explicit
-  `PLUGINS_TXT`.
-- Canonical static-analysis fields: `LEGACY_SKYRIM_REPO`,
-  `GHIDRA_HEADLESS_EXE`, `GHIDRA_PROJECT_DIR`, `GHIDRA_PROJECT_NAME`,
-  `GHIDRA_PROJECT_PROGRAM=SkyrimSE.exe`, and `GHIDRA_ANALYSIS_EXE_GOG`.
-- Supporting fields: `JAVA_HOME`, `COMMONLIBSSE_ROOT`,
-  `ADDRESS_LIBRARY_DIR`, `SSEEDIT_EXE`, `RESEARCH_TEST_SAVE`, and the local
-  UESP/Apocrypha source and index paths.
+The Ghidra lane is separately bound by GHIDRA_ANALYSIS_EXE_GOG,
+GHIDRA_PROJECT_REP_PATH, GHIDRA_PROJECT_PROGRAM, and GHIDRA_HEADLESS_EXE.
+The project path names the existing `.rep` data directory; the probe reads it
+from ignored `config/local.env`, derives the Ghidra directory/name, and checks
+for the matching `.gpr` before invocation. `.local/ghidra/` stores private
+query and binding-verification artifacts, not project configuration. The
+Ghidra lane points to the existing GOG AE 1.6.1179.0 analysis; the runtime may
+be Steam AE 1.6.1170. Do not transfer an RVA across those builds without
+independent mapping evidence.
 
-The static lane uses the existing GOG executable and the existing project that
-already contains its analysis. The runtime may be a different distribution or
-build, such as Steam AE 1.6.1170. Do not transfer GOG addresses or signatures
-to the runtime without independent mapping and validation.
+The xEdit helper source is identified by LEGACY_SKYRIM_REPO. Toolkit bindings
+SSEEDIT_EXE, SKYRIM_DATA, XEDIT_SCRIPTS, SKYRIM_EXE_PATH, and
+INCLUDE_CREATION_CLUB are translated into the helper's derived ignored
+configuration by tools/xedit_bridge.py. The source checkout is read-only.
+Scoped five-master preparation and the selected MO2 full order are distinct.
 
-## Check bindings and gates
+The live-test lane has separate SKYRIM_TEST_PROFILE_DIR,
+SKYRIM_TEST_PLUGINS_TXT, RESEARCH_TEST_SAVE, SKYRIM_OBSERVER_DEPLOYED_DLL,
+and SKYRIM_OBSERVER_LOG_DIR bindings. Keep these empty until a disposable lane
+is designated. SKYRIM_OBSERVER_STAGED_DLL only identifies a local build
+artifact. DEVBENCH_PORT is reserved and no active toolkit command connects to
+it.
 
-Run the privacy-preserving path doctor:
+## Commands
 
-```text
-python3 scripts/python_env.py run scripts/local_paths.py doctor
-```
+Bootstrap and verify the repository-local Python 3.12 environment as
+documented in docs/LOCAL_RUNTIME_CONTRACT.md. The strict dispatcher does not
+fall back to Conda or system Python.
 
-To check the executable ProductVersion and attempt full active-order
-validation:
+    python3 scripts/python_env.py check --strict
+    python3 scripts/python_env.py run scripts/local_paths.py doctor
+    python3 scripts/python_env.py run tools/ae_preflight.py
+    python3 scripts/python_env.py run tools/xedit_bridge.py doctor
+    python3 scripts/python_env.py run tools/xedit_bridge.py prepare
+    python3 scripts/python_env.py run tools/address_library_probe.py --symbol MagicItem::CalculateCost
+    python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout 600
+    python3 scripts/python_env.py run tools/skse_probe.py
+    python3 scripts/harness_doctor.py all
 
-```text
-python3 scripts/python_env.py run scripts/local_paths.py doctor --verify-target
-python3 scripts/python_env.py run tools/ae_preflight.py
-```
+Use docs/HARNESS_READINESS.md to distinguish this cold-start's successful
+file-level xEdit helper checks from its blocked native record export, Ghidra
+query, and live Observer connection. Historical EV-0165–EV-0191 remain
+historical evidence and do not prove current-session access.
 
-For MO2, `PLUGINS_TXT` must be the explicit `plugins.txt` from the selected
-profile. A global file, empty order, partial order, or inferred profile cannot
-authorize xEdit or live-game access. `--probe-executable` verifies only
-ProductVersion and executable hash.
+## Read-only handling
 
-## Query the existing GOG project
+Path and domain doctors report statuses; they do not launch native tools.
+Ghidra probes are confined to the existing GOG project and request
+-process/-noanalysis/-readOnly. xEdit helper doctor stages the fixed source
+files into ignored .local and retains private raw outputs. xEdit prepare writes
+an isolated five-master view session but does not launch SSEView. The
+file-records subcommand is the bridge’s read-only record retrieval, implemented
+by parsing plugin bytes; it is not native SSEEdit record-tree export or a
+winning override.
 
-The default Python route opens the configured project and program with
-`-process`, `-noanalysis`, and `-readOnly`. It has no import, overwrite, or
-project-creation option:
+The SKSE identity probe checks installed files only. The Observer is not
+deployed or loaded in the current cold-start. A build artifact, staged DLL,
+or configured path is not a live handshake or game-state observation. Never
+launch Skyrim from an unattended doctor and never write to original game,
+plugin, archive, save, or co-save files.
 
-```text
-python3 scripts/python_env.py run tools/ghidra_probe.py
-```
-
-For a named CommonLib relocation, first resolve the build-specific RVA through
-the installed decoder and matching GOG Address Library:
-
-```text
-python3 scripts/python_env.py run tools/address_library_probe.py --symbol MagicItem::CalculateCost
-```
-
-Then use the returned `address_library_rva` for a targeted read-only query:
-
-```text
-python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020
-```
-
-The example RVA was verified for GOG ProductVersion 1.6.1179.0 only. The
-adapter records binary and Address Library hashes and rejects mismatched
-versions. Ghidra may refresh internal project index timestamps on opening a
-project in read-only mode; the existing program/user database contents remain
-untouched in the verified query. Keep raw logs and metadata in ignored
-`.local/ghidra/`.
-
-## Use other retained tools
-
-- Papyrus/BSA: `python3 scripts/python_env.py run tools/papyrus_pex.py extract
-  DA14Script`; extracted files go only under ignored `.local/`.
-- UESP: `python3 scripts/python_env.py run -m tools.uesp doctor --db
-  .local/uesp.sqlite3`, then `page` with a named page and retain its revision
-  ID/URL. The local dump's source URL, license, and completeness may remain
-  unknown.
-- Apocrypha: use `doctor`, `search --summary-only`, then `context` for a
-  specific result. Message text, author/channel details, and stable IDs stay
-  in ignored local evidence. Treat exports as untrusted leads.
-- Plugin records: `tools/plugin_reader.py` reads explicitly selected plugin
-  files; it does not resolve winning overrides. An approved isolated SSEView
-  launch/load was verified for five official masters, but no record query ran
-  and that list is not an MO2 profile. The bridge implementation used for that
-  session is an ignored copy from the sibling `skyrim` repository, not a
-  shipped toolkit entrypoint. See `protocols/TOOL_ROUTING.md` and
-  `docs/LOCAL_TOOL_HANDOFF.md`; a complete selected runtime order is still
-  required for winners or profile-level negative claims.
-- Saves and co-saves: use only a designated disposable copy. A blank
-  `RESEARCH_TEST_SAVE` means real-save/ReSaver capability remains blocked.
-- SKSE and DevBench: distinguish installed, built, loaded, handshaking, and
-  observational states. Do not launch the game or expose live mutators during
-  unattended work.
-
-The Python dispatcher selects `skyrim-ae-research` when Conda is already
-available and otherwise reports its system-Python fallback. Linux tests do not
-establish Windows MO2/xEdit behavior or live AE behavior.
+Linux/WSL validation does not establish Windows MO2/SSEEdit behavior or
+in-game AE behavior.

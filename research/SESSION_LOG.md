@@ -1812,3 +1812,229 @@ The Markdown inventory first included the ignored private handoff note and its h
 The handoff's one-off Linux `Path.exists()` translation check also reported false for several Windows-bound and relative paths; it did not apply the configured adapter/root rules. The canonical `scripts/local_paths.py doctor` and `tools/domain_doctor.py` were rerun instead and both exited 0, confirming configured local installations and indexes while preserving the separate ProductVersion and active-order limits.
 
 Next exact action: In the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` from P0 OBJ-1/Q-0001.
+## 2026-10-15T07:11:12Z — Cold-start setup mission started
+
+Fresh-context assignment: finish the final setup mission without starting
+bounty research. Initial repository context and the required local tool handoff
+were read; prior claims remain unverified until reproduced. Exact next action:
+inspect the installed xEdit bridge CLI/exporter and ignored local bindings,
+then reproduce a documented read-only QUST query or record the exact interface
+blocker. Keep output under ignored `.local/` and distinguish xEdit output from
+direct plugin-file parsing.
+## 2026-10-15T07:11:12Z — Cold-start xEdit interface audit
+
+Source inspection of the installed ignored bridge copy shows `records` uses a
+read-only mmap TES4 parser and does not invoke xEdit. The separate Pascal
+exporter reads selected SSEView records, but its README says runtime validation
+is pending. The UI Automation helper can dump controls and dismiss known
+dialogs; it has no record-selection operation. Local configuration has the
+xEdit executable/data bindings but no selected MO2 profile/list, Observer
+deployment, or test-save binding (values remain private). Exact next action:
+run the documented file-level QUST query, prepare and preflight the scoped
+five-master SSEView session, inspect live controls, and only apply the exporter
+if record selection and selected-record identity are verifiable.
+## 2026-10-15T07:11:12Z — Scoped preflight boundary
+
+The bridge's documented direct file query exited 0 and returned 1,811 Skyrim.esm
+QUST rows (first record `00000E46`, `CreatureDialogueWerewolf`), but this is
+not an xEdit result. Isolated five-master session preparation exited 0. Its
+scoped AE preflight, launched from WSL with the generated plugin list, exited 1:
+the PowerShell bridge returned no Skyrim ProductVersion. No xEdit launch
+followed. Exact next action: inspect target-preflight platform/path handling and
+test whether the installed Windows Python/PowerShell route is available; keep
+the native launch gated on an actual preflight pass.
+## 2026-10-15T07:11:12Z — Windows interop probe
+
+The AE preflight source uses Windows version-resource APIs on Windows and an
+encoded PowerShell bridge in WSL. The actual WSL `powershell.exe` invocation
+emitted `UtilBindVsockAnyPort` and no ProductVersion; this is an execution-host
+failure, not evidence about the executable. Exact next action: check an
+independent installed PowerShell route; if absent/unusable, do not launch
+xEdit and continue with Ghidra, offline SKSE capability inspection, and Python
+environment validation.
+## 2026-10-15T07:11:12Z — Windows process bridge unavailable
+
+Read-only probes of `powershell.exe`, `py.exe`, and `cmd.exe` each exited 1
+with the same WSL `UtilBindVsockAnyPort:307: socket failed 1` message. No
+Linux `pwsh` is installed. A Windows-side preflight or xEdit launch is not
+reproducible from this execution host; the game was not launched and xEdit was
+not launched. Exact next action: run the configured GOG Ghidra adapter, then
+continue with offline SKSE capability and Python environment checks.
+## 2026-10-15T07:11:12Z — GOG symbol lookup attempt
+
+The cold-start `address_library_probe.py --symbol MagicItem::CalculateCost`
+command exited 2 without stdout; raw stderr is retained under ignored
+`.local/alignment/cold-start-20261015/`. The dependent Ghidra query was not
+run. Exact next action: inspect the sanitized error; if only the mapping adapter
+failed, run the documented GOG project query at the documented GOG RVA
+`0x14C020`, allowing its own identity checks, then continue SKSE/Python checks.
+## 2026-10-15T07:11:12Z — GOG identity probe failure
+
+Sanitized address-library adapter stderr says it could not read GOG executable
+ProductVersion; this is an identity/platform error, not a mapping result. Exact
+next action: invoke the documented Ghidra query directly at GOG-specific RVA
+`0x14C020` to test whether that adapter can independently reach Ghidra and
+attest the target. Preserve any failure and continue offline checks.
+## 2026-10-15T07:11:12Z — Ghidra cold-start query blocked
+
+The documented Ghidra command for the existing GOG project at RVA `0x14C020`
+exited 2 before analysis because the configured GOG executable ProductVersion
+could not be read. No analysis task or project query ran. Raw stderr remains in
+ignored `.local/alignment/cold-start-20261015/ghidra-direct.stderr.raw`. Exact
+next action: inspect SKSE installed identity and telemetry state offline, then
+audit active Python dependencies and implement/test strict `.venv` dispatch.
+## 2026-10-15T07:11:12Z — Offline SKSE capability check
+
+The canonical `skse_probe.py` exited 2 because current WSL Windows interop
+cannot read target ProductVersion. Independent local file hashing confirmed
+the configured Skyrim executable, SKSE loader, 1.6.1170-named Address Library,
+and staged Observer DLL; raw details are in ignored
+`.local/alignment/cold-start-20261015/skse-capability-summary.json`. The
+deployed DLL, selected profile/list, disposable save, and DevBench port are
+unset. No current process, handshake, or state snapshot was directly observed.
+Exact next action: inspect Observer/live capability docs, audit active Python
+imports/dependencies, then implement and validate strict `.venv` dispatch.
+## 2026-10-15T07:11:12Z — Python dependency audit
+
+Static import scan identifies runtime third-party dependencies `lz4` (save
+reader) and PyYAML (`yaml`, overlay validator); the other unfamiliar names
+resolve to repository modules. Existing requirements omit `lz4` and retain
+unreferenced packages. The dispatcher still falls back to system Python and
+this checkout has no `.venv`. Exact next action: capture current status and
+`read-save.py --help`, then implement and test strict `.venv` dispatch with
+pinned runtime dependencies.
+## 2026-10-15T07:11:12Z — Current Python false-ready reproduced
+
+`python_env.py check` exited 0 with `ready=true` under system Python 3.12.3
+despite no Conda environment and missing `lz4`; `read-save.py --help` failed
+with the explicit missing-lz4 message. Raw outputs/hashes are retained under
+ignored `.local/alignment/cold-start-20261015/`. Exact next action: inspect
+dispatcher/config tests, ignore rules and the locally configured read-only
+xEdit bridge source, then implement strict `.venv` dispatch and the minimal
+active dependency set.
+## 2026-10-15T07:11:12Z — Bridge provenance and Python repair plan
+
+The configured legacy checkout is present. Its bridge entrypoint, README and
+two Pascal exporter files match the ignored authoritative copy byte-for-byte;
+the original checkout has its own local config, creating an unsynchronized
+second snapshot. The toolkit's unit-test seams and active imports are inspected.
+Exact next action: implement strict `.venv` dispatch and strict local config
+parsing, keep only pinned runtime dependencies, attempt local dependency install
+and a save-reader fixture check, then reconcile routes/docs/skills.
+## 2026-10-15T07:11:12Z — Strict Python environment implementation
+
+Implemented `.venv`-only dispatch, exact pin/import/config checks, strict
+`config/local.env` parsing, and tests for environment failure modes and a
+synthetic compressed-save fixture. Updated runtime requirements to PyYAML and
+lz4 only. Nothing has been executed against the new environment yet. Exact
+next action: create the Python 3.12 repository `.venv`, confirm pip, install
+the pinned requirements, and run strict check; preserve all output under
+ignored `.local/alignment/cold-start-20261015/`.
+## 2026-10-15T07:11:12Z — Python venv bootstrap blocked
+
+`python3 -m venv .venv` exited 1 because the available Debian Python lacks
+ensurepip and asks for its system `python3-venv` package. An incomplete ignored
+`.venv` directory remains; pip and dependency installation were not attempted.
+Exact next action: inspect already-installed interpreter/pip/virtualenv tools
+without changing the system; continue independent harness work if none exists.
+## 2026-10-15T07:11:12Z — No local venv installer found
+
+The host exposes Python 3.12.3 and `venv`, but no ensurepip, pip module or
+command, `virtualenv`, `uv`, Conda, or working Windows launcher. The failed
+bootstrap left only an incomplete `.venv`; no system packages were installed.
+Exact next action: check the separate `python3.12` executable for a pip
+bootstrap and remove the partial venv if it cannot be used.
+## 2026-10-15T07:11:12Z — Local venv bootstrap alternatives exhausted
+
+Both `python3.12 -m ensurepip --version` and `python3.12 -m pip --version`
+exited 1 because those modules are absent. The incomplete `.venv` was removed;
+no apt/system package or dependency was installed. Exact next action: implement
+a config-derived xEdit helper wrapper and separate the scoped five-master list
+from selected-profile configuration, then update docs/tests.
+## 2026-10-15T07:11:12Z — Bridge and scope implementation
+
+Added the config-derived `tools/xedit_bridge.py` staging/doctor/prepare/file
+reader route and a separate scoped-five-master AE preflight mode. Normal order
+verification now uses only explicit `PLUGINS_TXT`, with selected MO2 profile
+parent validation; global fallback paths are removed. Added regression tests.
+Exact next action: run targeted implementation tests and compile checks through
+system Python, explicitly not through the not-yet-installed `.venv`.
+## 2026-10-15T07:11:12Z — Targeted implementation checks
+
+System-Python implementation tests passed: 8 dispatcher (one fresh-process
+skip), 6 local config, 12 AE target/scope, 3 bridge wrapper; `compileall`
+passed. Save-reader fixture tests are gated on absent `lz4` and did not run.
+These are code checks only. Exact next action: run strict `check` and a no-op
+`run` to confirm the dispatcher fails closed, then reconcile config/docs/skills.
+## 2026-10-15T07:11:12Z — Dispatcher import-path bug
+
+First `python_env.py check --strict` and `run -c` calls both errored before
+status handling because path execution placed `scripts/`, not the checkout
+root, on `sys.path`; config import raised `ModuleNotFoundError: scripts`.
+Exact next action: add the repository root to dispatcher imports and rerun both
+commands, requiring a structured missing-venv result and no child execution.
+## 2026-10-15T07:11:12Z — Structured fail-closed dispatch reproduced
+
+After adding the checkout root to imports, `check --strict` returned structured
+`FAIL_VENV_MISSING` (exit 1), and a dispatched no-op returned 127 without
+running. The checker still reported config invalid merely because no venv
+probe was run, despite the local file parsing at the system level. Exact next
+action: validate local config independently of venv existence and retest.
+## 2026-10-15T07:11:12Z — Dispatcher fail-closed status verified
+
+`python_env.py check --strict` now exits 1 with `FAIL_VENV_MISSING` while
+reporting `config_present=true` and `config_valid=true`. A dispatched no-op
+exits 127 with structured setup guidance and no child output. Artifacts are
+under ignored `.local/alignment/cold-start-20261015/`. Exact next action:
+reconcile config bindings/example and active docs/skills, then build the
+consolidated doctor.
+# 2026-10-15 cold-start setup mission continuation
+
+Next action: reconcile ignored `config/local.env` using the verified matching executable alias and empty legacy fields, add Observer/test-profile keys without exposing private values, and author the runtime contract and readiness report. Mission criteria are mapped to observed evidence or explicit blockers. No bounty investigation is authorized in this setup mission.
+
+Current verified boundary: this WSL host cannot invoke Windows executables (`powershell.exe`, `py.exe`, and `cmd.exe` fail with the WSL socket interop error); current system Python lacks venv/ensurepip/pip, and strict dispatcher correctly refuses system fallback. Previous file-level QUST parser success is not an xEdit query. Next evidence capture must preserve that distinction.
+
+Acceptance mapping read: the final mission has 52 criteria across baseline, Python/configuration, tools, ongoing research, and cleanup. Next action: reconcile private config safely and document the reproducible invocation contract while preserving blockers for native xEdit/Ghidra and live SKSE.
+
+
+## 2026-10-15 cold-start local config reconciliation
+
+The ignored `config/local.env` schema was aligned with `config/local.env.example`. The legacy executable alias matched the canonical path; deprecated empty load-order keys were removed. Staged Observer binding and separate, currently empty, disposable profile/deployed DLL/log/Papyrus bindings were added. Private values were not emitted. Next action: write the runtime contract and readiness report, update active docs/skills, and implement the read-only consolidated doctor.
+
+## 2026-10-15 cold-start native capability probes
+
+The `tools/xedit_bridge.py` doctor exited 0 and staged eight byte-hashed helper files; its scoped five-master preparation succeeded without launching xEdit, and explicitly reported `record_query_completed=false`. Its `file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf` query returned one `Skyrim.esm` record through the direct TES4 file parser; this is not a native xEdit query or winning override. Ghidra, GOG Address Library, SKSE identity and scoped AE preflight probes were rerun under system Python solely as diagnostics; all stopped at ProductVersion through the failing WSL/PowerShell bridge, before Ghidra, xEdit, Skyrim or SKSE runtime access. Raw outputs and hashes are in ignored `.local/alignment/cold-start-final-20261015/` and `.local/alignment/xedit-bridge/`. Observer docs describe bounded event/snapshot capture but say several gameplay systems are not instrumented; this session observed no process, deployment, handshake, or snapshot. Next action: write the runtime/readiness docs, reconcile active routes, add durable setup evidence, then build and run the read-only consolidated doctor.
+Next action: finish skill-specific routes and current handoff references; register cold-start artifacts as durable setup evidence; implement the non-mutating consolidated doctor and 42-row closeout checklist. Then run full readiness validation. Do not begin bounty research.
+Next action: add skill-specific Ghidra/xEdit/status notes and the current cold-start handoff; finish doctor and timeout/profile tests; register EV-0192 onward and generate the 42-row acceptance matrix. Then run complete readiness validation. Do not begin bounty research.
+Next action: run focused tests for Python binding lanes, xEdit timeout capture, and consolidated doctor status semantics; inspect and fix failures before the full suite. Then run harness_doctor all and register its actual verdict. Do not begin bounty research.
+Next action: run python3 scripts/harness_doctor.py all under the bootstrap system interpreter, inspect every local validator and capability status, and capture the result as private evidence. Then update readiness/acceptance files with the actual verdict. Do not begin bounty research.
+Next action: fix the duplicate exit_code serialization in harness_doctor, run focused doctor tests, then rerun python3 scripts/harness_doctor.py all and inspect each validator and capability status. Do not begin bounty research.
+Next action: rerun python3 scripts/harness_doctor.py all after focused serializer tests pass; inspect complete JSON and raw output, then fix remaining harness/local validation failures. Do not begin bounty research.
+Next action: run focused tests for the dev dependency/CI contract and Papyrus auto-selection age behavior; then regenerate and check the Markdown inventory with the user-provided bounty classified as active context. Do not begin bounty research.
+Next action: run the repository-invariant test via unittest discovery (the module form lacked tests/ on sys.path), then regenerate the Markdown audit with the bounty packet classified as active context and rerun its check. Do not begin bounty research.
+Next action: regenerate the Markdown audit with --write so current active docs/skills and the user-provided bounty packet have explicit disposition; run --check and inspect the diff. Do not begin bounty research.
+Next action: inspect Markdown audit exception schema, add a path-only active disposition for the user-provided bounty packet, then regenerate/check the inventory without reading or editing bounty content. Do not begin bounty research.
+Next action: run markdown_policy_audit.py --check, verify the bounty is active context only, inspect the inventory diff, then run the full local test suite. Do not begin bounty research.
+Next action: adjust Markdown audit handling for volatile STATE.md and SESSION_LOG.md checkpoints so required next-action updates do not stale the static inventory. Regenerate/check and retest. Do not begin bounty research.
+Next action: rerun python3 scripts/harness_doctor.py all after 176 unittest-discovered tests pass with 3 dependency-gated skips; inspect final local statuses and verify only external/environment gates remain blocked. Do not begin bounty research.
+Next action: Inspect the ignored Ghidra binding and probe config loader, compare the configured project folder to the user-specified `skyrim-gog.rep` path, and verify the project exists without writing to it; correct only the local binding if needed.
+
+Next action: Run the documented read-only GOG Ghidra query through python_env.py so the probe itself loads config/local.env; capture whether it reaches the existing project or stops at the Windows bridge, then record the verified path binding and runtime boundary.
+
+Observed: the documented Ghidra dispatcher invocation stopped at `FAIL_VENV_MISSING` before the Ghidra probe started. The ignored binding resolves to the requested existing `.rep` directory and sibling `.gpr`.
+Next action: Make GHIDRA_PROJECT_REP_PATH the single explicit local binding for the existing GOG .rep directory; update all config consumers, examples, and tests; validate the exact ignored binding and existing .rep/.gpr without writing to the project.
+
+Observed: Ghidra binding now uses the explicit full `.rep` path in ignored config/local.env. The requested existing `.rep` and adjacent `.gpr` are present. Ghidra probe source, local path doctor, domain doctor, docs, example config, and tests consume the new key. `python3 -m unittest discover -s tests` passed 177 tests with 3 skips. `python3 scripts/python_env.py check --strict` reports valid config and `FAIL_VENV_MISSING`.
+Next action: Remove the trailing blank line flagged in the historical migration note; rerun git diff --check, the consolidated harness doctor, and the private Ghidra binding/path checks; record the final verdict without opening the Ghidra project.
+
+Observed: consolidated `harness_doctor.py all` rerun: config and local/domain Ghidra path checks PASS; Python environment is BLOCKED_EXTERNAL (`FAIL_VENV_MISSING`); native probes are blocked; markdown policy check failed after tracked documentation changes; overall doctor verdict FAIL.
+Next action: Inspect the consolidated doctor’s Markdown-policy raw output, update the required inventory/disposition for the Ghidra contract changes, rerun the Markdown audit and consolidated doctor, and preserve the resulting verdict.
+
+Observed: after refreshing migration/ACTIVE_MARKDOWN_AUDIT.md, `harness_doctor.py all` completed with verdict BLOCKED, exit 2, no failing checks: local config, path doctor, domain doctor, Markdown policy, compile, and 177-test run passed; Python environment and native Ghidra/xEdit/SKSE routes remain externally blocked by missing repository .venv and profile/live prerequisites.
+Next action: Register the updated Ghidra binding and final consolidated-doctor report as durable setup evidence; update readiness and next-session handoff; rerun repository validators and inspect the final diff/status without beginning bounty research.
+
+Observed: EV-0199 records the direct Ghidra `.rep` binding check; EV-0200 records the consolidated doctor after the config refactor. The final test run passed 177 tests with 3 skips. Markdown audit, research-state validation, and diff check passed. `.local/ghidra/binding-verification.json` records the private resolved project path; no project was opened or modified. Overall readiness remains BLOCKED_EXTERNAL because `.venv` is absent and the strict dispatcher refused to launch Ghidra.
+Next action: On a host with Python 3.12 plus venv/ensurepip and pip, follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install the pinned requirements; run the strict check and consolidated doctor, then reproduce the read-only GOG Ghidra query and Windows-native xEdit gates. Do not begin bounty research until the strict research environment is ready.
+
+Closeout update: explicit GOG project path is bound and privately verified; `tools/ghidra_probe.py` reads the ignored local config and validates the existing `.rep` plus adjacent `.gpr`. EV-0199 and EV-0200 record the binding and final doctor. Full tests: 177 passed with 3 skips. Markdown audit, research-state validation, and diff check pass. No Ghidra query, game launch, or bounty research occurred. Readiness remains blocked by missing repository `.venv` and unavailable native gates.
+Next action: On a host with Python 3.12 plus venv/ensurepip and pip, follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install the pinned requirements; run the strict check and consolidated doctor, then reproduce the read-only GOG Ghidra query and Windows-native xEdit gates. Do not begin bounty research until the strict research environment is ready.

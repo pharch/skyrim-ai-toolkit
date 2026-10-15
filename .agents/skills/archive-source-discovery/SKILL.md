@@ -5,6 +5,8 @@ description: Locate and extract Skyrim AE vanilla plugin, script, or other resea
 
 # Skyrim AE BSA source discovery
 
+> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+
 Use this only for Skyrim AE `.bsa` research inputs. BA2 and other game-edition
 archive workflows are outside this harness.
 

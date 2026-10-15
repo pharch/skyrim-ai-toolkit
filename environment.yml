@@ -1,3 +1,5 @@
+# Optional legacy Conda alignment only. The supported primary setup is the
+# repository-local Python 3.12 .venv documented in docs/LOCAL_RUNTIME_CONTRACT.md.
 name: skyrim-ae-research
 channels:
   - conda-forge
@@ -5,10 +7,5 @@ dependencies:
   - python=3.12
   - pip
   - pip:
-      - pydantic==2.6.0
-      - cattrs==23.2.0
+      - lz4==4.3.3
       - PyYAML==6.0.1
-      - pytest==8.0.0
-      - pytest-cov==4.1.0
-      - ruff==0.3.0
-      - mypy==1.9.0

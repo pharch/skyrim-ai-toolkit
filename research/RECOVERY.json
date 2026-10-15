@@ -13,13 +13,20 @@
     "EV-0188",
     "EV-0189",
     "EV-0190",
-    "EV-0191"
+    "EV-0191",
+    "EV-0192",
+    "EV-0193",
+    "EV-0194",
+    "EV-0195",
+    "EV-0196",
+    "EV-0197",
+    "EV-0198"
   ],
-  "next_action": "At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while the xEdit full-profile/save and live Observer gates remain external.",
+  "next_action": "On a host with Python 3.12 plus venv/ensurepip and pip, follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install the pinned requirements; run the strict check and consolidated doctor, then reproduce the read-only GOG Ghidra query and Windows-native xEdit gates. Do not begin bounty research until the strict research environment is ready.",
   "next_frontier_id": "Q-0001",
   "last_transaction_id": "TX-0004",
   "readiness_gates": {
-    "STATIC_RESEARCH_READY": "READY",
+    "STATIC_RESEARCH_READY": "BLOCKED_ENVIRONMENT",
     "NATIVE_RESEARCH_READY": "PARTIAL",
     "INSTRUMENTED_AUTONOMOUS_RESEARCH_READY": "NOT_VERIFIED"
   }

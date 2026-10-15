@@ -66,8 +66,7 @@ def resolve_binding(config: dict[str, str], *, root: Path = ROOT) -> dict[str, o
     required_values = (
         "LEGACY_SKYRIM_REPO",
         "GHIDRA_HEADLESS_EXE",
-        "GHIDRA_PROJECT_DIR",
-        "GHIDRA_PROJECT_NAME",
+        "GHIDRA_PROJECT_REP_PATH",
         "GHIDRA_PROJECT_PROGRAM",
         "GHIDRA_ANALYSIS_EXE_GOG",
     )
@@ -81,9 +80,12 @@ def resolve_binding(config: dict[str, str], *, root: Path = ROOT) -> dict[str, o
 
     legacy_repo = _required_path(config, "LEGACY_SKYRIM_REPO")
     headless = _required_path(config, "GHIDRA_HEADLESS_EXE")
-    project_dir = _required_path(config, "GHIDRA_PROJECT_DIR")
+    project_rep_path = _required_path(config, "GHIDRA_PROJECT_REP_PATH")
     executable = _required_path(config, "GHIDRA_ANALYSIS_EXE_GOG")
-    project_name = config["GHIDRA_PROJECT_NAME"].strip()
+    if project_rep_path.suffix.casefold() != ".rep":
+        raise GhidraProbeError("GHIDRA_PROJECT_REP_PATH must identify the existing project's .rep directory")
+    project_dir = project_rep_path.parent
+    project_name = project_rep_path.stem
     program_name = config["GHIDRA_PROJECT_PROGRAM"].strip()
 
     if not legacy_repo.is_dir():
@@ -93,18 +95,18 @@ def resolve_binding(config: dict[str, str], *, root: Path = ROOT) -> dict[str, o
     if program_name.casefold() != "skyrimse.exe":
         raise GhidraProbeError("GHIDRA_PROJECT_PROGRAM must identify the existing AE SkyrimSE.exe")
     if not re.fullmatch(r"[A-Za-z0-9._-]+", project_name):
-        raise GhidraProbeError("GHIDRA_PROJECT_NAME must be a simple existing project name")
+        raise GhidraProbeError("GHIDRA_PROJECT_REP_PATH basename must be a simple existing project name")
     if not project_dir.is_dir():
-        raise GhidraProbeError("configured GHIDRA_PROJECT_DIR is missing; no project will be created")
-    if not (project_dir / f"{project_name}.gpr").is_file():
+        raise GhidraProbeError("configured GHIDRA_PROJECT_REP_PATH parent is missing; no project will be created")
+    if not project_rep_path.is_dir():
+        raise GhidraProbeError("configured GOG .rep project data directory is missing; no replacement will be created")
+    if not project_rep_path.with_suffix(".gpr").is_file():
         raise GhidraProbeError("configured GOG .gpr project is missing; no replacement will be created")
-    if not (project_dir / f"{project_name}.rep").is_dir():
-        raise GhidraProbeError("configured GOG project data directory is missing; no replacement will be created")
     if not executable.is_file() or executable.name.casefold() != "skyrimse.exe":
         raise GhidraProbeError("configured GOG analysis executable must be an accessible SkyrimSE.exe")
 
     repository = root.resolve()
-    for external_path, key in ((project_dir, "GHIDRA_PROJECT_DIR"), (executable, "GHIDRA_ANALYSIS_EXE_GOG")):
+    for external_path, key in ((project_rep_path, "GHIDRA_PROJECT_REP_PATH"), (executable, "GHIDRA_ANALYSIS_EXE_GOG")):
         if external_path == repository or repository in external_path.parents:
             raise GhidraProbeError(f"{key} must point to an external local installation/project, not this Git checkout")
 
@@ -122,6 +124,7 @@ def resolve_binding(config: dict[str, str], *, root: Path = ROOT) -> dict[str, o
         "headless": headless,
         "project_dir": project_dir,
         "project_name": project_name,
+        "project_rep_path": project_rep_path,
         "program_name": program_name,
         "executable": executable,
         "version": ".".join(map(str, version)),
@@ -223,7 +226,7 @@ def run_query(*, root: Path = ROOT, config: dict[str, str] | None = None, timeou
         "analysis_distribution": "GOG",
         "analysis_binary_product_version": binding["version"],
         "analysis_binary_sha256": binding["sha256"],
-        "project_alias": f"local-config:{project_name}",
+        "project_alias": "config/local.env:GHIDRA_PROJECT_REP_PATH",
         "program": program_name,
         "requested_rva": f"0x{rva:X}" if rva is not None else None,
         "program_executable_path_matches_gog_binary": path_matches,

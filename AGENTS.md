@@ -8,8 +8,9 @@ sources; do not treat their retired instructions as active.
 ## Required context
 
 At session start, read `NORTH_STAR.md`, `STATE.md`, `ROADMAP.md`,
-`research/FRONTIER.json`, and `protocols/TOOL_ROUTING.md`. Then read only the
-source documents relevant to the selected question.
+`research/FRONTIER.json`, `protocols/TOOL_ROUTING.md`,
+`docs/LOCAL_RUNTIME_CONTRACT.md`, and `docs/HARNESS_READINESS.md`. Then read
+only the source documents relevant to the selected question.
 
 ## Hard invariants
 
@@ -20,9 +21,10 @@ source documents relevant to the selected question.
   plugin/record, probe artifact, tested protocol, URL/revision, message ID, or
   preserved legacy path. Unsupported claims remain unverified.
 - Verify the target from `SkyrimSE.exe` ProductVersion (AE runtime 1.6.318+);
-  do not accept a manually typed version as executable evidence. Use
-  `python3 scripts/python_env.py run tools/ae_preflight.py` before xEdit or
-  live-game access.
+  do not accept a manually typed version as executable evidence. Use the
+  repository `.venv` dispatcher for `tools/ae_preflight.py` before xEdit or
+  live-game access. The exact Windows and Linux invocations are in
+  `docs/LOCAL_RUNTIME_CONTRACT.md`.
 - Load the complete active AE profile order. An empty, partial, stale, or
   unverified order cannot support a negative finding. MO2 requires its selected
   profile's explicit `plugins.txt`.
@@ -41,18 +43,38 @@ source documents relevant to the selected question.
 
 ## Python environment
 
-- The named environment is defined in `environment.yml` as
-  `skyrim-ae-research`. Use it when Conda is already available and the
-  environment exists; a fresh Conda environment is optional for local
-  alignment and must not trigger a native-tool installation or rebuild.
-- Run agent tools through `python3 scripts/python_env.py run <script-or-module>`
-  so an active Conda environment is selected when available. If Conda is not
-  installed, the dispatcher reports a system-Python fallback; record that
-  environment limitation and do not claim the Conda environment was verified.
+- The primary environment is the repository-local Python 3.12 `.venv`, with
+  runtime pins from `requirements.txt` and test tooling from
+  `requirements-dev.txt`. `environment.yml` is optional legacy alignment
+  metadata and is not an active fallback.
+- Bootstrap and verify it using `docs/LOCAL_RUNTIME_CONTRACT.md`. On Windows,
+  start the dispatcher with `& .\.venv\Scripts\python.exe scripts/python_env.py`;
+  on Linux/WSL use `python3 scripts/python_env.py`. Run agent tools only as
+  `... python_env.py run <script-or-module>`. Missing/wrong `.venv`, Python
+  version, pinned imports, or config makes dispatch fail closed; system Python
+  is never an automatic research fallback.
 - Active research tools are Python entrypoints. Do not add Node, shell, Java,
   or other-language launchers to agent skills. A domain requiring an external
   native app remains blocked until its Python entrypoint and behavior are
   tested.
+
+## Tool invocation
+
+- xEdit helper binding, scoped preparation, and file-only record parsing use
+  `tools/xedit_bridge.py`; `file-records` is not an xEdit query. See
+  `protocols/TOOL_ROUTING.md` for the native record-export boundary and the
+  required selected-profile preflight.
+- Existing GOG Ghidra analysis must pass ProductVersion and Address Library
+  checks before a read-only query. Bind `GHIDRA_PROJECT_REP_PATH` in ignored
+  `config/local.env` to the existing GOG `.rep` directory; the matching `.gpr`
+  must exist. Invoke only as
+  `python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]`.
+  The probe uses `-process -noanalysis -readOnly` and never imports or creates
+  a project. Do not reuse its RVA against Steam.
+- `tools/skse_probe.py` checks installed files only. A staged Observer DLL is
+  not a loaded DLL, handshake, connection, or game-state observation. Use a
+  separately designated disposable profile/save and keep live mutations out
+  of unattended runs.
 
 ## Research loop
 

@@ -1,11 +1,12 @@
 {
+  "session_next_action": "On a host with Python 3.12 plus venv/ensurepip and pip, follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install the pinned requirements; run the strict check and consolidated doctor, then reproduce the read-only GOG Ghidra query and Windows-native xEdit gates. Do not begin bounty research until the strict research environment is ready.",
   "schema_version": 3,
   "target": {
     "edition": "AE",
     "runtime_minimum": "1.6.318",
     "runtime_verified": false,
     "note": "Repository target policy is AE runtime 1.6.318+. Steam SkyrimSE.exe ProductVersion 1.6.1170.0 is verified (EV-0109), but no live game session or complete active MO2 order is verified. P0 order: OBJ-1 level-one quest/encounter initiation, then OBJ-2 effective armor with zero hit-earned armor XP. Legacy source files are hashed in migration/legacy_markdown_manifest.tsv; source commit is unavailable. Active Python routes and native tool limits are documented in the capability matrix. Four evidence-linked transactions exercise blocker reselection, rival armor hypotheses, an AV39 record screen, and breadth synthesis; process-isolated recovery is tested.",
-    "next_action": "Next session: run `python3 scripts/python_env.py run scripts/research_state.py validate`, review the final alignment report, then start P0 OBJ-1/Q-0001 using docs/RESEARCH_START_PROMPT.md. Continue with independent high-information frontier items and preserve the verified GOG/static versus native/live gate boundaries."
+    "next_action": "On a host with Python 3.12 plus venv/ensurepip and pip, follow docs/LOCAL_RUNTIME_CONTRACT.md to create .venv and install the pinned requirements; run the strict check and consolidated doctor, then reproduce the read-only GOG Ghidra query and Windows-native xEdit gates. Do not begin bounty research until the strict research environment is ready."
   },
   "items": [
     {
@@ -1039,15 +1040,14 @@
       ]
     }
   ],
-  "session_next_action": "At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while full-profile xEdit, save/ReSaver, and live Observer capabilities remain unverified.",
   "session_checkpoint": {
-    "timestamp_utc": "2026-10-15T07:02:35Z",
-    "task": "local tool knowledge handoff complete; no setup/research",
-    "next_action": "At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while full-profile xEdit, save/ReSaver, and live Observer capabilities remain unverified."
+    "timestamp_utc": "2026-10-15T07:11:12Z",
+    "task": "fresh-context final harness setup and reproducibility verification; no bounty research",
+    "next_action": "Update the canonical config contract and active instructions for exact xEdit/AE/Ghidra/SKSE routes."
   },
   "last_session_checkpoint": {
     "recorded_utc": "2026-10-15T05:39:44Z",
-    "next_action": "At the next research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then start P0 OBJ-1/Q-0001 using `docs/RESEARCH_START_PROMPT.md`.",
+    "next_action": "At the next research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `docs/HARNESS_READINESS.md`, then start P0 OBJ-1/Q-0001 using `docs/RESEARCH_START_PROMPT.md`.",
     "active_process": "Historical: SSEView 4.1.5f PID 3948 responded during EV-0185/0189; current process liveness was not rechecked. Skyrim was not launched; Observer DLL remains staged only under ignored .local."
   }
 }

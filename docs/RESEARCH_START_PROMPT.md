@@ -2,7 +2,7 @@
 
 The final local alignment pass and its October 15 capability follow-up are
 complete. Start this prompt in a new interactive Codex session at the
-repository root after reviewing `migration/FINAL_ALIGNMENT_REPORT.md`.
+repository root after reviewing `docs/HARNESS_READINESS.md`.
 
 ## Exact first command
 
@@ -21,7 +21,7 @@ Begin the first deep Skyrim AE glitch-research session. The alignment report
 and the current STATE.md / FRONTIER.json define the verified local capabilities.
 Read AGENTS.md, NORTH_STAR.md, STATE.md, ROADMAP.md, research/FRONTIER.json,
 research/EVIDENCE_MODEL.md, protocols/TOOL_ROUTING.md, and
-migration/FINAL_ALIGNMENT_REPORT.md. Load only the skills and source documents
+docs/HARNESS_READINESS.md. Load only the skills and source documents
 needed for the chosen frontier item.
 
 Start with P0 OBJ-1 / Q-0001: determine which level-gated vanilla quest or

@@ -47,22 +47,25 @@ def _exists(config: dict[str, str], key: str, root: Path, *, directory: bool | N
 def doctor(root: Path = ROOT, *, verify_target: bool = False) -> dict[str, object]:
     """Report configured/existing local bindings; never opens a native project."""
     config = read_local_config(root)
-    project_dir = _configured_path(config, "GHIDRA_PROJECT_DIR", root)
-    project_name = config.get("GHIDRA_PROJECT_NAME", "").strip()
+    project_rep_path = _configured_path(config, "GHIDRA_PROJECT_REP_PATH", root)
     project_files = bool(
-        project_dir and project_name
-        and (project_dir / f"{project_name}.gpr").is_file()
-        and (project_dir / f"{project_name}.rep").is_dir()
+        project_rep_path
+        and project_rep_path.suffix.casefold() == ".rep"
+        and project_rep_path.is_dir()
+        and project_rep_path.with_suffix(".gpr").is_file()
     )
     java_home = _configured_path(config, "JAVA_HOME", root)
     java_bin = next((java_home / "bin" / name for name in ("java.exe", "java")
                      if java_home and (java_home / "bin" / name).is_file()), None)
     path_keys = (
         "GAME_ROOT", "SKYRIM_EXE_PATH", "SKYRIM_DATA", "SSEEDIT_EXE",
-        "LEGACY_SKYRIM_REPO", "GHIDRA_HEADLESS_EXE", "GHIDRA_PROJECT_DIR",
+        "LEGACY_SKYRIM_REPO", "GHIDRA_HEADLESS_EXE", "GHIDRA_PROJECT_REP_PATH",
         "GHIDRA_ANALYSIS_EXE_GOG", "JAVA_HOME", "COMMONLIBSSE_ROOT",
         "ADDRESS_LIBRARY_DIR", "MO2_PROFILE_DIR", "PLUGINS_TXT",
-        "RESEARCH_TEST_SAVE", "UESP_DUMP_PATH", "UESP_INDEX_PATH",
+        "SKYRIM_TEST_PROFILE_DIR", "SKYRIM_TEST_PLUGINS_TXT", "RESEARCH_TEST_SAVE",
+        "SKYRIM_OBSERVER_STAGED_DLL", "SKYRIM_OBSERVER_DEPLOYED_DLL",
+        "SKYRIM_OBSERVER_LOG_DIR", "SKYRIM_CONFIG_DIR", "PAPYRUS_LOG_DIR",
+        "SKSE_CRASH_DIR", "UESP_DUMP_PATH", "UESP_INDEX_PATH",
         "APOCRYPHA_EXPORT_PATH", "APOCRYPHA_INDEX_PATH",
     )
 
@@ -90,9 +93,23 @@ def doctor(root: Path = ROOT, *, verify_target: bool = False) -> dict[str, objec
         "runtime_steam_executable_exists": _exists(config, "SKYRIM_EXE_PATH", root, directory=False),
         "runtime_data_dir_exists": _exists(config, "SKYRIM_DATA", root, directory=True),
         "sseedit_executable_exists": _exists(config, "SSEEDIT_EXE", root, directory=False),
+        "xedit_bridge_entrypoint_exists": bool(
+            _configured_path(config, "LEGACY_SKYRIM_REPO", root)
+            and (_configured_path(config, "LEGACY_SKYRIM_REPO", root) / "scripts" / "skyrim_tool.py").is_file()
+        ),
+        "xedit_export_script_exists": bool(
+            _configured_path(config, "LEGACY_SKYRIM_REPO", root)
+            and (_configured_path(config, "LEGACY_SKYRIM_REPO", root) / "scripts" / "xedit" / "export-records.pas").is_file()
+        ),
         "explicit_plugins_txt_configured_exists": _exists(config, "PLUGINS_TXT", root, directory=False),
         "mo2_profile_dir_configured_exists": _exists(config, "MO2_PROFILE_DIR", root, directory=True),
+        "test_profile_configured_exists": _exists(config, "SKYRIM_TEST_PROFILE_DIR", root, directory=True),
+        "test_plugins_txt_configured_exists": _exists(config, "SKYRIM_TEST_PLUGINS_TXT", root, directory=False),
         "test_save_configured_exists": _exists(config, "RESEARCH_TEST_SAVE", root, directory=False),
+        "observer_staged_dll_exists": _exists(config, "SKYRIM_OBSERVER_STAGED_DLL", root, directory=False),
+        "observer_deployed_dll_exists": _exists(config, "SKYRIM_OBSERVER_DEPLOYED_DLL", root, directory=False),
+        "observer_log_dir_exists": _exists(config, "SKYRIM_OBSERVER_LOG_DIR", root, directory=True),
+        "papyrus_log_dir_exists": _exists(config, "PAPYRUS_LOG_DIR", root, directory=True),
         "legacy_research_repo_exists": _exists(config, "LEGACY_SKYRIM_REPO", root, directory=True),
         "ghidra_headless_exists": _exists(config, "GHIDRA_HEADLESS_EXE", root, directory=False),
         "existing_ghidra_project_files_present": project_files,

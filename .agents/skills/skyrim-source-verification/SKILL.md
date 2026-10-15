@@ -5,6 +5,8 @@ description: Fact-check Skyrim AE quest prerequisites, perks, formulas, items an
 
 # Skyrim AE source verification procedure
 
+> Cold-start gate: read [the local runtime contract](../../../docs/LOCAL_RUNTIME_CONTRACT.md) and [current readiness](../../../docs/HARNESS_READINESS.md) before invoking tools. Use the repository Python 3.12 .venv dispatcher only; there is no system-Python or Conda fallback. A blocked capability cannot support a negative finding.
+
 Use when a factual premise affects a hypothesis or test plan. Distinguish wiki/community reports from winning AE records, build-matched native evidence, and controlled observations.
 
 1. State the falsifiable premise, source type, expected discriminant, and applicable build. If the executable ProductVersion or active plugin order is unknown, label the target unknown.
