@@ -1794,3 +1794,21 @@ All post-handoff research/evidence/recovery/overlay checks passed; the Markdown 
 Final gates are STATIC_RESEARCH_READY=READY, NATIVE_RESEARCH_READY=PARTIAL, and INSTRUMENTED_AUTONOMOUS_RESEARCH_READY=NOT_VERIFIED. The checklist has 52 terminal rows: 50 PASS, 2 BLOCKED_EXTERNAL, zero fixable or pending. The exact xEdit bridge configuration and source helper files were replayed and tested; the Observer is built/tested/prepared but not deployed. No deep gameplay research, xEdit record export, Skyrim launch, or save access occurred.
 
 Next exact action: At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while the xEdit full-profile/save and live Observer gates remain external.
+
+
+## 2026-10-15T06:49:00Z — Operational knowledge handoff
+
+Audit existing tool docs, EV-0184–EV-0191 private metadata and the exact worktree; run read-only configuration/data availability doctors and capture `git status`. Then write the sanitized/private handoff docs and verify ignore/status/commit constraints.
+
+
+## 2026-10-15T06:55:37Z — Local operational knowledge handoff complete
+
+Created a sanitized tracked tool handoff, ignored machine-specific path note, and short next-session checklist. Updated canonical tool routing/bindings and retained-tool skill to record that xEdit's tested bridge code is not shipped in this toolkit and its successful use depended on an ignored copy from the sibling `skyrim` repository. Preserved the approved SSEView argument line and real scoped preflight output, with the absence of a full MO2 order/export made explicit. Distinguished Observer DLL build/staging from deployment, process connection, handshake, and game-state retrieval. Current doctor/recovery probes exited 0; no new native launch or glitch research occurred.
+
+Next exact action: Complete privacy, ignore, whitespace and Git closeout checks; commit only the safe tracked handoff/docs/checkpoint changes if possible. In the next research session validate state and follow `docs/RESEARCH_START_PROMPT.md` from P0 OBJ-1/Q-0001.
+
+The Markdown inventory first included the ignored private handoff note and its hash. The existing `markdown_policy_audit.py` now explicitly excludes that one local file; regenerated inventory reports 165 Markdown files (79 active, 86 archival), and both write/check commands exit 0. The private file remains git-ignored. No tests, setup, native launch, or gameplay research were run in this handoff pass.
+
+The handoff's one-off Linux `Path.exists()` translation check also reported false for several Windows-bound and relative paths; it did not apply the configured adapter/root rules. The canonical `scripts/local_paths.py doctor` and `tools/domain_doctor.py` were rerun instead and both exited 0, confirming configured local installations and indexes while preserving the separate ProductVersion and active-order limits.
+
+Next exact action: In the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` from P0 OBJ-1/Q-0001.

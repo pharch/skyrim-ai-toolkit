@@ -1470,3 +1470,31 @@ Next exact action: Refresh migration/ACTIVE_MARKDOWN_AUDIT.md with `python3 scri
 Final local alignment is complete; no open-ended Skyrim research was started. EV-0191 holds the exact source bridge/config replay, fresh tests/validators, final gate audit, prompt hash, and private artifact hashes.
 
 Next exact action: At the next deep research session, run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` exactly. Start P0 OBJ-1/Q-0001; continue independent offline questions while the xEdit full-profile/save and live Observer gates remain external.
+
+
+## Resume checkpoint — 2026-10-15T06:49:00Z operational knowledge handoff
+
+No setup or gameplay research will be started. The task is to document reproducible prior operations, failures, configuration persistence, current data availability, and worktree state.
+
+Next exact action: Audit existing tool docs, EV-0184–EV-0191 private metadata and the exact worktree; run read-only configuration/data availability doctors and capture `git status`. Then write the sanitized/private handoff docs and verify ignore/status/commit constraints.
+
+
+## Resume checkpoint — 2026-10-15T06:55:37Z operational handoff complete
+
+The sanitized `docs/LOCAL_TOOL_HANDOFF.md`, ignored machine-path note, and short `NEXT_SESSION_HANDOFF.md` are written. Canonical tool routing/binding documentation now records that the verified xEdit bridge remains an ignored copy from the sibling `skyrim` repository; the exact approved command, real scoped output, limits, SKSE build/deployment/handshake distinction, and failures are preserved. Current local path/domain doctors and research-state validation exited 0. No setup, native launch, or glitch research was started.
+
+Next exact action: Finish privacy/ignore and Git diff checks, review the final status, and commit the safe tracked handoff changes if Git metadata permits. The next research session then runs `python3 scripts/python_env.py run scripts/research_state.py validate`, reviews `migration/FINAL_ALIGNMENT_REPORT.md`, and follows `docs/RESEARCH_START_PROMPT.md`.
+
+
+## Resume checkpoint — 2026-10-15T06:58:19Z private-index protection
+
+The Markdown audit initially indexed the ignored machine-specific handoff note and emitted its content hash into a tracked file. `scripts/markdown_policy_audit.py` now excludes that exact ignored path; the regenerated inventory contains 165 Markdown files (79 active, 86 archival), and both `--write` and `--check` exited 0. This is a privacy fix to existing audit tooling; no research or native setup was started.
+
+Next exact action: Run the final path/privacy/ignore and `git diff --check` audit, inspect the complete status, then commit only tracked handoff and tool-documentation changes. After closeout, the next session begins with research-state validation and `docs/RESEARCH_START_PROMPT.md`.
+
+
+## Resume checkpoint — 2026-10-15T07:02:35Z handoff verification
+
+The authoritative `scripts/local_paths.py doctor` and `tools/domain_doctor.py` were rerun and both exited 0. They confirm the local config, Steam runtime/Data and SSEEdit, GOG Ghidra project bindings, CommonLib/Address Library, UESP and Apocrypha indexes are available; ProductVersion through the normal WSL path and full MO2 order remain unverified. A naive raw `Path.exists()` scan failed to translate Windows/relative paths and is explicitly recorded as non-authoritative. The private Markdown note is excluded from the tracked inventory, whose write/check passed at 165 files (79 active, 86 archival). No native launch, test suite, setup, or gameplay research occurred.
+
+Next exact action for the next research session: run `python3 scripts/python_env.py run scripts/research_state.py validate`, review `migration/FINAL_ALIGNMENT_REPORT.md`, then follow `docs/RESEARCH_START_PROMPT.md` from P0 OBJ-1/Q-0001.

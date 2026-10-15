@@ -28,6 +28,7 @@ __pycache__/
 KNOWLEDGEBASE.local.md
 # Append these entries to the inherited .gitignore; do not replace upstream ignore rules.
 config/local.env
+config/LOCAL_TOOL_HANDOFF.private.md
 research/data-private/
 research/raw-private/
 research/uesp-cache/

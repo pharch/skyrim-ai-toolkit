@@ -14,6 +14,9 @@ ROOT = Path(__file__).resolve().parents[1]
 INVENTORY = ROOT / "migration" / "ACTIVE_MARKDOWN_AUDIT.md"
 EXCEPTIONS = ROOT / "migration" / "markdown-audit-exceptions.json"
 SKIP_DIRS = {".git", ".local", ".venv", "node_modules", "__pycache__"}
+# This machine-local handoff must not leak its path or content hash into the
+# tracked inventory.
+SKIP_FILES = {"config/LOCAL_TOOL_HANDOFF.private.md"}
 ACTIVE_MIGRATION = {
     "migration/LOCAL_RESEARCH_READINESS_MISSION.md",
     "migration/LOCAL_READINESS_CHECKLIST.md",
@@ -46,6 +49,8 @@ def markdown_files(root: Path = ROOT) -> list[Path]:
     for path in root.rglob("*.md"):
         relative = path.relative_to(root)
         if any(part in SKIP_DIRS for part in relative.parts):
+            continue
+        if relative.as_posix() in SKIP_FILES:
             continue
         found.append(path)
     return sorted(found, key=lambda path: path.relative_to(root).as_posix().casefold())

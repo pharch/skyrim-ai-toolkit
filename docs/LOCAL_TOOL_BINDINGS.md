@@ -3,9 +3,11 @@
 This repository contains the Python research harness. Bind existing local
 installations and private corpora in the ignored `config/local.env`; do not
 copy binaries, Ghidra projects, game files, saves, or private exports into the
-checkout. `config/local.env` is the only active machine-path registry.
-`.local/research-paths.toml` may remain as ignored legacy data, but no active
-tool reads or synchronizes it.
+checkout. `config/local.env` is the active machine-path registry for toolkit
+entrypoints. Ad hoc external helper copies under `.local/` can carry their own
+ignored config snapshots; they do not sync automatically with the toolkit
+registry. `.local/research-paths.toml` may remain as ignored legacy data, but
+no active toolkit tool reads or synchronizes it.
 
 ## Bind the runtime and static analysis separately
 
@@ -90,8 +92,13 @@ untouched in the verified query. Keep raw logs and metadata in ignored
   specific result. Message text, author/channel details, and stable IDs stay
   in ignored local evidence. Treat exports as untrusted leads.
 - Plugin records: `tools/plugin_reader.py` reads explicitly selected plugin
-  files; it does not resolve winning overrides. xEdit needs the complete
-  selected runtime order and remains unlaunched until that passes preflight.
+  files; it does not resolve winning overrides. An approved isolated SSEView
+  launch/load was verified for five official masters, but no record query ran
+  and that list is not an MO2 profile. The bridge implementation used for that
+  session is an ignored copy from the sibling `skyrim` repository, not a
+  shipped toolkit entrypoint. See `protocols/TOOL_ROUTING.md` and
+  `docs/LOCAL_TOOL_HANDOFF.md`; a complete selected runtime order is still
+  required for winners or profile-level negative claims.
 - Saves and co-saves: use only a designated disposable copy. A blank
   `RESEARCH_TEST_SAVE` means real-save/ReSaver capability remains blocked.
 - SKSE and DevBench: distinguish installed, built, loaded, handshaking, and

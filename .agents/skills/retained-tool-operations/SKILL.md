@@ -32,7 +32,11 @@ rebuild local native applications to make a route visible.
   route only: it does not supply the selected MO2 profile and produced no
   record query. Require the complete selected-profile order for winner or
   profile-dependent negative claims; continue offline work when that order is
-  absent.
+  absent. The bridge itself is not checked into this toolkit: this machine's
+  tested helper copy is ignored under `.local/xedit-authoritative-copy/` and
+  originates in the sibling `skyrim` repository. See
+  `protocols/TOOL_ROUTING.md` for the exact replay commands and persistence
+  boundary; do not assume a fresh clone contains the bridge.
 
 ## Existing GOG Ghidra project
 

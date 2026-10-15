@@ -29,13 +29,50 @@ negative result or winning-record claim.
 | Existing GOG static project | `python3 scripts/python_env.py run tools/ghidra_probe.py [--rva 0x...]` | Opens configured existing GOG `SkyrimSE.exe` with `-process -noanalysis -readOnly`; no import, overwrite, or project creation. EV-0165–0167. |
 | Named CommonLib relocation | `python3 scripts/python_env.py run tools/address_library_probe.py --symbol Namespace::Name` | Reads `Offsets.h`, verifies GOG ProductVersion and matching Address Library version/hash, and returns a GOG-specific RVA. EV-0167. |
 | One plugin's records/raw bytes | `python3 scripts/python_env.py run tools/plugin_reader.py record <plugin> --signature QUST --form-id <id> --include-subrecords` | File-level reader; not a winning-record/xEdit result. |
-| Load-order-aware winners | `python3 scripts/python_env.py run tools/ae_preflight.py`, then native SSEEdit only after it passes | The authoritative `skyrim` bridge helper/config copy was replayed byte-identically for helper files; all five xEdit settings, doctor, prepare, and scoped five-master preflight passed (EV-0191). The generated `-view` launch/load is verified (EV-0184–0185/0189), but no record query ran. The selected MO2 profile is absent, so winners and profile-dependent negatives remain blocked. |
+| Load-order-aware winners | `python3 scripts/python_env.py run tools/ae_preflight.py`, then native SSEEdit only after it passes | The isolated `skyrim` bridge replay commands and persistence boundary are documented below. Its generated `-view` launch/load is verified (EV-0184–0185/0189), but no record query ran. The selected MO2 profile is absent, so winners and profile-dependent negatives remain blocked. |
 | Known Papyrus/BSA input | `python3 scripts/python_env.py run tools/papyrus_pex.py extract DA14Script`, then `disassemble` the ignored output | Narrow base `Skyrim - Misc.bsa` extraction; classic PEX 3.2 subset, not a full decompiler. EV-0169. |
 | Save/co-save structure | `python3 scripts/python_env.py run tools/cosave-info.py <designated-copy.skse>` | Structural parser; current tests use synthetic data. No designated real save/ReSaver path is configured (EV-0174). |
 | Installed SKSE identity | `python3 scripts/python_env.py run tools/skse_probe.py` | Hashes runtime-named loader/DLL/Address Library files; no DLL load or handshake. EV-0173. |
 | UESP citation | `python3 scripts/python_env.py run -m tools.uesp page --db .local/uesp.sqlite3 <title> --raw` | Returns revision ID/URL. Local dump completeness/source provenance is unverified. EV-0170. |
 | Private Apocrypha lead | `python3 scripts/python_env.py run -m tools.apocrypha search --db .local/apocrypha.sqlite3 --summary-only <terms>`, then `context` for a selected ID | Keep message text and stable identifiers under ignored `.local/`; treat as untrusted. EV-0171. |
 | Domain status | `python3 scripts/python_env.py run tools/domain_doctor.py` | Reports path/tool state only. It does not launch xEdit, game, or Ghidra. EV-0172. |
+
+### xEdit bridge persistence and verified invocation
+
+The bridge implementation is **not checked into this toolkit**. The
+authoritative helper scripts live in the sibling `skyrim` repository. For the
+October 15 verification, eight helper/template files were copied byte-for-byte
+into ignored `.local/xedit-authoritative-copy/`; this copy is local evidence,
+not a portable toolkit feature. The source repository was read-only. The
+bridge CLI reads its ignored `.local/xedit-authoritative-copy/config/local.env`;
+toolkit AE preflight reads the root ignored `config/local.env`. Both held
+matching `SSEEDIT_EXE`, `SKYRIM_DATA`, `XEDIT_SCRIPTS`, `SKYRIM_EXE`, and
+`INCLUDE_CREATION_CLUB=0` values during verification. They are independent
+snapshots and do not synchronize. On this checkout, the tested replay was:
+
+```text
+python3 scripts/python_env.py run .local/xedit-authoritative-copy/scripts/skyrim_tool.py doctor
+python3 scripts/python_env.py run .local/xedit-authoritative-copy/scripts/skyrim_tool.py prepare-xedit
+PLUGINS_TXT=<prepared-session>/plugins.txt python3 scripts/python_env.py run tools/ae_preflight.py
+```
+
+Preparation created an ignored session manifest and `launch.ps1`. The approved
+SSEView process used `-SSE -view -DontCache -D:<Skyrim Data> -P:<session
+plugins.txt> -I:<session Skyrim.ini> -R:<session log> -O:<session directory>
+-S:<session directory>\`; `-autoload` was absent. EV-0184–0185/0189 record a
+successful executable/runtime preflight and a completed five-official-master
+Background Loader. EV-0191 is the later helper/config replay; that later
+session was prepared but not relaunched. The UI exposed no record-tree
+controls; no `session.log` or export file was created. The exporter script is
+selection-based and was not executed. No current MO2 profile or full order is
+bound, so this session cannot answer winner or profile-negative questions.
+
+Use [the operational handoff](../docs/LOCAL_TOOL_HANDOFF.md) for the captured
+JSON output example, exact isolated session arguments, and success/failure
+inventory. A fresh clone must not assume `.local/xedit-authoritative-copy`
+exists; consult the source `skyrim` bridge and compare its helper/config hashes
+before reuse. A new native launch still requires the normal AE/profile gate
+and any approval required by the active execution environment.
 
 ## Current evidence boundary
 
