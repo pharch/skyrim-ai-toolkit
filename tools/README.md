@@ -4,7 +4,7 @@ Normal tool execution uses the strict Python 3.12 environment dispatcher. Bootst
 
 | Route | Entrypoint | Scope |
 |---|---|---|
-| Existing GOG Ghidra project | `tools/ghidra_probe.py` | Read-only function/xref/disassembly/decompilation; no import or reanalysis. |
+| Existing GOG Ghidra project | `tools/ghidra_probe.py` | Read-only function/xref/disassembly/decompilation; no import or reanalysis. `--list-call-edges` inventories all direct call sites and unresolved indirect call sites in one selected function without decompiling every callee; `--follow-direct-calls` remains capped at eight callees. `--pointer-table-rva` plus `--pointer-count` reads a bounded table of initialized x64 pointers, lists references to each table entry, and resolves function targets. `--address-rva` captures nearby instructions and references where Ghidra has no function boundary. |
 | Native xEdit/SSEView | `tools/xedit_bridge.py native-query` | Native record fields in the guarded five-official-master scope. |
 | Direct plugin parsing | `tools/xedit_bridge.py file-records` | TES4 file-level fields; separate from xEdit and winner resolution. |
 | AE target verification | `tools/ae_preflight.py` | Executable ProductVersion and, when selected, complete target order. |

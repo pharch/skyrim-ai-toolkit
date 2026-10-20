@@ -1,0 +1,3 @@
+# EXP-0028 — ActiveEffect save/load restoration versus replacement
+
+This dossier records a GOG-only static trace of ActiveEffect update, finish, comparison, and serialization paths, then defines the read-only observations needed to distinguish a restored logical effect from replacement or reapplication. EV-0279 shows that the base serializer preserves timer, magnitude, flags, references, and a 16-bit logical ID; no functional after-load test was available. See [hypothesis](hypothesis.md), [protocol](protocol.md), [predicted outcomes](predicted-outcomes.md), [results](results.md), and [implications](implications.md).

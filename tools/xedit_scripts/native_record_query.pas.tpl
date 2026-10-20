@@ -102,7 +102,15 @@ begin
   end;
 
   g := GroupBySignature(f, __SIGNATURE__);
-  if Assigned(g) then
+  if __FORM_ID__ <> '' then begin
+    r := RecordByFormID(f, StrToInt('$' + __FORM_ID__), False);
+    if Assigned(r) and SameText(Signature(r), __SIGNATURE__) then begin
+      prefix := GetFileName(GetFile(r)) + #9 + IntToHex(GetLoadOrderFormID(r), 8) + #9 +
+        Clean(EditorID(r)) + #9 + Signature(r) + #9 + GetFileName(GetFile(WinningOverride(r)));
+      Walk(r, prefix, Signature(r));
+      Inc(found);
+    end;
+  end else if Assigned(g) then
     for j := 0 to ElementCount(g) - 1 do begin
       r := ElementByIndex(g, j);
       if SameText(EditorID(r), __EDITOR_ID__) then begin

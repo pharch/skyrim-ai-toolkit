@@ -1,0 +1,3 @@
+# Results
+
+EV-0335 maps PlayerCamera+0x28 as the active camera-state pointer updated by FUN_140551300, which calls state slot+0x10 before replacing it. State-array selection routes through FUN_1408e8e00. Index 9 is constructed as ThirdPersonState at PlayerCamera+0x100; its vtable slot+0x10 is FUN_1408e9990. That callback resets camera fields, conditionally invokes two direct helpers, and final-releases its +0xA0 member through an unresolved slot+0x8 target. No direct AV11/AV12 sink appears in this one body; the helpers, nested finalizer, other states, and teardown-selected state remain unresolved. Q64-H1/H2 are unchanged [EV-0335], [EV-0327].

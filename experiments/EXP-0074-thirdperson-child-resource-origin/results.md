@@ -1,0 +1,3 @@
+# Results
+
+EV-0336 maps ThirdPersonState+0xA0 through its setter FUN_1408ea490. FUN_1408e6500 obtains a receiver through PlayerCharacter slot+0x378, calls its slot+0x150 with a converted input, and stores the returned pointer in a ThirdPersonState. NiNode slot+0x150 maps to FUN_140d1f3c0, which performs recursive child-array traversal, but the actual receiver vtable is unknown. FUN_1408e9990 releases +0xA0 through slot+0x8 when final; that finalizer is unresolved. The mapped helper bodies contain no direct skill-progress sink, but Q64-H1/H2 remain open [EV-0336], [EV-0335], [EV-0329], [EV-0334].

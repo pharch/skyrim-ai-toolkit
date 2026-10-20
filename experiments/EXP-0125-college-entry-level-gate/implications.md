@@ -1,0 +1,4 @@
+# Implications
+
+The exact Skyrim.esm MG01/MG02 QUST and linked DIAL/INFO contain no function-index-80 `GetLevel` CTDA, and the mapped Story Manager level nodes do not select either quest [EV-0300], [EV-0321], [EV-0407], [EV-0409]. The quarters' Hall/Arcanaeum door endpoints carry CollegeArchMageKey locks; Tolfdir's post-forcegreet INFO requires MG02 stage 200 and its attached TIF adds the key and Arch-Mage robe to the player [EV-0410]–[EV-0413]. The four exact PEX bodies contain no `GetLevel` method call, but the exact INFO variable operand, full fragment-stage and door-property bindings, full profile winner and clean level-one route remain unresolved [EV-0412], [EV-0413], [EV-0260]. The boots are Clothing with `DNAM 0`, not physical armor [EV-0404]. This route has no captured shared call, quest state, ActorValue, HitData field or serialization edge to the armor XP selector or M-0096 resistance path, so no cross-objective causal edge is added.
+

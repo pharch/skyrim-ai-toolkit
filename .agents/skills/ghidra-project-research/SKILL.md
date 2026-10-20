@@ -37,6 +37,37 @@ runtime build.
    the executable/library, and reports any unproven legacy-map disagreement.
    A returned RVA is scoped to that GOG executable build.
 
+4. To inventory one function's direct-call edges and unresolved indirect
+   call sites without decompiling every target, use:
+
+   ```text
+   python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0xRVA --list-call-edges --timeout 600
+   ```
+
+   This query still uses the existing project in `-noanalysis -readOnly`
+   mode. `--follow-direct-calls` remains separate and decompiles at most eight
+   targets.
+
+5. For a statically identified initialized function-pointer table, use
+   `python3 scripts/python_env.py run tools/ghidra_probe.py --pointer-table-rva 0xRVA --pointer-count N --timeout 600`.
+   Keep the query bounded to the observed table and retain the raw values and
+   references to its base; function resolution does not by itself identify
+   the table's runtime type.
+
+6. If an observed pointer has no analyzed function boundary, use
+   `python3 scripts/python_env.py run tools/ghidra_probe.py --address-rva 0xRVA --timeout 600`
+   to preserve references and a bounded instruction context. Do not infer a
+   function body from that linear window alone.
+
+7. To search the already analyzed GOG listing for memory operands containing
+   one scalar displacement, use
+   `python3 scripts/python_env.py run tools/ghidra_probe.py --search-displacement 0x274 --timeout 600`.
+   This scans the whole instruction listing, reports stack-relative and
+   object-base candidates separately, and bounds writer/callee decompilation.
+   Require the metadata completion markers, keep function/output caps explicit,
+   and trace a candidate field through reads, writes, and data/schema sources
+   before assigning it a meaning.
+
 ## Evidence and interpretation
 
 - Keep metadata, stdout/stderr, Ghidra logs, and scripts under ignored

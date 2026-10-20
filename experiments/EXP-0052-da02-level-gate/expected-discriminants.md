@@ -1,0 +1,8 @@
+# Expected discriminants
+
+- **H1:** the level-30 node selects DA02; the QUST is not Start Game Enabled; helper routes require an already-running main quest; fixed book references disable below 30.
+- **H2:** an official book, shrine, dialogue, death, or scene callback independently invokes `Start()` or requests an effective DA02 stage without relying on the gated node. The book's `OnRead` stage request is a candidate until stopped-quest behavior and level-one acquisition are measured.
+- **Alternative outcome:** an ordinary callback exists but is downstream of a quest-owned alias, disabled reference, or another gated helper. This narrows the mechanism without proving a bypass.
+- **Live discriminator:** with exact verified Steam AE 1.6.1170.0 profile/order and a clean level-one save, compare no-trigger, book, shrine conversation, and cultist-death paths. Capture numeric level; DA02 running/stage; hook quest WEDA02 state; alias fills; cultist presence; dialogue availability; and functional progression. Console forcing, injected scripts, and altered plugins are diagnostic only.
+
+EV-0310 source result: WEDA02's serialized conditions require DA02 running and stage <1, so that helper is not an independent main-quest start in the inspected source path. The four fixed book references use the level-30 global in `OnCellLoad`; the generic leveled lists include the book at minimum level 24. `OnRead` still calls `DA02.SetStage(1)` if current stage <1. The decisive remaining observation is whether an otherwise naturally acquired/read level-one book changes DA02 running/stage or access, compared with a no-read control.

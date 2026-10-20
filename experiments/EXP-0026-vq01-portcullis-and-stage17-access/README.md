@@ -1,0 +1,3 @@
+# EXP-0026 — VQ01 portcullis activation and stage-17 access
+
+This static follow-up separates the Crypt02 portcullis activation script from the VQ01 stage-17 trigger. Direct records parent the portcullis activator to `DLC1VQ01LeverGateEnableMarker`; the recovered generic PEX animates the gate and toggles linked collision without a quest-stage call. The marker/child enable state, physical route through rubble, trigger callback, stopped-quest behavior, useful progression and level-one result remain unknown. See [hypothesis](hypothesis.md), [protocol](protocol.md), [predicted outcomes](predicted-outcomes.md), [results](results.md), and [implications](implications.md).

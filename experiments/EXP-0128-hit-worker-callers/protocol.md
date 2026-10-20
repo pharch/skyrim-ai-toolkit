@@ -1,0 +1,8 @@
+# Protocol
+
+1. Read EV-0397/EV-0423 and preserve the exact GOG caller-query artifact hashes. Recompute the unique direct-caller set from all 95 `XREF_CALL_EDGE` rows, subtract the 33 captured bodies (one separately selected caller plus 32 incoming callers), and preserve the exact 62 remaining function RVAs. Treat the reported 64 as the query implementation's storage cap, not the caller total.
+2. Query each exact remaining function with `tools/ghidra_probe.py --rva <RVA> --list-call-edges` through the strict dispatcher, using the existing GOG project read-only and auto-analysis disabled. Query sequentially to avoid a project lock collision. Keep the target build identity in each result; the explicit edge census validates outgoing calls even if the queried function has no analyzed incoming callers.
+3. Record the caller's payload initialization, tag/value writes, Actor argument provenance, call edge into `FUN_14065b800`, and whether indirect dispatch remains unresolved. Do not infer event names from numeric tags without independent evidence.
+4. For a tag-0xB candidate, trace only build-attested direct edges into the known dispatcher/HitData resolver. A matching function name, nearby tag, or shared sink does not prove an ordinary enemy hit.
+5. Compare against the captured 33 bodies and report the exact completion count out of 95. If any exact function query fails, preserve the failure and narrow the conclusion; do not count an incomplete query as a negative.
+6. Keep the Steam 1.6.1170.0 matched hit with positive measured armor protection, AV9/AV11/AV12 calls, and raw AVSK deltas as a separate runtime requirement [EV-0260]. Keep blocked-hit and ProcessTrapHit routes separate.

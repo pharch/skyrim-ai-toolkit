@@ -74,9 +74,10 @@ Canonical commands (Windows uses the same arguments after `py -3.12 scripts/pyth
 python3 scripts/python_env.py run tools/xedit_bridge.py doctor
 python3 scripts/python_env.py run tools/xedit_bridge.py file-records --signature QUST --plugin Skyrim.esm --editor-id CreatureDialogueWerewolf
 python3 scripts/python_env.py run tools/xedit_bridge.py native-query --signature QUST --plugin Skyrim.esm --editor-id dunDA14MorvunskarQST
+python3 scripts/python_env.py run tools/xedit_bridge.py native-query --signature INFO --plugin Skyrim.esm --form-id 00095585
 ```
 
-`file-records` parses a single TES4 plugin file and returns raw record fields; it does not run xEdit or resolve a winner. `native-query` launches configured SSEView using the original helper and Pascal field exporter. It makes a hash-verified read-only copy of the five official masters and matching vanilla strings under ignored `.local/`, loads the exact official-master scope, exports native fields and loaded-file inventory, and needs no MO2 profile. It uses a visible SSEView window and Windows PowerShell/UI Automation (native Windows or tested WSL-to-Windows interop). EV-0207 records the fresh native QUST export; the regression fixture is `tests/fixtures/xedit/native_quest_smoke.json`.
+`file-records` parses a single TES4 plugin file and returns raw record fields; it does not run xEdit or resolve a winner. `native-query` launches configured SSEView using the original helper and Pascal field exporter. Select exactly one record with `--editor-id` or an eight-digit source-plugin-local `--form-id`; the FormID route supports nested records such as INFO records that have no EditorID. It makes a hash-verified read-only copy of the five official masters and matching vanilla strings under ignored `.local/`, loads the exact official-master scope, exports native fields and loaded-file inventory, and needs no MO2 profile. It uses a visible SSEView window and Windows PowerShell/UI Automation (native Windows or tested WSL-to-Windows interop). EV-0207 records the fresh native QUST export; the regression fixture is `tests/fixtures/xedit/native_quest_smoke.json`.
 
 The native route is a real five-official-master session, not a profile winner. Profile-specific winner and negative claims require the complete order from the exact target; if MO2-managed, bind the selected profile's own `plugins.txt` and run `tools/ae_preflight.py`. Never substitute the five-master list or global AppData order.
 
@@ -88,6 +89,12 @@ python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0x14C020 --timeout
 ```
 
 The first command verifies GOG AE `SkyrimSE.exe` identity and matching Address Library. The second uses `GHIDRA_PROJECT_REP_PATH` and the existing project with `-process -noanalysis -readOnly`; it never creates, imports or reanalyzes a project. The verified GOG 1.6.1179.0 RVA is not a Steam 1.6.1170.0 address. When the source is on a read-only Windows mount, WSL uses the configured paired Linux launcher and copies the existing project into `GHIDRA_PROJECT_CACHE_WSL`, which must be on the WSL-native filesystem so Ghidra can acquire its project lock. Raw query output remains below ignored `.local/`.
+
+For a bounded call-graph census without decompiling each callee, use `python3 scripts/python_env.py run tools/ghidra_probe.py --rva 0xRVA --list-call-edges --timeout 600`. It reports every direct call edge and unresolved indirect call site in the selected function. The existing `--follow-direct-calls` option still decompiles at most eight direct callees.
+
+For a bounded initialized function-pointer table, use `python3 scripts/python_env.py run tools/ghidra_probe.py --pointer-table-rva 0xRVA --pointer-count N --timeout 600`. The query lists references to each table entry and reports each raw pointer value and any containing analyzed function; it remains attached to the identity-checked existing GOG project and runs read-only with auto-analysis disabled. Use the exact table address and bounds observed in a captured function; a resolved pointer alone does not establish its runtime type or behavior. For a target address with no analyzed function boundary, `--address-rva 0xRVA` reports references plus a bounded instruction context without creating or changing a function.
+
+For a whole-program analyzed-memory-operand scan by displacement, use `python3 scripts/python_env.py run tools/ghidra_probe.py --search-displacement 0x274 --timeout 600`. This reports matching operands, stack-relative references, containing functions, and bounded candidate writer/callee analysis from the existing GOG program. Check the metadata completion markers and output caps; a displacement match alone does not identify a field or establish semantics. The scan uses `-process -noanalysis -readOnly` and does not create, import, or reanalyze a program.
 
 ## SKSE, sources, and readiness
 

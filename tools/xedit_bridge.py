@@ -256,22 +256,28 @@ def render_native_query_script(
     status_path: str,
     plugin: str,
     signature: str,
-    editor_id: str,
+    editor_id: str | None,
+    form_id: str | None,
 ) -> str:
     """Render the original field walker as an xEdit Apply Script hotkey query."""
     if plugin not in OFFICIAL_PLUGINS:
         raise BridgeError("native official-master query requires an official plugin name")
-    if not re.fullmatch(r"[A-Z0-9]{4}", signature):
-        raise BridgeError("signature must be exactly four uppercase letters or digits")
-    if not editor_id or any(ord(ch) < 32 for ch in editor_id):
-        raise BridgeError("EditorID must be nonempty and contain no control characters")
+    if not re.fullmatch(r"[A-Z0-9_]{4}", signature):
+        raise BridgeError("signature must be exactly four uppercase letters, digits, or underscores")
+    if bool(editor_id) == bool(form_id):
+        raise BridgeError("native query requires exactly one of EditorID or file FormID")
+    if editor_id is not None and any(ord(ch) < 32 for ch in editor_id):
+        raise BridgeError("EditorID must contain no control characters")
+    if form_id is not None and not re.fullmatch(r"[0-9A-Fa-f]{8}", form_id):
+        raise BridgeError("file FormID must be exactly eight hexadecimal digits")
     replacements = {
         "__OUTPUT__": _pascal_string(output_path),
         "__LOADED__": _pascal_string(loaded_files_path),
         "__STATUS__": _pascal_string(status_path),
         "__PLUGIN__": _pascal_string(plugin),
         "__SIGNATURE__": _pascal_string(signature),
-        "__EDITOR_ID__": _pascal_string(editor_id),
+        "__EDITOR_ID__": _pascal_string(editor_id or ""),
+        "__FORM_ID__": _pascal_string(form_id.upper() if form_id else ""),
     }
     script = template
     for token, value in replacements.items():
@@ -547,7 +553,8 @@ def _native_session_script(
     data_overlay: Path,
     plugin: str,
     signature: str,
-    editor_id: str,
+    editor_id: str | None,
+    form_id: str | None,
 ) -> tuple[Path, Path, dict[str, object]]:
     prepared = _prepare(root, bridge, hashes, data_overlay=data_overlay)
     if prepared.get("exit_code") != 0 or not prepared.get("prepared"):
@@ -573,13 +580,18 @@ def _native_session_script(
         plugin=plugin,
         signature=signature,
         editor_id=editor_id,
+        form_id=form_id,
     )
     script_path = session / "native-query.pas"
     script_path.write_text(script, encoding="utf-8")
     manifest_path = session / "manifest.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     manifest.update({
-        "native_query": {"plugin": plugin, "signature": signature, "editor_id": editor_id},
+        "native_query": {
+            "plugin": plugin,
+            "signature": signature,
+            **({"editor_id": editor_id} if editor_id else {"form_id": form_id}),
+        },
         "native_script": str(script_path),
         "native_script_sha256": hashlib.sha256(script_path.read_bytes()).hexdigest(),
         "native_output": str(output),
@@ -639,7 +651,8 @@ def _native_query(
     *,
     plugin: str,
     signature: str,
-    editor_id: str,
+    editor_id: str | None,
+    form_id: str | None,
     timeout: int = 900,
     keep_open: bool = False,
 ) -> dict[str, object]:
@@ -651,14 +664,18 @@ def _native_query(
     data_overlay, overlay_manifest = configure_official_helper_data(root, bridge)
 
     session, output, setup = _native_session_script(
-        root, bridge, hashes, data_overlay, plugin, signature, editor_id
+        root, bridge, hashes, data_overlay, plugin, signature, editor_id, form_id
     )
     loaded_files = session / "native-loaded-files.txt"
     script_status = session / "native-query-status.txt"
     capture = _capture_dir(root, "xedit-native")
     (capture / "session.json").write_text(json.dumps({
         "session": str(session.relative_to(root)),
-        "query": {"plugin": plugin, "signature": signature, "editor_id": editor_id},
+        "query": {
+            "plugin": plugin,
+            "signature": signature,
+            **({"editor_id": editor_id} if editor_id else {"form_id": form_id}),
+        },
         "source_files_sha256": hashes,
         "official_plugins": list(setup["plugins"]),
         "native_script_sha256": setup["manifest"]["native_script_sha256"],
@@ -800,8 +817,13 @@ def _native_query(
     }
     if len(identities) != 1:
         raise BridgeError("native xEdit export contains multiple or inconsistent record identities")
-    source_plugin, form_id, actual_editor_id, actual_signature, winning_plugin = next(iter(identities))
-    if source_plugin.casefold() != plugin.casefold() or actual_editor_id.casefold() != editor_id.casefold() or actual_signature != signature:
+    source_plugin, form_id_actual, actual_editor_id, actual_signature, winning_plugin = next(iter(identities))
+    query_matches = (
+        actual_editor_id.casefold() == editor_id.casefold()
+        if editor_id
+        else form_id is not None and form_id.upper() == form_id_actual.upper()
+    )
+    if source_plugin.casefold() != plugin.casefold() or not query_matches or actual_signature != signature:
         raise BridgeError("native xEdit export identity does not match the requested record")
     loaded_files_names = tuple(
         line.strip() for line in loaded_files.read_text(encoding="cp1252", errors="replace").splitlines() if line.strip()
@@ -825,7 +847,11 @@ def _native_query(
     }
     structured = {
         "route": "native SSEView -view + original hotkey Apply Script field walker",
-        "query": {"plugin": plugin, "signature": signature, "editor_id": editor_id},
+        "query": {
+            "plugin": plugin,
+            "signature": signature,
+            **({"editor_id": editor_id} if editor_id else {"form_id": form_id}),
+        },
         "plugins": list(setup["plugins"]),
         "loaded_files": list(loaded_files_names),
         "loader_status": load_status,
@@ -923,7 +949,9 @@ def main(argv: list[str] | None = None) -> int:
     )
     native.add_argument("--signature", required=True)
     native.add_argument("--plugin", required=True, choices=OFFICIAL_PLUGINS)
-    native.add_argument("--editor-id", required=True)
+    native_target = native.add_mutually_exclusive_group(required=True)
+    native_target.add_argument("--editor-id", help="exact EditorID")
+    native_target.add_argument("--form-id", help="exact eight-digit FormID local to the source plugin")
     native.add_argument("--timeout", type=int, default=900, help="maximum loader/export wait in seconds")
     native.add_argument("--keep-open", action="store_true", help="leave the completed SSEView window open")
     args = parser.parse_args(argv)
@@ -943,6 +971,7 @@ def main(argv: list[str] | None = None) -> int:
                 plugin=args.plugin,
                 signature=args.signature.upper(),
                 editor_id=args.editor_id,
+                form_id=args.form_id,
                 timeout=args.timeout,
                 keep_open=args.keep_open,
             )

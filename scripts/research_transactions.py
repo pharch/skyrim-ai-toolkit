@@ -613,7 +613,32 @@ def validate_transaction_ledger(
                 elif frontier is not None:
                     item = next((entry for entry in frontier.get("items", []) if entry.get("id") == transaction.get("frontier_id")), None)
                     if item is None or item.get("status") not in {"open", "in_progress"}:
-                        errors.append(f"{txid}: unresolved checkpoint is absent from the active frontier")
+                        later_resolution = False
+                        if item is not None and item.get("status") in FRONTIER_TERMINAL:
+                            later_resolution = any(
+                                other.get("id") != txid
+                                and other.get("frontier_id") == transaction.get("frontier_id")
+                                and other.get("status") == "completed"
+                                and other.get("closure_scope") == "frontier_resolved"
+                                and isinstance(other.get("frontier_resolution"), dict)
+                                and other["frontier_resolution"].get("status") == item.get("status")
+                                and item.get("decision", {}).get("evidence") == other.get("evidence")
+                                for other in transactions
+                            )
+                        if item is not None and item.get("status") in BLOCK_STATUSES:
+                            item_evidence = set(item.get("evidence", []))
+                            later_resolution = later_resolution or any(
+                                other.get("id") != txid
+                                and other.get("frontier_id") == transaction.get("frontier_id")
+                                and other.get("status") == item.get("status")
+                                and other.get("closure_scope") == "blocked_checkpoint"
+                                and isinstance(other.get("frontier_resolution"), dict)
+                                and other["frontier_resolution"].get("status") == item.get("status")
+                                and set(other.get("evidence", [])).issubset(item_evidence)
+                                for other in transactions
+                            )
+                        if not later_resolution:
+                            errors.append(f"{txid}: unresolved checkpoint is absent from the active frontier")
             elif scope == "frontier_resolved":
                 resolution_status = resolution.get("status") if isinstance(resolution, dict) else None
                 if resolution_status not in FRONTIER_TERMINAL:

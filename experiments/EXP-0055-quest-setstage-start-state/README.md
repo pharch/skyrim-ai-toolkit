@@ -1,0 +1,5 @@
+# Native Quest.SetStage behavior on stopped, level-gated quests
+
+This investigation traces the registered Papyrus `Quest.SetStage` callback and its native quest-state effects, prompted by DA02's book `OnRead` callback and earlier DA04 book-stage chain. EV-0313 strongly maps the GOG SetStage row to `FUN_14034de90`; a peer GetStage row and callback confirm the shared method-name-to-callback layout. It also corrects the earlier EV-0272 inference: `FUN_140a48aa0` is registered as `Quest.SetCurrentStageID`, not `Quest.SetStage`.
+
+The GOG callback conditionally calls `TESQuest::EnsureQuestStarted` in start-now mode before stage lookup. An accepted state can reach `BGSStoryTeller::BeginStartUpQuest`, reference-promotion work, manager insertion, and stage-fragment dispatch. Event-ID/ready-bit guards still control entry, and the trace does not prove a live running state, alias completion, or functional access. DA02's level-30 `ENAM=LEVL` record and the Steam runtime transition remain separate questions; no level-one bypass is established.

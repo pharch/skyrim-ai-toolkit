@@ -1,0 +1,11 @@
+# Protocol
+
+1. Use the strict Python 3.12 dispatcher and the documented read-only direct TES4 parser for exact Skyrim.esm QUST source records. Preserve query output, source master hash, FormID, EditorID and parser route; label it direct parsing, not xEdit.
+2. Inspect exact First Lessons (`MG01`, FormID `0001F251`) and Under Saarthal (`MG02`, FormID `0001F252`) records. Decode each captured CTDA with the existing EXP-0052 decoder; do not infer a hard level gate from EditorID, quest suggested-level text or a missing field.
+3. Cross-check the exact QUST FormIDs against EV-0321's complete, hash-identified five-master GetLevel CTDA census. This census can test function-index-80 `GetLevel` conditions, not other condition functions or runtime entry paths.
+4. Join all Skyrim.esm DIAL topics with QNAM pointing to MG01/MG02 to their INFO children by full GRUP ancestry; decode every CTDA and preserve per-record conditions. Interpret observed function names only through the pinned TES5Edit schema in [schema notes](schema-notes.md). A `GetVMQuestVariable` result is not resolved until the referenced script variable and its writers are examined.
+5. Inspect relevant Story Manager, quest-stage, door/lock, alias and attached QF/TIF script conditions before a route-wide static no-level-gate claim. For this route, resolve the exact QF_MG01/QF_MG02 fragment streams and the Tolfdir key-giving INFO fragment from the supported base `Skyrim - Misc.bsa` path. Preserve archive hash/size/version, PEX source offsets and hashes, disassembly, and loose-file checks; a bounded extractor miss cannot support an archive-wide negative.
+6. Decode XLOC/XTEL and linked REFR endpoints using the pinned TES5Edit schema. Follow key FormIDs to their exact source references and linked dialogue/PEX grant, while keeping unresolved `GetVMQuestVariable` operands, fragment-to-stage mappings, and door-property bindings explicit.
+7. Ground page-level claims with exact local UESP revision IDs and retain the corpus provenance limit. Do not promote a suggested level into a minimum or wiki text into a live observation.
+8. A vanilla level-one result requires a clean Steam state, exact target order, and controlled play. Console stage/level forcing is diagnostic only. Do not write to game files, plugins, archives, saves, or co-saves.
+

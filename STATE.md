@@ -1,23 +1,24 @@
-# Current research state — 2026-10-15
+# Current research state — 2026-10-20
 
-## Priority
+## Active checkpoint
 
-The active task is [`bounties/BOUNTY-0001-LEVEL1-P0.md`](bounties/BOUNTY-0001-LEVEL1-P0.md): investigate player-accessible level-one quest/encounter initiation and effective armor with zero hit-earned armor XP. Preserve both as P0 and reselect between independent tractable questions as evidence changes.
+Q-0088 / TX-20261020-0007 is closed as a bounded GOG static displacement investigation. EV-0695 shows that equal +0x325 offsets do not identify one field: the analyzed setter caller is soul-capture-related, while the unbounded store has no owner/xrefs and is absent from the first 64 StatsMenu vtable entries. No StatsMenu byte producer or level-up input timing is identified; no causal edge is added to the armor/level bridge.
 
-## Continuation
+Frontier review found every existing item terminal or blocked; this does not resolve the P0 bounty. Q-0089 / TX-20261020-0008 is active as a new independent OBJ-2 static question from the unresolved Q-0052 selector-0x55 call inside the PlayerCharacter +0x274 cached armor-factor visitor. EV-0311/EV-0312 already establish the cache writer, type-0/1 input path, and GOG hit-builder connection; they do not classify whether selector 0x55 changes the contribution or whether vanilla perk data can make it non-positive. Competing models and predicted discriminants are recorded in Q-0089 and EXP-0136. Exact next action: query fresh GOG Actor/PlayerCharacter vtable slot 0x100 targets for FUN_140386070, trace the contribution before/after selector-0x55 dispatch, then identify the selector and inspect scoped official PERK rows. Strict Python 3.12 and research-state/transaction validators passed before begin; the current live lane remains gated by EV-0260. No Steam protection, raw AVSK, level-one quest transition, or vanilla exploit is claimed.
 
-Recovery is idle after historical `TX-0004`; `Q-0001` / `OBJ-1` is currently the highest-priority ready item. Rival models and prior source limits are recorded in `research/FRONTIER.json` and linked claims/evidence. On the next Codex start, validate host and research state, inspect recovery, and resume its transaction or generate a unique ID for the selected ready item.
+Q-0081 / `TX-20261019-0002` is checkpointed as `blocked_environment` on the external EV-0260 natural Steam transition test. Its bounded static result shows distinct CLOC `DLC2CultistAmbush` and SCPT `DLC2WE09` Story Manager branches selecting separate QUSTs; their loose stage-10 PSC fragments share a `DLC2MQ01` handoff, which does not make the branches identical [EV-0654]–[EV-0664]. The world QUST has `GetLevel >=25` and Solstheim rows with both OR bits set; pinned TES5Edit decoding plus the identity-checked GOG 1.6.1179 condition evaluator support the static expression earlier chance/stage predicates AND (level >=25 OR current location is Solstheim) [EV-0665]–[EV-0669]. This is not a Steam RVA transfer, evaluation-timing proof, or natural level-one start. No profile-specific winner or vanilla reproduction is claimed.
 
-## Capability boundary
+Q-0082 / `TX-20261020-0001` remains complete only for the bounded mitigation-to-armor-scan phase order: GOG AE 1.6.1179.0 places AV39 mitigation before the unblocked worn-ARMO AV11/AV12 scan in `FUN_1406bcaa0`, with `FUN_1406b9df0` as a later separate continuation [EV-0670], [EV-0673]. Correction: the Q82 interpretation treated EPFT as the handler ID. The wrapper capture shows handler ID comes from `DATA[1]`, while EPFT selects the function-data class; official matching rows use DATA[1] IDs 1, 3, and 14 [EV-0683]. Q84 later completed the handler review [EV-0683]–[EV-0685]; no live protection, raw AVSK, Steam equivalence, active profile winner, or qualifying zero-XP result is established. EV-0260 remains the exact Steam matched-hit/protection/raw-AVSK requirement.
 
-Static Python, the configured GOG Ghidra project, native xEdit official-five-master retrieval, UESP/Apocrypha lookups and research-state validation have passing evidence in [`docs/HARNESS_READINESS.md`](docs/HARNESS_READINESS.md). The selected MO2 order is unconfigured; profile-specific winner/negative claims are unavailable. SKSE installed identity is known, but live game/Observer handshake or telemetry is unverified and is not required for static research.
+Q-0083 / `TX-20261020-0002` is completed as a bounded static OBJ-1 source result. The screened official CLOC parent/node/QUST and available loose PSC path contain no explicit Player-level predicate; the separate SCPT route selects `DLC2WE09` with the GOG-evaluator-backed level/location OR group [EV-0654]–[EV-0669]. Direct Steam-tree parsing maps CLOC aliases through TPLT/NPC_ records to LVLNs with level-1 entries, but actual alias fill is unresolved; GOG template-copy code is generic and build-separate [EV-0677]–[EV-0680]. No genuinely level-gated transition, level-one bypass, or OBJ-2 edge is established.
 
-## Local cleanup
+Q-0084 / `TX-20261020-0003` completed as a bounded GOG static handler investigation. `BGSEntryPointPerkEntry` returns the handler ID from `DATA[1]` and a separate function-data pointer; EPFT selects the data class [EV-0681]–[EV-0684]. Handlers 3/14 update numeric results, and handler 14 reads AV 138 through a getter that may fill derived-value caches [EV-0684]–[EV-0685]. No direct equipment, HitData, source ActorValue, skill-progress, or event write is identified in the resolved path. The callback/runtime scope remains bounded; no live protection, raw AVSK, Steam equivalence, active profile winner, or qualifying zero-XP result is established.
 
-Ignored local cleanup is complete. Active Python, source databases, xEdit inputs,
-the configured GOG project/cache, and evidence-cited captures were preserved;
-unreferenced temporary environments, duplicate caches, old Ghidra projects, and
-generated setup/build outputs were removed. Research data validation passed;
-no bounty transaction was started.
+Q-0085 / `TX-20261020-0004` completed as a conditional static OBJ-1 result. The DLC2WE09 world-cultist quest condition combines earlier chance/stage predicates with `(GetLevel >=25 OR current location is Solstheim)`; screened selectors, trigger, and source-ordered initial ferry-topic rows add no explicit player-level predicate [EV-0686]–[EV-0687]. Reachability, Steam evaluation timing, natural level-one startup, aliases, and profile winners remain unresolved; there is no OBJ-2 edge.
 
-Exact next action: Read the active bounty and current Q-0001 evidence, validate Python and research state, then inspect recovery: recover/resume any active checkpoint, or, when recovery is idle, state H1/H2 discriminants and begin the highest-priority ready item with a generated ID.
+## Current limits
+
+- GOG Ghidra identity: SkyrimSE.exe ProductVersion 1.6.1179.0, SHA-256 `9b0fc7880c4b12d436bfb59bcae64868f176dbc04010adbd9bc2ecb64bc8ed3f`; do not transfer RVAs to the separate Steam AE 1.6.1170.0 build.
+- No verified clean Steam level-one transition or matched armor/protection/raw-AVSK run with the exact full active order, disposable save, and read-only observer is available [EV-0260].
+- The Q81 GOG evaluator result is static cross-build inference; timing and natural start remain unknown. The prior AV44 necklace candidate is magic-resistance clothing, not evidence of physical armor protection or zero hit-earned armor XP [EV-0645–EV-0652].
+- For Q88, GOG identifies the exact stored-level setter, StatsMenu `kUpdate` threshold path, and shared armor-skill progress object [EV-0691]–[EV-0694]. Remaining uncertainty is user-action ordering, other Player writer registration, and all Steam/runtime outcomes under EV-0260.

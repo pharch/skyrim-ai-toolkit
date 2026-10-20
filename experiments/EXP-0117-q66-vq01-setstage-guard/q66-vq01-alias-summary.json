@@ -1,0 +1,167 @@
+{
+  "source": "preserved native xEdit five-official-master QUST export for Dawnguard.esm DLC1VQ01 0200352A (EV-0326)",
+  "native_records_tsv_sha256": "2a7e08eb95219dd4c20d0c33549f4db570cc9030fa7c71c51d6935a674e8b036",
+  "alias_count": 14,
+  "alias_condition_function_count": 0,
+  "alias_condition_functions": [],
+  "aliases": [
+    {
+      "index": 0,
+      "name": "DimhollowCrypt",
+      "optional": false,
+      "fill_sources": [
+        {
+          "field": "3:ALFL - Specific Location",
+          "value": "DLC1DimhollowCryptLocation \"<Error: No strings file for lstring ID 0000036B>\" [LCTN:02004EE8]"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "name": "Tolan",
+      "optional": false,
+      "fill_sources": [
+        {
+          "field": "3:ALUA - Unique Actor",
+          "value": "DLC1VigilantTolan \"<Error: No strings file for lstring ID 00000179>\" [NPC_:0200352D]"
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "name": "Adalvald",
+      "optional": false,
+      "fill_sources": [
+        {
+          "field": "3:ALUA - Unique Actor",
+          "value": "DLC1VigilantAdalvald \"<Error: No strings file for lstring ID 0000272F>\" [NPC_:0200FB33]"
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "name": "Agmaer",
+      "optional": true,
+      "fill_sources": [
+        {
+          "field": "3:ALUA - Unique Actor",
+          "value": "DLC1Agmaer \"<Error: No strings file for lstring ID 00000126>\" [NPC_:0200336E]"
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "name": "Serana",
+      "optional": false,
+      "fill_sources": [
+        {
+          "field": "0:ALEQ - Quest",
+          "value": "DLC1NPCMentalModel [QUST:02002B6E]"
+        },
+        {
+          "field": "1:ALEA - Alias",
+          "value": "000 ResponsiveNPC"
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "name": "Book",
+      "optional": false,
+      "fill_sources": [
+        {
+          "field": "3:ALFR - Forced Reference",
+          "value": "[REFR:0200D072] (places DLC1VQ01Book \"<Error: No strings file for lstring ID 000011D0>\" [BOOK:0200D070] in GRUP Cell Persistent Children of DLC1DimHollowCrypt02 \"<Error: No strings file for lstring ID 000000C1>\" [CELL:02000EB7])"
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "name": "Sarcophagus",
+      "optional": true,
+      "fill_sources": [
+        {
+          "field": "3:ALFR - Forced Reference",
+          "value": "[REFR:02009FC9] (places DLC1VQ01PuzzleControllerScriptTrigger [ACTI:02009FC8] in GRUP Cell Persistent Children of DLC1DimHollowCrypt02 \"<Error: No strings file for lstring ID 000000C1>\" [CELL:02000EB7])"
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "name": "DimhollowEntrance",
+      "optional": false,
+      "fill_sources": [
+        {
+          "field": "3:ALFR - Forced Reference",
+          "value": "[REFR:02002F71] (places AutoLoadDoor01 \"<Error: No strings file for lstring ID 00002F73>\" [DOOR:00031897] in GRUP Cell Persistent Children of DLC1DimHollowCrypt01 \"<Error: No strings file for lstring ID 000001AB>\" [CELL:02000EB8])"
+        }
+      ]
+    },
+    {
+      "index": 8,
+      "name": "SeranaCloaking",
+      "optional": true,
+      "fill_sources": [
+        {
+          "field": "3:ALUA - Unique Actor",
+          "value": "DLC1Serana \"<Error: No strings file for lstring ID 0000014A>\" [NPC_:02002B6C]"
+        }
+      ]
+    },
+    {
+      "index": 9,
+      "name": "Vampire1",
+      "optional": true,
+      "fill_sources": [
+        {
+          "field": "3:ALFR - Forced Reference",
+          "value": "DLC1VQ01LvLVampire1 [ACHR:02002F6D] (places DLC1LvlVampireFemaleVampire [NPC_:0200F509] in GRUP Cell Persistent Children of DLC1DimHollowCrypt01 \"<Error: No strings file for lstring ID 000001AB>\" [CELL:02000EB8])"
+        }
+      ]
+    },
+    {
+      "index": 10,
+      "name": "Vampire2",
+      "optional": true,
+      "fill_sources": [
+        {
+          "field": "3:ALFR - Forced Reference",
+          "value": "DLC1VQ01LvLVampire2 [ACHR:02002F6C] (places DLC1LvlVampireMaleVampire [NPC_:020123A5] in GRUP Cell Persistent Children of DLC1DimHollowCrypt01 \"<Error: No strings file for lstring ID 000001AB>\" [CELL:02000EB8])"
+        }
+      ]
+    },
+    {
+      "index": 11,
+      "name": "PuzzleRoomVampireBoss",
+      "optional": true,
+      "fill_sources": [
+        {
+          "field": "3:ALFR - Forced Reference",
+          "value": "DLC1VQ01PuzzleRoomVampireBoss [ACHR:0200FBF5] (places DLC1LvlVampireBossMaleVampireNord [NPC_:0200F4FF] in GRUP Cell Persistent Children of DLC1DimHollowCrypt02 \"<Error: No strings file for lstring ID 000000C1>\" [CELL:02000EB7])"
+        }
+      ]
+    },
+    {
+      "index": 12,
+      "name": "PuzzleRoomVampire1",
+      "optional": true,
+      "fill_sources": [
+        {
+          "field": "3:ALFR - Forced Reference",
+          "value": "DLC1VQ01PuzzleRoomVampire1 [ACHR:0200FBF6] (places DLC1LvlVampireFemaleVampire [NPC_:0200F509] in GRUP Cell Persistent Children of DLC1DimHollowCrypt02 \"<Error: No strings file for lstring ID 000000C1>\" [CELL:02000EB7])"
+        }
+      ]
+    },
+    {
+      "index": 13,
+      "name": "PuzzleRoomVampireThrall",
+      "optional": true,
+      "fill_sources": [
+        {
+          "field": "3:ALFR - Forced Reference",
+          "value": "DLC1VQ01PuzzleRoomVampire2 [ACHR:0200FBF9] (places LvlVampireThrallMelee2H \"<Error: No strings file for lstring ID 0000971D>\" [NPC_:0002ED6B] in GRUP Cell Persistent Children of DLC1DimHollowCrypt02 \"<Error: No strings file for lstring ID 000000C1>\" [CELL:02000EB7])"
+        }
+      ]
+    }
+  ]
+}

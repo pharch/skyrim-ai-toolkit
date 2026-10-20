@@ -1,0 +1,7 @@
+# EXP-0138 hypothesis outcome
+
+- **H1 supported within the scoped static path:** An official selector-`0x24` zero row can set incoming HitData damage to zero before the `+0x54` copy when Deft Movement's entry conditions succeed. The positive-points guard then rejects armor skill progress on that proc [EV-0699], [EV-0700], [EV-0701], [EV-0221]. This is a conditional GOG/record inference, not a measured runtime outcome.
+- **H2 falsified for the scoped official rows:** The complete selector screen did not support a global negative. Deft Movement is one Player-applicable zero row; other zero rows are tied to the MQ105 phantom actor, carriage actors/horses, or Dragonborn companion safety. The raw reference census is source-level linkage only [EV-0700].
+- **H3 not supported as a bounty solution:** Deft Movement's row is stochastic and requires Light Armor and perk/equipment conditions. The pinned local UESP page describes it as avoiding damage on a successful melee proc. The evidence does not show level-one reachability, a qualifying hit with positive armor-provided protection, or zero Heavy/Light AVSK across repeated incoming hits [EV-0701], [EV-0702], [EV-0260].
+
+The distinct award-side `Mod Skill Use` route remains a useful next question: it runs after the non-positive-points guard and may act independently from HitData damage/protection. Q92 screens that mechanism and its source records.

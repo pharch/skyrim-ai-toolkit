@@ -226,7 +226,10 @@ def environment_status(root: Path = ROOT) -> dict[str, object]:
                     str(interpreter), "-c", _PROBE, str(directory.resolve()),
                     json.dumps(REQUIRED_DISTRIBUTIONS), json.dumps(REQUIRED_MODULES),
                 ],
-                cwd=root, text=True, capture_output=True, timeout=30, check=False,
+                # Imports from a WSL checkout on a Windows-mounted workspace can
+                # exceed the old 30-second ceiling even when bootstrap verifies
+                # the same environment successfully.
+                cwd=root, text=True, capture_output=True, timeout=90, check=False,
             )
             if result.returncode != 0:
                 base["python_status"] = "FAIL_VENV_PROBE"

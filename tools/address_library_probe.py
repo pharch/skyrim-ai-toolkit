@@ -22,22 +22,65 @@ class AddressLibraryProbeError(RuntimeError):
     """A build-matched Address Library lookup could not be verified."""
 
 
-def commonlib_ae_id(offsets_header: Path, symbol: str) -> int:
-    """Read the AE ID from CommonLibSSE-NG's named relocation declaration."""
+def commonlib_ae_id(offsets_header: Path, symbol: str, *, vtable_index: int = 0) -> int:
+    """Read an AE ID from a CommonLib relocation or named vtable declaration."""
     if "::" not in symbol:
         raise AddressLibraryProbeError("symbol must use Namespace::Name form")
     namespace, name = symbol.rsplit("::", 1)
+    if namespace == "VTABLE":
+        offsets_vtable = offsets_header.with_name("Offsets_VTABLE.h")
+        if not offsets_vtable.is_file():
+            raise AddressLibraryProbeError("CommonLib vtable declarations are missing")
+        source = offsets_vtable.read_text(encoding="utf-8")
+        declaration = re.search(
+            rf"\bstd::array\s*<\s*REL::VariantID\s*,\s*(\d+)\s*>\s+"
+            rf"VTABLE_{re.escape(name)}\s*\{{(?P<body>[^}}]*)\}}\s*;",
+            source,
+        )
+        if not declaration:
+            raise AddressLibraryProbeError(f"CommonLib vtable not found: {symbol}")
+        variants = re.findall(
+            r"REL::VariantID\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(0x[0-9A-Fa-f]+|\d+)\s*\)",
+            declaration.group("body"),
+        )
+        expected_count = int(declaration.group(1))
+        if len(variants) != expected_count or not variants:
+            raise AddressLibraryProbeError(f"CommonLib vtable variants are incomplete: {symbol}")
+        if not 0 <= vtable_index < len(variants):
+            raise AddressLibraryProbeError(
+                f"CommonLib vtable index {vtable_index} is outside the {len(variants)} entries for {symbol}"
+            )
+        # Each array entry identifies a distinct class subobject vtable. The
+        # AE component is resolved independently against the verified GOG library.
+        return int(variants[vtable_index][1])
+    if vtable_index != 0:
+        raise AddressLibraryProbeError("--vtable-index applies only to VTABLE symbols")
     source = offsets_header.read_text(encoding="utf-8")
-    namespace_match = re.search(
-        rf"\bnamespace\s+{re.escape(namespace)}\s*\{{(?P<body>.*?)^\s*\}}",
-        source,
-        flags=re.MULTILINE | re.DOTALL,
+    namespace_match = next(
+        (
+            match
+            for match in re.finditer(r"\bnamespace\s+([\w:]+)\s*\{", source)
+            if match.group(1) == namespace
+        ),
+        None,
     )
-    if not namespace_match:
+    if namespace_match is None:
         raise AddressLibraryProbeError(f"CommonLib namespace not found: {namespace}")
+    body_start = namespace_match.end()
+    depth = 1
+    body_end = body_start
+    while body_end < len(source) and depth:
+        if source[body_end] == "{":
+            depth += 1
+        elif source[body_end] == "}":
+            depth -= 1
+        body_end += 1
+    if depth:
+        raise AddressLibraryProbeError(f"CommonLib namespace is unterminated: {namespace}")
+    body = source[body_start:body_end - 1]
     declaration = re.search(
         rf"\b{re.escape(name)}\s*=\s*RELOCATION_ID\s*\(\s*(\d+)\s*,\s*(\d+)\s*\)",
-        namespace_match.group("body"),
+        body,
     )
     if not declaration:
         raise AddressLibraryProbeError(f"CommonLib AE relocation not found: {symbol}")
@@ -69,6 +112,7 @@ def _legacy_mapping(path: Path, symbol: str) -> dict[str, Any] | None:
 
 def probe(
     *, root: Path = ROOT, config: dict[str, str] | None = None, symbol: str,
+    vtable_index: int = 0,
 ) -> dict[str, object]:
     config = read_local_config(root) if config is None else config
     required = ("LEGACY_SKYRIM_REPO", "COMMONLIBSSE_ROOT", "GHIDRA_ANALYSIS_EXE_GOG")
@@ -99,7 +143,7 @@ def probe(
         raise AddressLibraryProbeError("matching GOG Address Library file is missing for the verified ProductVersion")
 
     offsets_header = commonlib / "include" / "RE" / "Offsets.h"
-    symbol_id = commonlib_ae_id(offsets_header, symbol)
+    symbol_id = commonlib_ae_id(offsets_header, symbol, vtable_index=vtable_index)
     decoder = _legacy_decoder(legacy / "scripts" / "address_library_lookup.py")
     try:
         library_version, mappings = decoder.decode(address_library)
@@ -122,6 +166,8 @@ def probe(
     return {
         "ok": True,
         "symbol": symbol,
+        "commonlib_symbol_kind": "vtable_array_entry" if symbol.startswith("VTABLE::") else "relocation",
+        "commonlib_vtable_index": vtable_index if symbol.startswith("VTABLE::") else None,
         "commonlib_ae_id": symbol_id,
         "analysis_distribution": "GOG",
         "analysis_binary_product_version": product_text,
@@ -145,9 +191,13 @@ def probe(
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--symbol", required=True, help="CommonLib symbol as Namespace::Name")
+    parser.add_argument(
+        "--vtable-index", type=int, default=0,
+        help="zero-based CommonLib subobject-vtable entry (default: 0; VTABLE symbols only)",
+    )
     args = parser.parse_args(argv)
     try:
-        result = probe(symbol=args.symbol)
+        result = probe(symbol=args.symbol, vtable_index=args.vtable_index)
         print(json.dumps(result, indent=2, ensure_ascii=False))
         return 0
     except (OSError, ValueError, AddressLibraryProbeError, TargetError) as exc:
